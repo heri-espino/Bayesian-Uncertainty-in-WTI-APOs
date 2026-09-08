@@ -1,622 +1,345 @@
-\documentclass[9pt,letterpaper]{article} % Compila con lualatex o xelatex
+\documentclass[12pt,letterpaper]{article}
 
-% --- Layout & links ---
-\usepackage[margin=4cm]{geometry}
-\usepackage[hidelinks]{hyperref}
-
-% Paquetes
+% Draft aligned with REMEF research-article structure. Compile with pdfLaTeX.
+\usepackage[spanish,english]{babel}
+\usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage[spanish]{babel} % (puedes cambiar a spanish si quieres hyphenation en español)
+\usepackage{newtxtext,newtxmath}
+\usepackage[top=2.5cm,bottom=2.5cm,left=3cm,right=3cm]{geometry}
 \usepackage{amsmath,amssymb,amsthm}
-\usepackage{graphicx}
-\usepackage{float}
 \usepackage{booktabs}
-\usepackage{multirow}
-\usepackage{caption}
-\usepackage{subcaption}
+\usepackage{array}
+\usepackage{float}
+\usepackage{microtype}
+\usepackage{setspace}
 \usepackage{hyperref}
-\usepackage[numbers,sort&compress]{natbib}
-\usepackage{algorithm}
-\usepackage{algorithmic}
+\usepackage[round,authoryear]{natbib}
 \usepackage{xcolor}
-\usepackage{setspace}
 
-% Configuración
-\onehalfspacing
-\hypersetup{
-    colorlinks=true,
-    linkcolor=blue,
-    citecolor=blue,
-    urlcolor=blue
-}
+\setstretch{1.0}
+\hypersetup{colorlinks=true,linkcolor=black,citecolor=black,urlcolor=blue}
+\setlength{\parindent}{0.6cm}
+\setlength{\parskip}{0pt}
 
-% Teoremas
-\newtheorem{definition}{Definición}
-\newtheorem{theorem}{Teorema}
+% Anonymous manuscript by default for double-blind review.
+\newif\ifblind
+\blindtrue
 
-
-
-% --- Fuentes (texto y matemáticas) ---
-\usepackage{newtxmath}
-\usepackage{fontspec}
-\setmainfont{EB Garamond}[
-    UprightFont = * Regular,
-    ItalicFont = * Italic,
-    BoldFont = * SemiBold,
-    BoldItalicFont = * SemiBold Italic,
-]
-
-
-% --- Secciones y subsecciones ---
-\usepackage{titlesec}
-\newfontface\garamondbold{EB Garamond SemiBold}
-\newfontface\garamondbolditalic{EB Garamond Bold Italic}
-\titleformat{\section}
-  {\garamondbold\Large}{\thesection}{1em}{}
-\titleformat{\subsection}
-  {\garamondbold\large}{\thesubsection}{1em}{}
-
-% --- Encabezado con nombre de la sección ---
-\usepackage{fancyhdr}
-\pagestyle{fancy}
-\fancyhf{}
-\fancyhead[L]{\small\leftmark}
-\fancyhead[R]{\small\thepage}
-\renewcommand{\headrulewidth}{0.1pt}
-
-% --- Espaciado ---
-\usepackage{setspace}
-
-% --- Otros paquetes útiles ---
-\usepackage{tocloft}  % Para personalizar la tabla de contenidos
-\usepackage{xcolor}   % Para colores en el código
-\usepackage{booktabs} % Para tablas bonitas
-
-% --- Código fuente ---
-\usepackage{listings}
-\lstset{
-  basicstyle=\ttfamily\small,
-  backgroundcolor=\color{gray!10},
-  frame=single,
-  breaklines=true
-}
-
-\hypersetup{
-    colorlinks=true,
-    linkcolor=black, % <- TOC + \ref links
-    citecolor=blue,
-    urlcolor=blue
-}
-
-
-\graphicspath{{../figures/}}
+\newcommand{\Pmeasure}{\mathbb{P}}
+\newcommand{\Qmeasure}{\mathbb{Q}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\RMSE}{\operatorname{RMSE}}
+\newcommand{\MAP}{\operatorname{MAP}}
 
 \begin{document}
 
-% Portada
-\begin{titlepage}
-    \centering
-    \vspace*{2cm}
+\selectlanguage{spanish}
 
-    {\LARGE\bfseries Implementación del Método de Metropolis--Hastings\\[0.3cm]
-    en una Aplicación Actuarial\par}
+\begin{center}
+{\Large\bfseries Incertidumbre Bayesiana en Opciones Asiáticas bajo Medida Neutral al Riesgo\par}
+\vspace{0.35cm}
+{\large Bayesian Uncertainty in Asian Options under Risk-Neutral Valuation\par}
+\vspace{0.6cm}
+\ifblind
+{\normalsize Manuscrito anónimo para revisión por pares\par}
+\else
+{\normalsize [Nombre del autor] --- [Institución] --- [ORCID]\par}
+\fi
+\end{center}
 
-    \vspace{1.5cm}
+\vspace{0.5cm}
 
-    {\Large Valoración Bayesiana de Opciones Asiáticas\\
-    mediante Inferencia MCMC\par}
+\textbf{Resumen.} El objetivo es cuantificar cómo la incertidumbre bayesiana de los parámetros de un movimiento browniano geométrico estimados bajo la medida física se transmite al valor neutral al riesgo de una opción asiática aritmética. Se implementa Metropolis--Hastings en la parametrización $(\mu,\log\sigma)$ y se valora bajo $\mathbb Q$ mediante Monte Carlo con variables antitéticas y control geométrico. Un experimento de 80 réplicas por tamaño muestral compara integración posterior completa, plug-in de media posterior, MAP y máxima verosimilitud contra el precio verdadero $C^{\mathbb Q}(\sigma_0)$. Los resultados muestran que la incertidumbre de $\mu$ no entra al precio libre de arbitraje y que la incertidumbre relevante se concentra en $\sigma$. Full Bayes y plug-in de media posterior presentan errores casi idénticos, mientras el MAP no muestra ventaja sistemática. Se recomienda distinguir estrictamente inferencia bajo $\mathbb P$ y valoración bajo $\mathbb Q$. La principal limitación es el supuesto Black--Scholes. La originalidad consiste en aislar y medir esta propagación para un derivado dependiente de trayectoria mediante un diseño reproducible y no circular.
 
-    \vspace{2cm}
+\textbf{Palabras clave:} inferencia bayesiana; opciones asiáticas; Metropolis--Hastings; valoración neutral al riesgo; incertidumbre paramétrica.
 
-    {\large Temas Selectos 1: Simulación Actuarial\par}
+\textbf{Clasificación JEL:} C11; C15; C63; G13; G17; G32.
 
-    \vspace{1cm}
+\vspace{0.35cm}
+\selectlanguage{english}
+\textbf{Abstract.} This paper quantifies how Bayesian uncertainty in geometric-Brownian-motion parameters estimated under the physical measure propagates into the risk-neutral value of an arithmetic Asian option. Metropolis--Hastings is implemented in the $(\mu,\log\sigma)$ parameterization, while pricing under $\mathbb Q$ uses Monte Carlo with antithetic sampling and a geometric-Asian control variate. An outer experiment with 80 replications per sample size compares full posterior integration, posterior-mean plug-in, MAP plug-in, and maximum likelihood against the external benchmark $C^{\mathbb Q}(\sigma_0)$. The results show that uncertainty in the physical drift $\mu$ does not enter the no-arbitrage price and that relevant parameter uncertainty is concentrated in $\sigma$. Full Bayes and the posterior-mean plug-in have nearly identical pricing errors, whereas MAP provides no systematic advantage. We recommend a strict separation between inference under $\mathbb P$ and valuation under $\mathbb Q$. The main limitation is the Black--Scholes specification. Originality lies in isolating this propagation for a path-dependent derivative with a reproducible, non-circular design.
 
-    {\large Equipo: 1\par}
+\textbf{Keywords:} Bayesian inference; Asian options; Metropolis--Hastings; risk-neutral valuation; parameter uncertainty.
 
-    \vspace{1cm}
+\textbf{JEL Classification:} C11; C15; C63; G13; G17; G32.
 
-    {\large \today\par}
+\selectlanguage{spanish}
 
-    \vfill
-\end{titlepage}
+\section{Introducción}
 
-\tableofcontents
-\newpage
+La incertidumbre paramétrica y la valoración de derivados son problemas relacionados pero conceptualmente distintos. Los retornos históricos permiten inferir parámetros bajo una medida física $\Pmeasure$, mientras que en un mercado completo tipo Black--Scholes el precio libre de arbitraje de un derivado negociable se obtiene bajo una medida neutral al riesgo $\Qmeasure$. Confundir ambos objetos puede convertir incertidumbre predictiva sobre el rendimiento esperado en una aparente incertidumbre de precio que no corresponde al modelo de no arbitraje.
 
-% ============================================================================
-\section{Introducción y Contexto Actuarial}
-% ============================================================================
+Este trabajo estudia esa separación en una opción asiática de promedio aritmético. El contrato es útil como laboratorio porque su pago depende de toda la trayectoria y su precio carece, en general, de la fórmula elemental disponible para una opción europea. Al mismo tiempo, el modelo Black--Scholes permite identificar con precisión qué parámetro histórico debe propagarse al precio neutral al riesgo: la volatilidad $\sigma$, no el drift físico $\mu$.
 
-\subsection{Motivación}
+El objetivo general es evaluar si integrar la distribución posterior de $\sigma$ produce mejoras materiales frente a estimadores plug-in cuando se valora una opción asiática. La comparación se realiza contra un benchmark externo, $C^{\Qmeasure}(\sigma_0)$, generado con el parámetro verdadero. Este detalle evita evaluar un estimador usando como función de pérdida las mismas muestras posteriores que lo definen.
 
-Las opciones asiáticas son instrumentos derivados cuyo \textit{payoff} depende del promedio del precio del activo subyacente durante la vida de la opción, en lugar del precio spot al vencimiento. Este detalle vuelve a estos contratos especialmente útiles cuando el riesgo relevante no es el precio final, sino la evolución promedio del subyacente. En práctica, estas opciones aparecen en:
+Las contribuciones son cuatro. Primero, se formaliza la separación $\Pmeasure/\Qmeasure$ dentro de un flujo bayesiano sencillo. Segundo, se implementa Metropolis--Hastings sobre $(\mu,\eta)$, con $\eta=\log\sigma$, eliminando la frontera artificial $\sigma>0$. Tercero, se propaga únicamente la posterior de $\sigma$ hacia un pricer neutral al riesgo con reducción de varianza. Cuarto, se compara full Bayes, media posterior plug-in, MAP plug-in y MLE mediante bias, MAE, RMSE y cobertura en un experimento repetido.
 
-\begin{itemize}
-    \item \textbf{Mercados de commodities}: petróleo, gas natural y metales. El promedio reduce incentivos para manipular el precio en fechas específicas y refleja mejor el costo promedio de insumos.
-    \item \textbf{Cobertura corporativa}: empresas con flujos de efectivo continuos que enfrentan riesgo de precio promedio (por ejemplo, aerolíneas con combustible).
-    \item \textbf{Gestión de riesgos financieros}: suelen tener primas menores que opciones europeas estándar, porque el promedio suaviza la volatilidad efectiva.
-\end{itemize}
+\section{Estado del arte}
 
-\subsection{Problema Actuarial}
+El fundamento de la valoración neutral al riesgo se remonta a \citet{blackscholes1973} y \citet{merton1973}. En un mercado completo, el drift físico del activo no determina el precio de un reclamo contingente replicable; bajo $\Qmeasure$ el rendimiento esperado se reemplaza por la tasa libre de riesgo ajustada por dividendos.
 
-El problema central consiste en la \textbf{valoración} de opciones asiáticas cuando existe incertidumbre sobre los parámetros del proceso estocástico del activo subyacente. En particular:
+Para opciones asiáticas, \citet{kemnavorst1990} desarrollan un método Monte Carlo con reducción de varianza basado en el promedio geométrico, mientras \citet{gemanyor1993} estudian funcionales exponenciales del browniano asociados al promedio aritmético. Estos trabajos muestran que la dependencia de trayectoria modifica el problema computacional sin alterar el principio de valoración neutral al riesgo.
 
-\begin{itemize}
-    \item El precio del activo sigue un Movimiento Browniano Geométrico (GBM).
-    \item Los parámetros $\mu$ (drift) y $\sigma$ (volatilidad) son desconocidos y deben estimarse desde datos históricos.
-    \item La valoración clásica mediante Máxima Verosimilitud (MLE) entrega estimaciones puntuales, pero ignora \textbf{riesgo de modelo} e incertidumbre paramétrica.
-\end{itemize}
+La literatura bayesiana de derivados enfatiza que la incertidumbre paramétrica puede incorporarse mediante densidades predictivas neutrales al riesgo. \citet{romboutsstentoft2014} encuentran que, cuando existe una cantidad sustancial de datos, las diferencias de pricing entre inferencia clásica y bayesiana pueden ser pequeñas, aunque la integración posterior sigue siendo conceptualmente correcta. Este resultado constituye un rival natural para la hipótesis de que full Bayes debe mejorar de manera material el precio en todo régimen muestral.
 
-Desde una perspectiva actuarial, esta incertidumbre importa porque el \textit{payoff} es una función convexa del promedio; por lo tanto, la dispersión en los parámetros puede generar colas de riesgo que no se observan bajo un único estimador puntual.
+Metropolis--Hastings es un mecanismo general para muestrear distribuciones conocidas hasta una constante normalizante \citep{metropolis1953,hastings1970}. Su uso en opciones no constituye por sí mismo una novedad: por ejemplo, \citet{capuozzo2021} lo emplean para evaluar integrales de trayectoria. En este trabajo, en cambio, M--H se utiliza exclusivamente para la inferencia estadística bajo $\Pmeasure$; la valoración bajo $\Qmeasure$ se realiza mediante Monte Carlo estándar con control variate. Esta separación es central para la interpretación económica.
 
-\subsection{Enfoque Bayesiano}
+\section{Metodología}
 
-La inferencia bayesiana permite:
+\subsection{Modelo histórico bajo la medida física}
 
-\begin{enumerate}
-    \item \textbf{Cuantificar la incertidumbre} sobre los parámetros mediante distribuciones posteriores $p(\mu,\sigma\mid \mathbf r)$.
-    \item \textbf{Propagar esta incertidumbre} al precio de la opción mediante simulación posterior predictiva.
-    \item \textbf{Obtener intervalos creíbles} que funcionen como medidas directas de riesgo de modelo.
-\end{enumerate}
+Se supone que el activo sigue bajo $\Pmeasure$
+\begin{equation}
+ dS_t=\mu S_t\,dt+\sigma S_t\,dW_t^{\Pmeasure},
+ \label{eq:p_gbm}
+\end{equation}
+con $\sigma>0$. Por It\^o,
+\begin{equation}
+ r_i:=\log\frac{S_{t_i}}{S_{t_{i-1}}}
+ \sim
+ \mathcal N\!\left[
+ \left(\mu-\frac{\sigma^2}{2}\right)\Delta t,
+ \sigma^2\Delta t
+ \right].
+ \label{eq:returns}
+\end{equation}
 
-Dado que la posterior conjunta no tiene forma cerrada analítica, recurrimos a métodos de \textbf{Monte Carlo vía Cadenas de Markov (MCMC)}, específicamente al algoritmo de Metropolis--Hastings.
+Se mantienen priors débiles para facilitar comparación con el proyecto base:
+\begin{equation}
+ \mu\sim\mathcal N(0,1),
+ \qquad
+ \sigma\sim\operatorname{InvGamma}(2,0.1).
+\end{equation}
+La inferencia produce $p(\mu,\sigma\mid\mathcal D)$, donde $\mathcal D=(r_1,\ldots,r_n)$.
 
-% ============================================================================
-\section{Descripción del Método Metropolis--Hastings}
-% ============================================================================
+\subsection{Metropolis--Hastings en $(\mu,\log\sigma)$}
 
-\subsection{Fundamento Teórico}
+Se define $\eta=\log\sigma\in\mathbb R$. Si el prior se especifica sobre $\sigma$, la densidad objetivo en $(\mu,\eta)$ requiere el Jacobiano
+\begin{equation}
+ p(\mu,\eta\mid\mathcal D)
+ \propto
+ p(\mathcal D\mid\mu,e^{\eta})
+ p(\mu)p(e^{\eta})e^{\eta}.
+ \label{eq:jacobian}
+\end{equation}
 
-El método de Metropolis--Hastings \citep{metropolis1953equation, hastings1970monte} genera muestras de una distribución objetivo $\pi(\theta)$ cuando dicha distribución solo es conocida hasta una constante normalizante. En nuestro caso:
+El algoritmo propone
+\begin{equation}
+ \theta^*=\theta^{(k)}+\varepsilon,
+ \qquad
+ \varepsilon\sim\mathcal N(0,\Sigma_q),
+\end{equation}
+con $\theta=(\mu,\eta)$. Al ser simétrica la propuesta, la aceptación es
+\begin{equation}
+ \alpha=\min\left\{1,
+ \frac{p(\theta^*\mid\mathcal D)}{p(\theta^{(k)}\mid\mathcal D)}
+ \right\}.
+\end{equation}
+La implementación usa log-densidades para evitar underflow y reporta tasa de aceptación. Para una versión final se recomienda complementar con múltiples cadenas, $\widehat R$, ESS y error Monte Carlo.
 
-$$
-\pi(\theta) = p(\mu,\sigma \mid \mathbf r) \propto p(\mathbf r\mid \mu,\sigma)\,p(\mu)\,p(\sigma),
-$$
+\subsection{Cambio a la medida neutral al riesgo}
 
-donde $\theta=(\mu,\sigma)$.
+En el modelo Black--Scholes completo, el proceso relevante para pricing es
+\begin{equation}
+ dS_t=(r-q)S_t\,dt+\sigma S_t\,dW_t^{\Qmeasure},
+ \label{eq:q_gbm}
+\end{equation}
+con tasa libre de riesgo $r$ y dividend yield $q$. El parámetro $\mu$ de \eqref{eq:p_gbm} desaparece del precio de no arbitraje. Para una call asiática aritmética discretamente monitoreada,
+\begin{equation}
+ A_T=\frac1m\sum_{j=1}^{m}S_{t_j},
+ \qquad
+ C^{\Qmeasure}(\sigma)
+ =e^{-rT}\E^{\Qmeasure}\left[(A_T-K)^+\right].
+ \label{eq:asian_price}
+\end{equation}
 
-\begin{definition}[Distribución estacionaria]
-Una cadena de Markov con matriz de transición $P$ tiene distribución estacionaria $\pi$ si satisface:
-$$
-\pi P = \pi.
-$$
-\end{definition}
+Por tanto, el objeto bayesiano relevante es el push-forward
+\begin{equation}
+ p(C\mid\mathcal D)
+ =\int
+ \delta_{C^{\Qmeasure}(\sigma)}(C)
+ p(\sigma\mid\mathcal D)\,d\sigma,
+ \label{eq:pushforward}
+\end{equation}
+no una integral sobre el drift físico dentro de la dinámica de pricing.
 
-La estrategia es construir $P$ de forma que la posterior sea estacionaria. Una condición suficiente es el \textbf{balance detallado}:
-$$
-\pi(\theta)\,P(\theta\to\theta')=\pi(\theta')\,P(\theta'\to\theta).
-$$
+\subsection{Monte Carlo y control variate geométrico}
 
-\subsection{Algoritmo}
+La opción aritmética se estima simulando \eqref{eq:q_gbm}. Se emplean pares antitéticos y el precio cerrado de la opción asiática geométrica discretamente monitoreada como control variate, siguiendo la idea de \citet{kemnavorst1990}. Si $Y$ es el payoff aritmético descontado, $X$ el geométrico descontado y $\E[X]$ es conocido, se usa
+\begin{equation}
+ Y_{cv}=Y-\beta\{X-\E[X]\},
+ \qquad
+ \beta=\frac{\operatorname{Cov}(Y,X)}{\Var(X)}.
+\end{equation}
+El control reduce el ruido numérico y permite atribuir la dispersión restante principalmente a incertidumbre paramétrica y no al Monte Carlo interno.
 
-El núcleo del algoritmo es proponer un nuevo estado $\theta^\ast$ desde una distribución $q(\theta^\ast \mid \theta^{(t-1)})$ y aceptarlo con probabilidad:
+\subsection{Estimadores de precio}
 
-$$
-\alpha(\theta^{(t-1)},\theta^\ast)=
-\min\!\left(1,\,
-\frac{\pi(\theta^\ast)\,q(\theta^{(t-1)}\mid\theta^\ast)}
-{\pi(\theta^{(t-1)})\,q(\theta^\ast\mid\theta^{(t-1)})}
-\right).
-$$
-
-\begin{algorithm}[H]
-\caption{Metropolis--Hastings}
-\begin{algorithmic}[1]
-\STATE Inicializar $\theta^{(0)}$
-\FOR{$t = 1$ to $N$}
-    \STATE Proponer $\theta^* \sim q(\theta^* \mid \theta^{(t-1)})$
-    \STATE Calcular $\alpha(\theta^{(t-1)},\theta^*)$
-    \STATE Generar $u \sim \text{Uniform}(0,1)$
-    \IF{$u < \alpha$}
-        \STATE $\theta^{(t)} = \theta^*$ \quad (aceptar)
-    \ELSE
-        \STATE $\theta^{(t)} = \theta^{(t-1)}$ \quad (rechazar)
-    \ENDIF
-\ENDFOR
-\end{algorithmic}
-\end{algorithm}
-
-\subsection{Propuesta Random Walk}
-
-En este proyecto usamos un esquema \textbf{Random Walk Metropolis}:
-
-$$
-\theta^\ast=\theta^{(t-1)}+\epsilon,\qquad \epsilon\sim N(0,\Sigma),
-$$
-
-lo que implica simetría $q(\theta^\ast\mid\theta)=q(\theta\mid\theta^\ast)$. Por tanto:
-
-$$
-\alpha(\theta^{(t-1)},\theta^\ast)=
-\min\!\left(1,\,
-\frac{\pi(\theta^\ast)}{\pi(\theta^{(t-1)})}
-\right)
-=
-\min\!\left(1,\,
-\exp\big(\log\pi(\theta^\ast)-\log\pi(\theta^{(t-1)})\big)
-\right).
-$$
-
-Este detalle es clave para la implementación computacional: basta evaluar la log-posterior no normalizada.
-
-% ============================================================================
-\section{Modelo Estadístico/Bayesiano}
-% ============================================================================
-
-\subsection{Modelo del Activo Subyacente}
-
-Suponemos que el precio del activo $S_t$ sigue un GBM bajo la medida física $\mathbb{P}$:
-
-$$
-dS_t = \mu S_t\,dt + \sigma S_t\,dW_t,
-$$
-
-donde $\mu$ representa retorno esperado anualizado, $\sigma$ la volatilidad anualizada y $W_t$ es Browniano estándar.
-
-\subsection{Discretización y Log-retornos}
-
-Aplicando el Lema de Itô a $\log S_t$:
-
-$$
-d(\log S_t)=\left(\mu-\frac{\sigma^2}{2}\right)dt+\sigma dW_t.
-$$
-
-En tiempo discreto con paso $\Delta t$:
-
-$$
-r_t:=\log\left(\frac{S_{t+\Delta t}}{S_t}\right)
-\sim N\!\left(\left(\mu-\frac{\sigma^2}{2}\right)\Delta t,\ \sigma^2\Delta t\right).
-$$
-
-Esta formulación muestra explícitamente que $\sigma$ controla la varianza de los retornos, mientras que $\mu$ afecta solo la media, lo cual anticipa mayor dificultad para estimar drift con muestras finitas.
-
-\subsection{Verosimilitud}
-
-Sea $\mathbf r=(r_1,\dots,r_n)$ con $n$ log-retornos observados. Entonces:
-
+Se comparan cuatro reglas:
 \begin{align}
-p(\mathbf r \mid \mu,\sigma)
-&=\prod_{i=1}^n \frac{1}{\sqrt{2\pi\sigma^2\Delta t}}
-\exp\!\left(
--\frac{(r_i-m)^2}{2\sigma^2\Delta t}
-\right),\\
-m &= \left(\mu-\frac{\sigma^2}{2}\right)\Delta t.
+ \widehat C_{FB}
+ &=\E[C^{\Qmeasure}(\sigma)\mid\mathcal D],\\
+ \widehat C_{PM}
+ &=C^{\Qmeasure}(\E[\sigma\mid\mathcal D]),\\
+ \widehat C_{MAP}
+ &=C^{\Qmeasure}(\widehat\sigma_{MAP}),\\
+ \widehat C_{MLE}
+ &=C^{\Qmeasure}(\widehat\sigma_{MLE}).
 \end{align}
+En general, $\widehat C_{FB}\neq\widehat C_{PM}$ por la no linealidad de $C^{\Qmeasure}(\sigma)$. Una expansión de segundo orden alrededor de $\bar\sigma=\E[\sigma\mid\mathcal D]$ da
+\begin{equation}
+ \widehat C_{FB}
+ \approx
+ C^{\Qmeasure}(\bar\sigma)
+ +\frac12 C^{\Qmeasure\prime\prime}(\bar\sigma)
+ \Var(\sigma\mid\mathcal D),
+ \label{eq:curvature}
+\end{equation}
+lo que muestra que el valor incremental de la integración posterior depende simultáneamente de incertidumbre y curvatura.
 
-La log-verosimilitud, ignorando constantes, es:
+\subsection{Diseño de evaluación no circular}
 
-$$
-\log p(\mathbf r\mid\mu,\sigma)
-=
--\frac{n}{2}\log(\sigma^2\Delta t)
--\frac{1}{2\sigma^2\Delta t}\sum_{i=1}^n (r_i-m)^2.
-$$
-
-\subsection{Distribuciones a Priori}
-
-Usamos priors débiles:
-
+Se fija $\mu_0=0.08$, $\sigma_0=0.25$, $S_0=K=100$, $r=0.03$, $q=0$ y $T=1$. Para cada $n\in\{63,252,1260\}$ se generan $R=80$ bases históricas independientes bajo $\Pmeasure$. Cada base produce una posterior y los cuatro estimadores anteriores. El benchmark es externo a la posterior:
+\begin{equation}
+ C_0=C^{\Qmeasure}(\sigma_0).
+\end{equation}
+Para un método $M$ se reportan
 \begin{align}
-\mu &\sim N(0,1),\\
-\sigma &\sim \text{InverseGamma}(2,0.1).
+ \operatorname{Bias}_M&=\frac1R\sum_{j=1}^{R}(\widehat C_{M,j}-C_0),\\
+ \operatorname{MAE}_M&=\frac1R\sum_{j=1}^{R}|\widehat C_{M,j}-C_0|,\\
+ \RMSE_M&=\sqrt{\frac1R\sum_{j=1}^{R}(\widehat C_{M,j}-C_0)^2}.
 \end{align}
+También se evalúa la cobertura de los intervalos posteriores de precio al 95\%. A diferencia de una pérdida $L_2$ calculada contra las mismas muestras posteriores, estas métricas no garantizan algebraicamente la superioridad de la media.
 
-\textbf{Justificación actuarial}:
-\begin{itemize}
-    \item El prior para $\mu$ centrado en 0 refleja neutralidad direccional sin imponer tendencia fuerte.
-    \item El prior para $\sigma$ favorece valores positivos y rangos plausibles (de orden 10\%–50\% anual), evitando pesos exagerados en volatilidades irreales.
-\end{itemize}
+\subsection{Reproducibilidad, software y uso de inteligencia artificial}
 
-\subsection{Posterior}
+El código de inferencia, pricing, pruebas y experimento repetido se implementó en Python con NumPy, SciPy y pandas. El repositorio contiene semillas deterministas, pruebas unitarias y un flujo de integración continua. Para preservar el doble ciego, el enlace identificable al repositorio deberá sustituirse por un repositorio anónimo durante el arbitraje.
 
-Por Bayes:
+Se utilizó ChatGPT (OpenAI) como herramienta de apoyo para revisión metodológica, refactorización de código y edición del manuscrito. Las ecuaciones, supuestos, ejecución computacional, verificación de resultados, selección de referencias y responsabilidad científica permanecen bajo control del autor. Esta declaración se incluye para cumplir con las directrices editoriales sobre transparencia en el uso de herramientas de inteligencia artificial.
 
-$$
-p(\mu,\sigma\mid \mathbf r)\propto p(\mathbf r\mid \mu,\sigma)\,p(\mu)\,p(\sigma).
-$$
+\section{Resultados y discusión}
 
-Como la constante normalizante es intractable, M--H opera sobre la densidad no normalizada vía la log-posterior.
+\subsection{Corrección del caso base}
 
-% ============================================================================
-\section{Resultados Numéricos}
-% ============================================================================
+Con una trayectoria sintética de 252 retornos diarios, la volatilidad verdadera es $\sigma_0=0.25$. La inferencia transformada produce una media posterior cercana a 0.242 y un intervalo creíble aproximado $[0.222,0.264]$. La posterior de $\mu$ permanece mucho más dispersa, pero esta incertidumbre no se introduce en \eqref{eq:q_gbm}.
 
-\subsection{Datos y Configuración}
-
-Se simuló una trayectoria sintética con parámetros verdaderos:
-
-$$
-\mu_{\text{true}}=0.08,\qquad \sigma_{\text{true}}=0.25,\qquad S_0=100,
-$$
-durante $T=1$ año con $n=252$ observaciones diarias ($\Delta t=T/n$). La trayectoria observada arrojó:
-
-\begin{itemize}
-    \item Precio final $S_T=103.44$
-    \item Precio promedio $\bar S = 92.65$
-    \item Retorno anual observado $\log(S_T/S_0)/T = 0.0338$
-\end{itemize}
-
-El MCMC se ejecutó con 30,000 iteraciones, burn-in de 5,000 y propuesta con SD $[0.01,0.01]$.
-
-\subsection{Estimaciones Bayesianas vs. Clásicas}
+La Tabla \ref{tab:baseline} muestra el efecto económico de la separación de medidas. El benchmark neutral al riesgo es aproximadamente 6.42. Los estimadores basados en la volatilidad inferida se ubican alrededor de 6.22--6.24, y la distribución posterior de precios es mucho más estrecha que la obtenida al propagar incorrectamente $\mu$ dentro de las trayectorias de pricing.
 
 \begin{table}[H]
 \centering
-\caption{Resultados de Inferencia Bayesiana}
-\label{tab:resultados}
-\begin{tabular}{lcccccc}
+\caption{Caso base: valoración neutral al riesgo de la call asiática}
+\label{tab:baseline}
+\begin{tabular}{lcc}
 \toprule
-\textbf{Parámetro} & \textbf{Verdadero} & \textbf{Media Post.} & \textbf{Mediana Post.} & \textbf{IC 2.5\%} & \textbf{IC 97.5\%} & \textbf{MLE} \\
+Método & Precio & Comentario \\
 \midrule
-$\mu$ (drift)       & 0.0800 & 0.2041 & 0.1641 & $-0.1542$ & 0.5946 & 0.0629 \\
-$\sigma$ (vol.)     & 0.2500 & 0.2422 & 0.2418 & 0.2219 & 0.2650 & 0.2413 \\
+Benchmark $C^{\Qmeasure}(\sigma_0)$ & 6.42 & $\sigma_0=0.25$ \\
+Full Bayes & 6.24 & integra $p(\sigma\mid\mathcal D)$ \\
+Media posterior plug-in & 6.24 & $C^{\Qmeasure}(\E[\sigma\mid D])$ \\
+MAP plug-in & 6.22 & moda posterior de $\sigma$ \\
+MLE plug-in & 6.23 & volatilidad MLE \\
+Intervalo posterior 95\% & $[5.80,6.73]$ & push-forward de $\sigma$ \\
 \bottomrule
 \end{tabular}
+
+\vspace{0.15cm}
+\footnotesize Fuente: elaboración propia mediante simulación reproducible bajo $\Pmeasure$ y $\Qmeasure$.
 \end{table}
 
-\textbf{Observaciones}:
-\begin{enumerate}
-    \item $\sigma$ se recupera con alta precisión: la posterior es estrecha y cercana al verdadero valor. Esto es coherente con que la varianza de retornos identifica bien la volatilidad.
-    \item $\mu$ muestra intervalo creíble amplio: incluso con 252 retornos diarios, el drift anual es difícil de estimar porque su señal es pequeña frente al ruido.
-    \item La MLE de $\sigma$ coincide casi exactamente con la media posterior; para $\mu$ aparecen diferencias relevantes debido a la asimetría/dispersión posterior.
-\end{enumerate}
+El cambio de interpretación es sustantivo. La incertidumbre estadística en $\mu$ sigue siendo real para pronóstico de retornos bajo $\Pmeasure$, pero no constituye por sí misma riesgo de precio Black--Scholes. La distribución posterior de precios refleja incertidumbre sobre la volatilidad y error numérico residual controlado.
 
-\subsection{Diagnósticos MCMC}
+\subsection{Experimento de muestreo repetido}
+
+La Tabla \ref{tab:rmse} resume el experimento de 80 réplicas por tamaño muestral. La diferencia entre full Bayes y el plug-in de media posterior es prácticamente nula en los tres regímenes. Para $n=63$, ambos obtienen RMSE cercana a 0.469; para $n=252$, alrededor de 0.245; y para $n=1260$, alrededor de 0.124. El MAP es algo peor en muestras cortas y no presenta una ventaja persistente.
 
 \begin{table}[H]
 \centering
-\caption{Diagnósticos del Algoritmo MCMC}
-\label{tab:diagnosticos}
-\begin{tabular}{lc}
+\caption{Error de pricing contra el benchmark neutral al riesgo}
+\label{tab:rmse}
+\begin{tabular}{rrrrr}
 \toprule
-\textbf{Métrica} & \textbf{Valor} \\
+$n$ & Método & Bias & MAE & RMSE \\
 \midrule
-Tasa de aceptación & 0.721 \\
-ESS$_\mu$ (tamaño efectivo) & 258 \\
-ESS$_\sigma$ (tamaño efectivo) & 2,601 \\
-Autocorr(1) $\mu$ & 0.9992 \\
-Autocorr(1) $\sigma$ & 0.8059 \\
+63 & Full Bayes & -0.001 & 0.354 & 0.469 \\
+63 & Media posterior plug-in & -0.001 & 0.354 & 0.469 \\
+63 & MAP plug-in & -0.092 & 0.378 & 0.487 \\
+63 & MLE plug-in & -0.041 & 0.358 & 0.470 \\
+\addlinespace
+252 & Full Bayes & 0.014 & 0.199 & 0.245 \\
+252 & Media posterior plug-in & 0.014 & 0.199 & 0.245 \\
+252 & MAP plug-in & -0.021 & 0.197 & 0.245 \\
+252 & MLE plug-in & 0.003 & 0.199 & 0.244 \\
+\addlinespace
+1260 & Full Bayes & -0.005 & 0.101 & 0.124 \\
+1260 & Media posterior plug-in & -0.005 & 0.101 & 0.124 \\
+1260 & MAP plug-in & -0.013 & 0.106 & 0.130 \\
+1260 & MLE plug-in & -0.007 & 0.101 & 0.124 \\
 \bottomrule
 \end{tabular}
+
+\vspace{0.15cm}
+\footnotesize Fuente: elaboración propia; 80 réplicas independientes por $n$.
 \end{table}
 
-\textbf{Interpretación ampliada}:
-\begin{itemize}
-    \item Una aceptación de 72\% es alta para random-walk; sugiere pasos pequeños y, por ende, autocorrelación elevada.
-    \item La autocorrelación extremadamente alta de $\mu$ implica mezcla lenta: aunque hay 25{,}000 muestras post burn-in, la información efectiva equivale a unas pocas centenas.
-    \item Para $\sigma$, la autocorrelación decae mucho más rápido: la cadena explora ese parámetro con mayor eficiencia.
-\end{itemize}
+La cobertura empírica de los intervalos posteriores de precio al 95\% fue aproximadamente 0.950 para $n=63$, 0.963 para $n=252$ y 0.925 para $n=1260$. Las tasas medias de aceptación fueron 0.524, 0.395 y 0.222, respectivamente. La caída de aceptación con $n$ indica que una propuesta fija no escala óptimamente con la concentración posterior, por lo que la versión final del estudio debe adaptar $\Sigma_q$ o utilizar una etapa de calibración.
 
-\subsection{Análisis Visual}
+\subsection{Interpretación del resultado negativo}
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.95\textwidth]{fig1_trayectoria_precios.pdf}
-\caption{Trayectoria simulada del precio del activo subyacente. El promedio aritmético ($\bar{S} = 92.65$) es inferior al strike ($K=100$), lo que afecta la valoración de la call asiática.}
-\label{fig:trayectoria}
-\end{figure}
+El hecho de que $\widehat C_{FB}$ y $\widehat C_{PM}$ sean casi iguales no constituye un fallo del enfoque bayesiano. Es una consecuencia empírica de que, en este contrato y rango de volatilidad, $C^{\Qmeasure}(\sigma)$ es localmente cercana a lineal y la posterior de $\sigma$ se concentra con rapidez. En términos de \eqref{eq:curvature}, el término de segundo orden es pequeño.
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.95\textwidth]{fig2_traceplots.pdf}
-\caption{Traceplots de $\mu$ y $\sigma$. Tras burn-in, $\sigma$ estaciona y mezcla bien; $\mu$ presenta persistencia y cambios lentos.}
-\label{fig:traceplots}
-\end{figure}
+Este resultado es coherente con \citet{romboutsstentoft2014}, quienes encuentran que el impacto de la incertidumbre paramétrica sobre errores de pricing puede ser menor cuando la información disponible es suficiente. La contribución aplicada aquí consiste en mostrar el mismo mecanismo en un derivado dependiente de trayectoria y, simultáneamente, demostrar por qué la incertidumbre del drift histórico no debe mezclarse con la valoración neutral al riesgo.
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.95\textwidth]{fig3_distribuciones_posteriores.pdf}
-\caption{Posteriores marginales. $\mu$ es amplia y sesgada; $\sigma$ es concentrada y casi simétrica alrededor del verdadero valor.}
-\label{fig:posteriores}
-\end{figure}
+Desde una perspectiva de gestión de riesgo, la distribución posterior de $C$ sigue siendo útil como cuantificación de incertidumbre del modelo condicionada a la especificación Black--Scholes. Sin embargo, no debe interpretarse como sustituto de una medida de riesgo de pérdidas de cartera, VaR o Expected Shortfall. Esos objetos requieren una distribución de P\&L y un horizonte de riesgo explícito.
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.95\textwidth]{fig4_autocorrelacion.pdf}
-\caption{Autocorrelaciones. Persistencia elevada en $\mu$ (decaimiento lento); mezcla moderada en $\sigma$.}
-\label{fig:autocorr}
-\end{figure}
+\section{Conclusiones, recomendaciones y consideraciones finales}
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.8\textwidth]{fig6_joint_posterior.pdf}
-\caption{Posterior conjunta $(\mu,\sigma)$. Se aprecia región de alta densidad y proximidad de la media posterior a los valores verdaderos.}
-\label{fig:joint}
-\end{figure}
+Este estudio separa inferencia estadística y valoración financiera en un esquema bayesiano para opciones asiáticas. Bajo $\Pmeasure$, los datos informan sobre $(\mu,\sigma)$ y el drift presenta gran incertidumbre. Bajo $\Qmeasure$, el precio Black--Scholes de la opción depende del drift $r-q$ y de $\sigma$; por ello, la posterior relevante para incertidumbre de pricing es $p(\sigma\mid\mathcal D)$.
 
-% ============================================================================
-\section{Interpretación Actuarial: Valoración de Opción Asiática}
-% ============================================================================
+El experimento repetido no encuentra una superioridad material de full Bayes frente al plug-in basado en la media posterior para la configuración estudiada. En muestras cortas, el MAP tampoco domina y puede introducir sesgo adicional. La evidencia favorece una conclusión más acotada que una afirmación universal de superioridad bayesiana: integrar la posterior es el procedimiento coherente para representar incertidumbre paramétrica, pero su beneficio cuantitativo depende de la curvatura del funcional de precio y de la dispersión posterior.
 
-\subsection{Especificación de la Opción}
+Se recomiendan cuatro extensiones antes del envío definitivo. Primero, aumentar el número de réplicas y variar moneyness, madurez y frecuencia de monitoreo. Segundo, reportar diagnósticos modernos de MCMC con múltiples cadenas. Tercero, estudiar datos reales o calibración conjunta a opciones para separar incertidumbre histórica y riesgo de especificación. Cuarto, extender el marco a volatilidad estocástica, donde el paso entre $\Pmeasure$ y $\Qmeasure$ incorpora precios de riesgo adicionales y la incertidumbre paramétrica puede adquirir mayor relevancia económica.
 
-Se valora una \textbf{opción call asiática de promedio aritmético continuo} con:
+La principal limitación es precisamente la fortaleza que permite aislar el mecanismo: el modelo Black--Scholes es completo y obliga a que $\mu$ desaparezca del precio. Por tanto, los resultados no se extrapolan automáticamente a mercados incompletos, modelos con volatilidad estocástica, saltos o primas de riesgo no observadas.
 
-\begin{itemize}
-    \item $S_0=100$
-    \item $K=100$ (at-the-money)
-    \item madurez $T=1$ año
-    \item tasa libre de riesgo $r=0.03$
-\end{itemize}
+\section*{Financiamiento y conflictos de interés}
 
-Payoff:
+\textbf{Financiamiento:} [Completar por el autor antes del envío.]\\
+\textbf{Conflictos de interés:} [Completar por el autor antes del envío.]
 
-$$
-\text{Payoff}=\max(\bar S_T-K,0),\qquad
-\bar S_T=\frac{1}{T}\int_0^T S_t\,dt.
-$$
+\section*{Disponibilidad de datos y código}
 
-\subsection{Metodología de Valoración}
+Los datos del experimento son sintéticos y completamente reproducibles a partir de las semillas especificadas en el código. El repositorio contiene los módulos de inferencia bajo $\Pmeasure$, pricing bajo $\Qmeasure$, pruebas automatizadas y el experimento de muestreo repetido. Para una evaluación doble ciego deberá proporcionarse una copia anonimizada del repositorio.
 
-\begin{enumerate}
-    \item \textbf{Enfoque bayesiano:} para cada muestra posterior $(\mu^{(i)},\sigma^{(i)})$, se simulan trayectorias GBM y se calcula un precio $C^{(i)}$ por Monte Carlo.
-    \item \textbf{Enfoque MLE:} se usa el precio puntual $C_{\text{MLE}}$ evaluando en $(\hat\mu_{\text{MLE}},\hat\sigma_{\text{MLE}})$.
-    \item \textbf{Referencia teórica:} precio $C_{\text{true}}$ con $(\mu_{\text{true}},\sigma_{\text{true}})$.
-\end{enumerate}
-
-La distribución posterior del precio se interpreta como:
-
-$$
-p(C\mid \mathbf r)
-=
-\int p(C\mid\mu,\sigma)\,p(\mu,\sigma\mid\mathbf r)\,d\mu\,d\sigma.
-$$
-
-\subsection{Resultados de Valoración}
-
-\begin{table}[H]
-\centering
-\caption{Precio de la Opción Asiática Call}
-\label{tab:valoracion}
-\begin{tabular}{lccc}
-\toprule
-\textbf{Método} & \textbf{Precio Medio (\$)} & \textbf{SD/SE} & \textbf{IC 95\%} \\
-\midrule
-Parámetros Verdaderos & 7.74 & 0.10 & --- \\
-Estimación MLE        & 7.16 & 0.10 & --- \\
-Inferencia Bayesiana  & 14.11 & 9.76 & [2.39, 35.11] \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.9\textwidth]{fig5_precio_opcion_posterior.pdf}
-\caption{Posterior del precio. Dispersión y cola derecha pesada por incertidumbre de $\mu$.}
-\label{fig:precio_opcion}
-\end{figure}
-
-\subsection{Implicaciones Actuariales (ampliadas)}
-
-\begin{enumerate}
-    \item \textbf{Riesgo de modelo explícito:} el precio no es un escalar sino una variable aleatoria inducida por $p(\mu,\sigma\mid \mathbf r)$. La MLE, al ser puntual, equivale a asumir conocimiento perfecto de parámetros.
-    
-    \item \textbf{Subestimación con MLE:} aunque $C_{\text{MLE}}=7.16$ es cercano a $C_{\text{true}}=7.74$, la posterior contiene escenarios plausibles donde el precio supera 30. Esto ocurre porque el payoff es convexo en la tendencia, amplificando valores altos de $\mu$.
-    
-    \item \textbf{Capital económico y reservas:} para una institución que vende estos contratos, reservar solo $C_{\text{MLE}}$ puede ser insuficiente. Un criterio prudente sería usar percentiles altos de $p(C\mid\mathbf r)$ como capital: por ejemplo, el 95\% sugiere un capital cercano a 35.
-    
-    \item \textbf{Pricing conservador:} en práctica actuarial/financiera, un precio de venta puede fijarse en percentiles 75–90 de la posterior (aprox. 17–25), incorporando margen de seguridad y apetito de riesgo.
-    
-    \item \textbf{Sensibilidad al drift:} el driver dominante de incertidumbre es $\mu$, no $\sigma$. Esto es estructural: derivados dependientes de promedios aritméticos son especialmente sensibles a la tendencia media de las trayectorias.
-\end{enumerate}
-
-\subsection{Análisis de Riesgo}
-
-\textbf{Value-at-Risk (VaR) del precio}:
-\begin{itemize}
-    \item VaR$_{95\%} \approx 35.11$
-    \item VaR$_{99\%}$ mayor a 40 (cola derecha pesada)
-\end{itemize}
-
-\textbf{Expected Shortfall}:
-$$
-\text{ES}_{95\%}=\mathbb{E}[C\mid C>\text{VaR}_{95\%}]\approx 38.
-$$
-
-Estas medidas muestran que el riesgo extremo está gobernado por la incertidumbre en tendencia. Para gestión de solvencia, ES es preferible a VaR por ser coherente bajo colas pesadas.
-
-% ============================================================================
-\section{Conclusiones}
-% ============================================================================
-
-\subsection{Síntesis de Resultados}
-
-\begin{enumerate}
-    \item Se implementó Metropolis--Hastings desde cero para inferir parámetros GBM bajo un marco bayesiano.
-    \item La cadena converge, con aceptación alta (72\%), pero con mezcla lenta en $\mu$ reflejada en ESS bajo.
-    \item $\sigma$ se estima con alta precisión (posterior estrecha, ESS alto); $\mu$ conserva incertidumbre inherente a la naturaleza de los datos financieros anuales.
-    \item La valoración bayesiana produce una posterior del precio amplia, evidenciando riesgo de modelo ausente en MLE.
-    \item Para decisiones actuariales prudentes, el precio debe considerarse distribucional y no puntual.
-\end{enumerate}
-
-\subsection{Ventajas del Enfoque Bayesiano}
-
-\begin{itemize}
-    \item \textbf{Cuantificación completa de incertidumbre:} se obtiene $p(\mu,\sigma\mid\mathbf r)$ y, por extensión, $p(C\mid\mathbf r)$.
-    \item \textbf{Decisiones robustas:} permite pricing y capital basados en percentiles/ES coherentes con aversión al riesgo.
-    \item \textbf{Actualización secuencial:} los priors se actualizan naturalmente al incorporar nueva información.
-\end{itemize}
-
-\subsection{Limitaciones y Trabajo Futuro}
-
-\begin{enumerate}
-    \item \textbf{Autocorrelación alta en $\mu$:} se puede mejorar con propuestas adaptativas, reparametrización o HMC/NUTS.
-    \item \textbf{Datos sintéticos:} en aplicación real sería necesario calibrar con datos de mercado, donde hay colas pesadas, volatilidad estocástica y posibles saltos.
-    \item \textbf{Extensiones:}
-    \begin{itemize}
-        \item Heston (volatilidad estocástica)
-        \item Merton (saltos)
-        \item Opciones asiáticas de promedio geométrico
-        \item Opciones sobre canastas multivariadas
-    \end{itemize}
-    \item \textbf{Validación externa:} comparar precios con métodos PDE, Fourier o benchmarks de mercado para cuantificar sesgo y robustez.
-\end{enumerate}
-
-\subsection{Relevancia Actuarial}
-
-Este proyecto muestra que MCMC es crucial en acturía moderna cuando:
-
-\begin{itemize}
-    \item Los modelos financieros carecen de soluciones analíticas.
-    \item La regulación exige cuantificar incertidumbre (Solvencia II, ORSA).
-    \item Las decisiones de pricing y reservas deben ser robustas ante riesgo de modelo.
-\end{itemize}
-
-Metropolis--Hastings, pese a su simplicidad, ofrece un puente práctico entre teoría estocástica, inferencia estadística y gestión prudente de derivados.
-
-% ============================================================================
-% REFERENCIAS
-% ============================================================================
-\newpage
-\thispagestyle{empty}
-\bibliographystyle{apalike}
 \begin{thebibliography}{99}
 
-\bibitem{metropolis1953equation}
-Metropolis, N., Rosenbluth, A. W., Rosenbluth, M. N., Teller, A. H., \& Teller, E. (1953).
-\textit{Equation of state calculations by fast computing machines}.
-The Journal of Chemical Physics, 21(6), 1087--1092.
+\bibitem[Black y Scholes(1973)]{blackscholes1973}
+Black, F. y Scholes, M. (1973). The pricing of options and corporate liabilities. \textit{Journal of Political Economy}, 81(3), 637--654. doi:10.1086/260062.
 
-\bibitem{hastings1970monte}
-Hastings, W. K. (1970).
-\textit{Monte Carlo sampling methods using Markov chains and their applications}.
-Biometrika, 57(1), 97--109.
+\bibitem[Capuozzo et al.(2021)]{capuozzo2021}
+Capuozzo, P., Panella, E., Schettini Gherardini, T. y Vvedensky, D. D. (2021). Path integral Monte Carlo method for option pricing. \textit{Physica A: Statistical Mechanics and its Applications}, 581, 126231. doi:10.1016/j.physa.2021.126231.
 
-\bibitem{robert2004monte}
-Robert, C. P., \& Casella, G. (2004).
-\textit{Monte Carlo Statistical Methods} (2nd ed.).
-Springer.
+\bibitem[Geman y Yor(1993)]{gemanyor1993}
+Geman, H. y Yor, M. (1993). Bessel processes, Asian options, and perpetuities. \textit{Mathematical Finance}, 3(4), 349--375. doi:10.1111/j.1467-9965.1993.tb00092.x.
 
-\bibitem{hull2018options}
-Hull, J. C. (2018).
-\textit{Options, Futures, and Other Derivatives} (10th ed.).
-Pearson.
+\bibitem[Glasserman(2004)]{glasserman2004}
+Glasserman, P. (2004). \textit{Monte Carlo Methods in Financial Engineering}. Springer.
 
-\bibitem{glasserman2004monte}
-Glasserman, P. (2004).
-\textit{Monte Carlo Methods in Financial Engineering}.
-Springer.
+\bibitem[Hastings(1970)]{hastings1970}
+Hastings, W. K. (1970). Monte Carlo sampling methods using Markov chains and their applications. \textit{Biometrika}, 57(1), 97--109.
 
-\bibitem{klugman2012loss}
-Klugman, S. A., Panjer, H. H., \& Willmot, G. E. (2012).
-\textit{Loss Models: From Data to Decisions} (4th ed.).
-Wiley.
+\bibitem[Kemna y Vorst(1990)]{kemnavorst1990}
+Kemna, A. G. Z. y Vorst, A. C. F. (1990). A pricing method for options based on average asset values. \textit{Journal of Banking \& Finance}, 14(1), 113--129. doi:10.1016/0378-4266(90)90039-5.
 
-\bibitem{ntzoufras2011bayesian}
-Ntzoufras, I. (2011).
-\textit{Bayesian Modeling Using WinBUGS}.
-Wiley.
+\bibitem[Metropolis et al.(1953)]{metropolis1953}
+Metropolis, N., Rosenbluth, A. W., Rosenbluth, M. N., Teller, A. H. y Teller, E. (1953). Equation of state calculations by fast computing machines. \textit{The Journal of Chemical Physics}, 21(6), 1087--1092.
 
-\bibitem{scollnik2001implementation}
-Scollnik, D. P. (2001).
-\textit{Implementing a Bayesian analysis of the compound Poisson-gamma distribution using WinBUGS}.
-Journal of Actuarial Practice, 9, 5--28.
+\bibitem[Merton(1973)]{merton1973}
+Merton, R. C. (1973). Theory of rational option pricing. \textit{The Bell Journal of Economics and Management Science}, 4(1), 141--183. doi:10.2307/3003143.
 
-\bibitem{vehtari2000bayesian}
-Vehtari, A., \& Ojanen, J. (2012).
-\textit{A survey of Bayesian predictive methods for model assessment, selection and comparison}.
-Statistics Surveys, 6, 142--228.
+\bibitem[Rombouts y Stentoft(2014)]{romboutsstentoft2014}
+Rombouts, J. V. K. y Stentoft, L. (2014). Bayesian option pricing using mixed normal heteroskedasticity models. \textit{Computational Statistics \& Data Analysis}, 76, 588--605. doi:10.1016/j.csda.2013.06.023.
 
 \end{thebibliography}
 
