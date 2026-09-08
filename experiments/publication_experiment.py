@@ -1,12 +1,12 @@
 """Repeated-sampling experiment for the publication-oriented manuscript.
 
-The outer experiment generates historical returns under P.  Each data set is used to
-infer the posterior of (mu, sigma) by Metropolis-Hastings.  Option prices are then
+The outer experiment generates historical returns under P. Each data set is used to
+infer the posterior of (mu, sigma) by Metropolis-Hastings. Option prices are then
 computed under Q, where the stock drift is r-q and only posterior uncertainty in sigma
 enters the Black-Scholes Asian-option value.
 
-The crucial evaluation target is external to the posterior sample: the benchmark
-C_Q(sigma_true).  Therefore the comparison between posterior integration and plug-in
+The evaluation target is external to the posterior sample: the benchmark
+C_Q(sigma_true). Therefore the comparison between posterior integration and plug-in
 estimators is not circular.
 """
 
@@ -17,14 +17,11 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+from scipy.optimize import minimize_scalar
+from scipy.stats import gaussian_kde
 
 from src.asian_pricing import asian_arithmetic_call_mc
-from src.bayesian_gbm import (
-    gbm_log_returns,
-    gbm_mle,
-    log_posterior_mu_logsigma,
-    random_walk_metropolis_gbm,
-)
+from src.bayesian_gbm import gbm_log_returns, gbm_mle, random_walk_metropolis_gbm
 
 
 @dataclass(frozen=True)
@@ -41,14 +38,14 @@ class ExperimentConfig:
     replications: int = 80
     mcmc_iter: int = 6_000
     burn_in: int = 1_200
-    pricing_paths: int = 20_000
-    pricing_grid_points: int = 81
-    seed: int = 20260907
+    pricing_paths: int = 12_000
+    pricing_grid_points: int = 77
+    pricing_seed: int = 20260907
 
 
 def _build_price_grid(cfg: ExperimentConfig) -> tuple[np.ndarray, np.ndarray]:
     """Build a smooth C_Q(sigma) lookup table using common random numbers."""
-    sigma_grid = np.linspace(0.10, 0.55, cfg.pricing_grid_points)
+    sigma_grid = np.linspace(0.12, 0.50, cfg.pricing_grid_points)
     prices = np.empty_like(sigma_grid)
     for i, sigma in enumerate(sigma_grid):
         prices[i] = asian_arithmetic_call_mc(
@@ -60,7 +57,7 @@ def _build_price_grid(cfg: ExperimentConfig) -> tuple[np.ndarray, np.ndarray]:
             q=cfg.q,
             n_steps=cfg.monitoring_steps,
             n_paths=cfg.pricing_paths,
-            seed=cfg.seed,
+            seed=cfg.pricing_seed,
             antithetic=True,
             geometric_control=True,
         ).price
@@ -81,17 +78,21 @@ def _price_from_grid(
     return float(out) if values.ndim == 0 else out
 
 
-def _joint_map_sigma(mu: np.ndarray, sigma: np.ndarray, returns: np.ndarray, dt: float) -> float:
-    """Approximate the joint MAP by the sampled state with highest posterior density."""
-    logp = np.empty_like(sigma)
-    for i, (mu_i, sigma_i) in enumerate(zip(mu, sigma, strict=True)):
-        logp[i] = log_posterior_mu_logsigma(
-            np.array([mu_i, np.log(sigma_i)]), returns, dt
-        )
-    return float(sigma[int(np.argmax(logp))])
+def _posterior_mode_kde(samples: np.ndarray) -> float:
+    """Estimate a one-dimensional posterior mode with Gaussian KDE."""
+    samples = np.asarray(samples, dtype=float)
+    kde = gaussian_kde(samples, bw_method="scott")
+    result = minimize_scalar(
+        lambda x: -float(kde(x)[0]),
+        bounds=(float(samples.min()), float(samples.max())),
+        method="bounded",
+    )
+    return float(result.x)
 
 
-def run_experiment(cfg: ExperimentConfig = ExperimentConfig()) -> tuple[pd.DataFrame, pd.DataFrame]:
+def run_experiment(
+    cfg: ExperimentConfig = ExperimentConfig(),
+) -> tuple[pd.DataFrame, pd.DataFrame]:
     sigma_grid, price_grid = _build_price_grid(cfg)
     true_price = _price_from_grid(cfg.sigma_true, sigma_grid, price_grid)
 
@@ -99,8 +100,9 @@ def run_experiment(cfg: ExperimentConfig = ExperimentConfig()) -> tuple[pd.DataF
     for n_obs in cfg.n_obs_values:
         dt = cfg.T / n_obs
         for replication in range(cfg.replications):
-            data_seed = cfg.seed + 10_000 * n_obs + replication
-            chain_seed = cfg.seed + 20_000 * n_obs + replication
+            # Deterministic seed scheme used for the manuscript pilot.
+            data_seed = 1000 * n_obs + replication
+            chain_seed = data_seed + 100_000
             returns = gbm_log_returns(
                 mu=cfg.mu_true,
                 sigma=cfg.sigma_true,
@@ -119,7 +121,7 @@ def run_experiment(cfg: ExperimentConfig = ExperimentConfig()) -> tuple[pd.DataF
 
             sigma_draws = posterior.sigma
             posterior_prices = _price_from_grid(sigma_draws, sigma_grid, price_grid)
-            sigma_map = _joint_map_sigma(posterior.mu, posterior.sigma, returns, dt)
+            sigma_map = _posterior_mode_kde(sigma_draws)
             _, sigma_mle = gbm_mle(returns, dt)
 
             price_full_bayes = float(np.mean(posterior_prices))
@@ -151,6 +153,12 @@ def run_experiment(cfg: ExperimentConfig = ExperimentConfig()) -> tuple[pd.DataF
     raw = pd.DataFrame(rows)
     summary_rows: list[dict[str, float | int | str]] = []
     for n_obs, group in raw.groupby("n_obs"):
+        coverage = float(
+            np.mean(
+                (group["price_ci_low"] <= group["true_price"])
+                & (group["true_price"] <= group["price_ci_high"])
+            )
+        )
         for method in ("full_bayes", "postmean_plugin", "map_plugin", "mle_plugin"):
             error = group[method] - group["true_price"]
             summary_rows.append(
@@ -161,17 +169,11 @@ def run_experiment(cfg: ExperimentConfig = ExperimentConfig()) -> tuple[pd.DataF
                     "mae": float(np.mean(np.abs(error))),
                     "rmse": float(np.sqrt(np.mean(error**2))),
                     "mean_acceptance_rate": float(group["acceptance_rate"].mean()),
-                    "coverage_95": float(
-                        np.mean(
-                            (group["price_ci_low"] <= group["true_price"])
-                            & (group["true_price"] <= group["price_ci_high"])
-                        )
-                    ),
+                    "coverage_95": coverage,
                 }
             )
 
-    summary = pd.DataFrame(summary_rows)
-    return raw, summary
+    return raw, pd.DataFrame(summary_rows)
 
 
 def main() -> None:
