@@ -1,0 +1,95 @@
+{
+  "generated_at_utc": "2026-09-09T14:21:32.796812+00:00",
+  "git": {
+    "branch": null,
+    "commit": null,
+    "dirty": null
+  },
+  "hardware": {
+    "fallback_repository_disk": {
+      "free_bytes": 1562469597184,
+      "free_human": "1.42 TiB",
+      "path": "C:\\Users\\175199\\OneDrive - Fundacion Universidad de las Americas Puebla\\git\\Metropolis-Hastings-for-Asian-Options-Using-Bayesian-Inference-and-Black-Scholes--Article-",
+      "total_bytes": 2047511359488,
+      "total_human": "1.86 TiB"
+    },
+    "nvidia": {
+      "available": true,
+      "cuda_version_reported_by_driver": "13.2",
+      "gpus": [
+        {
+          "driver_version": "596.86",
+          "index": "0",
+          "memory_total_human": "23.99 GiB",
+          "memory_total_mib": 24570.0,
+          "name": "NVIDIA RTX 4500 Ada Generation"
+        }
+      ]
+    },
+    "psutil": {
+      "available": true,
+      "cpu": {
+        "frequency_mhz_current": 3200.0,
+        "frequency_mhz_max": 3200.0,
+        "frequency_mhz_min": 0.0,
+        "logical_cores": 32,
+        "physical_cores": 24
+      },
+      "disks": [
+        {
+          "device": "C:\\",
+          "filesystem": "NTFS",
+          "free_bytes": 1562469662720,
+          "free_human": "1.42 TiB",
+          "mountpoint": "C:\\",
+          "total_bytes": 2047511359488,
+          "total_human": "1.86 TiB"
+        }
+      ],
+      "memory": {
+        "available_bytes": 37336252416,
+        "available_human": "34.77 GiB",
+        "total_bytes": 68333309952,
+        "total_human": "63.64 GiB"
+      },
+      "version": "7.2.2"
+    }
+  },
+  "repository_root": "C:\\Users\\175199\\OneDrive - Fundacion Universidad de las Americas Puebla\\git\\Metropolis-Hastings-for-Asian-Options-Using-Bayesian-Inference-and-Black-Scholes--Article-",
+  "schema_version": 1,
+  "software": {
+    "conda": {
+      "active_environment": "asian-options",
+      "available": true,
+      "conda_version": "conda 26.7.1",
+      "error": null,
+      "prefix": "C:\\Users\\175199\\AppData\\Local\\miniconda3\\envs\\asian-options"
+    },
+    "cupy": {
+      "error": "ModuleNotFoundError(\"No module named 'cupy'\")",
+      "installed": false,
+      "usable": false,
+      "version": null
+    },
+    "packages": {
+      "cupy": null,
+      "matplotlib": "3.11.1",
+      "numpy": "2.4.6",
+      "pandas": "3.0.5",
+      "psutil": "7.2.2",
+      "pytest": "9.1.1",
+      "scipy": "1.17.1"
+    },
+    "python_executable": "C:\\Users\\175199\\AppData\\Local\\miniconda3\\envs\\asian-options\\python.exe",
+    "python_version": "3.11.16"
+  },
+  "system": {
+    "architecture": "AMD64",
+    "cpu_model": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "hostname": "PCAG103A-15",
+    "logical_cpu_count_stdlib": 32,
+    "operating_system": "Windows",
+    "operating_system_release": "10",
+    "platform": "Windows-10-10.0.26100-SP0"
+  }
+}

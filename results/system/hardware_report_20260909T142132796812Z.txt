@@ -1,0 +1,44 @@
+Workstation reproducibility report
+==================================
+Generated UTC: 2026-09-09T14:21:32.796812+00:00
+Hostname: PCAG103A-15
+OS: Windows-10-10.0.26100-SP0
+Architecture: AMD64
+CPU: Intel64 Family 6 Model 183 Stepping 1, GenuineIntel
+Physical cores: 24
+Logical cores: 32
+RAM total: 63.64 GiB
+Python: 3.11.16
+Conda environment: asian-options
+Git commit: None
+Git branch: None
+Git dirty: None
+
+NVIDIA
+------
+nvidia-smi available: True
+CUDA reported by driver: 13.2
+GPU 0: NVIDIA RTX 4500 Ada Generation | VRAM 23.99 GiB | driver 596.86
+
+CuPy
+----
+Installed: False
+Usable: False
+Version: None
+CUDA runtime version: None
+CUDA driver version: None
+CuPy error: ModuleNotFoundError("No module named 'cupy'")
+
+Disks
+-----
+C:\ at C:\: total 1.86 TiB, free 1.42 TiB
+
+Package versions
+----------------
+numpy: 2.4.6
+pandas: 3.0.5
+scipy: 1.17.1
+matplotlib: 3.11.1
+pytest: 9.1.1
+psutil: 7.2.2
+cupy: None
