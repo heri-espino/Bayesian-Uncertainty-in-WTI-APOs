@@ -19,7 +19,7 @@ jobs:
         run: python -m pytest -q
       - name: Run reproducible synthetic validation smoke test
         run: >-
-          python experiments/synthetic_validation.py
+          python -m experiments.synthetic_validation
           --quick
           --parameter-replications 5
           --posterior-replications 1
