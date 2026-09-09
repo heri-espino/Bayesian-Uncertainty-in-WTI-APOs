@@ -43,14 +43,19 @@ def _flatten_columns(frame: pd.DataFrame) -> pd.DataFrame:
 
 
 def normalize_yahoo_history(frame: pd.DataFrame) -> pd.DataFrame:
-    """Return a stable, lowercase OHLCV schema from a Yahoo/yfinance DataFrame."""
+    """Return a stable, lowercase OHLCV schema from a Yahoo/yfinance DataFrame.
+
+    The function is idempotent: it accepts both a raw yfinance frame with a Date
+    index and a frame already normalized by this function.
+    """
     if frame is None or len(frame) == 0:
         raise ValueError("Yahoo history is empty")
 
     out = _flatten_columns(frame)
-    out = out.reset_index()
-    date_col = "Date" if "Date" in out.columns else out.columns[0]
-    out = out.rename(columns={date_col: "date"})
+    if "date" not in out.columns:
+        out = out.reset_index()
+        date_col = "Date" if "Date" in out.columns else out.columns[0]
+        out = out.rename(columns={date_col: "date"})
 
     rename = {
         "Open": "open",
@@ -63,6 +68,8 @@ def normalize_yahoo_history(frame: pd.DataFrame) -> pd.DataFrame:
     out = out.rename(columns=rename)
     if "close" not in out.columns:
         raise ValueError("Yahoo history does not contain a Close column")
+    if "date" not in out.columns:
+        raise ValueError("Yahoo history does not contain a date index/column")
 
     keep = [c for c in ["date", "open", "high", "low", "close", "adj_close", "volume"] if c in out]
     out = out[keep].copy()
