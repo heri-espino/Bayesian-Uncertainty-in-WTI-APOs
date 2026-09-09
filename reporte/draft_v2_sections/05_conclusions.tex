@@ -1,0 +1,32 @@
+\section{Limitaciones y extensiones}
+
+La primera limitación es la especificación Black--Scholes. La volatilidad constante permite aislar la separación $\Pmeasure/\Qmeasure$, pero excluye smiles, leverage effects, saltos y volatilidad estocástica. En mercados incompletos, el cambio hacia $\Qmeasure$ puede introducir precios de riesgo adicionales cuya incertidumbre sea más relevante que la de una única volatilidad constante.
+
+La segunda limitación corresponde al diagnóstico MCMC. La parametrización logarítmica evita propuestas de volatilidad negativa y las tasas de aceptación son razonables, pero la corrida masiva utiliza una cadena por dataset. Una versión final debe validar una submuestra representativa mediante múltiples cadenas con inicializaciones dispersas, $\widehat R$, effective sample size y Monte Carlo standard error. Dado que el problema es bidimensional, también puede utilizarse cuadratura o una malla posterior como benchmark de inferencia.
+
+La tercera limitación es el prior. La especificación $\sigma\sim\operatorname{InvGamma}(2,0.1)$ sobre la propia desviación estándar se conserva por trazabilidad con el proyecto original. La robustez de las conclusiones debe contrastarse con alternativas como half-normal, half-$t$ o una especificación explícita sobre $\sigma^2$. El objetivo de esa sensibilidad no es seleccionar un prior que favorezca full Bayes, sino determinar si la relación entre dispersión posterior, curvatura y brecha de precios persiste.
+
+La cuarta limitación es numérica. El benchmark y las reglas se evalúan mediante interpolación de grids Monte Carlo de alta precisión. El uso de números aleatorios comunes y variable de control reduce ruido comparativo, pero no convierte el benchmark en una solución analítica. Resulta conveniente validar un subconjunto de contratos con mayor número de trayectorias, quasi-Monte Carlo u otro método independiente para acotar el error de discretización en $\sigma$ e interpolación.
+
+Finalmente, el estudio principal es sintético. Esta elección permite conocer $\sigma_0$ y medir RMSE y cobertura sin ambigüedad, pero limita la evidencia económica externa. Una aplicación empírica posterior puede utilizar datos reales de opciones asiáticas sobre futuros o exposiciones promedio, manteniendo la distinción entre validación simulada y aplicación de mercado.
+
+\section{Conclusiones}
+
+Este trabajo desarrolla un esquema reproducible para estudiar incertidumbre paramétrica bayesiana en la valuación de una opción asiática aritmética. El punto metodológico central es la separación entre inferencia bajo la medida física y valuación bajo la medida neutral al riesgo. En Black--Scholes, los retornos históricos informan sobre el drift físico y la volatilidad, pero el precio de no arbitraje depende de $r-q$ y de $\sigma$, no de $\mu$. Propagar la posterior de $\mu$ dentro de las trayectorias de pricing no representa incertidumbre coherente con el modelo.
+
+La incertidumbre sobre $\sigma$ sí puede trasladarse al precio. El experimento principal, con 81 escenarios y 2,000 réplicas por escenario, muestra que full Bayes, plug-in de media posterior y MLE presentan errores puntuales muy similares en buena parte del espacio estudiado. No existe dominancia universal: full Bayes y MLE obtienen cada uno el menor RMSE en 35 escenarios, mientras MAP lo hace en 11. MAP presenta, además, el mayor RMSE y sesgo absoluto promedio de forma consistente.
+
+La principal conclusión sobre integración posterior es condicional. La mediana de la brecha absoluta entre full Bayes y media posterior es inferior a una milésima de unidad monetaria en el conjunto completo, pero el gap no es aleatorio. Disminuye fuertemente al aumentar la cantidad de historia, es prácticamente nulo at-the-money y aumenta fuera de at-the-money y con la madurez. Estos resultados son consistentes con la expansión de Taylor que relaciona la corrección de Jensen con $C^{\Qmeasure\prime\prime}(\sigma)$ y $\Var(\sigma\mid\mathcal D)$.
+
+La cobertura media de los intervalos posteriores de precio es 94.88\%, cercana al 95\% nominal. Así, el valor principal de full Bayes en este entorno no reside necesariamente en mejorar el punto de precio, sino en proporcionar una representación coherente de incertidumbre paramétrica y en identificar cuándo esa incertidumbre interactúa con la no linealidad del payoff de forma cuantitativamente relevante.
+
+En términos aplicados, el aumento de información histórica tiene un efecto mucho mayor sobre RMSE que la elección entre full Bayes, media posterior y MLE. Esto sugiere una jerarquía práctica: primero debe controlarse la calidad y cantidad de información utilizada para estimar volatilidad; después resulta relevante decidir si la dispersión posterior y la curvatura contractual justifican integrar la posterior completa. En muestras cortas y contratos alejados de at-the-money, esa integración es más informativa; con historias largas, las reglas convergen rápidamente.
+
+\section*{Reproducibilidad, financiamiento y uso de inteligencia artificial}
+
+Los datos principales son sintéticos y pueden regenerarse mediante semillas deterministas. La corrida principal utiliza la semilla raíz 20260909 y el fingerprint de configuración \texttt{f497062f0c571126}. El repositorio contiene módulos de inferencia bajo $\Pmeasure$, pricing bajo $\Qmeasure$, pruebas automatizadas, checkpoints reanudables y un analizador que reconstruye las estadísticas utilizadas en esta sección a partir de los CSV agregados. Para una revisión doble ciego deberá utilizarse una versión anonimizada del repositorio.
+
+Se utilizó ChatGPT (OpenAI) como herramienta de apoyo para revisión metodológica, refactorización de código, organización de literatura, análisis reproducible y edición del manuscrito. Las decisiones de modelación, ejecución de experimentos, revisión de resultados, selección final de referencias y responsabilidad científica corresponden al autor.
+
+\textbf{Financiamiento:} [Completar antes del envío.]\\
+\textbf{Conflictos de interés:} [Completar antes del envío.]
