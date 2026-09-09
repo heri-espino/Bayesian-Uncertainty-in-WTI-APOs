@@ -20,9 +20,12 @@ jobs:
           python -m py_compile
           scripts/system_probe.py
           src/accelerated_pricing.py
+          src/asian_futures_pricing.py
+          src/wti_yahoo.py
           experiments/large_scale_synthetic.py
           experiments/precompute_pricing_grids.py
           experiments/analyze_extreme_results.py
+          experiments/wti_yahoo_application.py
       - name: Run tests
         run: python -m pytest -q
       - name: Run system probe without requiring NVIDIA/CuPy
