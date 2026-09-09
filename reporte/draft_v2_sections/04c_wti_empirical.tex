@@ -1,0 +1,30 @@
+\subsection{Aplicación empírica: futuros WTI}
+\label{subsec:wti_empirical}
+
+Como complemento a la validación por muestreo repetido, se realiza una aplicación empírica con precios diarios de futuros de petróleo West Texas Intermediate (WTI). Se utiliza el símbolo \texttt{CL=F} de Yahoo Finance, descargado mediante \texttt{yfinance} 1.7.0. Esta serie se interpreta exclusivamente como un \emph{proxy} continuo/front-month de WTI: la metodología histórica de roll de Yahoo no se reconstruye contrato por contrato y, por tanto, no se afirma que la serie constituya una first-nearby construida por los autores.
+
+El snapshot descargado contiene 6,539 observaciones diarias entre el 23 de agosto de 2000 y el 9 de septiembre de 2026. Para preservar la compatibilidad con la especificación lognormal del GBM, cuya variable de estado debe permanecer positiva, la estimación se restringe al periodo posterior al episodio de precios no positivos de 2020. La ventana efectiva va del 4 de enero de 2021 al 9 de septiembre de 2026 e incluye 1,429 precios y 1,428 log-retornos diarios, con $\Delta t=1/252$. El archivo local utilizado queda identificado por el hash SHA-256 \texttt{b55c92a4f354fa0f6d5a4c72907920f46a5cf6aebf0a6db5fc4a93d88dcb469d}.
+
+La inferencia empírica utiliza 50,000 iteraciones de Metropolis--Hastings, 10,000 de burn-in y 40,000 draws posteriores, con semilla 20260909. La Tabla~\ref{tab:wti_posterior} resume los principales resultados.
+
+\begin{table}[H]
+\centering
+\caption{Inferencia sobre parámetros del proxy front-month WTI, 2021--2026}
+\label{tab:wti_posterior}
+\begin{tabular}{lrrrr}
+\toprule
+Parámetro & MLE & Media post. & Mediana post. & Intervalo post. 95\% \\
+\midrule
+$\mu$ & 0.20774 & 0.19940 & 0.20185 & $[-0.13249,\;0.53216]$ \\
+$\sigma$ & 0.40620 & 0.40624 & 0.40612 & $[0.39157,\;0.42181]$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+El contraste entre ambos parámetros es marcado. La volatilidad anualizada se encuentra fuertemente identificada: la estimación de máxima verosimilitud, la media posterior, la mediana posterior y el MAP ($0.40612$) difieren sólo en la cuarta cifra decimal. El intervalo posterior al 95\% para $\sigma$ tiene una amplitud aproximada de 0.0302, alrededor de una media de 0.4062. En cambio, el drift físico conserva una incertidumbre sustancial. Aunque su media posterior es 0.1994, el intervalo al 95\% abarca valores negativos y positivos, de $-0.1325$ a $0.5322$.
+
+Esta evidencia empírica refuerza la separación entre inferencia bajo $\Pmeasure$ y valuación bajo $\Qmeasure$. Los datos históricos contienen relativamente poca información sobre el drift anualizado, incluso con más de cinco años de observaciones diarias, mientras que la volatilidad se estima con mucha mayor precisión. Bajo la especificación de no arbitraje empleada en este artículo, la amplitud posterior de $\mu$ no debe trasladarse a las trayectorias neutrales al riesgo; la posterior de $\sigma$ es el objeto históricamente estimado que resulta relevante para el funcional de precio.
+
+La tasa de aceptación de la cadena empírica es 17.75\%. El resultado no altera la coincidencia observada entre MLE y los resúmenes posteriores de $\sigma$, pero es suficientemente bajo para justificar diagnósticos adicionales antes del envío final. En consecuencia, esta aplicación debe acompañarse en la versión de envío por múltiples cadenas, $\widehat R$, effective sample size y Monte Carlo standard error, así como por una revisión de la escala de propuesta.
+
+La aplicación WTI no constituye una validación contra precios observados de opciones asiáticas. En la corrida reportada no se impone una curva libre de riesgo ni se utiliza una cotización de mercado de una Asian; el objetivo es mostrar, con datos reales de un mercado de materias primas, el comportamiento empírico de la incertidumbre paramétrica que alimentaría la etapa de valuación. La validación de precios frente a opciones asiáticas negociadas o cotizadas requiere una fuente adicional de precios contractuales y se mantiene como extensión separada.
