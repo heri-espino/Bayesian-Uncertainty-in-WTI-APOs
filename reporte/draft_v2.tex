@@ -1,6 +1,6 @@
 \documentclass[12pt,letterpaper]{article}
 
-% Draft v2: publication-scale synthetic evidence incorporated.
+% Draft v2: publication-scale synthetic evidence and WTI empirical application.
 % Target structure: REMEF research article. Compile from repository root with:
 %   pdflatex reporte/draft_v2.tex
 \usepackage[spanish,english]{babel}
@@ -51,7 +51,7 @@
 
 \vspace{0.45cm}
 
-\textbf{Resumen.} Este trabajo estudia cómo la incertidumbre bayesiana sobre los parámetros de un movimiento browniano geométrico estimados con retornos históricos se transmite al valor neutral al riesgo de una opción asiática aritmética. La inferencia se realiza bajo la medida física mediante Metropolis--Hastings en $(\mu,\log\sigma)$ y la valuación bajo $\mathbb Q$ mediante Monte Carlo con variables antitéticas y control geométrico. En 81 escenarios, con 2,000 muestras históricas independientes por escenario, se comparan integración posterior completa, plug-in de media posterior, MAP y máxima verosimilitud contra un benchmark generado con la volatilidad verdadera. Full Bayes y el plug-in de media posterior presentan diferencias de RMSE económicamente pequeñas en la mayoría de los escenarios, pero la brecha aumenta con menor información histórica, moneyness alejado de at-the-money y mayor madurez. El MAP presenta mayor error promedio. Los intervalos posteriores de precio alcanzan una cobertura media de 94.88\%, cercana al nivel nominal de 95\%.
+\textbf{Resumen.} Este trabajo estudia cómo la incertidumbre bayesiana sobre parámetros de un movimiento browniano geométrico estimados con retornos históricos se transmite al valor neutral al riesgo de una opción asiática aritmética. La inferencia se realiza bajo la medida física mediante Metropolis--Hastings y la valuación bajo $\mathbb Q$ mediante Monte Carlo con variables antitéticas y control geométrico. En 81 escenarios y 2,000 réplicas por escenario, full Bayes, plug-in de media posterior, MAP y máxima verosimilitud se comparan contra un benchmark con volatilidad verdadera. Full Bayes y media posterior presentan diferencias de RMSE pequeñas en la mayoría de los casos; la brecha aumenta con menor información, moneyness alejado de at-the-money y mayor madurez. La cobertura media de los intervalos de precio es 94.88\%. Una aplicación con 1,428 retornos diarios del proxy front-month WTI (2021--2026) estima $E[\sigma\mid D]=0.4062$ con intervalo 95\% $[0.3916,0.4218]$, mientras el drift físico permanece ampliamente incierto.
 
 \textbf{Palabras clave:} inferencia bayesiana; opciones asiáticas; Metropolis--Hastings; valoración neutral al riesgo; incertidumbre paramétrica.
 
@@ -60,7 +60,7 @@
 \vspace{0.35cm}
 \selectlanguage{english}
 
-\textbf{Abstract.} This paper studies how Bayesian uncertainty about geometric-Brownian-motion parameters estimated from historical returns propagates into the risk-neutral value of an arithmetic Asian option. Inference is conducted under the physical measure using Metropolis--Hastings in $(\mu,\log\sigma)$, whereas valuation is performed under $\mathbb Q$ using Monte Carlo with antithetic sampling and a geometric control variate. Across 81 scenarios and 2,000 independent historical samples per scenario, full posterior integration, posterior-mean plug-in, MAP, and maximum likelihood are evaluated against a benchmark generated with the true volatility. Full Bayes and posterior-mean plug-in have economically small RMSE differences in most scenarios, although their gap increases with shorter historical samples, moneyness away from at-the-money, and longer maturities. MAP has higher average error. Posterior price intervals attain mean coverage of 94.88\%, close to the nominal 95\% level.
+\textbf{Abstract.} This paper studies how Bayesian uncertainty about geometric-Brownian-motion parameters estimated from historical returns propagates into the risk-neutral value of an arithmetic Asian option. Inference is conducted under the physical measure using Metropolis--Hastings, whereas valuation is performed under $\mathbb Q$ using Monte Carlo with antithetic sampling and a geometric control variate. Across 81 scenarios and 2,000 replications per scenario, full Bayes, posterior-mean plug-in, MAP, and maximum likelihood are evaluated against a benchmark based on the true volatility. Full Bayes and posterior-mean plug-in display small RMSE differences in most cases; the gap increases with shorter histories, moneyness away from at-the-money, and longer maturities. Mean posterior-price coverage is 94.88\%. An empirical application using 1,428 daily returns of a front-month WTI proxy (2021--2026) yields $E[\sigma\mid D]=0.4062$ with a 95\% interval of $[0.3916,0.4218]$, while the physical drift remains substantially uncertain.
 
 \textbf{Keywords:} Bayesian inference; Asian options; Metropolis--Hastings; risk-neutral valuation; parameter uncertainty.
 
