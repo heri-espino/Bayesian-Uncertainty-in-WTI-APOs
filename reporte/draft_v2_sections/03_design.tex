@@ -1,0 +1,67 @@
+\section{Diseño experimental y reproducibilidad}
+
+\subsection{Escenarios de muestreo repetido}
+
+La configuración fija
+\begin{equation}
+ S_0=100,
+ \qquad \mu_0=0.08,
+ \qquad r=0.03,
+ \qquad q=0,
+ \qquad \Delta t=1/252.
+\end{equation}
+Se consideran tres cantidades de información histórica,
+\begin{equation}
+ n\in\{63,252,1260\},
+\end{equation}
+que corresponden aproximadamente a 0.25, 1 y 5 años de retornos diarios; tres volatilidades verdaderas,
+\begin{equation}
+ \sigma_0\in\{0.15,0.25,0.40\};
+\end{equation}
+tres niveles de moneyness,
+\begin{equation}
+ K/S_0\in\{0.8,1.0,1.2\};
+\end{equation}
+y tres madureces,
+\begin{equation}
+ T\in\{0.5,1,2\}.
+\end{equation}
+El producto cartesiano genera 81 escenarios de evaluación. Para cada combinación $(n,\sigma_0)$ se simulan 2,000 historias independientes, dando lugar a 18,000 ajustes posteriores. Cada posterior se reutiliza sobre las nueve combinaciones $(K/S_0,T)$; no se repite la inferencia al cambiar términos contractuales.
+
+Cada ajuste utiliza 20,000 iteraciones de Metropolis--Hastings, 4,000 de burn-in y thinning igual a 2. La semilla raíz es 20260909 y las semillas de unidades independientes se generan de forma determinista, de modo que una corrida puede reconstruirse a partir de la configuración y el commit de código.
+
+\subsection{Benchmark neutral al riesgo}
+
+Para cada contrato se precomputa una malla
+\begin{equation}
+ \sigma\in[0.02,1.00]
+\end{equation}
+con 161 puntos. Cada punto se valúa con dos millones de trayectorias bajo $\Qmeasure$, muestreo antitético y control geométrico. Los nueve grids se calcularon con GPU mediante CuPy. El error estándar Monte Carlo máximo reportado entre las nueve configuraciones contractuales se encuentra entre 0.00218 y 0.01805, con mediana de 0.00579 entre los máximos por contrato.
+
+El benchmark de cada escenario es
+\begin{equation}
+ C_0=C^{\Qmeasure}(\sigma_0),
+ \label{eq:trueprice}
+\end{equation}
+aproximado mediante interpolación en la malla de alta precisión. Por construcción, $C_0$ depende de la volatilidad verdadera y no de una posterior estimada. Los mismos grids se utilizan para evaluar \eqref{eq:fb}--\eqref{eq:mle}, reduciendo ruido numérico en comparaciones entre reglas.
+
+\subsection{Métricas}
+
+Para cada método $M$ y escenario, con $R=2000$ réplicas, se calculan
+\begin{align}
+ \Bias_M
+ &=\frac1R\sum_{j=1}^{R}(\widehat C_{M,j}-C_0),\\
+ \MAE_M
+ &=\frac1R\sum_{j=1}^{R}|\widehat C_{M,j}-C_0|,\\
+ \RMSE_M
+ &=\sqrt{\frac1R\sum_{j=1}^{R}(\widehat C_{M,j}-C_0)^2}.
+\end{align}
+Para la posterior de precios se registra además si el intervalo central al 95\% contiene el benchmark. Las métricas se agregan por escenario y también se estudia directamente la diferencia
+\begin{equation}
+ \Delta_{FB,PM}=\widehat C_{FB}-\widehat C_{PM}.
+ \label{eq:gap}
+\end{equation}
+
+\subsection{Infraestructura computacional}
+
+La corrida principal corresponde al fingerprint reproducible \texttt{f497062f0c571126}. Se ejecutó con 24 procesos de CPU para las inferencias independientes y una NVIDIA RTX 4500 Ada Generation para las mallas de pricing mediante CuPy 14.2.0. El manifiesto conserva configuración, semilla, versiones de software, hardware y commit de Git. Los checkpoints se almacenan por unidad de inferencia y por punto de pricing, permitiendo reanudar una corrida interrumpida sin recalcular unidades completas. Los resultados agregados y el código de análisis permanecen versionados en el repositorio.
