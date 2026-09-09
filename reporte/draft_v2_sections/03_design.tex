@@ -62,6 +62,16 @@ Para la posterior de precios se registra además si el intervalo central al 95\%
  \label{eq:gap}
 \end{equation}
 
+\subsection{Aplicación empírica WTI}
+
+La evidencia simulada se complementa con una aplicación a futuros de petróleo WTI. Se descarga el histórico diario de \texttt{CL=F} desde Yahoo Finance mediante \texttt{yfinance}. El símbolo se utiliza como proxy continuo/front-month y no como una reconstrucción propia de first-nearby, dado que la regla histórica de roll del proveedor no se observa de forma contractual en la descarga.
+
+El snapshot completo contiene 6,539 registros entre 2000-08-23 y 2026-09-09. Debido a que el GBM requiere una variable de estado positiva y el mercado WTI presentó precios no positivos en 2020, la muestra de estimación se fija ex ante desde 2021-01-01. La primera observación efectiva es 2021-01-04 y la última 2026-09-09, con 1,429 precios y 1,428 log-retornos. Se utiliza nuevamente $\Delta t=1/252$.
+
+Para esta aplicación se ejecutan 50,000 iteraciones de Metropolis--Hastings, con 10,000 de burn-in y 40,000 draws posteriores. El snapshot local se conserva fuera del repositorio, mientras el manifiesto versionado registra proveedor, fechas, versión de \texttt{yfinance}, tamaño muestral y SHA-256 del archivo. Esta parte del estudio se interpreta como aplicación empírica de la inferencia paramétrica, no como validación de precios de opciones asiáticas observadas.
+
 \subsection{Infraestructura computacional}
 
 La corrida principal corresponde al fingerprint reproducible \texttt{f497062f0c571126}. Se ejecutó con 24 procesos de CPU para las inferencias independientes y una NVIDIA RTX 4500 Ada Generation para las mallas de pricing mediante CuPy 14.2.0. El manifiesto conserva configuración, semilla, versiones de software, hardware y commit de Git. Los checkpoints se almacenan por unidad de inferencia y por punto de pricing, permitiendo reanudar una corrida interrumpida sin recalcular unidades completas. Los resultados agregados y el código de análisis permanecen versionados en el repositorio.
+
+La aplicación WTI utiliza el mismo entorno reproducible y la semilla 20260909 para la cadena MCMC. El snapshot empleado se identifica por el SHA-256 \texttt{b55c92a4f354fa0f6d5a4c72907920f46a5cf6aebf0a6db5fc4a93d88dcb469d}, permitiendo distinguir de forma inequívoca los datos que produjeron los resultados empíricos aun si el proveedor actualiza posteriormente su histórico.
