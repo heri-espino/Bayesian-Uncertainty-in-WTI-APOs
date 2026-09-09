@@ -1,0 +1,61 @@
+\subsection{El tamaño de la historia domina el error de valuación}
+
+El patrón más fuerte es la reducción del error al aumentar la cantidad de información histórica. La Tabla \ref{tab:rmse_n} presenta el RMSE promedio sobre las 27 combinaciones de $(\sigma_0,K/S_0,T)$ disponibles para cada tamaño de muestra.
+
+\begin{table}[H]
+\centering
+\caption{RMSE promedio por tamaño de historia y regla de valuación}
+\label{tab:rmse_n}
+\begin{tabular}{rcccc}
+\toprule
+$n$ & Full Bayes & Media posterior & MAP & MLE \\
+\midrule
+63   & 0.38031 & 0.37972 & 0.38928 & 0.38066 \\
+252  & 0.18289 & 0.18282 & 0.18692 & 0.18288 \\
+1260 & 0.08416 & 0.08415 & 0.08595 & 0.08413 \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.15cm}
+\footnotesize Nota: promedio sobre 27 regímenes contractuales y de volatilidad por fila; 2,000 muestras históricas independientes por escenario.
+\end{table}
+
+Para full Bayes, la mediana del cociente $\RMSE_{63}/\RMSE_{1260}$ a través de contratos y volatilidades es 4.67. Los cocientes medianos correspondientes son 4.66 para media posterior, 4.50 para MAP y 4.55 para MLE. Por tanto, pasar de aproximadamente tres meses a cinco años de historia diaria reduce el error en un orden cuantitativamente mucho mayor que cambiar entre full Bayes, media posterior y MLE.
+
+La Tabla \ref{tab:rmse_n} también muestra que no existe un ganador universal. La media posterior presenta el menor RMSE promedio en $n=63$ y $n=252$, mientras MLE lo hace en $n=1260$, pero las diferencias entre estas tres reglas son pequeñas. MAP es la única regla con una penalización promedio persistente.
+
+Una comparación escenario por escenario produce un matiz adicional. Full Bayes obtiene el menor RMSE en 35 de 81 escenarios, MLE en 35 y MAP en 11; la media posterior no es el mínimo exacto en ningún escenario. Este conteo no contradice sus bajos promedios: cuando las diferencias son diminutas, una regla puede ser sistemáticamente segunda por un margen mínimo y aun así exhibir un promedio competitivo. Por ello, los conteos de ``ganadores'' se interpretan sólo como complemento de las magnitudes de error.
+
+\subsection{Full Bayes frente al plug-in de media posterior}
+
+La comparación central del artículo es entre \eqref{eq:fb} y \eqref{eq:pm}. Full Bayes presenta menor RMSE en 45 de 81 escenarios y el plug-in en 36. La diferencia mediana $\RMSE_{FB}-\RMSE_{PM}$ es $-1.26\times10^{-6}$, mientras que la brecha absoluta relativa mediana es apenas 0.045\%. En términos de punto de precio, la mediana de $|\Delta_{FB,PM}|$ es 0.000736 y el máximo observado en el diseño completo es 0.01896 unidades monetarias.
+
+Estas cifras confirman que la integración posterior completa rara vez cambia materialmente el punto de valuación dentro de la especificación Black--Scholes estudiada. Sin embargo, el experimento factorial permite identificar con mayor precisión cuándo la diferencia deja de ser despreciable. La Tabla \ref{tab:fbpm_n} muestra que la brecha cae rápidamente con la cantidad de información histórica.
+
+\begin{table}[H]
+\centering
+\caption{Brecha Full Bayes--media posterior según información histórica}
+\label{tab:fbpm_n}
+\begin{tabular}{rccc}
+\toprule
+$n$ & Mediana $|\Delta_{FB,PM}|$ & Máximo $|\Delta_{FB,PM}|$ & Mediana brecha RMSE relativa \\
+\midrule
+63   & 0.007927 & 0.018964 & 0.288\% \\
+252  & 0.001962 & 0.004788 & 0.045\% \\
+1260 & 0.000391 & 0.000955 & 0.007\% \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.15cm}
+\footnotesize La brecha relativa se calcula como $|\RMSE_{FB}-\RMSE_{PM}|/\RMSE_{PM}$.
+\end{table}
+
+El patrón es consistente con \eqref{eq:taylor}: al concentrarse $p(\sigma\mid\mathcal D)$, el término proporcional a $\Var(\sigma\mid\mathcal D)$ disminuye. La reducción no depende de que el payoff deje de ser dependiente de trayectoria; surge de que la incertidumbre de volatilidad que alimenta ese payoff se vuelve pequeña.
+
+\subsection{MAP, MLE y ausencia de dominancia universal}
+
+Full Bayes tiene menor RMSE que MAP en 60 de 81 escenarios. En promedio, $\RMSE_{FB}-\RMSE_{MAP}=-0.00493$, y la diferencia mediana es $-0.00232$. La debilidad del MAP se observa también en sesgo: con $n=63$, su sesgo absoluto promedio a través de regímenes es 0.1046, frente a 0.0329 de full Bayes y 0.0323 del plug-in de media posterior. Con $n=252$ los valores correspondientes son 0.0259, 0.0065 y 0.0067; con $n=1260$, 0.00434, 0.00135 y 0.00111. En esta especificación, la moda posterior no constituye una regla de pricing especialmente robusta.
+
+La comparación con MLE es más equilibrada. MLE presenta menor RMSE en 46 escenarios frente a 35 para full Bayes, pero la diferencia mediana $\RMSE_{FB}-\RMSE_{MLE}$ es sólo $2.4\times10^{-5}$ y la diferencia media es $-1.0\times10^{-4}$. Con historias largas, MLE obtiene el mínimo en 20 de 27 escenarios de $n=1260$, lo cual es compatible con la convergencia entre estimadores cuando la verosimilitud domina y la posterior se concentra.
+
+Estos resultados no respaldan una narrativa de superioridad universal del enfoque bayesiano en error cuadrático. Su ventaja distintiva es otra: full Bayes produce simultáneamente un punto de integración y una distribución de precios inducida por incertidumbre paramétrica. Cuando la posterior es estrecha, un plug-in o MLE puede reproducir el punto de precio con precisión similar; cuando la posterior es más dispersa y el funcional es curvo, la integración empieza a separarse de las reglas puntuales.
