@@ -1,0 +1,40 @@
+# OS / editor artifacts
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Python caches / local tooling
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+*.egg-info/
+
+# Local environments / secrets
+.venv/
+venv/
+env/
+.env
+.conda/
+
+# Logs and temporary files
+*.log
+*.tmp
+*.tmp.*
+
+# Generated experiment checkpoints and large intermediates
+# Keep final manifests and summary CSVs; do not version thousands of restart files.
+results/**/*.npz
+results/**/checkpoints/
+results/**/*_raw.csv
+results/**/progress.json
+results/**/pricing_progress.json
+
+# Keep only the rolling workstation report in Git; timestamped snapshots remain local.
+results/system/hardware_report_*.json
+results/system/hardware_report_*.txt
+!results/system/hardware_report_latest.json
+!results/system/hardware_report_latest.txt
