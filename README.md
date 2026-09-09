@@ -71,13 +71,13 @@ python -m pip install -r requirements-publication.txt
 Run a lightweight deterministic smoke validation:
 
 ```bash
-python experiments/synthetic_validation.py --quick
+python -m experiments.synthetic_validation --quick
 ```
 
 Run the publication-oriented validation suite:
 
 ```bash
-python experiments/synthetic_validation.py
+python -m experiments.synthetic_validation
 ```
 
 The default output directory is `results/synthetic_validation/`. Each run writes:
@@ -92,7 +92,7 @@ The default output directory is `results/synthetic_validation/`. Each run writes
 The default reproducibility seed is `20260909`. It can be overridden explicitly:
 
 ```bash
-python experiments/synthetic_validation.py \
+python -m experiments.synthetic_validation \
   --seed 20260909 \
   --output-dir results/synthetic_validation
 ```
@@ -106,7 +106,7 @@ The continuous-integration workflow runs the unit tests and a reduced `--quick` 
 Run the current repeated-sampling pricing experiment with:
 
 ```bash
-python experiments/publication_experiment.py
+python -m experiments.publication_experiment
 ```
 
 ## Publication-oriented research question
