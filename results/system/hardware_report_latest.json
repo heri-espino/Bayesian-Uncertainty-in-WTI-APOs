@@ -1,13 +1,13 @@
 {
-  "generated_at_utc": "2026-09-09T14:21:32.796812+00:00",
+  "generated_at_utc": "2026-09-09T14:35:18.852433+00:00",
   "git": {
-    "branch": null,
-    "commit": null,
-    "dirty": null
+    "branch": "main",
+    "commit": "6da8d4dd407d10181752ca997cf882bfe96eeb57",
+    "dirty": true
   },
   "hardware": {
     "fallback_repository_disk": {
-      "free_bytes": 1562469597184,
+      "free_bytes": 1559052488704,
       "free_human": "1.42 TiB",
       "path": "C:\\Users\\175199\\OneDrive - Fundacion Universidad de las Americas Puebla\\git\\Metropolis-Hastings-for-Asian-Options-Using-Bayesian-Inference-and-Black-Scholes--Article-",
       "total_bytes": 2047511359488,
@@ -39,7 +39,7 @@
         {
           "device": "C:\\",
           "filesystem": "NTFS",
-          "free_bytes": 1562469662720,
+          "free_bytes": 1559052488704,
           "free_human": "1.42 TiB",
           "mountpoint": "C:\\",
           "total_bytes": 2047511359488,
@@ -47,8 +47,8 @@
         }
       ],
       "memory": {
-        "available_bytes": 37336252416,
-        "available_human": "34.77 GiB",
+        "available_bytes": 36651139072,
+        "available_human": "34.13 GiB",
         "total_bytes": 68333309952,
         "total_human": "63.64 GiB"
       },
@@ -66,13 +66,24 @@
       "prefix": "C:\\Users\\175199\\AppData\\Local\\miniconda3\\envs\\asian-options"
     },
     "cupy": {
-      "error": "ModuleNotFoundError(\"No module named 'cupy'\")",
-      "installed": false,
-      "usable": false,
-      "version": null
+      "cuda_driver_version": 13020,
+      "cuda_runtime_version": 13020,
+      "device_count": 1,
+      "devices": [
+        {
+          "compute_capability": "8.9",
+          "index": 0,
+          "name": "NVIDIA RTX 4500 Ada Generation",
+          "total_global_memory_bytes": 25762988032,
+          "total_global_memory_human": "23.99 GiB"
+        }
+      ],
+      "installed": true,
+      "usable": true,
+      "version": "14.2.0"
     },
     "packages": {
-      "cupy": null,
+      "cupy": "14.2.0",
       "matplotlib": "3.11.1",
       "numpy": "2.4.6",
       "pandas": "3.0.5",

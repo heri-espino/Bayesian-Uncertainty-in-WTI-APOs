@@ -1,0 +1,78 @@
+{
+  "checkpoint_policy": "atomic per inference replication and per pricing grid; reruns resume missing units",
+  "completed_at_utc": "2026-09-09T14:45:54.148750+00:00",
+  "config": {
+    "S0": 100.0,
+    "base_proposal_logsigma_sd": 0.08,
+    "base_proposal_mu_sd": 0.3,
+    "burn_in": 2400,
+    "historical_dt": 0.003968253968253968,
+    "maturities": [
+      0.5,
+      1.0,
+      2.0
+    ],
+    "mcmc_iter": 12000,
+    "moneyness_values": [
+      0.8,
+      1.0,
+      1.2
+    ],
+    "mu_true": 0.08,
+    "posterior_thin": 2,
+    "price_grid_points": 121,
+    "price_sigma_max": 0.9,
+    "price_sigma_min": 0.03,
+    "pricing_chunk_size": 50000,
+    "pricing_paths": 500000,
+    "q": 0.0,
+    "r": 0.03,
+    "replications": 1000,
+    "root_seed": 20260909,
+    "sample_sizes": [
+      63,
+      252,
+      1260
+    ],
+    "sigma_true_values": [
+      0.15,
+      0.25,
+      0.4
+    ]
+  },
+  "config_fingerprint": "7843e0b3b9c2c562",
+  "created_or_resumed_at_utc": "2026-09-09T14:43:29.620556+00:00",
+  "git_commit": "6da8d4dd407d10181752ca997cf882bfe96eeb57",
+  "hardware": {
+    "logical_cpu_count": 32,
+    "machine": "AMD64",
+    "numpy": "2.4.6",
+    "nvidia_smi": [
+      {
+        "driver_version": "596.86",
+        "memory_total_mib": "24570",
+        "name": "NVIDIA RTX 4500 Ada Generation"
+      }
+    ],
+    "platform": "Windows-10-10.0.26100-SP0",
+    "processor": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "python": "3.11.16",
+    "selected_backend": {
+      "backend": "cupy",
+      "cupy_version": "14.2.0",
+      "device_id": 0,
+      "device_name": "NVIDIA RTX 4500 Ada Generation",
+      "total_global_memory_bytes": 25762988032
+    }
+  },
+  "inference_checkpoints": {
+    "completed": 9000,
+    "total": 9000
+  },
+  "preset": "research",
+  "raw_rows": 81000,
+  "requested_backend": "cupy",
+  "script_version": "1.0.0",
+  "summary_rows": 324,
+  "workers": 24
+}
