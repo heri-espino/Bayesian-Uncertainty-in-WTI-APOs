@@ -1,0 +1,53 @@
+{
+  "application_type": "empirical illustration; not market-price validation",
+  "asian_pricing": null,
+  "data_interpretation": "Yahoo CL=F continuous/front-month proxy; historical roll methodology is not reconstructed here",
+  "generated_at_utc": "2026-09-09T20:22:55.125016+00:00",
+  "local_snapshot": "data\\wti_yahoo\\CL_F_2026-09-09.csv",
+  "local_snapshot_sha256": "b55c92a4f354fa0f6d5a4c72907920f46a5cf6aebf0a6db5fc4a93d88dcb469d",
+  "mcmc": {
+    "burn_in": 10000,
+    "n_iter": 50000,
+    "posterior_draws": 40000,
+    "seed": 20260909
+  },
+  "model": {
+    "dt": 0.003968253968253968,
+    "first_price_used": "2021-01-04",
+    "gbm_requires_positive_prices": true,
+    "last_price_used": "2026-09-09",
+    "measure": "P",
+    "model_end_requested": null,
+    "model_start_requested": "2021-01-01",
+    "n_log_returns": 1428,
+    "n_prices": 1429
+  },
+  "posterior": {
+    "acceptance_rate": 0.17752355047100943,
+    "mu_mle": 0.20773988856270637,
+    "mu_posterior_mean": 0.19939918054511735,
+    "mu_posterior_median": 0.20184550035977808,
+    "mu_q025": -0.13249425298704562,
+    "mu_q975": 0.532161446918419,
+    "sigma_mle": 0.4061969840667636,
+    "sigma_posterior_map": 0.40612117284049326,
+    "sigma_posterior_mean": 0.40624194448126844,
+    "sigma_posterior_median": 0.4061225731533322,
+    "sigma_q025": 0.3915691230160919,
+    "sigma_q975": 0.4218097390726832
+  },
+  "yahoo": {
+    "auto_adjust": false,
+    "first_observation": "2000-08-23",
+    "interval": "1d",
+    "last_observation": "2026-09-09",
+    "provider": "Yahoo Finance via yfinance",
+    "query_end": null,
+    "query_period": "max",
+    "query_start": null,
+    "repair": false,
+    "rows": 6539,
+    "ticker": "CL=F",
+    "yfinance_version": "1.7.0"
+  }
+}
