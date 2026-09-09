@@ -1,0 +1,7 @@
+-r requirements-publication.txt
+
+# Optional NVIDIA/CUDA acceleration for src/accelerated_pricing.py.
+# This package targets CUDA 12.x. Verify the workstation driver with `nvidia-smi`
+# before installing; if the machine uses a different CUDA major version, install
+# the matching CuPy distribution instead.
+cupy-cuda12x
