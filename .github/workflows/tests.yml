@@ -14,7 +14,7 @@ jobs:
         with:
           python-version: "3.11"
       - name: Install test dependencies
-        run: python -m pip install --upgrade pip numpy pytest psutil
+        run: python -m pip install --upgrade pip numpy pandas pytest psutil
       - name: Compile research utility and long-run scripts
         run: >-
           python -m py_compile
@@ -22,6 +22,7 @@ jobs:
           src/accelerated_pricing.py
           experiments/large_scale_synthetic.py
           experiments/precompute_pricing_grids.py
+          experiments/analyze_extreme_results.py
       - name: Run tests
         run: python -m pytest -q
       - name: Run system probe without requiring NVIDIA/CuPy
@@ -33,3 +34,7 @@ jobs:
           --parameter-replications 5
           --posterior-replications 1
           --output-dir /tmp/synthetic_validation
+      - name: Analyze committed extreme experiment
+        run: >-
+          python -m experiments.analyze_extreme_results
+          --output /tmp/extreme_analysis.json
