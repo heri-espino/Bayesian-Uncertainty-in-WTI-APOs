@@ -1,0 +1,63 @@
+\subsection{Moneyness y madurez: evidencia de un efecto de curvatura}
+
+La diferencia entre full Bayes y media posterior también varía con las características del contrato. La Tabla \ref{tab:curvature} presenta la brecha absoluta media y mediana agrupada por moneyness y por madurez.
+
+\begin{table}[H]
+\centering
+\caption{Brecha absoluta $|\Delta_{FB,PM}|$ por características contractuales}
+\label{tab:curvature}
+\begin{tabular}{llrrr}
+\toprule
+Dimensión & Nivel & Media & Mediana & Máximo \\
+\midrule
+Moneyness & $K/S_0=0.8$ & 0.004833 & 0.001973 & 0.018964 \\
+          & $K/S_0=1.0$ & 0.000207 & 0.000049 & 0.001775 \\
+          & $K/S_0=1.2$ & 0.005178 & 0.003063 & 0.017492 \\
+\addlinespace
+Madurez   & $T=0.5$ & 0.002574 & 0.000268 & 0.017492 \\
+          & $T=1.0$ & 0.003633 & 0.000736 & 0.018964 \\
+          & $T=2.0$ & 0.004012 & 0.000979 & 0.018721 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+La diferencia es casi nula alrededor de at-the-money: la mediana de $|\Delta_{FB,PM}|$ para $K/S_0=1$ es sólo $4.9\times10^{-5}$. Fuera de at-the-money aumenta en aproximadamente dos órdenes de magnitud en la mediana. También se incrementa con la madurez. Estos patrones son coherentes con una interpretación de Jensen: la relevancia de integrar la posterior depende no sólo de la dispersión de $\sigma$, sino de la curvatura local de $C^{\Qmeasure}(\sigma)$.
+
+El mayor gap promedio entre reglas aparece con $n=63$, $\sigma_0=0.40$, $K/S_0=0.8$ y $T=1$, donde full Bayes excede al precio de media posterior en aproximadamente 0.01896. Otros máximos se concentran igualmente en historias cortas y contratos alejados de at-the-money. La magnitud absoluta continúa siendo pequeña respecto de $S_0=100$, pero el patrón transversal permite distinguir un efecto económico real de una simple igualdad numérica accidental.
+
+Algunos contratos profundamente dentro o fuera del dinero exhiben diferencias porcentuales grandes de RMSE, incluso cercanas a 70\%. Esos porcentajes son engañosos cuando el error absoluto está cerca de cero: en el caso extremo correspondiente, la diferencia absoluta de RMSE es sólo aproximadamente $2.2\times10^{-4}$. Por ello, la discusión privilegia magnitudes monetarias y diferencias absolutas por encima de cocientes relativos en celdas de error casi nulo.
+
+\subsection{Cobertura de la incertidumbre posterior}
+
+La Tabla \ref{tab:coverage} reporta la cobertura empírica del intervalo posterior central de precio al 95\%. Dado que $C^{\Qmeasure}(\sigma)$ es monótono en los regímenes evaluados, la cobertura se hereda de la incertidumbre sobre $\sigma$ y no cambia al variar strike o madurez dentro de una misma muestra histórica.
+
+\begin{table}[H]
+\centering
+\caption{Cobertura empírica del intervalo posterior de precio al 95\%}
+\label{tab:coverage}
+\begin{tabular}{rccc}
+\toprule
+$n$ & $\sigma_0=0.15$ & $\sigma_0=0.25$ & $\sigma_0=0.40$ \\
+\midrule
+63   & 0.9435 & 0.9380 & 0.9475 \\
+252  & 0.9470 & 0.9510 & 0.9560 \\
+1260 & 0.9500 & 0.9545 & 0.9515 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+La cobertura media de las nueve celdas es 0.9488, con mínimo 0.938 y máximo 0.956. A diferencia del piloto de 80 réplicas, que producía fluctuaciones visibles alrededor del nivel nominal, las 2,000 réplicas muestran una calibración estable y cercana a 95\%. Por tanto, aunque la integración posterior rara vez cambie mucho el punto de precio, la distribución inducida conserva contenido informativo para representar incertidumbre paramétrica.
+
+\subsection{Diagnóstico numérico y robustez del experimento}
+
+Las tasas medias de aceptación de Metropolis--Hastings se ubican entre 0.301 y 0.458, con promedio 0.381 entre las nueve combinaciones $(n,\sigma_0)$. Estos valores no muestran señales obvias de una propuesta degenerada. Sin embargo, una tasa de aceptación razonable no constituye una prueba de convergencia; por ello, diagnósticos multcadena se mantienen como una extensión necesaria antes de una versión final de envío.
+
+La precisión numérica del pricing también fue ampliada respecto del experimento de 1,000 réplicas. Las nueve mallas del experimento principal utilizan dos millones de trayectorias por punto y backend CuPy. Al comparar las 324 filas agregadas del run de 1,000 réplicas con el run final de 2,000, la mediana del cambio absoluto de RMSE es 0.000996 y la mediana del cambio relativo absoluto es 1.21\%. La diferencia media absoluta en cobertura es 0.0053. Por tanto, las conclusiones cualitativas son estables al duplicar las réplicas y elevar la precisión del benchmark.
+
+\subsection{Relación con la literatura e interpretación económica}
+
+Los resultados conectan con \citet{romboutsstentoft2014} en un punto central: incorporar incertidumbre paramétrica de forma bayesiana es conceptualmente coherente, pero su impacto incremental sobre errores de pricing puede ser pequeño cuando los parámetros se encuentran bien identificados. Nuestro experimento añade una dimensión dependiente de trayectoria y permite localizar dónde esa conclusión deja de ser aproximadamente cierta: muestras cortas, moneyness lejos de at-the-money y mayores madureces.
+
+La dependencia de trayectoria, por sí sola, no garantiza que full Bayes cambie materialmente el punto de precio. Lo que importa es la interacción entre incertidumbre estadística y geometría del funcional de valuación. Esta conclusión es más informativa que una simple comparación entre estimadores: establece condiciones bajo las cuales la sofisticación adicional de integrar una posterior completa tiene consecuencias cuantitativas visibles.
+
+Frente a la literatura mexicana, el trabajo complementa los enfoques que introducen tasas estocásticas, volatilidad dinámica o aplicaciones específicas \citep{ortiz2016,matias2019,ortizjimenez2026}. El objetivo aquí es distinto: cuantificar la parte de incertidumbre que proviene de estimar históricamente un parámetro y determinar cómo debe entrar en una valuación neutral al riesgo sin confundir medidas de probabilidad.
