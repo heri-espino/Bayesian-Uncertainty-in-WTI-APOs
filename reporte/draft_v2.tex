@@ -1,0 +1,78 @@
+\documentclass[12pt,letterpaper]{article}
+
+% Draft v2: publication-scale synthetic evidence incorporated.
+% Target structure: REMEF research article. Compile from repository root with:
+%   pdflatex reporte/draft_v2.tex
+\usepackage[spanish,english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{newtxtext,newtxmath}
+\usepackage[top=2.5cm,bottom=2.5cm,left=3cm,right=3cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{float}
+\usepackage{microtype}
+\usepackage{setspace}
+\usepackage{hyperref}
+\usepackage[round,authoryear]{natbib}
+
+\setstretch{1.05}
+\setlength{\parindent}{0.6cm}
+\setlength{\parskip}{0pt}
+\hypersetup{colorlinks=true,linkcolor=black,citecolor=black,urlcolor=blue}
+
+\newif\ifblind
+\blindtrue
+
+\newcommand{\Pmeasure}{\mathbb{P}}
+\newcommand{\Qmeasure}{\mathbb{Q}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\RMSE}{\operatorname{RMSE}}
+\newcommand{\MAE}{\operatorname{MAE}}
+\newcommand{\Bias}{\operatorname{Bias}}
+\newcommand{\MAP}{\operatorname{MAP}}
+
+\begin{document}
+\selectlanguage{spanish}
+
+\begin{center}
+{\Large\bfseries Incertidumbre Bayesiana en Opciones Asiáticas bajo Valuación Neutral al Riesgo\par}
+\vspace{0.3cm}
+{\large Bayesian Uncertainty in Asian Options under Risk-Neutral Valuation\par}
+\vspace{0.55cm}
+\ifblind
+{\normalsize Manuscrito anónimo para revisión por pares\par}
+\else
+{\normalsize [Autor] --- [Afiliación] --- [ORCID]\par}
+\fi
+\end{center}
+
+\vspace{0.45cm}
+
+\textbf{Resumen.} Este trabajo estudia cómo la incertidumbre bayesiana sobre los parámetros de un movimiento browniano geométrico estimados con retornos históricos se transmite al valor neutral al riesgo de una opción asiática aritmética. La inferencia se realiza bajo la medida física mediante Metropolis--Hastings en $(\mu,\log\sigma)$ y la valuación bajo $\mathbb Q$ mediante Monte Carlo con variables antitéticas y control geométrico. En 81 escenarios, con 2,000 muestras históricas independientes por escenario, se comparan integración posterior completa, plug-in de media posterior, MAP y máxima verosimilitud contra un benchmark generado con la volatilidad verdadera. Full Bayes y el plug-in de media posterior presentan diferencias de RMSE económicamente pequeñas en la mayoría de los escenarios, pero la brecha aumenta con menor información histórica, moneyness alejado de at-the-money y mayor madurez. El MAP presenta mayor error promedio. Los intervalos posteriores de precio alcanzan una cobertura media de 94.88\%, cercana al nivel nominal de 95\%.
+
+\textbf{Palabras clave:} inferencia bayesiana; opciones asiáticas; Metropolis--Hastings; valoración neutral al riesgo; incertidumbre paramétrica.
+
+\textbf{Clasificación JEL:} C11; C15; C63; G13; G17; G32.
+
+\vspace{0.35cm}
+\selectlanguage{english}
+
+\textbf{Abstract.} This paper studies how Bayesian uncertainty about geometric-Brownian-motion parameters estimated from historical returns propagates into the risk-neutral value of an arithmetic Asian option. Inference is conducted under the physical measure using Metropolis--Hastings in $(\mu,\log\sigma)$, whereas valuation is performed under $\mathbb Q$ using Monte Carlo with antithetic sampling and a geometric control variate. Across 81 scenarios and 2,000 independent historical samples per scenario, full posterior integration, posterior-mean plug-in, MAP, and maximum likelihood are evaluated against a benchmark generated with the true volatility. Full Bayes and posterior-mean plug-in have economically small RMSE differences in most scenarios, although their gap increases with shorter historical samples, moneyness away from at-the-money, and longer maturities. MAP has higher average error. Posterior price intervals attain mean coverage of 94.88\%, close to the nominal 95\% level.
+
+\textbf{Keywords:} Bayesian inference; Asian options; Metropolis--Hastings; risk-neutral valuation; parameter uncertainty.
+
+\textbf{JEL Classification:} C11; C15; C63; G13; G17; G32.
+
+\selectlanguage{spanish}
+
+\input{reporte/draft_v2_sections/01_introduction_literature.tex}
+\input{reporte/draft_v2_sections/02_methodology.tex}
+\input{reporte/draft_v2_sections/03_design.tex}
+\input{reporte/draft_v2_sections/04_results.tex}
+\input{reporte/draft_v2_sections/05_conclusions.tex}
+\input{reporte/draft_v2_sections/06_bibliography.tex}
+
+\end{document}
