@@ -1,5 +1,6 @@
 {
   "checkpoint_policy": "atomic per inference replication and per pricing grid; reruns resume missing units",
+  "completed_at_utc": "2026-09-09T15:51:34.989805+00:00",
   "config": {
     "S0": 100.0,
     "base_proposal_logsigma_sd": 0.08,
@@ -64,8 +65,14 @@
       "total_global_memory_bytes": 25762988032
     }
   },
+  "inference_checkpoints": {
+    "completed": 18000,
+    "total": 18000
+  },
   "preset": "extreme",
+  "raw_rows": 162000,
   "requested_backend": "cupy",
   "script_version": "1.0.0",
+  "summary_rows": 324,
   "workers": 24
 }
