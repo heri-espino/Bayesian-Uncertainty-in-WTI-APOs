@@ -1,0 +1,137 @@
+\section{Metodología}
+
+\subsection{Dinámica histórica bajo la medida física}
+
+Se supone que el activo sigue un movimiento browniano geométrico bajo la medida física:
+\begin{equation}
+ dS_t=\mu S_t\,dt+\sigma S_t\,dW_t^{\Pmeasure}.
+ \label{eq:p_gbm}
+\end{equation}
+Para observaciones igualmente espaciadas con intervalo $\Delta t$, los log-retornos
+\begin{equation}
+ R_i=\log\left(\frac{S_{t_i}}{S_{t_{i-1}}}\right)
+\end{equation}
+satisfacen
+\begin{equation}
+ R_i\mid\mu,\sigma
+ \sim
+ \mathcal N\!\left[
+ \left(\mu-\frac12\sigma^2\right)\Delta t,
+ \sigma^2\Delta t
+ \right].
+ \label{eq:return_likelihood}
+\end{equation}
+La función de verosimilitud se obtiene como el producto de estas densidades condicionales.
+
+\subsection{Especificación bayesiana y Metropolis--Hastings}
+
+La especificación base conserva los priors del proyecto original:
+\begin{align}
+ \mu &\sim \mathcal N(0,1),\\
+ \sigma &\sim \operatorname{InvGamma}(2,0.1), \qquad \sigma>0,
+ \label{eq:priors}
+\end{align}
+donde la segunda densidad es proporcional a $\sigma^{-3}\exp(-0.1/\sigma)$. Esta parametrización se mantiene como baseline y no se interpreta como una elección universal; la sensibilidad al prior se discute como una extensión pendiente.
+
+Para respetar automáticamente la restricción $\sigma>0$, el algoritmo trabaja con
+\begin{equation}
+ \eta=\log\sigma.
+\end{equation}
+La densidad objetivo en $(\mu,\eta)$ incorpora el Jacobiano de la transformación:
+\begin{equation}
+ \log\pi(\mu,\eta\mid\mathcal D)
+ =
+ \log L(\mu,e^\eta;\mathcal D)
+ +\log p(\mu)
+ +\log p(e^\eta)
+ +\eta + C.
+ \label{eq:posterior_eta}
+\end{equation}
+Se utiliza una propuesta Random-Walk Metropolis simétrica. Si $\theta=(\mu,\eta)$, se propone
+\begin{equation}
+ \theta'=\theta+\varepsilon,
+ \qquad
+ \varepsilon\sim\mathcal N(0,\Sigma_q),
+\end{equation}
+y la probabilidad de aceptación es
+\begin{equation}
+ \alpha(\theta,\theta')
+ =\min\left\{1,
+ \frac{\pi(\theta'\mid\mathcal D)}{\pi(\theta\mid\mathcal D)}
+ \right\}.
+\end{equation}
+La implementación sigue el principio general de \citet{metropolis1953} y \citet{hastings1970}.
+
+\subsection{Valuación bajo la medida neutral al riesgo}
+
+En Black--Scholes--Merton con rendimiento continuo por dividendos $q$, la dinámica de valuación es
+\begin{equation}
+ dS_t=(r-q)S_t\,dt+\sigma S_t\,dW_t^{\Qmeasure}.
+ \label{eq:q_gbm}
+\end{equation}
+El drift físico $\mu$ no aparece en \eqref{eq:q_gbm}. Por ello, aunque $p(\mu,\sigma\mid\mathcal D)$ sea conjunta, la incertidumbre de $\mu$ no se propaga al precio de no arbitraje dentro de esta especificación.
+
+Sea una call asiática aritmética discretamente monitoreada en $0<t_1<\cdots<t_m=T$ con
+\begin{equation}
+ A_T=\frac1m\sum_{j=1}^{m}S_{t_j}.
+\end{equation}
+Condicionado en $\sigma$, el precio es
+\begin{equation}
+ C^{\Qmeasure}(\sigma)
+ =e^{-rT}\E^{\Qmeasure}_{\sigma}
+ \left[(A_T-K)^+\right].
+ \label{eq:cq}
+\end{equation}
+La posterior de volatilidad induce entonces una distribución posterior de precios por push-forward:
+\begin{equation}
+ p(C\mid\mathcal D)
+ =\int
+ \delta_{C^{\Qmeasure}(\sigma)}(C)
+ p(\sigma\mid\mathcal D)\,d\sigma.
+ \label{eq:pushforward}
+\end{equation}
+Esta distribución representa incertidumbre paramétrica sobre un precio teórico; no es una distribución de pérdidas de cartera ni una medida de VaR o Expected Shortfall.
+
+\subsection{Monte Carlo y reducción de varianza}
+
+El precio aritmético se aproxima mediante simulación exacta de la GBM en las fechas de monitoreo. Se utilizan pares antitéticos y una opción asiática geométrica como variable de control. Sea
+\begin{equation}
+ G_T=\left(\prod_{j=1}^{m}S_{t_j}\right)^{1/m}.
+\end{equation}
+Si $Y=e^{-rT}(A_T-K)^+$ y $X=e^{-rT}(G_T-K)^+$, con $\E[X]$ disponible analíticamente, el estimador de control es
+\begin{equation}
+ Y_{cv}=Y-\beta\left(X-\E[X]\right),
+ \qquad
+ \beta=\frac{\operatorname{Cov}(Y,X)}{\Var(X)}.
+ \label{eq:cv}
+\end{equation}
+La estrategia sigue a \citet{kemnavorst1990}. En las mallas de pricing se emplean además números aleatorios comunes a través de los puntos de volatilidad de un mismo contrato, con el objetivo de suavizar comparaciones e interpolación.
+
+\subsection{Reglas de valuación comparadas}
+
+Se consideran cuatro reglas:
+\begin{align}
+ \widehat C_{FB}
+ &=\E\left[C^{\Qmeasure}(\sigma)\mid\mathcal D\right],
+ \label{eq:fb}\\
+ \widehat C_{PM}
+ &=C^{\Qmeasure}\!\left(\E[\sigma\mid\mathcal D]\right),
+ \label{eq:pm}\\
+ \widehat C_{MAP}
+ &=C^{\Qmeasure}(\widehat\sigma_{MAP}),
+ \label{eq:map}\\
+ \widehat C_{MLE}
+ &=C^{\Qmeasure}(\widehat\sigma_{MLE}).
+ \label{eq:mle}
+\end{align}
+
+En general, $\widehat C_{FB}$ y $\widehat C_{PM}$ no tienen por qué coincidir. Una expansión de Taylor de segundo orden alrededor de $\bar\sigma=\E[\sigma\mid\mathcal D]$ produce
+\begin{equation}
+ \widehat C_{FB}
+ \approx
+ C^{\Qmeasure}(\bar\sigma)
+ +\frac{1}{2}C^{\Qmeasure\prime\prime}(\bar\sigma)
+ \Var(\sigma\mid\mathcal D).
+ \label{eq:taylor}
+\end{equation}
+La ecuación \eqref{eq:taylor} sugiere dos predicciones. La brecha entre full Bayes y plug-in debe disminuir cuando la posterior de $\sigma$ se concentra, y debe aumentar en regiones donde el precio sea más curvo respecto de la volatilidad. El diseño experimental se construye para evaluar ambas predicciones.
