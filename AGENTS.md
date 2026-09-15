@@ -6,10 +6,10 @@ architecture unless a deliberate migration is documented and completed atomicall
 ## Read before editing
 
 Before writing code, read `docs/index.md`, `docs/architecture.md`, `docs/api/index.md`,
-`docs/agent_guide.md`, and the relevant files under `research/`. Search the Sphinx API
-reference before implementing a new function.
+`docs/agent_guide.md`, `paper/README.md`, and the relevant files under `research/`. Search
+the Sphinx API reference before implementing a new function.
 
-## Required structure
+## Required package structure
 
 Reusable scientific code lives only under:
 
@@ -41,12 +41,43 @@ Every new public library function/class/module must ship in the same change with
 Private helpers begin with `_`. Do not silently rename or remove public APIs; update all
 callers, tests, examples, and docs in the same change.
 
+## Manuscript structure is also normative
+
+The active paper targets the **Journal of Futures Markets**. Manuscript source belongs only
+under `paper/manuscript/`; historical paper drafts belong under `archive/`. The Wiley NJDv5
+bundle supplied by the author is frozen under `paper/vendor/wiley_njd_v5/` and must not be
+edited during ordinary manuscript work.
+
+The internal manuscript must preserve the selected Wiley simulation unless the author
+explicitly requests a format change:
+
+```tex
+\documentclass[HARVARD,Utopia2COL]{WileyNJDv5}
+```
+
+This means Harvard references, Utopia, and two columns. The canonical build command is:
+
+```bash
+python paper/build.py
+```
+
+Do not add an alternative ad-hoc LaTeX build script or compile into the source directory.
+All generated TeX/PDF products belong under the gitignored `paper/build/`. CI uses
+`python paper/build.py --check` to detect format or layout drift without requiring a full
+TeX installation.
+
+When editing the manuscript, never invent empirical results to fill a narrative gap. An
+empirical number enters the paper only when it can be traced to a versioned experiment,
+configuration, data provenance, seed where relevant, and code commit. Explicit TODO or
+working-draft language is preferable to an unsupported result.
+
 ## Root-directory hygiene
 
-Do not drop notebooks, ad-hoc scripts, PDFs, temporary outputs, or downloaded files in the
-repository root. Use the existing domain directories: `archive/`, `data/`, `docs/`,
-`experiments/`, `figures/`, `literature/`, `paper/`, `research/`, `results/`, `scripts/`,
-and `tests/`. Generated caches/build products must remain ignored.
+Do not drop vendor bundles, notebooks, ad-hoc scripts, PDFs, temporary outputs, or downloaded
+files in the repository root. Use the existing domain directories: `archive/`, `data/`,
+`docs/`, `experiments/`, `figures/`, `literature/`, `paper/`, `research/`, `results/`,
+`scripts/`, and `tests/`. Third-party manuscript templates belong below `paper/vendor/`.
+Generated caches/build products must remain ignored.
 
 ## Scientific invariants
 
@@ -72,6 +103,13 @@ permitted derived summaries.
 
 ## Enforcement
 
-Run `python -m scripts.check_repo_structure` before opening a PR. CI also runs this check,
-pytest, the empirical panel audit, synthetic validation smoke tests, and Sphinx with
-warnings as errors. Structural CI failures must be fixed rather than bypassed.
+Run both commands before opening a PR:
+
+```bash
+python -m scripts.check_repo_structure
+python paper/build.py --check
+```
+
+CI also runs these checks, pytest, the empirical panel audit, synthetic validation smoke
+tests, and Sphinx with warnings as errors. Structural CI failures must be fixed rather than
+bypassed.
