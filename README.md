@@ -1,8 +1,9 @@
 # Bayesian parameter uncertainty for Asian options
 
-Research code and manuscript for Bayesian parameter uncertainty in arithmetic Asian-option
-valuation, with a real-market CME WTI Average Price Option application. The publication
-strategy currently targets the **Journal of Futures Markets** first.
+Research library, reproducible experiments, data pipeline, and manuscript for Bayesian
+parameter uncertainty in arithmetic Asian-option valuation, with an empirical application
+to CME WTI Average Price Options. The publication strategy targets the **Journal of Futures
+Markets** first.
 
 ## Scientific boundary: P versus Q
 
@@ -24,16 +25,13 @@ the current baseline, is propagated into the option value.
 
 ## Install the research library
 
-The reusable code is a proper editable-install package rather than a generic root `src`
-namespace:
-
 ```bash
 conda env create -f environment.yml
 conda activate asian-options
 python -m pip install -e ".[dev,docs,market]"
 ```
 
-Then import directly:
+Representative imports:
 
 ```python
 from bayesian_asian_options.bayesian_gbm import random_walk_metropolis_gbm
@@ -48,73 +46,83 @@ CuPy is optional and platform-specific. For a CUDA-12 workstation, see
 
 ```text
 bayesian_asian_options/src/bayesian_asian_options/  reusable scientific library
-docs/                                                Sphinx/MyST documentation
+docs/                                                Sphinx/MyST API and methodology docs
 experiments/                                         reproducible experiment drivers
 tests/                                               automated tests
-scripts/                                             reproducibility/repository utilities
+scripts/                                             repository/reproducibility utilities
 data/                                                source data and provenance
-results/                                             generated/checkpointed outputs
-paper/                                               current manuscript sources
+results/                                             experiment outputs and checkpoints
+paper/manuscript/                                    active JFM LaTeX manuscript
+paper/vendor/wiley_njd_v5/                           frozen Wiley NJDv5 vendor bundle
+paper/build.py                                       canonical manuscript builder
 research/                                            methodological design notes
 figures/                                             study figures
 literature/                                          literature corpus/index
-archive/                                             legacy notebooks/presentation/output
+archive/                                             superseded papers/notebooks/presentations
 ```
 
-The root `AGENTS.md` is mandatory reading for coding agents and maintainers. It defines
-where new code belongs and the scientific guardrails that must be preserved.
+The root `AGENTS.md` is mandatory reading for coding agents and maintainers. It defines the
+package and manuscript contracts and the scientific guardrails that must be preserved.
+
+## JFM manuscript
+
+The internal manuscript preserves the selected Wiley layout:
+
+```tex
+\documentclass[HARVARD,Utopia2COL]{WileyNJDv5}
+```
+
+Build it with XeLaTeX through the repository wrapper rather than compiling source files in
+place:
+
+```bash
+python paper/build.py
+```
+
+The generated PDF and all intermediate files remain under the gitignored `paper/build/`.
+A compiler-free structural check is available for CI and agents:
+
+```bash
+python paper/build.py --check
+```
+
+See `paper/README.md` for the manuscript directory contract. The older REMEF-oriented draft
+is retained intact under `archive/paper_remef/` for provenance.
 
 ## Documentation and API discovery
 
-Build the documentation after editable installation:
+After editable installation:
 
 ```bash
 python -m sphinx -W --keep-going -b html docs docs/_build/html
 ```
 
-Start at `docs/index.md`. `docs/api/index.md` is generated from package docstrings and is
-the canonical function/class inventory. New reusable modules must be documented there.
+Start at `docs/index.md`. `docs/api/index.md` is the canonical function/class inventory.
+New reusable modules must be documented there.
 
 ## Reproducible validation
 
-Quick synthetic smoke validation:
-
 ```bash
+python -m scripts.check_repo_structure
+python paper/build.py --check
 python -m experiments.synthetic_validation --quick
-```
-
-Build/audit the committed WTI APO panel:
-
-```bash
 python -m experiments.build_wti_apo_panel --input-dir data/csv --output-dir results/wti_apo
 ```
 
-Run the repository architecture check:
-
-```bash
-python -m scripts.check_repo_structure
-```
-
-Long-running synthetic experiments remain checkpointed and resumable. See
-`research/COMPUTE.md` and the experiment modules for presets, seeds, configuration
-fingerprints, and hardware manifests.
+Long-running experiments remain checkpointed and resumable. See `research/COMPUTE.md` and
+the experiment modules for presets, seeds, configuration fingerprints, and hardware
+manifests.
 
 ## WTI empirical application
 
 The CME WTI Average Price Option application does not treat one fixed futures contract as
-the Asian underlying. The empirical pipeline reconstructs calendar-month first-nearby CL
-fixings, separates realized and remaining fixings, uses the observed term structure for
-remaining expectations, defines moneyness observation by observation relative to the
-expected final average, and compares Full Bayes / posterior-mean / MAP / MLE prices with
-observed market settlements.
+the Asian underlying. The pipeline reconstructs calendar-month first-nearby CL fixings,
+separates realized and remaining fixings, uses the observed term structure for remaining
+expectations, defines moneyness observation by observation relative to the expected final
+average, and compares Full Bayes / posterior-mean / MAP / MLE prices with observed market
+settlements.
 
 All downloaded strikes are retained in the raw panel. Liquidity/sample filters and
 representative-contract rankings are separate operations. In particular,
 `richest_option_series.csv` is a data-completeness diagnostic, not a liquidity ranking.
 See `docs/empirical_wti.md` and `research/EMPIRICAL_WTI_DESIGN.md`.
-
-## Manuscript and legacy material
-
-Active manuscript sources live in `paper/`. Legacy exploratory notebooks, the prior
-presentation, and superseded output artifacts live under `archive/` so they remain
-traceable without cluttering the active project root.
