@@ -9,13 +9,14 @@ manuscript sources.
 ```text
 paper/
 ├── build.py
+├── espino_2026_bayess-on-wti.pdf  # generated final PDF; gitignored
 ├── manuscript/
 │   ├── main.tex
 │   ├── references.bib
 │   └── sections/
 ├── vendor/
 │   └── wiley_njd_v5/
-└── build/                 # generated and gitignored
+└── build/                 # generated intermediate files; gitignored
 ```
 
 The Wiley vendor directory is a frozen copy of the NJDv5 bundle supplied for manuscript
@@ -40,14 +41,14 @@ python paper/build.py
 
 The builder creates an isolated staging tree under `paper/build/`, combines the manuscript
 with the frozen Wiley bundle, and compiles with XeLaTeX. If `latexmk` is available it is
-preferred; otherwise the script falls back to XeLaTeX + BibTeX passes. The final local PDF
-is written to:
+preferred; otherwise the script falls back to XeLaTeX + BibTeX passes. After compilation,
+the builder moves the final local PDF to:
 
 ```text
-paper/build/jfm_internal_draft.pdf
+paper/espino_2026_bayess-on-wti.pdf
 ```
 
-Generated LaTeX products must not be committed.
+Generated LaTeX products and the exported PDF must not be committed.
 
 Useful maintenance commands:
 

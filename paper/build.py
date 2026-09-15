@@ -27,8 +27,16 @@ VENDOR_DIR = PAPER_DIR / "vendor" / "wiley_njd_v5"
 BUILD_DIR = PAPER_DIR / "build"
 STAGE_DIR = BUILD_DIR / "stage"
 MAIN_TEX = SOURCE_DIR / "main.tex"
-FINAL_PDF = BUILD_DIR / "jfm_internal_draft.pdf"
+FINAL_PDF = PAPER_DIR / "espino_2026_bayess-on-wti.pdf"
+LEGACY_FINAL_PDFS = (
+    BUILD_DIR / "jfm_internal_draft.pdf",
+    BUILD_DIR / FINAL_PDF.name,
+)
 EXPECTED_CLASS = r"\documentclass[HARVARD,Utopia2COL]{WileyNJDv5}"
+LEGACY_RESERVE_INSERTS = r"\reserveinserts{28}"
+GUARDED_RESERVE_INSERTS = (
+    r"\ifdefined\reserveinserts\reserveinserts{28}\fi"
+)
 
 
 def validate_layout() -> None:
@@ -57,6 +65,7 @@ def validate_layout() -> None:
 def clean() -> None:
     """Remove all generated LaTeX products."""
     shutil.rmtree(BUILD_DIR, ignore_errors=True)
+    FINAL_PDF.unlink(missing_ok=True)
 
 
 def prepare_stage() -> None:
@@ -70,6 +79,27 @@ def prepare_stage() -> None:
     # portable than requiring local font installation or symlink support.
     shutil.copytree(VENDOR_DIR, STAGE_DIR)
     shutil.copytree(SOURCE_DIR, STAGE_DIR, dirs_exist_ok=True)
+
+    # LaTeX releases from 2026 no longer expose etex's \reserveinserts
+    # command because the extended allocation mechanism is built in.  Patch
+    # only the disposable staged class so the frozen Wiley bundle continues
+    # to work with both older and newer TeX installations.
+    staged_class = STAGE_DIR / "WileyNJDv5.cls"
+    source = staged_class.read_text(encoding="utf-8")
+    if source.count(LEGACY_RESERVE_INSERTS) != 1:
+        raise SystemExit(
+            "Could not apply the Wiley/LaTeX compatibility patch: expected "
+            "one \\reserveinserts{28} command in the staged class"
+        )
+    staged_class.write_text(
+        source.replace(LEGACY_RESERVE_INSERTS, GUARDED_RESERVE_INSERTS),
+        encoding="utf-8",
+    )
+
+    # The bundle's 2020 listings.sty is incompatible with the newer lstmisc
+    # and lstpatch companion files installed by current MiKTeX/TeX Live.
+    # Let the TeX installation resolve a consistent listings package instead.
+    (STAGE_DIR / "listings.sty").unlink(missing_ok=True)
 
 
 def run(command: list[str]) -> None:
@@ -125,8 +155,10 @@ def build() -> Path:
     staged_pdf = STAGE_DIR / "main.pdf"
     if not staged_pdf.exists():
         raise SystemExit("Compilation finished without producing main.pdf")
-    BUILD_DIR.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(staged_pdf, FINAL_PDF)
+    for legacy_pdf in LEGACY_FINAL_PDFS:
+        legacy_pdf.unlink(missing_ok=True)
+    FINAL_PDF.unlink(missing_ok=True)
+    shutil.move(staged_pdf, FINAL_PDF)
     print(f"Built {FINAL_PDF.relative_to(ROOT)}")
     return FINAL_PDF
 
@@ -141,7 +173,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument(
         "--clean",
         action="store_true",
-        help="remove paper/build before any requested check/build",
+        help="remove paper/build and the exported PDF before any requested check/build",
     )
     return parser.parse_args(argv)
 
