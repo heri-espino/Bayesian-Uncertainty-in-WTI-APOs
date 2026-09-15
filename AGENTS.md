@@ -62,7 +62,8 @@ python paper/build.py
 ```
 
 Do not add an alternative ad-hoc LaTeX build script or compile into the source directory.
-All generated TeX/PDF products belong under the gitignored `paper/build/`. CI uses
+Generated TeX intermediates belong under the gitignored `paper/build/`; the canonical
+builder moves the final, gitignored PDF to `paper/espino_2026_bayess-on-wti.pdf`. CI uses
 `python paper/build.py --check` to detect format or layout drift without requiring a full
 TeX installation.
 

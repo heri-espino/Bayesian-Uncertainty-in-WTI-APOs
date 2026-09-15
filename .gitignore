@@ -30,6 +30,7 @@ docs/_build/
 
 # Generated JFM manuscript build/staging tree
 paper/build/
+paper/espino_2026_bayess-on-wti.pdf
 
 # Yahoo Finance market-data snapshots remain local. Version code, query metadata,
 # hashes and derived scientific summaries rather than redistributing raw Yahoo data.
