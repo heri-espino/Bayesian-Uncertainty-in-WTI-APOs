@@ -42,6 +42,10 @@ jobs:
           path = Path('.gitignore')
           path.write_text(path.read_text(encoding='utf-8').rstrip() + '\n', encoding='utf-8')
           PY
+          # The GitHub App token cannot modify workflow files. Restore those two files
+          # before the bot commit; the normal CI workflow is updated and this temporary
+          # migration workflow is deleted afterward through the repository connector.
+          git checkout HEAD -- .github/workflows/tests.yml .github/workflows/package-refactor-once.yml
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
