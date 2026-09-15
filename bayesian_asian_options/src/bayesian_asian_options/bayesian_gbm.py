@@ -1,7 +1,7 @@
 """Bayesian inference for a GBM under the physical measure P.
 
 The module deliberately stops at parameter inference. Derivative pricing belongs in
-``src.asian_pricing`` and is performed under the risk-neutral measure Q.
+``bayesian_asian_options.asian_pricing`` and is performed under the risk-neutral measure Q.
 
 We sample ``theta = (mu, eta)`` with ``eta = log(sigma)``.  This removes the
 positivity boundary for volatility.  If the prior is specified on sigma, the

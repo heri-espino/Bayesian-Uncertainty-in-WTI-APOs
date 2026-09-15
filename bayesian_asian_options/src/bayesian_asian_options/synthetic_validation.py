@@ -13,7 +13,7 @@ from math import sqrt
 
 import numpy as np
 
-from src.asian_pricing import asian_arithmetic_call_mc, discrete_geometric_asian_call_price
+from bayesian_asian_options.asian_pricing import asian_arithmetic_call_mc, discrete_geometric_asian_call_price
 
 
 @dataclass(frozen=True)

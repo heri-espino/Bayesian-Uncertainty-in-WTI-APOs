@@ -15,7 +15,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from src.barchart_apo import (
+from bayesian_asian_options.barchart_apo import (
     build_apo_panel,
     discover_barchart_histories,
     rank_representative_contracts,

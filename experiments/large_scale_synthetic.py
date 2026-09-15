@@ -35,8 +35,8 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
-from src.accelerated_pricing import asian_arithmetic_call_mc_chunked, backend_info
-from src.bayesian_gbm import gbm_log_returns, gbm_mle, random_walk_metropolis_gbm
+from bayesian_asian_options.accelerated_pricing import asian_arithmetic_call_mc_chunked, backend_info
+from bayesian_asian_options.bayesian_gbm import gbm_log_returns, gbm_mle, random_walk_metropolis_gbm
 
 
 SCRIPT_VERSION = "1.0.0"

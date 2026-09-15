@@ -15,7 +15,7 @@ from typing import Any
 
 import numpy as np
 
-from src.asian_pricing import discrete_geometric_asian_call_price
+from bayesian_asian_options.asian_pricing import discrete_geometric_asian_call_price
 
 
 @dataclass(frozen=True)

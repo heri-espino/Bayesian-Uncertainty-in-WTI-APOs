@@ -13,27 +13,20 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Install test and documentation dependencies
+      - name: Install editable research package
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev,docs,market]"
+      - name: Enforce repository architecture
+        run: python -m scripts.check_repo_structure
+      - name: Smoke-test installed package namespace
+        run: python -c "import bayesian_asian_options as bao; print(bao.__version__)"
+      - name: Compile library, experiments, and scripts
         run: >-
-          python -m pip install --upgrade
-          pip numpy pandas pytest psutil
-          -r docs/requirements.txt
-      - name: Compile research utility and long-run scripts
-        run: >-
-          python -m py_compile
-          scripts/system_probe.py
-          src/accelerated_pricing.py
-          src/asian_futures_pricing.py
-          src/wti_yahoo.py
-          src/barchart_apo.py
-          src/wti_first_nearby.py
-          src/wti_apo_pricing.py
-          src/volatility_regimes.py
-          experiments/large_scale_synthetic.py
-          experiments/precompute_pricing_grids.py
-          experiments/analyze_extreme_results.py
-          experiments/wti_yahoo_application.py
-          experiments/build_wti_apo_panel.py
+          python -m compileall -q
+          bayesian_asian_options/src/bayesian_asian_options
+          experiments
+          scripts
       - name: Run tests
         run: python -m pytest -q
       - name: Build Sphinx API documentation

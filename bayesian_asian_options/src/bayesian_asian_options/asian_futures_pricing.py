@@ -11,11 +11,11 @@ usual discount factor exp(-rT).
 
 from __future__ import annotations
 
-from src.accelerated_pricing import (
+from bayesian_asian_options.accelerated_pricing import (
     AcceleratedMonteCarloEstimate,
     asian_arithmetic_call_mc_chunked,
 )
-from src.asian_pricing import MonteCarloEstimate, asian_arithmetic_call_mc
+from bayesian_asian_options.asian_pricing import MonteCarloEstimate, asian_arithmetic_call_mc
 
 
 def asian_futures_arithmetic_call_mc(
