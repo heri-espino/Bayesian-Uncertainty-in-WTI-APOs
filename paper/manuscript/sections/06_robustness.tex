@@ -1,0 +1,33 @@
+\section{Robustness and extensions}\label{sec:robustness}
+
+The baseline model is intentionally simple enough that the source of any full-Bayes/plugin difference can be identified. The final paper will therefore separate robustness to statistical choices from robustness to the commodity-pricing model.
+
+\subsection{Prior and estimation-window sensitivity}
+
+The inverse-gamma volatility prior in Equation~\eqref{eq:priors} is a baseline rather than a universal recommendation. The main posterior-pricing comparisons will be repeated with weaker and alternative positive-support priors. A result attributed to parameter uncertainty should not be driven by one prior parameterization. Likewise, empirical posteriors will be estimated under alternative historical windows. Shorter windows react more quickly to volatility changes but contain less information; longer windows concentrate the posterior while potentially mixing distinct volatility regimes. This trade-off is directly relevant to Equation~\eqref{eq:taylor_gap}.
+
+The MCMC implementation will be checked with multiple chains, effective sample sizes, and convergence diagnostics. Because MAP estimates depend on parameterization, the MAP plug-in is treated as a conventional comparator rather than a uniquely Bayesian decision rule. Posterior integration and posterior-mean plug-in are invariant to the arbitrary choice of reporting a marginal KDE mode.
+
+\subsection{Liquidity and settlement quality}
+
+The primary data-quality robustness checks progressively restrict the sample by open interest, remove minimum-tick observations, and distinguish dates with and without positive volume. The purpose is not to assume that zero-volume settlements are unusable, but to determine whether the model ranking changes when attention is restricted to contracts with stronger evidence of active market participation.
+
+Contract histories will also be cross-checked against CME daily settlements on a larger set of dates and strikes where public bulletin observations can be matched. Any systematic discrepancy between Barchart's end-of-day field and CME settlement would require redefining the empirical benchmark before model comparisons are interpreted.
+
+\subsection{Alternative moneyness definitions}
+
+The baseline moneyness variable uses the expected final APO average in Equation~\eqref{eq:expected_average}. Robustness checks will compare it with simpler forward-based measures and with normalized intrinsic-distance measures that explicitly condition on the realized portion of the monthly average. The economic conclusions should not depend on a single arbitrary ATM bandwidth.
+
+\subsection{Futures-curve dynamics}
+
+Equation~\eqref{eq:futures_q} is a one-factor benchmark. Crude-oil futures are exposed to term-structure movements that need not be perfectly correlated across maturities. A natural extension replaces the common-volatility representation with a low-dimensional correlated futures-curve model. A further extension allows stochastic volatility or mean reversion. These models can improve absolute fit, but they introduce additional parameters whose uncertainty must also be propagated. They therefore provide a demanding test of whether the qualitative conclusion from the baseline model survives richer dynamics.
+
+The paper will distinguish two claims. The first concerns whether a simple constant-volatility model prices WTI APOs accurately in absolute terms. The second concerns whether integrating parameter uncertainty improves on using point estimates \emph{within the same model}. The second comparison is the main contribution and remains meaningful even when the first reveals model misspecification.
+
+\subsection{Monte Carlo accuracy}
+
+All competing pricing rules will be evaluated with common random numbers and sufficiently large path counts so that pairwise differences are not dominated by simulation noise. Selected contracts will be repriced at substantially larger simulation budgets to verify convergence. Where a geometric control variate is not directly available for the exact first-nearby structure, the variance-reduction method will be documented separately from the standard Asian benchmark rather than applying an inappropriate closed form.
+
+\subsection{Sample composition}
+
+The principal results will be repeated after excluding the sparsest far-maturity contracts and after balancing maturity buckets as far as the observed data permit. Calls and puts will be reported jointly and separately. Because the downloaded panel was intentionally not chosen only by current open interest, we will also verify that results are not driven by contracts that became economically irrelevant after the sharp change in WTI prices.

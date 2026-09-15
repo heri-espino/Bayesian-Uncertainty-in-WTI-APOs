@@ -1,0 +1,39 @@
+\section{Introduction}\label{sec:introduction}
+
+Derivative values are conditional on parameters that are not observed. In the Black--Scholes--Merton benchmark, volatility is commonly inserted into the pricing map as though it were known, even when it has been estimated from a finite sample of returns. This plug-in convention is operationally convenient, but it suppresses a distinct source of uncertainty: uncertainty about the parameter that enters the risk-neutral valuation rule. A Bayesian treatment makes this distinction explicit by replacing a single volatility estimate with a posterior distribution and propagating that distribution through the derivative-pricing function.
+
+The distinction is especially relevant for path-dependent commodity derivatives. Average-price options depend on a sequence of underlying prices rather than a terminal observation, and their sensitivity to volatility changes with moneyness, maturity, and the fraction of the averaging window that has already been fixed. Commodity markets add a further complication because the economically relevant state is a futures curve rather than a single spot asset. These features create a natural setting in which posterior parameter uncertainty may be economically negligible in some regions of the contract space but material in others.
+
+This paper studies that question using CME WTI Average Price Options (APOs). The contract pays against the arithmetic average of daily first-nearby WTI futures settlements over a calendar month. Consequently, a faithful valuation exercise must account for both the first-nearby roll convention and partial fixing: once the averaging month has begun, some components of the final average are known while the remaining components are stochastic. Treating the option as an ordinary European claim on a single fixed-maturity futures contract would therefore change the object being valued.
+
+The central methodological principle is a strict separation between inference under the physical measure and valuation under the risk-neutral measure. Historical returns are used to infer the parameters of a data-generating process under $\mathbb P$. The resulting posterior uncertainty in volatility is then mapped into option values under $\mathbb Q$. The physical drift is not inserted into the risk-neutral pricing dynamics. This distinction is elementary in no-arbitrage theory \cite{blackscholes1973,merton1973}, but it becomes easy to obscure when estimation and Monte Carlo valuation are implemented in a single numerical pipeline.
+
+Let $C^{Q}(\sigma)$ denote the risk-neutral value of an arithmetic-average call conditional on volatility $\sigma$. The full-Bayes valuation rule is
+\begin{equation}
+ C_{FB}=\mathbb E\!\left[C^{Q}(\sigma)\mid\mathcal D\right],
+ \label{eq:intro_fb}
+\end{equation}
+whereas the posterior-mean plug-in rule is
+\begin{equation}
+ C_{PM}=C^{Q}\!\left(\mathbb E[\sigma\mid\mathcal D]\right).
+ \label{eq:intro_pm}
+\end{equation}
+The two need not coincide because the option-pricing map is nonlinear. A second-order expansion around $\bar\sigma=\mathbb E[\sigma\mid\mathcal D]$ gives the approximation
+\begin{equation}
+ C_{FB}-C_{PM}
+ \approx
+ \frac{1}{2}C^{Q\prime\prime}(\bar\sigma)
+ \operatorname{Var}(\sigma\mid\mathcal D),
+ \label{eq:intro_taylor}
+\end{equation}
+which isolates two forces: posterior dispersion and curvature of the pricing function. Equation \eqref{eq:intro_taylor} motivates the empirical analysis. Parameter uncertainty should matter most where the posterior is diffuse and where option value is highly curved in volatility.
+
+The paper uses two complementary forms of evidence. First, repeated-sampling experiments provide a controlled environment in which the true volatility and the associated risk-neutral option value are known. This makes it possible to evaluate bias, mean absolute error, root mean squared error, and posterior interval coverage without defining the target from the posterior itself. That distinction avoids the circular comparison that arises when an estimator is evaluated against draws generated from the same posterior. Second, the paper develops an empirical application using historical CME WTI APO settlements obtained through Barchart. The current panel contains 213 unique call and put contracts and 11,179 option-date observations across expiries from September 2026 through June 2029.
+
+The empirical design deliberately uses the full downloaded contract panel rather than selecting a handful of strikes according to current moneyness. This is important in the recent WTI sample because the level of crude oil changed sharply over the life of many contracts. A strike that is out of the money on the final observation date may have been near or in the money earlier in its history. Moneyness is therefore constructed at the option-date level using the expected final average, not assigned permanently from one market snapshot. Liquidity variables are retained as filters and robustness dimensions rather than used as the sole criterion for selecting contracts.
+
+The paper contributes to three related literatures. The first is Bayesian option pricing and parameter uncertainty. Existing work shows how posterior parameter and state uncertainty can be incorporated into predictive and risk-neutral densities \cite{guidolin2003,romboutsstentoft2014}. The second is the valuation of Asian and average-price options, where arithmetic averaging generally eliminates the simple closed form available for standard European options and motivates conditioning, approximation, and simulation methods \cite{kemnavorst1990,curran1994,kahale2020}. The third is commodity-derivative valuation, where contract mechanics and the term structure of futures prices are central to the economically relevant pricing state. The present paper connects these strands by asking a narrower empirical question: when does integrating parameter uncertainty improve the valuation of a traded path-dependent energy derivative relative to conventional plug-in rules?
+
+An important feature of the analysis is that it allows a negative result. Preliminary synthetic evidence indicates that full posterior integration and the posterior-mean plug-in can be almost identical in regular Black--Scholes settings. That finding is not treated as a failure of the Bayesian framework. Instead, it establishes a benchmark: if the pricing function is locally close to linear in the posterior support and the posterior of volatility is concentrated, integration should add little. The WTI application is then designed to identify the contract and market states in which this approximation ceases to be adequate.
+
+The remainder of the paper is organized as follows. Section~\ref{sec:contract} describes the WTI Average Price Option and the empirical panel. Section~\ref{sec:methodology} presents physical-measure inference, risk-neutral valuation, and the competing pricing rules. Section~\ref{sec:design} describes the synthetic and empirical research designs. Section~\ref{sec:results} reports the currently available evidence and defines the remaining empirical tests. Section~\ref{sec:robustness} sets out robustness checks and extensions, and Section~\ref{sec:conclusion} concludes.

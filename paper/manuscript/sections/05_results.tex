@@ -1,0 +1,82 @@
+\section{Preliminary results}\label{sec:results}
+
+This section distinguishes completed evidence from analyses that remain to be run. The simulation results reported below are preliminary validation results for the baseline case $\sigma_0=0.25$, $S_0=K=100$, and $T=1$. The empirical data audit is complete for the downloaded Barchart histories. Contract-level WTI APO model prices are not yet reported in this internal draft because the historical first-nearby CL curve and realized-fixing reconstruction must be finalized before a market-pricing comparison is economically meaningful.
+
+\subsection{Synthetic evidence: integration versus plug-in}
+
+Table~\ref{tab:synthetic_pilot} reports the initial repeated-sampling comparison. With only 63 daily observations, full Bayes has RMSE 0.469, compared with 0.469 for the posterior-mean plug-in, 0.487 for MAP, and 0.470 for MLE. The full-Bayes and posterior-mean prices are effectively indistinguishable in both bias and absolute error. As the historical sample increases to 252 and 1,260 observations, all four methods converge and the difference between full Bayes and posterior-mean plug-in becomes numerically negligible.
+
+\begin{table*}[t]
+\centering
+\caption{Preliminary repeated-sampling pricing performance. The target is the risk-neutral price evaluated at the true volatility, not a posterior-generated target.}\label{tab:synthetic_pilot}
+\begin{tabular}{llrrrr}
+\toprule
+$N$ & Method & Bias & MAE & RMSE & 95\% coverage\\
+\midrule
+63 & Full Bayes & -0.0011 & 0.3543 & 0.4686 & 0.9500\\
+63 & Posterior-mean plug-in & -0.0012 & 0.3543 & 0.4687 & 0.9500\\
+63 & MAP plug-in & -0.0919 & 0.3783 & 0.4867 & 0.9500\\
+63 & MLE plug-in & -0.0407 & 0.3576 & 0.4701 & 0.9500\\
+\addlinespace
+252 & Full Bayes & 0.0139 & 0.1988 & 0.2454 & 0.9625\\
+252 & Posterior-mean plug-in & 0.0139 & 0.1988 & 0.2454 & 0.9625\\
+252 & MAP plug-in & -0.0212 & 0.1974 & 0.2446 & 0.9625\\
+252 & MLE plug-in & 0.0035 & 0.1992 & 0.2444 & 0.9625\\
+\addlinespace
+1260 & Full Bayes & -0.0048 & 0.1010 & 0.1243 & 0.9250\\
+1260 & Posterior-mean plug-in & -0.0048 & 0.1010 & 0.1243 & 0.9250\\
+1260 & MAP plug-in & -0.0128 & 0.1060 & 0.1302 & 0.9250\\
+1260 & MLE plug-in & -0.0067 & 0.1013 & 0.1243 & 0.9250\\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+The near equality of $\widehat C_{FB}$ and $\widehat C_{PM}$ is economically informative. In this baseline setting, posterior dispersion and curvature are not large enough for Jensen-type effects to generate a meaningful pricing difference. This is consistent with the mechanism in Equation~\eqref{eq:taylor_gap}: posterior integration is not expected to produce a premium merely because the analysis is Bayesian. The result also accords with the broader observation that parameter-uncertainty effects may be modest in sufficiently informative samples \cite{romboutsstentoft2014}.
+
+MAP performs somewhat less stably in the smallest sample, but the ranking is not monotone at every sample size. The evidence therefore does not support a generic claim that one plug-in estimator is uniformly dominated. The production experiment expands volatility, moneyness, and maturity specifically to identify where the pricing map becomes nonlinear enough for posterior integration to separate from plug-in valuation.
+
+\subsection{Posterior price uncertainty in a baseline case}
+
+For the corrected baseline implementation, the high-precision risk-neutral benchmark is approximately 6.42. A representative posterior fit gives a full-Bayes value near 6.24, a posterior-mean plug-in near 6.24, a MAP plug-in near 6.22, and an MLE plug-in near 6.23. The corresponding central 95\% posterior price interval is approximately $[5.80,6.73]$.
+
+The interval has a different interpretation from the point-estimator comparison. Even when $C_{FB}$ and $C_{PM}$ are almost identical, the push-forward posterior in Equation~\eqref{eq:pushforward} can remain non-degenerate. Thus, ``integration does not change the point price much'' does not imply ``parameter uncertainty is zero.'' The empirical section will distinguish these two questions by reporting both pricing-rule differences and posterior price dispersion.
+
+\subsection{Empirical data coverage}
+
+The Barchart ingestion audit produces the sample summarized in Table~\ref{tab:data_audit}. The broad maturity coverage is useful, but the cross section becomes thin at the longest horizon. This is a feature of the observed market data rather than a reason to manufacture a balanced panel.
+
+\begin{table}[t]
+\centering
+\caption{Current WTI APO data audit.}\label{tab:data_audit}
+\begin{tabular}{lr}
+\toprule
+Item & Count\\
+\midrule
+Raw CSV histories & 214\\
+Unique option contracts & 213\\
+Option-date observations & 11,179\\
+Expiry months represented & 8\\
+Folder/expiry mismatches & 1\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Trading activity is sparse for many contracts. Across several expiry/type groups, only a small percentage of dates report positive volume even when open interest is positive. This makes transaction-price language inappropriate for the full panel. The market benchmark is instead an end-of-day settlement or mark, subject to validation against CME records and sensitivity checks that focus on more actively held contracts.
+
+The maturity groups cover September, October, and November 2026; March and September 2027; March and September 2028; and June 2029. The June 2029 group is particularly sparse, with only a few identified contracts in the current download. Those observations will be retained in the raw panel and may be shown as a long-horizon case while the main statistical conclusions are checked without them.
+
+\subsection{Empirical pricing tests to be completed}
+
+The principal empirical results table will compare market-pricing errors for full Bayes, posterior-mean plug-in, MAP, and MLE after the first-nearby futures reconstruction is finalized. The table will report the number of option-date observations, mean error, MAE, RMSE, and paired differences in absolute error. It will be produced for the full main sample and separately for calls and puts.
+
+A second set of results will condition on the mechanism variables. The key test is not simply whether
+\begin{equation}
+ \overline{|e^{FB}|}<\overline{|e^{PM}|},
+\end{equation}
+but whether any advantage is concentrated where theory predicts it should be: high posterior variance, high realized-volatility regimes, longer maturity, near-the-money nonlinear exposure, and early stages of the averaging window. If full Bayes remains economically indistinguishable from the posterior-mean plug-in even in these states, that is itself a relevant result for practitioners because the computationally simpler plug-in rule would be difficult to reject.
+
+\subsection{Planned figures}
+
+The final manuscript will include four core figures. The first plots the WTI price level and 21-day realized volatility, with regime boundaries defined mechanically rather than by geopolitical labels. The second shows selected contracts that move through out-of-the-money, near-the-money, and in-the-money states over time. The third plots $C^Q(\sigma)$ and the posterior density of $\sigma$ for representative short- and long-maturity contracts, making Equation~\eqref{eq:taylor_gap} visually interpretable. The fourth plots $|\Delta_{FB,PM}|$ against posterior variance and maturity, with separate markers or panels for volatility regimes.
+
+No empirical model-ranking claim is made in this draft until those calculations are completed using the contract-consistent first-nearby reconstruction.

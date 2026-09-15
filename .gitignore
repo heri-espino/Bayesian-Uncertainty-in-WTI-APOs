@@ -28,7 +28,10 @@ env/
 # Generated Sphinx site
 docs/_build/
 
-# Yahoo Finance market-data snapshots remain local.  Version code, query metadata,
+# Generated JFM manuscript build/staging tree
+paper/build/
+
+# Yahoo Finance market-data snapshots remain local. Version code, query metadata,
 # hashes and derived scientific summaries rather than redistributing raw Yahoo data.
 data/wti_yahoo/*.csv
 
@@ -45,6 +48,7 @@ results/system/hardware_report_*.json
 results/system/hardware_report_*.txt
 !results/system/hardware_report_latest.json
 !results/system/hardware_report_latest.txt
+
 # Python package build products
 build/
 dist/
