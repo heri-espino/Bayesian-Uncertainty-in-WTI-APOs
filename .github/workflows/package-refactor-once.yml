@@ -20,7 +20,9 @@ jobs:
         with:
           python-version: "3.11"
       - name: Apply repository migration
-        run: python scripts/_one_time_package_restructure.py
+        run: |
+          python scripts/_one_time_package_restructure.py
+          python scripts/_one_time_package_restructure_fix.py
       - name: Install editable package and test dependencies
         run: |
           python -m pip install --upgrade pip
