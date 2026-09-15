@@ -5,11 +5,13 @@ from bayesian_asian_options import (
     asian_pricing,
     barchart_apo,
     bayesian_gbm,
+    rates,
     synthetic_validation,
     volatility_regimes,
     wti_apo_pricing,
     wti_first_nearby,
     wti_yahoo,
+    wti_yahoo_futures,
 )
 
 
@@ -22,6 +24,9 @@ def test_canonical_package_namespace_is_importable() -> None:
     assert callable(barchart_apo.build_apo_panel)
     assert callable(wti_first_nearby.assign_first_nearby_contract)
     assert callable(wti_apo_pricing.wti_average_price_option_mc)
+    assert callable(wti_apo_pricing.wti_apo_cross_section_mc)
     assert callable(volatility_regimes.realized_volatility)
     assert callable(wti_yahoo.prepare_wti_model_sample)
+    assert callable(wti_yahoo_futures.reconstruct_first_nearby_history)
+    assert callable(rates.treasury_curve_on_or_before)
     assert callable(synthetic_validation.risk_neutral_martingale_check)
