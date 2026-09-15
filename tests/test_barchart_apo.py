@@ -3,7 +3,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from src.barchart_apo import (
+from bayesian_asian_options.barchart_apo import (
     add_effective_moneyness,
     build_apo_panel,
     discover_barchart_histories,

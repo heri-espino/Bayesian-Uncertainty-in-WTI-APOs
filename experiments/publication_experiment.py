@@ -20,8 +20,8 @@ import pandas as pd
 from scipy.optimize import minimize_scalar
 from scipy.stats import gaussian_kde
 
-from src.asian_pricing import asian_arithmetic_call_mc
-from src.bayesian_gbm import gbm_log_returns, gbm_mle, random_walk_metropolis_gbm
+from bayesian_asian_options.asian_pricing import asian_arithmetic_call_mc
+from bayesian_asian_options.bayesian_gbm import gbm_log_returns, gbm_mle, random_walk_metropolis_gbm
 
 
 @dataclass(frozen=True)

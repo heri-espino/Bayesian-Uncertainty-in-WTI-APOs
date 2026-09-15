@@ -1,6 +1,6 @@
 import numpy as np
 
-from src.bayesian_gbm import (
+from bayesian_asian_options.bayesian_gbm import (
     gbm_log_returns,
     gbm_mle,
     log_posterior_mu_logsigma,

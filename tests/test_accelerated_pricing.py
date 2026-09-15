@@ -2,11 +2,11 @@ import inspect
 
 import numpy as np
 
-from src.accelerated_pricing import (
+from bayesian_asian_options.accelerated_pricing import (
     asian_arithmetic_call_mc_chunked,
     backend_info,
 )
-from src.asian_pricing import asian_arithmetic_call_mc
+from bayesian_asian_options.asian_pricing import asian_arithmetic_call_mc
 
 
 def test_numpy_backend_is_always_available():

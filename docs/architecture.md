@@ -1,72 +1,70 @@
 # Architecture
 
-The repository is organized as a research library plus reproducible experiment entry points. Code under `src/` should contain reusable scientific logic. Code under `experiments/` should orchestrate datasets, parameter grids, checkpoints, and outputs without duplicating model implementations.
+The repository is an installed research library plus reproducible experiment entry
+points. Reusable scientific logic lives in
+`bayesian_asian_options/src/bayesian_asian_options/`. `experiments/` orchestrates data,
+parameter grids, checkpoints, and outputs without duplicating model implementations.
 
 ## Core layers
 
 ### Physical-measure inference
 
-`src.bayesian_gbm`
-: Simulates GBM log returns under $\mathbb P$, evaluates the posterior in `(mu, log_sigma)`, runs Random-Walk Metropolis, and computes GBM MLEs.
-
-The important interface boundary is that this layer estimates historical parameters but does not price derivatives.
+`bayesian_asian_options.bayesian_gbm`
+: GBM returns under $\mathbb P$, posterior evaluation in `(mu, log_sigma)`, Random-Walk Metropolis, and GBM MLEs.
 
 ### Generic Asian-option pricing
 
-`src.asian_pricing`
-: Reference risk-neutral pricer for discretely monitored arithmetic Asian calls, including a closed-form geometric Asian control variate and posterior-volatility propagation.
+`bayesian_asian_options.asian_pricing`
+: Reference risk-neutral arithmetic-Asian pricing, geometric control variate, and posterior-volatility propagation.
 
-`src.accelerated_pricing`
-: Bounded-memory NumPy/CuPy implementations used for large pricing grids and workstation-scale experiments.
+`bayesian_asian_options.accelerated_pricing`
+: Bounded-memory NumPy/CuPy pricing used for large grids.
 
-`src.asian_futures_pricing`
-: Convenience wrappers for lognormal futures dynamics under $\mathbb Q$, implemented by setting the spot-style drift to zero while retaining discounting.
+`bayesian_asian_options.asian_futures_pricing`
+: Lognormal futures-price Asian wrappers under $\mathbb Q$.
 
 ### Synthetic validation
 
-`src.synthetic_validation`
-: Reusable theoretical, deterministic, and stochastic validation utilities.
-
-Experiment entry points in `experiments/` build on these functions to generate publication tables and restartable large-scale simulations.
+`bayesian_asian_options.synthetic_validation`
+: Reusable deterministic, theoretical, and stochastic checks. Publication-scale orchestration remains in `experiments/`.
 
 ### WTI market-data ingestion
 
-`src.barchart_apo`
-: Parses individual Barchart WTI Average Price Option histories, decodes contract metadata, standardizes the daily panel, audits folder/expiry mismatches, adds effective moneyness, and separates data-quality diagnostics from estimation filters.
+`bayesian_asian_options.barchart_apo`
+: Barchart WTI APO filename decoding, tidy histories, quality audits, effective moneyness, filters, and representative-contract ranking.
 
-`src.wti_yahoo`
-: Handles the Yahoo `CL=F` continuous/front-month proxy used for historical-volatility inference and auxiliary empirical work. It must not be described as an exact reconstructed first-nearby series.
+`bayesian_asian_options.wti_yahoo`
+: Yahoo `CL=F` continuous/front-month proxy utilities. The proxy is not described as an exact reconstructed first-nearby series.
 
-### CME WTI APO contract mechanics
+### CME WTI APO mechanics
 
-`src.wti_first_nearby`
-: Maps each APO fixing date to the first CL futures contract that is still trading, using explicit exchange last-trade dates supplied as data.
+`bayesian_asian_options.wti_first_nearby`
+: First-nearby CL mapping from explicit exchange last-trade dates.
 
-`src.wti_apo_pricing`
-: Prices CME-style WTI arithmetic-average calls and puts from realized fixings plus the futures term structure for remaining first-nearby fixings.
+`bayesian_asian_options.wti_apo_pricing`
+: CME-style calls/puts from realized fixings plus the futures term structure for remaining fixings.
 
-`src.volatility_regimes`
-: Constructs rolling realized-volatility measures and data-driven low/medium/high volatility regimes.
+`bayesian_asian_options.volatility_regimes`
+: Rolling realized volatility and data-driven low/medium/high regimes.
 
 ## Dependency direction
 
-Keep dependencies moving from experiment orchestration toward reusable library code:
-
 ```text
-experiments/  --->  src/
-                    |
-                    +--> NumPy / pandas / SciPy
+experiments/  --->  bayesian_asian_options
+                         |
+                         +--> NumPy / pandas / SciPy
 ```
 
-Avoid importing an `experiments.*` module from `src.*`. A function that becomes useful to more than one experiment should be moved into `src/` and documented in the API reference.
+The package must never import `experiments.*`. A function reused by more than one
+experiment belongs in the package and must be added to the API documentation and tests.
 
 ## Scientific invariants
 
-Changes should preserve these invariants unless the research design is explicitly revised and documented:
+1. `mu` belongs to inference under $\mathbb P$ and does not enter baseline pricing under $\mathbb Q$.
+2. Posterior uncertainty is propagated only through parameters that matter for the pricing model, principally `sigma` in the baseline.
+3. The empirical WTI APO payoff uses calendar-month first-nearby CL settlements, not one fixed futures contract.
+4. Historical market settlements are external benchmarks; posterior-generated prices cannot define truth.
+5. Data completeness, liquidity, figure ranking, and estimation-sample inclusion are separate concepts.
+6. Long runs remain reproducible/restartable through explicit seeds, manifests, hashes, and checkpoints.
 
-1. `mu` belongs to inference under $\mathbb P$ and does not enter the baseline Black--Scholes pricing dynamics under $\mathbb Q$.
-2. Posterior uncertainty is propagated through parameters that matter for pricing, principally `sigma` in the current baseline.
-3. The empirical WTI APO payoff is based on calendar-month averages of first-nearby CL settlements, not on one fixed futures contract.
-4. Historical market settlements are external benchmarks; posterior-generated prices must not be reused as the definition of truth.
-5. Raw-data completeness, liquidity, representative-figure ranking, and estimation-sample inclusion are different concepts and must remain separate in code and analysis.
-6. Long-running experiments must remain reproducible and restartable through explicit seeds, manifests, hashes, and checkpoints.
+See `AGENTS.md` for the mandatory maintenance policy.

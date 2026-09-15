@@ -43,9 +43,9 @@ from typing import Any
 
 import numpy as np
 
-from src.asian_pricing import asian_arithmetic_call_mc
-from src.bayesian_gbm import gbm_log_returns, gbm_mle, random_walk_metropolis_gbm
-from src.synthetic_validation import (
+from bayesian_asian_options.asian_pricing import asian_arithmetic_call_mc
+from bayesian_asian_options.bayesian_gbm import gbm_log_returns, gbm_mle, random_walk_metropolis_gbm
+from bayesian_asian_options.synthetic_validation import (
     arithmetic_price_curve_by_strike,
     arithmetic_price_curve_by_volatility,
     geometric_asian_call_mc,

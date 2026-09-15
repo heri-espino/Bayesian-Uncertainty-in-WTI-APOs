@@ -2,9 +2,9 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from src.asian_futures_pricing import asian_futures_arithmetic_call_mc
-from src.asian_pricing import asian_arithmetic_call_mc
-from src.wti_yahoo import dataframe_sha256, normalize_yahoo_history, prepare_wti_model_sample
+from bayesian_asian_options.asian_futures_pricing import asian_futures_arithmetic_call_mc
+from bayesian_asian_options.asian_pricing import asian_arithmetic_call_mc
+from bayesian_asian_options.wti_yahoo import dataframe_sha256, normalize_yahoo_history, prepare_wti_model_sample
 
 
 def _history(values):

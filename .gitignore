@@ -45,3 +45,18 @@ results/system/hardware_report_*.json
 results/system/hardware_report_*.txt
 !results/system/hardware_report_latest.json
 !results/system/hardware_report_latest.txt
+# Python package build products
+build/
+dist/
+
+# LaTeX build products
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.run.xml
+*.synctex.gz

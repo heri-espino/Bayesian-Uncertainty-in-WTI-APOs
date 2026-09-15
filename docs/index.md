@@ -1,19 +1,31 @@
 # Bayesian Asian Options Research Library
 
-This documentation is the operational reference for the code used in the Bayesian Asian-option research project. It is written for researchers, maintainers, and future coding agents who need to understand what modules exist, which functions are public, and how the pieces fit together without reading every source file.
+This documentation is the operational reference for the reusable Python package and the
+research workflows built on top of it. It is intended for researchers, maintainers, and
+future coding agents who need to discover existing functionality without reading the
+entire source tree.
 
-The current Python import namespace is `src`. The repository is still a research codebase rather than a separately published PyPI package, so examples use imports such as `from src.bayesian_gbm import ...`.
+The canonical Python namespace is `bayesian_asian_options`. The repository uses a
+standard editable-install source layout:
+
+```text
+bayesian_asian_options/src/bayesian_asian_options/
+```
+
+Install from the repository root before running experiments or building documentation:
+
+```bash
+python -m pip install -e ".[dev,docs,market]"
+```
 
 ## Design principles
-
-The codebase enforces several distinctions that are central to the paper:
 
 - Historical inference is performed under the physical measure $\mathbb P$.
 - Derivative valuation is performed under the risk-neutral measure $\mathbb Q$.
 - The physical drift $\mu$ is not propagated into Black--Scholes no-arbitrage prices.
 - Synthetic validation and the empirical CME WTI Average Price Option application are separate experimental layers.
-- Raw market-data provenance and data-quality diagnostics are kept distinct from economic sample-selection rules.
-- Representative contracts are selected only for figures and case studies; they do not define the estimation sample.
+- Raw market-data provenance and data-quality diagnostics remain distinct from economic sample-selection rules.
+- Representative contracts are selected only for figures/case studies; they do not define the estimation sample.
 
 ## Documentation map
 
@@ -23,6 +35,7 @@ The codebase enforces several distinctions that are central to the paper:
 
 quickstart
 architecture
+repository_layout
 empirical_wti
 agent_guide
 api/index
@@ -30,13 +43,9 @@ api/index
 
 ## Build the documentation
 
-From the repository root:
-
 ```bash
-python -m pip install -r docs/requirements.txt
 python -m sphinx -W --keep-going -b html docs docs/_build/html
 ```
 
-Open `docs/_build/html/index.html` after a successful build.
-
-The CI workflow builds the documentation with warnings treated as errors. Broken API references or invalid Sphinx markup should therefore fail a pull request before merge.
+The package must already be installed editable. CI builds the documentation with warnings
+as errors, so broken API references fail before merge.
