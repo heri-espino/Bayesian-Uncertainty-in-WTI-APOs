@@ -1,0 +1,14 @@
+# Local research data (licensed / non-redistributable inputs)
+data/raw/
+data/processed/
+
+# Local experiment outputs
+results/wti_apo_panel.csv
+
+# Python
+__pycache__/
+.pytest_cache/
+*.py[cod]
+
+# OS / editor
+.DS_Store
