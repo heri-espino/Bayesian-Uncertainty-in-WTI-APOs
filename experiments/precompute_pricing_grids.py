@@ -23,7 +23,7 @@ from experiments.large_scale_synthetic import (
     _price_grid_path,
     _seed,
 )
-from src.accelerated_pricing import asian_arithmetic_call_mc_chunked
+from bayesian_asian_options.accelerated_pricing import asian_arithmetic_call_mc_chunked
 
 
 def _point_path(run_dir: Path, mi: int, ti: int, point: int) -> Path:

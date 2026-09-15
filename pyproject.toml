@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bayesian-asian-options"
+version = "0.1.0"
+description = "Research library for Bayesian parameter uncertainty and risk-neutral Asian-option pricing."
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [{name = "Heriberto Espino Montelongo"}]
+dependencies = [
+  "numpy>=2.0",
+  "pandas>=2.2",
+  "scipy>=1.13",
+]
+
+[project.optional-dependencies]
+market = ["yfinance>=1.4"]
+dev = [
+  "pytest>=8.0",
+  "psutil>=6.0",
+  "matplotlib>=3.9",
+]
+docs = [
+  "sphinx>=8.0",
+  "myst-parser>=4.0",
+  "furo>=2024.8.6",
+]
+
+[tool.setuptools]
+package-dir = {"" = "bayesian_asian_options/src"}
+include-package-data = false
+
+[tool.setuptools.packages.find]
+where = ["bayesian_asian_options/src"]
+include = ["bayesian_asian_options*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"

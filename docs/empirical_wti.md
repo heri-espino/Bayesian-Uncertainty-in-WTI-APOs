@@ -7,7 +7,7 @@ This page describes the intended research pipeline for the CME WTI Average Price
 Use all downloaded near-the-money contracts in the raw panel. Do not select strikes according to the final observed WTI level.
 
 ```python
-from src.barchart_apo import discover_barchart_histories, build_apo_panel
+from bayesian_asian_options.barchart_apo import discover_barchart_histories, build_apo_panel
 
 paths = discover_barchart_histories("data/csv")
 raw_panel = build_apo_panel(paths, deduplicate_contracts=True)
@@ -19,14 +19,14 @@ The filename parser is the authoritative source for expiry, strike, and call/put
 
 `data/csv/richest_option_series.csv` was created from a score based on session count, calendar span, and numerical-field completeness. It is useful for auditing historical coverage but must not define the main empirical sample.
 
-Use `src.barchart_apo.summarize_contracts` for diagnostics and `src.barchart_apo.apply_main_sample_filters` for an explicit baseline sample rule. Sensitivity analysis can then vary open-interest thresholds or minimum-tick exclusions without changing the raw panel.
+Use `bayesian_asian_options.barchart_apo.summarize_contracts` for diagnostics and `bayesian_asian_options.barchart_apo.apply_main_sample_filters` for an explicit baseline sample rule. Sensitivity analysis can then vary open-interest thresholds or minimum-tick exclusions without changing the raw panel.
 
 ## 3. Reconstruct the first-nearby fixing schedule
 
 A WTI APO is not an Asian option on one fixed CL maturity. For every remaining fixing date, map to the earliest CL contract that has not passed its exchange last-trade date:
 
 ```python
-from src.wti_first_nearby import build_forward_fixing_curve
+from bayesian_asian_options.wti_first_nearby import build_forward_fixing_curve
 
 forward_curve = build_forward_fixing_curve(
     fixing_dates=remaining_fixing_dates,
@@ -53,7 +53,7 @@ $$
 
 where `R_t` denotes already fixed business days and `U_t` remaining fixing dates. Under the current baseline, each current futures quote is the $\mathbb Q$ expectation of its own future settlement.
 
-Use `src.wti_apo_pricing.expected_average_level` for the corresponding numerical quantity.
+Use `bayesian_asian_options.wti_apo_pricing.expected_average_level` for the corresponding numerical quantity.
 
 ## 5. Define moneyness observation by observation
 
@@ -65,18 +65,18 @@ $$
 m_{t,K,T}=\log\left(\frac{K}{\widehat A_{t,T}^{Q}}\right).
 $$
 
-`src.barchart_apo.add_effective_moneyness` currently classifies absolute log-moneyness into ATM (`<= 0.05`), moderate (`0.05` to `0.15`), and deep (`> 0.15`) buckets. These thresholds are analysis conventions and should be reported when used.
+`bayesian_asian_options.barchart_apo.add_effective_moneyness` currently classifies absolute log-moneyness into ATM (`<= 0.05`), moderate (`0.05` to `0.15`), and deep (`> 0.15`) buckets. These thresholds are analysis conventions and should be reported when used.
 
 ## 6. Estimate historical volatility uncertainty
 
-Historical WTI returns generate a posterior for `sigma` under the physical measure. The current baseline uses the GBM inference routines in `src.bayesian_gbm`. The posterior should be estimated with information available at the valuation date when conducting a genuinely out-of-sample exercise.
+Historical WTI returns generate a posterior for `sigma` under the physical measure. The current baseline uses the GBM inference routines in `bayesian_asian_options.bayesian_gbm`. The posterior should be estimated with information available at the valuation date when conducting a genuinely out-of-sample exercise.
 
 The physical drift `mu` is retained as an inferred quantity but is not passed into the risk-neutral APO pricer.
 
 ## 7. Propagate posterior volatility through the CME-style pricer
 
 ```python
-from src.wti_apo_pricing import posterior_wti_apo_prices
+from bayesian_asian_options.wti_apo_pricing import posterior_wti_apo_prices
 
 posterior_prices = posterior_wti_apo_prices(
     sigma_samples,
@@ -103,8 +103,8 @@ Compare these quantities against the observed market settlement, not against pos
 
 Use realized volatility to define low, medium, and high-volatility regimes from the data rather than manually labeling geopolitical events. Geopolitical developments can be discussed as market context after the statistical regime definition is fixed.
 
-The relevant utilities live in `src.volatility_regimes`.
+The relevant utilities live in `bayesian_asian_options.volatility_regimes`.
 
 ## 9. Representative contracts
 
-Use `src.barchart_apo.rank_representative_contracts` only to identify informative examples for plots or case studies. A representative score can reward long histories, non-minimum-tick observations, open interest, ATM days, and moneyness crossings without changing the main estimation sample.
+Use `bayesian_asian_options.barchart_apo.rank_representative_contracts` only to identify informative examples for plots or case studies. A representative score can reward long histories, non-minimum-tick observations, open interest, ATM days, and moneyness crossings without changing the main estimation sample.

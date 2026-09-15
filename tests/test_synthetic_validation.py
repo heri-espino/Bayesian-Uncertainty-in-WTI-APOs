@@ -1,6 +1,6 @@
 import numpy as np
 
-from src.synthetic_validation import (
+from bayesian_asian_options.synthetic_validation import (
     arithmetic_price_curve_by_strike,
     arithmetic_price_curve_by_volatility,
     deterministic_arithmetic_asian_call_price,

@@ -1,76 +1,42 @@
 # Maintainer and agent guide
 
-This page is the short operational contract for future contributors and coding agents.
+The root `AGENTS.md` is the authoritative operational contract. This page explains how to
+apply it while working with the documented API.
 
 ## Before changing code
 
-1. Read {doc}`architecture` to identify the correct layer.
-2. Search {doc}`api/index` for an existing function before implementing a duplicate.
-3. Check `research/` for methodological assumptions that the code is expected to preserve.
-4. Treat `experiments/` as orchestration and `src/` as the reusable library layer.
-5. Preserve deterministic seeds, manifests, and checkpoint semantics in publication experiments.
+1. Read {doc}`architecture` and {doc}`repository_layout`.
+2. Search {doc}`api/index` before implementing a function.
+3. Check `research/` for scientific assumptions.
+4. Install with `python -m pip install -e ".[dev,docs,market]"`.
+5. Put reusable logic under `bayesian_asian_options/src/bayesian_asian_options/`; keep `experiments/` as orchestration.
+6. Preserve deterministic seeds, manifests, and checkpoint semantics.
 
-## Public-function documentation standard
+## Public-function standard
 
-Every public function or class added under `src/` should have a docstring that states, as applicable:
+Every public package function/class must document the scientific object, P/Q
+interpretation where relevant, parameters/units, return meaning, assumptions, validation
+conditions, and whether it is intended for estimation, diagnostics, or figures. Add type
+hints, tests, and the module to `docs/api/index.md` in the same change.
 
-- what scientific object it computes;
-- the probability measure or modeling interpretation (`P` versus `Q`);
-- parameter meaning and units when not obvious;
-- return type and the meaning of returned fields;
-- important assumptions or approximations;
-- validation or failure conditions;
-- whether it is intended for production estimation, diagnostics, or figures only.
+Private helpers begin with `_`. Avoid silent interface changes; update all callers,
+examples, tests, and Sphinx references together.
 
-Private helpers should begin with `_`. If a helper becomes part of the intended public interface, rename/document it and ensure it appears in the Sphinx API reference.
-
-## Adding a new module
-
-When adding a reusable module under `src/`:
-
-1. Give the module a top-level docstring describing its scientific role.
-2. Add type hints to public functions.
-3. Add unit tests under `tests/`.
-4. Add the module to `docs/api/index.md`.
-5. Add a short architecture entry if it introduces a new conceptual layer.
-6. Add a usage example to the relevant guide when the interface is not self-evident.
-7. Run the documentation build locally with warnings as errors.
-
-## Documentation build
+## Required checks
 
 ```bash
-python -m pip install -r docs/requirements.txt
+python -m scripts.check_repo_structure
+python -m pytest -q
 python -m sphinx -W --keep-going -b html docs docs/_build/html
 ```
 
-The same build runs in CI. A documentation warning should be treated as a code-quality failure, not ignored.
+CI runs the same structural, test, documentation, and research smoke checks. Do not bypass
+a failing structural check by adding path hacks or duplicate modules.
 
-## API stability
+## Data and scientific guardrails
 
-This repository is research software, so the API can evolve. Nevertheless, avoid silent interface changes. When renaming/removing a public function:
-
-- update all internal callers in the same PR;
-- update examples and Sphinx references;
-- note the change in the PR description;
-- preserve a compatibility wrapper when an old result/checkpoint depends on the previous name and the wrapper is inexpensive.
-
-## Data handling
-
-Do not infer economic metadata from folder names when it is encoded in the contract symbol. Keep source-file and source-folder provenance in processed panels so anomalies remain auditable.
-
-Do not interpret `Latest` as a transaction price when volume is zero. In the empirical study it is treated as an EOD market settlement/mark only after validation against an independent CME settlement where available.
-
-Do not commit newly acquired proprietary/raw market data unless redistribution rights have been checked. Code, schemas, hashes, diagnostics, and permitted derived summaries are safer public artifacts.
-
-## Scientific guardrails
-
-The following are not implementation details and should not be changed casually:
-
-- historical `mu` must not be inserted into the baseline risk-neutral pricing dynamics;
-- the WTI APO average uses first-nearby CL fixings across the calendar month;
-- the empirical market settlement is an external benchmark;
-- full-Bayes-versus-plug-in comparisons must not use a circular loss whose target is generated from the same posterior draws;
-- strike relevance is time-varying, so contracts are not permanently labeled ATM based on a single date;
-- `richest` means data completeness, not liquidity.
-
-If a new model deliberately relaxes one of these guardrails, implement it as a clearly named alternative specification and document the change in both the research design and the API.
+Preserve source-file/folder provenance, do not equate zero-volume `Latest` marks with
+transactions, and do not commit proprietary data without redistribution rights. The P/Q
+separation, WTI first-nearby payoff mechanics, external market benchmark, non-circular
+Bayesian comparison, time-varying moneyness, and `richest`-versus-liquidity distinction
+are scientific invariants unless a separately named alternative model is introduced.

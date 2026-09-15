@@ -103,7 +103,7 @@ The experimental design should not be weakened merely to save runtime. In partic
 
 ### GPU
 
-GPU acceleration is most useful for the risk-neutral Monte Carlo layer. The project provides `src/accelerated_pricing.py`, which can use CuPy and processes paths in bounded-memory chunks. The geometric Asian control variate is evaluated from global sufficient statistics accumulated over all chunks.
+GPU acceleration is most useful for the risk-neutral Monte Carlo layer. The project provides `bayesian_asian_options/src/bayesian_asian_options/accelerated_pricing.py`, which can use CuPy and processes paths in bounded-memory chunks. The geometric Asian control variate is evaluated from global sufficient statistics accumulated over all chunks.
 
 The low-dimensional Random-Walk Metropolis chain itself is sequential and is not expected to benefit much from moving one chain to the GPU. GPU resources are therefore reserved for the path-simulation workload where vectorization is large.
 

@@ -24,9 +24,9 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from src.asian_futures_pricing import asian_futures_arithmetic_call_mc_chunked
-from src.bayesian_gbm import gbm_mle, random_walk_metropolis_gbm
-from src.wti_yahoo import (
+from bayesian_asian_options.asian_futures_pricing import asian_futures_arithmetic_call_mc_chunked
+from bayesian_asian_options.bayesian_gbm import gbm_mle, random_walk_metropolis_gbm
+from bayesian_asian_options.wti_yahoo import (
     DEFAULT_MODEL_START,
     DEFAULT_TICKER,
     download_yahoo_wti,
