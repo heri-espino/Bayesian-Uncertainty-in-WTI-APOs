@@ -1,0 +1,69 @@
+\section{WTI Average Price Options and the empirical setting}\label{sec:contract}
+
+\subsection{Contract mechanics}
+
+CME WTI Average Price Options are cash-settled options whose payoff is linked to the arithmetic average of daily settlements of first-nearby WTI crude-oil futures during the relevant calendar month. For an averaging month with fixing dates $t_1,\ldots,t_M$, define
+\begin{equation}
+ A_T=\frac{1}{M}\sum_{j=1}^{M}F^{(1)}_{t_j},
+ \label{eq:apo_average}
+\end{equation}
+where $F^{(1)}_{t_j}$ denotes the settlement of the first-nearby CL futures contract applicable to fixing date $t_j$. A call and put have terminal payoffs
+\begin{align}
+ H_C&=(A_T-K)^+,\\
+ H_P&=(K-A_T)^+.
+\end{align}
+The first-nearby designation matters because the futures contract contributing to the average can change during the averaging period. The payoff is therefore not, in general, an average of repeated observations of one fixed futures maturity.
+
+At an option valuation date $t$ inside the averaging month, let $\mathcal R_t$ denote fixing dates already realized and $\mathcal U_t$ the remaining fixing dates. The final average can be decomposed as
+\begin{equation}
+ A_T=rac{1}{M}
+ \left(
+ \sum_{j\in\mathcal R_t}F^{(1)}_{t_j}
+ +
+ \sum_{j\in\mathcal U_t}F^{(1)}_{t_j}
+ \right).
+ \label{eq:partial_fixing}
+\end{equation}
+This decomposition is central to the empirical pricing exercise. Realized fixings are known constants; only the remaining components are simulated under the risk-neutral measure. As the averaging month progresses, the option mechanically loses exposure to future volatility because a larger share of $A_T$ has already been fixed.
+
+A useful state variable for cross-sectional analysis is the risk-neutral expected final average,
+\begin{equation}
+ \widehat A^{Q}_{t,T}=
+ \frac{1}{M}
+ \left(
+ \sum_{j\in\mathcal R_t}F^{(1)}_{t_j}
+ +
+ \sum_{j\in\mathcal U_t}\mathbb E_t^Q[F^{(1)}_{t_j}]
+ \right).
+ \label{eq:expected_average}
+\end{equation}
+We define log moneyness observation by observation as
+\begin{equation}
+ m_{t,K,T}=\log\!\left(\frac{K}{\widehat A^{Q}_{t,T}}\right).
+ \label{eq:moneyness}
+\end{equation}
+For calls, negative values correspond to strikes below the expected average; for puts the economic interpretation is reversed in terms of intrinsic direction. This measure is preferable to assigning a contract a fixed moneyness category using the futures price on the final sample date.
+
+\subsection{Why WTI is informative for parameter uncertainty}
+
+WTI provides a demanding empirical environment for the question studied in this paper. Oil prices can exhibit rapid changes in level, realized volatility, and the shape of the futures curve. These changes imply that the same option can move through substantially different moneyness states during its observed history. They also create episodes in which a posterior estimated from a rolling historical window may be materially more dispersed than in quieter periods.
+
+The analysis does not attribute individual price moves mechanically to particular geopolitical events. Such causal statements would require a separate event-study design. Instead, market turbulence is measured directly from observed WTI returns. Dates are classified into volatility regimes using rolling realized volatility, allowing the pricing comparison to ask whether posterior integration becomes more relevant when the data themselves indicate an unusually volatile market state.
+
+\subsection{Barchart option histories}
+
+The empirical database was assembled from individual Barchart historical series for WTI Average Price Options. The downloaded maturities are September 2026, October 2026, November 2026, March 2027, September 2027, March 2028, September 2028, and June 2029. Calls and puts were retained as available. Rather than choosing only contracts that appear near the money on one date, the raw panel keeps all downloaded contracts and lets moneyness vary by date according to Equation~\eqref{eq:moneyness}.
+
+The ingestion pipeline recursively audits the raw CSV directory, parses option symbols, derives strike and option type, checks the symbol-implied expiry against the storage folder, and de-duplicates contracts before constructing the option-date panel. The current audit identifies 214 input files, 213 unique contracts, and 11,179 option-date observations. One file is stored under a folder inconsistent with its symbol-implied expiry; the parser records the mismatch and uses the contract symbol rather than silently trusting the directory name.
+
+The histories contain end-of-day fields including open, high, low, latest, volume, and open interest. A validation exercise found exact agreement between at least one Barchart \texttt{Latest} observation and the corresponding CME daily settlement for the same WTI APO contract and date. The empirical work therefore treats the field as an end-of-day settlement or mark after contract/date validation, not as evidence of a transaction on every date. This distinction is necessary because many histories contain zero reported volume while open interest remains positive.
+
+Liquidity is consequently used as a diagnostic and robustness dimension rather than a binary requirement that every observation have positive trading volume. The main analysis will report results under alternative open-interest thresholds and will separately identify observations at the minimum quoted price. Contracts with sparse trading can still contain an exchange settlement, but conclusions that depend exclusively on such observations will be treated cautiously.
+
+The data pipeline also produces a variable called \texttt{richest}, inherited from an earlier data-audit routine. It measures information completeness using the number of sessions, calendar span, and field completeness. It does \emph{not} measure liquidity, trading intensity, or economic importance. The variable is retained for data-quality diagnostics but is not used as the economic contract-selection rule.
+
+\subsection{Maturity coverage}
+
+The chosen expiries deliberately span the maturity dimension rather than concentrating exclusively on consecutive nearby months. The first three maturities provide short-horizon contracts, while March 2027 through June 2029 extend the cross section toward medium and long horizons. This structure is useful because Equation~\eqref{eq:intro_taylor} predicts that the importance of posterior uncertainty depends not only on posterior dispersion but also on the curvature of the pricing map, which can change materially with time to maturity.
+
+The number of available strikes and the depth of trading are not constant across maturities. In particular, the far end of the curve contains fewer contracts. The empirical design does not force a balanced panel. Instead, it preserves the observed contract set, reports coverage by maturity and option type, and uses weighting and sample restrictions as robustness exercises.
