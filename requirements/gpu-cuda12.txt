@@ -1,0 +1,4 @@
+# Optional NVIDIA/CUDA acceleration for bayesian_asian_options.accelerated_pricing.
+# Verify the workstation driver with nvidia-smi first. If the workstation uses a
+# different CUDA major version, install the matching CuPy distribution instead.
+cupy-cuda12x

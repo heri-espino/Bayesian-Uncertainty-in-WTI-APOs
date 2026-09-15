@@ -1,8 +1,8 @@
 import numpy as np
 import pandas as pd
 
-from src.wti_apo_pricing import expected_average_level, wti_average_price_option_mc
-from src.wti_first_nearby import assign_first_nearby_contract, build_forward_fixing_curve
+from bayesian_asian_options.wti_apo_pricing import expected_average_level, wti_average_price_option_mc
+from bayesian_asian_options.wti_first_nearby import assign_first_nearby_contract, build_forward_fixing_curve
 
 
 def test_fully_realized_option_is_exact():

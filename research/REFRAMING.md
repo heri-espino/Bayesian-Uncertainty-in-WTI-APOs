@@ -177,7 +177,7 @@ La opción asiática aritmética no tiene una fórmula Black–Scholes elemental
 - convergencia en número de trayectorias y fechas de monitoreo;
 - cuando sea posible, un segundo método independiente (PDE, transformada o benchmark publicado).
 
-El módulo `src/asian_pricing.py` implementa el primer bloque de esta validación.
+El módulo `bayesian_asian_options/src/bayesian_asian_options/asian_pricing.py` implementa el primer bloque de esta validación.
 
 ## 6. Hipótesis testables
 

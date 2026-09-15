@@ -1,11 +1,5 @@
 from __future__ import annotations
 
-import sys
-from pathlib import Path
-
-ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT))
-
 project = "Bayesian Asian Options Research Library"
 author = "Heriberto Espino Montelongo"
 copyright = "2026, Heriberto Espino Montelongo"
@@ -28,17 +22,8 @@ napoleon_numpy_docstring = True
 napoleon_use_param = True
 napoleon_use_rtype = True
 
-myst_enable_extensions = [
-    "colon_fence",
-    "deflist",
-    "dollarmath",
-    "fieldlist",
-]
-
-source_suffix = {
-    ".rst": "restructuredtext",
-    ".md": "markdown",
-}
+myst_enable_extensions = ["colon_fence", "deflist", "dollarmath", "fieldlist"]
+source_suffix = {".rst": "restructuredtext", ".md": "markdown"}
 master_doc = "index"
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 

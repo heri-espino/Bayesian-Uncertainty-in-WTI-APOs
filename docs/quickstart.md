@@ -7,6 +7,7 @@ The scientific environment remains Conda-first:
 ```bash
 conda env create -f environment.yml
 conda activate asian-options
+python -m pip install -e ".[dev,docs,market]"
 ```
 
 Documentation dependencies are intentionally separate from the scientific runtime:
@@ -20,7 +21,7 @@ python -m pip install -r docs/requirements.txt
 ```python
 import numpy as np
 
-from src.bayesian_gbm import (
+from bayesian_asian_options.bayesian_gbm import (
     gbm_log_returns,
     gbm_mle,
     random_walk_metropolis_gbm,
@@ -53,7 +54,7 @@ print(posterior.sigma.mean())
 ## 2. Price an arithmetic Asian call under $\mathbb Q$
 
 ```python
-from src.asian_pricing import asian_arithmetic_call_mc
+from bayesian_asian_options.asian_pricing import asian_arithmetic_call_mc
 
 estimate = asian_arithmetic_call_mc(
     S0=100.0,
@@ -76,7 +77,7 @@ The pricing function deliberately has no `mu` argument. Its simulated drift is t
 ## 3. Propagate posterior volatility into Asian prices
 
 ```python
-from src.asian_pricing import posterior_price_samples
+from bayesian_asian_options.asian_pricing import posterior_price_samples
 
 price_draws = posterior_price_samples(
     posterior.sigma,
@@ -108,7 +109,7 @@ python -m experiments.build_wti_apo_panel \
 The ingestion utilities are also usable directly:
 
 ```python
-from src.barchart_apo import (
+from bayesian_asian_options.barchart_apo import (
     discover_barchart_histories,
     build_apo_panel,
     summarize_contracts,
@@ -126,7 +127,7 @@ Do not use `richest_option_series.csv` as a liquidity filter. Its score describe
 ```python
 import numpy as np
 
-from src.wti_apo_pricing import wti_average_price_option_mc
+from bayesian_asian_options.wti_apo_pricing import wti_average_price_option_mc
 
 estimate = wti_average_price_option_mc(
     realized_fixings=np.array([91.2, 92.0, 91.7]),

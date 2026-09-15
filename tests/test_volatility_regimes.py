@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from src.volatility_regimes import classify_volatility_regimes, realized_volatility
+from bayesian_asian_options.volatility_regimes import classify_volatility_regimes, realized_volatility
 
 
 def test_realized_volatility_positive_after_window():
