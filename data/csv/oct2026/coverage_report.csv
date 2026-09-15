@@ -1,0 +1,32 @@
+﻿source,contract_csv,selected_2_years,rows,oldest_date,latest_date,status
+01.md,jaov6_9200c_price-history-09-12-2026.csv,true,12,2026-08-26,2026-09-11,ok
+02.md,jaov6_9225c_price-history-09-12-2026.csv,true,12,2026-08-26,2026-09-11,ok
+03.md,jaov6_9348c_price-history-09-12-2026.csv,true,12,2026-08-26,2026-09-11,ok
+04.md,jaov6_9353c_price-history-09-12-2026.csv,true,12,2026-08-26,2026-09-11,ok
+05.md,jaov6_9435c_price-history-09-12-2026.csv,true,12,2026-08-26,2026-09-11,ok
+06.md,jaov6_9700c_price-history-09-12-2026.csv,true,7,2026-09-02,2026-09-11,ok
+07.md,jaov6_9800c_price-history-09-12-2026.csv,true,12,2026-08-26,2026-09-11,ok
+08.md,jaov6_9911c_price-history-09-12-2026.csv,true,12,2026-08-26,2026-09-11,ok
+09.md,jaov6_9955c_price-history-09-12-2026.csv,true,12,2026-08-26,2026-09-11,ok
+10.md,jaov6_10000c_price-history-09-12-2026.csv,true,12,2026-08-26,2026-09-11,ok
+11.md,jaov6_10205c_price-history-09-12-2026.csv,true,12,2026-08-26,2026-09-11,ok
+12.md,jaov6_10240c_price-history-09-12-2026.csv,true,12,2026-08-26,2026-09-11,ok
+13.md,jaov6_10300c_price-history-09-12-2026.csv,true,12,2026-08-26,2026-09-11,ok
+14.md,jaov6_10500c_price-history-09-12-2026.csv,true,12,2026-08-26,2026-09-11,ok
+15.md,jaov6_10800c_price-history-09-12-2026.csv,true,12,2026-08-26,2026-09-11,ok
+16.md,jaov6_11500c_price-history-09-12-2026.csv,true,12,2026-08-26,2026-09-11,ok
+17.md,jaov6_12100c_price-history-09-12-2026.csv,true,12,2026-08-26,2026-09-11,ok
+18.md,jaov6_12495c_price-history-09-12-2026.csv,false,1,2026-09-11,2026-09-11,review: page does not show 2 Years selected
+19.md,jaov6_12500c_price-history-09-12-2026.csv,true,12,2026-08-26,2026-09-11,ok
+20.md,jaov6_16000c_price-history-09-12-2026.csv,true,12,2026-08-26,2026-09-11,ok
+21.md,jaov6_7200p_price-history-09-12-2026.csv,true,12,2026-08-26,2026-09-11,ok
+22.md,jaov6_7400p_price-history-09-12-2026.csv,true,12,2026-08-26,2026-09-11,ok
+23.md,jaov6_7450p_price-history-09-12-2026.csv,true,12,2026-08-26,2026-09-11,ok
+24.md,jaov6_7500p_price-history-09-12-2026.csv,true,12,2026-08-26,2026-09-11,ok
+25.md,jaov6_7600p_price-history-09-12-2026.csv,true,12,2026-08-26,2026-09-11,ok
+26.md,jaov6_7750p_price-history-09-12-2026.csv,false,1,2026-09-11,2026-09-11,review: page does not show 2 Years selected
+27.md,jaov6_7800p_price-history-09-12-2026.csv,true,12,2026-08-26,2026-09-11,ok
+28.md,jaov6_8000p_price-history-09-12-2026.csv,true,18,2026-08-18,2026-09-11,ok
+29.md,jaov6_8200p_price-history-09-12-2026.csv,true,18,2026-08-18,2026-09-11,ok
+30.md,jaov6_8250p_price-history-09-12-2026.csv,false,5,2026-09-04,2026-09-11,review: page does not show 2 Years selected
+31.md,jaov6_9000p_price-history-09-12-2026.csv,true,18,2026-08-18,2026-09-11,ok
