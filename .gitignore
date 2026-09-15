@@ -25,6 +25,9 @@ env/
 *.tmp
 *.tmp.*
 
+# Generated Sphinx site
+docs/_build/
+
 # Yahoo Finance market-data snapshots remain local.  Version code, query metadata,
 # hashes and derived scientific summaries rather than redistributing raw Yahoo data.
 data/wti_yahoo/*.csv
