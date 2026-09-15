@@ -1,0 +1,97 @@
+\section{Research design}\label{sec:design}
+
+\subsection{Synthetic repeated-sampling experiment}
+
+The simulation study is designed to answer a question that cannot be answered cleanly with market prices alone: when the data-generating volatility is known, how much is lost by collapsing posterior uncertainty before pricing? Historical return samples are generated under $\mathbb P$ and option values are evaluated under $\mathbb Q$, preserving the measure separation in Section~\ref{sec:methodology}.
+
+The baseline configuration fixes
+\begin{equation}
+ S_0=100,\qquad \mu_0=0.08,\qquad r=0.03,
+ \qquad q=0,\qquad \Delta t=1/252.
+\end{equation}
+The production design varies the amount of historical information,
+\begin{equation}
+ n\in\{63,252,1260\},
+\end{equation}
+true volatility,
+\begin{equation}
+ \sigma_0\in\{0.15,0.25,0.40\},
+\end{equation}
+moneyness, and option maturity. The contract grid is chosen to cover in-, near-, and out-of-the-money states over short, intermediate, and longer horizons. Posterior inference is performed once for each simulated history and then reused across contractual terms; changing a strike or maturity does not generate a new historical posterior.
+
+For each scenario the external target is
+\begin{equation}
+ C_0=C^Q(\sigma_0),
+ \label{eq:synthetic_target}
+\end{equation}
+computed from a high-precision risk-neutral pricing grid. Importantly, $C_0$ is not a posterior draw and is not constructed from any of the estimators being compared. This prevents the mechanical advantage that the posterior mean would obtain if squared error were evaluated against the posterior distribution that defines it.
+
+For method $M\in\{FB,PM,MAP,MLE\}$ and $R$ independent histories, the main statistics are
+\begin{align}
+ \operatorname{Bias}_M
+ &=R^{-1}\sum_{j=1}^{R}(\widehat C_{M,j}-C_0),\\
+ \operatorname{MAE}_M
+ &=R^{-1}\sum_{j=1}^{R}|\widehat C_{M,j}-C_0|,\\
+ \operatorname{RMSE}_M
+ &=\left[R^{-1}\sum_{j=1}^{R}(\widehat C_{M,j}-C_0)^2\right]^{1/2}.
+ \label{eq:metrics}
+\end{align}
+We additionally record coverage of central 95\% posterior price intervals and analyze $\Delta_{FB,PM}$ directly. The production simulation uses deterministic seeds, restartable checkpoints, and shared pricing grids so that each reported result can be reproduced from the code version and experiment manifest.
+
+\subsection{Empirical option panel}
+
+The raw empirical sample contains every downloaded WTI APO history rather than a hand-selected set of strikes. The unit of observation is option $i$ on trading date $t$, identified by option type, strike, expiry month, and symbol. The raw panel currently contains 213 unique contracts and 11,179 option-date observations. The sample is intentionally unbalanced because strike availability and liquidity decline at longer maturities.
+
+Three layers are kept separate. The \emph{raw panel} preserves all parsed observations. The \emph{main empirical panel} applies transparent data-quality and pricing-availability rules that can be reproduced from code. The \emph{representative-contract set} is used only for figures and economic discussion. A contract can therefore be visually representative without determining the statistical sample.
+
+The main sample does not require positive daily volume because an exchange settlement can exist on a day with no reported trade. Instead, volume, open interest, and minimum-tick indicators enter the diagnostics and robustness analysis. Alternative samples impose progressively stronger open-interest thresholds and remove observations pinned at the minimum quoted price. Results are reported with observation counts after every filter.
+
+\subsection{Reconstructing first-nearby fixings and moneyness}
+
+Each option-date observation must be linked to the information set required by the actual APO payoff. The empirical pipeline therefore reconstructs: (i) realized first-nearby settlements for fixing dates already elapsed, (ii) the relevant CL futures contracts for remaining fixing dates, and (iii) the contemporaneous futures term structure used to initialize those remaining fixings. This mapping produces $\widehat A^Q_{t,T}$ in Equation~\eqref{eq:expected_average} and the observation-specific moneyness measure in Equation~\eqref{eq:moneyness}.
+
+This step is deliberately separated from the option-history ingestion. A generic continuous futures ticker is useful for exploratory historical-return analysis but is not treated as a contractual substitute for the sequence of first-nearby fixings that determines the APO payoff. The final empirical tables will report the source and roll convention for the CL curve used in valuation.
+
+\subsection{Rolling parameter uncertainty}
+
+The empirical comparison requires a posterior available at each valuation date rather than a single posterior estimated using the full sample. Let $\mathcal D_t$ denote the historical information set available at date $t$. For a fixed or expanding estimation window, the posterior
+\begin{equation}
+ p(\sigma\mid\mathcal D_t)
+\end{equation}
+is estimated without using future returns. Each option-date observation is then priced by the four rules in Equation~\eqref{eq:estimators}. This creates a panel of model prices and posterior diagnostics aligned with observed option settlements.
+
+The principal out-of-sample pricing errors are
+\begin{equation}
+ e^M_{i,t}=P^{M}_{i,t}-P^{mkt}_{i,t},
+ \end{equation}
+where $P^{mkt}_{i,t}$ is the validated end-of-day settlement or mark and $M$ indexes the pricing rule. Absolute and squared errors are aggregated overall and by economically relevant states. Because option settlements can themselves contain microstructure or administrative components, results are also stratified by open interest and trading activity.
+
+\subsection{Volatility regimes and heterogeneous effects}
+
+Recent WTI history contains unusually large changes in price and volatility. Rather than label dates according to news narratives, the baseline regime variable is constructed from realized returns. For a 21-session window,
+\begin{equation}
+ RV_t^{(21)}
+ =\sqrt{252}\;\operatorname{sd}(r_{t-20},\ldots,r_t).
+ \label{eq:rv21}
+\end{equation}
+Dates are classified into low-, medium-, and high-volatility regimes using sample quantiles determined without reference to option-pricing errors.
+
+The mechanism in Equation~\eqref{eq:taylor_gap} is examined by relating the full-Bayes/plugin gap to posterior variance, moneyness, maturity, partial-fixing status, and the realized-volatility regime. A descriptive panel specification is
+\begin{equation}
+ |\Delta_{FB,PM,i,t}|
+ =g\!\left(
+ \operatorname{Var}_t(\sigma),
+ |m_{i,t}|,
+ \tau_{i,t},
+ RV_t,
+ L_{i,t}
+ \right)+u_{i,t},
+ \label{eq:gap_panel}
+\end{equation}
+where $L_{i,t}$ contains liquidity diagnostics. The purpose of this regression is mechanism description, not a causal interpretation of market volatility.
+
+\subsection{Primary empirical comparisons}
+
+The first empirical question is whether full posterior integration reduces pricing error relative to the posterior-mean, MAP, and MLE plug-ins. The second is whether any difference is concentrated in states predicted by Equation~\eqref{eq:taylor_gap}. The analysis therefore reports both average performance and conditional performance across maturity, moneyness, volatility regime, option type, and fraction of the averaging month already fixed.
+
+Statistical comparisons will use paired option-date errors because all pricing rules are evaluated on the same market observations and, where possible, the same Monte Carlo random numbers. Standard errors will account for dependence within contracts and dates in the final specification. The exact clustering rule will be fixed before examining the final model-ranking results.

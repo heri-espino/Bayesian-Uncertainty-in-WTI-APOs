@@ -1,0 +1,55 @@
+\documentclass[HARVARD,Utopia2COL]{WileyNJDv5}
+
+\usepackage{amsmath,amssymb,booktabs}
+\usepackage{graphicx}
+
+\articletype{Research Article}
+\journal{Journal of Futures Markets}
+\raggedbottom
+
+\begin{document}
+
+\title{Bayesian Parameter Uncertainty in WTI Average Price Option Valuation}
+
+\author[1]{Heriberto Espino Montelongo}
+\authormark{ESPINO MONTELONGO}
+\titlemark{BAYESIAN UNCERTAINTY IN WTI AVERAGE PRICE OPTIONS}
+
+\address[1]{\orgname{Universidad de las Am\'{e}ricas Puebla}, \orgaddress{\state{Puebla}, \country{Mexico}}}
+\corres{Corresponding author: Heriberto Espino Montelongo. \email{[corresponding email]}}
+
+\abstract[Abstract]{
+Parameter uncertainty is often treated as secondary in derivative valuation, even though volatility is estimated from finite and potentially unstable samples. This paper develops a Bayesian framework that separates statistical learning under the physical measure from no-arbitrage valuation under the risk-neutral measure and propagates posterior uncertainty in volatility into arithmetic-average option prices. The framework is evaluated first in repeated-sampling experiments, where the true risk-neutral price is known, and then in an empirical application to CME WTI Average Price Options. The empirical database contains 213 unique call and put contracts and 11,179 option-date observations spanning expiries from September 2026 to June 2029. The contract-specific implementation respects the calendar-month average of first-nearby WTI futures settlements and distinguishes realized from remaining fixings. Preliminary synthetic evidence indicates that posterior integration and posterior-mean plug-in pricing can be nearly indistinguishable in regular settings, while MAP pricing is less stable in small samples. The empirical design asks when that apparent irrelevance breaks down as maturity, moneyness, posterior dispersion, and oil-market volatility change.
+}
+
+\keywords{Bayesian option pricing; Asian options; WTI crude oil; parameter uncertainty; commodity derivatives}
+
+\maketitle
+
+\begin{center}
+\textit{Internal working draft --- not for circulation. Empirical pricing results remain in progress.}
+\end{center}
+
+\input{sections/01_introduction}
+\input{sections/02_contract_market}
+\input{sections/03_methodology}
+\input{sections/04_research_design}
+\input{sections/05_results}
+\input{sections/06_robustness}
+\input{sections/07_conclusion}
+
+\bmsection*{Data availability}
+The option histories used in the empirical application were obtained through a commercial Barchart subscription. Redistribution of raw proprietary files is not assumed to be permitted. The public repository therefore prioritizes code, schemas, provenance records, diagnostics, hashes, and derived results consistent with the applicable data license.
+
+\bmsection*{Code availability}
+The research code is organized as an installable Python package, \texttt{bayesian\_asian\_options}, with documented APIs, tests, deterministic seeds, and reproducible experiment entry points. A versioned code snapshot will accompany the final article.
+
+\bmsection*{Conflict of interest}
+The author declares no conflict of interest.
+
+\bmsection*{Acknowledgments}
+To be completed before submission.
+
+\bibliography{references}
+
+\end{document}
