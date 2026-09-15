@@ -13,8 +13,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Install test dependencies
-        run: python -m pip install --upgrade pip numpy pandas pytest psutil
+      - name: Install test and documentation dependencies
+        run: >-
+          python -m pip install --upgrade
+          pip numpy pandas pytest psutil
+          -r docs/requirements.txt
       - name: Compile research utility and long-run scripts
         run: >-
           python -m py_compile
@@ -33,6 +36,8 @@ jobs:
           experiments/build_wti_apo_panel.py
       - name: Run tests
         run: python -m pytest -q
+      - name: Build Sphinx API documentation
+        run: python -m sphinx -W --keep-going -b html docs /tmp/sphinx-html
       - name: Audit committed WTI APO histories
         run: >-
           python -m experiments.build_wti_apo_panel
