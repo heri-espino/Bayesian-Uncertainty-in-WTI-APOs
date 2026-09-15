@@ -22,12 +22,22 @@ jobs:
           src/accelerated_pricing.py
           src/asian_futures_pricing.py
           src/wti_yahoo.py
+          src/barchart_apo.py
+          src/wti_first_nearby.py
+          src/wti_apo_pricing.py
+          src/volatility_regimes.py
           experiments/large_scale_synthetic.py
           experiments/precompute_pricing_grids.py
           experiments/analyze_extreme_results.py
           experiments/wti_yahoo_application.py
+          experiments/build_wti_apo_panel.py
       - name: Run tests
         run: python -m pytest -q
+      - name: Audit committed WTI APO histories
+        run: >-
+          python -m experiments.build_wti_apo_panel
+          --input-dir data/csv
+          --output-dir /tmp/wti_apo
       - name: Run system probe without requiring NVIDIA/CuPy
         run: python -m scripts.system_probe --output-dir /tmp/system_probe
       - name: Run reproducible synthetic validation smoke test
