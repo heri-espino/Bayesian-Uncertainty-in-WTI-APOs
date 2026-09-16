@@ -1,4 +1,4 @@
-"""Report stale remote branches without deleting anything.
+"""Audit and optionally delete remote branches already merged into the base branch.
 
 Examples
 --------
@@ -6,12 +6,16 @@ Refresh remote refs and list branches already merged into ``origin/main``::
 
     python -m scripts.branch_audit --fetch
 
-Also print explicit deletion commands::
+Print explicit deletion commands without changing the remote::
 
     python -m scripts.branch_audit --fetch --delete-commands
 
-The script is intentionally read-only with respect to branch deletion. A human must review
-and run the printed ``git push <remote> --delete <branch>`` commands.
+Delete only branches Git reports as fully merged into ``origin/main``::
+
+    python -m scripts.branch_audit --fetch --delete-merged --yes
+
+Deletion is opt-in and requires ``--yes``. Branches with unique commits are never deleted by
+``--delete-merged``; inspect and remove intentionally superseded branches manually.
 """
 
 from __future__ import annotations
@@ -55,6 +59,26 @@ def merged_remote_branches(remote: str = "origin", base: str = "main") -> list[s
     return sorted(set(branches))
 
 
+def delete_merged_remote_branches(
+    branches: list[str],
+    *,
+    remote: str = "origin",
+) -> None:
+    """Delete an already-audited list of merged remote branches.
+
+    ``branches`` must come from :func:`merged_remote_branches`. The base branch is not part
+    of that list, so this helper cannot delete it through the normal CLI path.
+    """
+    if not branches:
+        return
+    subprocess.run(
+        ["git", "push", remote, "--delete", *branches],
+        cwd=ROOT,
+        check=True,
+    )
+    subprocess.run(["git", "fetch", remote, "--prune"], cwd=ROOT, check=True)
+
+
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--remote", default="origin")
@@ -64,6 +88,16 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         "--delete-commands",
         action="store_true",
         help="Print deletion commands for review; never executes them",
+    )
+    parser.add_argument(
+        "--delete-merged",
+        action="store_true",
+        help="Delete only remote branches Git reports as fully merged into remote/base",
+    )
+    parser.add_argument(
+        "--yes",
+        action="store_true",
+        help="Required confirmation for --delete-merged",
     )
     return parser.parse_args(argv)
 
@@ -83,6 +117,12 @@ def main(argv: list[str] | None = None) -> None:
         print("\nReview before running:")
         for branch in branches:
             print(f"git push {args.remote} --delete {branch}")
+
+    if args.delete_merged:
+        if not args.yes:
+            raise SystemExit("Refusing branch deletion without explicit --yes confirmation")
+        delete_merged_remote_branches(branches, remote=args.remote)
+        print(f"\nDeleted {len(branches)} fully merged remote feature branches.")
 
     print(
         "\nBranches with unique unmerged commits are intentionally not classified as safe "
