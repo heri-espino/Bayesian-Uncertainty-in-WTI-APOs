@@ -4,28 +4,28 @@ This section reports the completed baseline evidence from the repeated-sampling 
 
 \subsection{Synthetic evidence: integration versus plug-in}
 
-Table~\ref{tab:synthetic_pilot} reports the initial repeated-sampling comparison. With only 63 daily observations, full Bayes has RMSE 0.469, compared with 0.469 for the posterior-mean plug-in, 0.487 for MAP, and 0.470 for MLE. The full-Bayes and posterior-mean prices are effectively indistinguishable in both bias and absolute error. As the historical sample increases to 252 and 1,260 observations, all four methods converge and the difference between full Bayes and posterior-mean plug-in becomes numerically negligible.
+Table~\ref{tab:synthetic_pilot} reports the initial repeated-sampling comparison. With only 63 daily observations, full Bayes has RMSE 0.469, compared with 0.469 for the posterior-mean plug-in, 0.487 for the marginal sigma-mode plug-in, and 0.470 for MLE. The full-Bayes and posterior-mean prices are effectively indistinguishable in both bias and absolute error. As the historical sample increases to 252 and 1,260 observations, all four methods converge and the difference between full Bayes and posterior-mean plug-in becomes numerically negligible.
 
 \begin{table*}[t]
 \centering
-\caption{Preliminary repeated-sampling pricing performance. The target is the risk-neutral price evaluated at the true volatility, not a posterior-generated target.}\label{tab:synthetic_pilot}
+\caption{Preliminary repeated-sampling pricing performance. The target is the risk-neutral price evaluated at the true volatility, not a posterior-generated target. The sigma-mode comparator is the marginal posterior mode of volatility rather than a joint MAP estimate.}\label{tab:synthetic_pilot}
 \begin{tabular}{llrrrr}
 \toprule
 $N$ & Method & Bias & MAE & RMSE & 95\% coverage\\
 \midrule
 63 & Full Bayes & -0.0011 & 0.3543 & 0.4686 & 0.9500\\
 63 & Posterior-mean plug-in & -0.0012 & 0.3543 & 0.4687 & 0.9500\\
-63 & MAP plug-in & -0.0919 & 0.3783 & 0.4867 & 0.9500\\
+63 & Sigma posterior-mode plug-in & -0.0919 & 0.3783 & 0.4867 & 0.9500\\
 63 & MLE plug-in & -0.0407 & 0.3576 & 0.4701 & 0.9500\\
 \addlinespace
 252 & Full Bayes & 0.0139 & 0.1988 & 0.2454 & 0.9625\\
 252 & Posterior-mean plug-in & 0.0139 & 0.1988 & 0.2454 & 0.9625\\
-252 & MAP plug-in & -0.0212 & 0.1974 & 0.2446 & 0.9625\\
+252 & Sigma posterior-mode plug-in & -0.0212 & 0.1974 & 0.2446 & 0.9625\\
 252 & MLE plug-in & 0.0035 & 0.1992 & 0.2444 & 0.9625\\
 \addlinespace
 1260 & Full Bayes & -0.0048 & 0.1010 & 0.1243 & 0.9250\\
 1260 & Posterior-mean plug-in & -0.0048 & 0.1010 & 0.1243 & 0.9250\\
-1260 & MAP plug-in & -0.0128 & 0.1060 & 0.1302 & 0.9250\\
+1260 & Sigma posterior-mode plug-in & -0.0128 & 0.1060 & 0.1302 & 0.9250\\
 1260 & MLE plug-in & -0.0067 & 0.1013 & 0.1243 & 0.9250\\
 \bottomrule
 \end{tabular}
@@ -33,11 +33,11 @@ $N$ & Method & Bias & MAE & RMSE & 95\% coverage\\
 
 The near equality of $\widehat C_{FB}$ and $\widehat C_{PM}$ is economically informative. In this baseline setting, posterior dispersion and curvature are not large enough for Jensen-type effects to generate a meaningful pricing difference. This is consistent with the mechanism in Equation~\eqref{eq:taylor_gap}: posterior integration is not expected to produce a premium merely because the analysis is Bayesian. The result also accords with the broader observation that parameter-uncertainty effects may be modest in sufficiently informative samples \cite{romboutsstentoft2014}.
 
-MAP performs somewhat less stably in the smallest sample, but the ranking is not monotone at every sample size. The evidence therefore does not support a generic claim that one plug-in estimator is uniformly dominated. The production experiment expands volatility, moneyness, and maturity specifically to identify where the pricing map becomes nonlinear enough for posterior integration to separate from plug-in valuation.
+The marginal sigma-mode plug-in performs somewhat less stably in the smallest sample, but the ranking is not monotone at every sample size. The evidence therefore does not support a generic claim that one plug-in estimator is uniformly dominated. The production experiment expands volatility, moneyness, and maturity specifically to identify where the pricing map becomes nonlinear enough for posterior integration to separate from plug-in valuation.
 
 \subsection{Posterior price uncertainty in a baseline case}
 
-For the corrected baseline implementation, the high-precision risk-neutral benchmark is approximately 6.42. A representative posterior fit gives a full-Bayes value near 6.24, a posterior-mean plug-in near 6.24, a MAP plug-in near 6.22, and an MLE plug-in near 6.23. The corresponding central 95\% posterior price interval is approximately $[5.80,6.73]$.
+For the corrected baseline implementation, the high-precision risk-neutral benchmark is approximately 6.42. A representative posterior fit gives a full-Bayes value near 6.24, a posterior-mean plug-in near 6.24, a marginal sigma-mode plug-in near 6.22, and an MLE plug-in near 6.23. The corresponding central 95\% posterior price interval is approximately $[5.80,6.73]$.
 
 The interval has a different interpretation from the point-estimator comparison. Even when $C_{FB}$ and $C_{PM}$ are almost identical, the push-forward posterior in Equation~\eqref{eq:pushforward} can remain non-degenerate. Thus, ``integration does not change the point price much'' does not imply ``parameter uncertainty is zero.'' The empirical section below preserves this distinction by reporting both pricing-rule differences and model-to-market error.
 
