@@ -1,17 +1,13 @@
 # Yahoo WTI individual-contract cache
 
-This directory is the local cache for contract-specific NYMEX WTI futures histories downloaded through `yfinance`, using symbols such as `CLV26.NYM`, `CLX26.NYM`, and `CLZ26.NYM`.
+This directory is retained for optional Yahoo individual-contract validation experiments. It is **not required** by the canonical WTI APO pilot.
 
-The current empirical pilot uses these individual contracts only where the actual APO mechanics require them: the valuation-date futures curve and the first-nearby contracts associated with the averaging-month fixing dates. A live workstation test showed that Yahoo may return 404 / `YFTzMissingError` for older delisted symbols such as `CLG24.NYM`; therefore the project must not assume that a complete historical strip of individual Yahoo contracts is available indefinitely.
+A live workstation test showed that Yahoo may return 404 / `YFTzMissingError` for older delisted symbols such as `CLG24.NYM`. The canonical valuation-date CL curve now comes from the committed Barchart `Daily Prices` files under `data/csv/CL`.
 
-Physical-measure volatility inference in the current pilot uses the separate Yahoo `CL=F` continuous/front-month proxy under `data/wti_yahoo/`. That series is explicitly labelled a proxy because Yahoo does not document its historical roll convention precisely enough to call it a reconstructed contractual first-nearby series.
+The current source split is:
 
-Yahoo daily `Close` for individual contracts remains a settlement proxy until cross-validated against CME/Barchart observations. CSV and JSON cache files in this directory are gitignored; source code, hashes, manifests, diagnostics, and permitted derived summaries remain versioned.
+- Yahoo `CL=F` under `data/wti_yahoo/`: physical-measure historical-return proxy;
+- Barchart `data/csv/CL/*.csv`: contract-specific valuation-date CL curve and first-nearby fixing contracts;
+- this directory: optional Yahoo individual-contract cross-checks only.
 
-Recreate the cache with:
-
-```bash
-python -m scripts.run_university_wti_apo --quick
-```
-
-Use `--refresh-futures` only when a fresh Yahoo snapshot is intentionally required.
+If an individual Yahoo contract is downloaded for validation, Yahoo daily `Close` remains a settlement proxy until compared with CME/Barchart observations. Generated CSV/JSON cache files in this directory remain gitignored.

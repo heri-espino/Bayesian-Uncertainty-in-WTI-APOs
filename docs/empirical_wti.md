@@ -6,20 +6,20 @@ This page describes the implemented research pipeline for the CME WTI Average Pr
 
 The empirical application deliberately uses different sources for different objects:
 
-- **WTI APO market marks:** committed Barchart contract histories already present under `data/csv`;
+- **WTI APO market marks:** committed Barchart option histories under `data/csv`;
 - **physical-measure volatility inference:** Yahoo Finance `CL=F`, explicitly labelled as a continuous/front-month proxy;
-- **valuation-date CL term structure and APO fixing contracts:** Yahoo Finance individual contract symbols such as `CLV26.NYM`, `CLX26.NYM`, and `CLZ26.NYM`;
-- **CL contract settlement/expiration metadata:** Yahoo quote metadata when available, with a named pilot fallback for the October-2026 case and exchange/Barchart validation required for production work;
+- **valuation-date CL term structure and APO fixing contracts:** committed Barchart `Daily Prices` histories under `data/csv/CL`;
+- **CL last-trade dates:** the explicit versioned table `data/csv/CL/contract_expiries.csv`;
 - **USD discounting:** U.S. Treasury Daily Treasury Par Yield Curve Rates;
-- **validation:** small external reference tables can be supplied locally and are never required to be committed.
+- **optional validation:** a small external reference table can be supplied locally.
 
-Yahoo `Close` is treated as a **daily settlement proxy**, not silently renamed an official CME settlement.
+Barchart `Latest` is used as the futures end-of-day price / settlement proxy. It is not silently renamed an official CME settlement.
 
-A live university-workstation test showed that Yahoo can return 404 / `YFTzMissingError` for older delisted individual contracts such as `CLG24.NYM`. Consequently, the project does **not** assume that Yahoo provides a complete historical strip of monthly CL contracts indefinitely.
+A live workstation test showed that Yahoo can return 404 / `YFTzMissingError` for older delisted individual contracts such as `CLG24.NYM`. Individual Yahoo CL pages are therefore no longer required by the canonical pilot.
 
-## 1. Ingest all downloaded option histories
+## 1. Ingest the option histories
 
-Use all downloaded contracts in the raw panel. Do not select strikes according to the final observed WTI level.
+Use all downloaded APO contracts in the raw panel. Do not select strikes according to the final observed WTI level.
 
 ```python
 from bayesian_asian_options.barchart_apo import discover_barchart_histories, build_apo_panel
@@ -28,7 +28,7 @@ paths = discover_barchart_histories("data/csv")
 raw_panel = build_apo_panel(paths, deduplicate_contracts=True)
 ```
 
-The filename parser is the authoritative source for expiry, strike, and call/put metadata. Folder names are audited rather than blindly trusted.
+The APO discovery function ignores the separate `data/csv/CL` futures files because they do not match the JAO option filename convention.
 
 ## 2. Keep data richness separate from liquidity
 
@@ -39,10 +39,7 @@ The filename parser is the authoritative source for expiry, strike, and call/put
 The current pilot uses Yahoo `CL=F` only for historical-return inference:
 
 ```python
-from bayesian_asian_options.wti_yahoo import (
-    download_yahoo_wti,
-    prepare_wti_model_sample,
-)
+from bayesian_asian_options.wti_yahoo import download_yahoo_wti, prepare_wti_model_sample
 
 history, metadata = download_yahoo_wti(
     ticker="CL=F",
@@ -57,33 +54,60 @@ sample = prepare_wti_model_sample(
 returns = sample.log_returns
 ```
 
-This is an explicit measurement compromise, not a contractual claim. Yahoo does not document the historical `CL=F` roll convention precisely enough to call this series a self-reconstructed CME first-nearby series. The experiment manifest records that limitation.
+This is an explicit measurement compromise, not a contractual claim. Yahoo does not document the historical `CL=F` roll convention precisely enough to call the series a self-reconstructed CME first-nearby series. The experiment manifest records that limitation.
 
-If a later source provides complete contract-specific historical data, the preferred robustness specification is to reconstruct the first-nearby series contract by contract and exclude every return that spans a roll.
+If a later source provides a complete historical monthly CL strip, the preferred robustness specification is to reconstruct the first-nearby series contract by contract and exclude every return that spans a roll.
 
-## 4. Download only the individual CL contracts needed for APO valuation
+## 4. Load the Barchart CL term structure
 
-The APO payoff still requires contract-specific futures levels. For one averaging month we therefore download only a short local strip around that month. The October-2026 pilot uses:
+The committed futures files live under:
 
 ```text
-CLV26.NYM
-CLX26.NYM
-CLZ26.NYM
+data/csv/CL/
+├── CLV26.csv
+├── CLX26.csv
+├── CLZ26.csv
+├── ...
+├── CLN29.csv
+├── CLQ29.csv
+└── contract_expiries.csv
 ```
 
-The October delivery contract has already expired by the averaging month, the November contract is first-nearby for the early October fixings, and the December contract becomes first-nearby after the November contract terminates.
-
-These snapshots are cached under `data/wti_yahoo_contracts/` and are gitignored. This avoids making the experiment depend on Yahoo retaining dozens of old delisted contract pages.
-
-## 5. Reconstruct the remaining APO fixing curve
-
-For every remaining fixing date, map to the earliest CL contract that has not passed its settlement/expiration date:
+Load only the contracts needed for a particular APO averaging month:
 
 ```python
-from bayesian_asian_options.wti_first_nearby import build_forward_fixing_curve
-from bayesian_asian_options.wti_yahoo_futures import futures_curve_on_date
+from bayesian_asian_options.barchart_cl import load_barchart_cl_strip
 
-curve_t = futures_curve_on_date(panel, "2026-09-04")
+panel, manifest = load_barchart_cl_strip(
+    "data/csv/CL",
+    contracts=["CLX26", "CLZ26"],
+)
+```
+
+For an averaging month `M`, daily first-nearby fixings use the `M+1` delivery contract until its last-trade date and then the `M+2` delivery contract. Thus the October-2026 pilot requires `CLX26` and `CLZ26`, not a historical strip of old Yahoo contracts.
+
+On the 2026-09-04 valuation date the committed files contain `CLX26 = 88.57` and `CLZ26 = 85.46` in the Barchart `Latest` field. These values are preserved in the run-level valuation-curve audit.
+
+## 5. Reconstruct the APO fixing curve
+
+Last-trade dates are read from the explicit study table rather than inferred through an undocumented roll heuristic:
+
+```python
+from bayesian_asian_options.barchart_cl import (
+    barchart_cl_curve_on_date,
+    load_cl_expiry_table,
+)
+from bayesian_asian_options.wti_first_nearby import build_forward_fixing_curve
+
+expiries = load_cl_expiry_table(
+    "data/csv/CL/contract_expiries.csv",
+    contracts=["CLX26", "CLZ26"],
+)
+curve_t = barchart_cl_curve_on_date(
+    panel,
+    "2026-09-04",
+    contracts=["CLX26", "CLZ26"],
+)
 forward_fixings = build_forward_fixing_curve(
     fixing_dates=remaining_fixing_dates,
     contract_expiries=expiries,
@@ -91,7 +115,7 @@ forward_fixings = build_forward_fixing_curve(
 )
 ```
 
-Yahoo expiry metadata is preferred. If metadata is missing for an active contract, the October-2026 pilot can fall back to a named weekend-only implementation of the standard CL three-business-day termination rule. Production-panel dates affected by exchange holidays require a validated CME calendar rather than this pilot fallback.
+The current October-2026 pilot still uses a weekday fixing schedule. General production-panel work must replace that fallback with an explicit CME energy settlement calendar before final publication tables are produced.
 
 ## 6. Construct expected final average and moneyness
 
@@ -117,26 +141,17 @@ A strike is not permanently ATM/ITM/OTM.
 
 ## 7. Use a date-specific Treasury curve
 
-Place the official Treasury CSV files under:
-
-```text
-data/rates/treasury/
-```
-
-or let the workstation runner download the required year when the directory is empty.
+Place official Treasury CSVs under `data/rates/treasury/`, or let the workstation runner download the required year when the directory is empty.
 
 ```python
-from bayesian_asian_options.rates import (
-    load_treasury_par_yields,
-    treasury_curve_on_or_before,
-)
+from bayesian_asian_options.rates import load_treasury_par_yields, treasury_curve_on_or_before
 
 table = load_treasury_par_yields(["data/rates/treasury/2026.csv"])
 curve = treasury_curve_on_or_before(table, "2026-09-04")
 discount = curve.proxy_discount_factor(time_to_payoff_years)
 ```
 
-The current pilot is explicit about its approximation: it interpolates the Treasury **par** curve and treats that yield as a continuously compounded zero-rate proxy. It is not called a bootstrapped zero/OIS curve. A proper zero/OIS discounting robustness specification can replace this component later without changing the rest of the pipeline.
+The current pilot interpolates the Treasury **par** curve and treats that yield as a continuously compounded zero-rate proxy. It is not described as a bootstrapped zero/OIS curve. A proper zero/OIS discounting robustness specification can replace this component later without changing the rest of the pipeline.
 
 ## 8. Estimate historical volatility uncertainty
 
@@ -146,33 +161,23 @@ The first real-market driver runs multiple Metropolis chains and records chain-l
 
 ## 9. Price the observed cross-section under Q
 
-`wti_apo_cross_section_mc` simulates the arithmetic average once for a shared expiry/fixing state and reuses it across all call/put strikes. Nearby sigma values use the same random seed, providing common random numbers.
+`wti_apo_cross_section_mc` simulates the arithmetic average once for a shared expiry/fixing state and reuses it across all call/put strikes. Nearby sigma values use common random numbers.
 
-The reported pricing rules are:
-
-- Full Bayes: posterior mean of conditional prices;
-- posterior-mean plug-in;
-- marginal-sigma-mode plug-in;
-- historical MLE plug-in.
-
-The external benchmark is the observed Barchart end-of-day option mark.
+The reported pricing rules are Full Bayes, posterior-mean plug-in, marginal-sigma-mode plug-in, and historical MLE plug-in. The external benchmark is the observed Barchart end-of-day APO mark.
 
 ## 10. First real experiment
 
 The canonical first pilot is the October-2026 APO cross-section observed on 2026-09-04.
 
-Direct command:
-
 ```bash
 python -m experiments.wti_apo_empirical_hybrid \
     --valuation-date 2026-09-04 \
     --apo-expiry 2026-10 \
+    --cl-data-dir data/csv/CL \
     --download-treasury
 ```
 
-The experiment writes a versioned run directory containing the continuous-proxy inference series, inference-return audit, MCMC diagnostics, posterior summary/draws, APO fixing state, pricing grid, contract-level prices/errors, source metadata, and a JSON manifest.
-
-The current pilot uses a weekday fixing schedule because October 2026 has no full-day CME energy closure. General production-panel work must replace this fallback with an explicit exchange settlement calendar before results are treated as final.
+The run directory contains the continuous-proxy inference series, inference-return audit, MCMC diagnostics, posterior draws/summary, valuation-date CL curve, explicit expiry table, APO fixing state, pricing grid, contract-level prices/errors, Barchart CL source manifest, and the JSON reproducibility manifest.
 
 ## 11. University-PC launcher
 
@@ -184,11 +189,11 @@ python -m scripts.run_university_wti_apo --quick
 python -m scripts.run_university_wti_apo
 ```
 
-`--quick` is for an end-to-end smoke run. The default command uses the higher-precision MCMC/pricing settings. The launcher now routes through the hybrid experiment: one `CL=F` inference history, only the individual CL contracts needed for the valuation curve, and Treasury data only when the local Treasury directory is empty.
+`--quick` is the end-to-end smoke run. A fresh run now requires network access only for Yahoo `CL=F` and, when no local Treasury CSV exists, the U.S. Treasury download. Individual CL curve contracts are read locally from `data/csv/CL`.
 
 ## 12. Source validation
 
-If a small Barchart/CME reference table is available locally, pass:
+An optional external table with schema `trade_date,contract,close` can be passed with:
 
 ```bash
 python -m scripts.run_university_wti_apo \
@@ -196,4 +201,4 @@ python -m scripts.run_university_wti_apo \
     --futures-reference-csv path/to/reference.csv
 ```
 
-The reference schema is `trade_date,contract,close`. The validation report contains Yahoo close, reference price, difference, and absolute difference. Do not commit newly acquired proprietary reference data unless redistribution rights are clear.
+The resulting report compares the external price with Barchart `Latest`. Keep licensing and redistribution restrictions in mind before publishing raw market-data files.

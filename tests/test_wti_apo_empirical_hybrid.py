@@ -1,34 +1,29 @@
+from pathlib import Path
+
 import pandas as pd
 
-from experiments.wti_apo_empirical_hybrid import (
-    _candidate_curve_contracts,
-    _cl_last_trade_rule_weekday,
-    _complete_expiry_metadata,
-)
+from bayesian_asian_options.barchart_cl import load_cl_expiry_table
+from experiments.wti_apo_empirical_hybrid import _candidate_curve_contracts
 
 
-def test_october_2026_curve_strip_avoids_old_delisted_contracts() -> None:
-    assert _candidate_curve_contracts("2026-10") == ["CLV26", "CLX26", "CLZ26"]
+ROOT = Path(__file__).resolve().parents[1]
 
 
-def test_october_2026_cl_termination_dates_from_pilot_rule() -> None:
-    assert _cl_last_trade_rule_weekday("CLV26") == pd.Timestamp("2026-09-22")
-    assert _cl_last_trade_rule_weekday("CLX26") == pd.Timestamp("2026-10-20")
-    assert _cl_last_trade_rule_weekday("CLZ26") == pd.Timestamp("2026-11-20")
+def test_october_2026_curve_strip_uses_only_fixing_contracts() -> None:
+    assert _candidate_curve_contracts("2026-10") == ["CLX26", "CLZ26"]
 
 
-def test_missing_yahoo_expiry_metadata_gets_named_fallback() -> None:
-    raw = pd.DataFrame(
-        {
-            "contract": ["CLV26", "CLX26"],
-            "settlement_date": ["2026-09-22", None],
-            "settlement_date_source": ["yahoo_info:expireDate", None],
-        }
-    )
-    completed = _complete_expiry_metadata(raw)
-    assert completed.loc[0, "settlement_date_source"] == "yahoo_info:expireDate"
-    assert completed.loc[1, "settlement_date"] == "2026-10-20"
-    assert (
-        completed.loc[1, "settlement_date_source"]
-        == "cme_standard_rule_weekday_pilot_fallback"
-    )
+def test_other_apo_months_map_to_next_two_delivery_contracts() -> None:
+    assert _candidate_curve_contracts("2026-09") == ["CLV26", "CLX26"]
+    assert _candidate_curve_contracts("2026-11") == ["CLZ26", "CLF27"]
+    assert _candidate_curve_contracts("2029-06") == ["CLN29", "CLQ29"]
+
+
+def test_october_2026_expiry_reference_is_explicit() -> None:
+    table = load_cl_expiry_table(
+        ROOT / "data" / "csv" / "CL" / "contract_expiries.csv",
+        contracts=["CLX26", "CLZ26"],
+    ).set_index("contract")
+    assert table.loc["CLX26", "last_trade_date"] == pd.Timestamp("2026-10-20")
+    assert table.loc["CLZ26", "last_trade_date"] == pd.Timestamp("2026-11-20")
+    assert table.loc["CLX26", "source"] == "CME_CL_termination_rule_explicit_study_table"
