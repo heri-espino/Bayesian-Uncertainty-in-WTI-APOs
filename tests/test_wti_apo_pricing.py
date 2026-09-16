@@ -1,8 +1,13 @@
 import numpy as np
 import pandas as pd
+import pytest
 
 from bayesian_asian_options.wti_apo_pricing import expected_average_level, wti_average_price_option_mc
-from bayesian_asian_options.wti_first_nearby import assign_first_nearby_contract, build_forward_fixing_curve
+from bayesian_asian_options.wti_first_nearby import (
+    assign_first_nearby_contract,
+    build_forward_fixing_curve,
+    build_realized_fixing_curve,
+)
 
 
 def test_fully_realized_option_is_exact():
@@ -62,3 +67,55 @@ def test_first_nearby_roll_mapping():
     )
     forward = build_forward_fixing_curve(fixing_dates, expiries, curve)
     assert forward["settlement"].tolist() == [100.0, 98.0, 96.0]
+
+
+def test_realized_first_nearby_fixings_use_exact_contract_dates():
+    expiries = pd.DataFrame(
+        {
+            "contract": ["CLV26", "CLX26"],
+            "last_trade_date": ["2026-09-22", "2026-10-20"],
+        }
+    )
+    history = pd.DataFrame(
+        {
+            "trade_date": pd.to_datetime(
+                ["2026-09-21", "2026-09-23", "2026-09-23"]
+            ),
+            "contract": ["CLV26", "CLV26", "CLX26"],
+            "latest": [100.0, 999.0, 98.0],
+            "source_field": ["Latest", "Latest", "Latest"],
+        }
+    )
+
+    realized = build_realized_fixing_curve(
+        pd.to_datetime(["2026-09-21", "2026-09-23"]),
+        expiries,
+        history,
+    )
+
+    assert realized["contract"].tolist() == ["CLV26", "CLX26"]
+    assert realized["settlement"].tolist() == [100.0, 98.0]
+    assert realized["source_field"].tolist() == ["Latest", "Latest"]
+
+
+def test_realized_first_nearby_fixings_reject_missing_settlement():
+    expiries = pd.DataFrame(
+        {
+            "contract": ["CLV26"],
+            "last_trade_date": ["2026-09-22"],
+        }
+    )
+    history = pd.DataFrame(
+        {
+            "trade_date": pd.to_datetime(["2026-09-01"]),
+            "contract": ["CLV26"],
+            "latest": [90.0],
+        }
+    )
+
+    with pytest.raises(ValueError, match="Missing realized first-nearby settlements"):
+        build_realized_fixing_curve(
+            pd.to_datetime(["2026-09-01", "2026-09-02"]),
+            expiries,
+            history,
+        )
