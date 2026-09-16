@@ -47,7 +47,7 @@ with $\theta=(\mu,\eta)$. The acceptance probability is
  \frac{\pi(\theta'\mid\mathcal D)}{\pi(\theta\mid\mathcal D)}
  \right\},
 \end{equation}
-following the Metropolis--Hastings construction \cite{metropolis1953,hastings1970}. Multiple-chain diagnostics, effective sample size, and prior sensitivity are included in the final empirical implementation rather than treating a single acceptance rate as sufficient evidence of convergence.
+following the Metropolis--Hastings construction \cite{metropolis1953,hastings1970}. The empirical implementation uses multiple chains and reports Gelman--Rubin $\hat R$ diagnostics for $\mu$ and $\sigma$ rather than treating a single acceptance rate as sufficient evidence of convergence. Effective-sample-size calculations and broader prior sensitivity remain robustness extensions.
 
 \subsection{Risk-neutral valuation}
 
@@ -111,13 +111,13 @@ Four estimators are compared:
  &=\mathbb E[C^Q(\sigma)\mid\mathcal D],\\
  \widehat C_{PM}
  &=C^Q(\mathbb E[\sigma\mid\mathcal D]),\\
- \widehat C_{MAP}
- &=C^Q(\widehat\sigma_{MAP}),\\
+ \widehat C_{Mode}
+ &=C^Q(\widehat\sigma_{Mode}),\\
  \widehat C_{MLE}
  &=C^Q(\widehat\sigma_{MLE}).
  \label{eq:estimators}
 \end{align}
-The first estimator integrates the pricing map over the posterior. The second collapses the posterior to its mean before pricing. The third uses the posterior mode, and the fourth is a non-Bayesian likelihood benchmark.
+The first estimator integrates the pricing map over the posterior. The second collapses the posterior to its mean before pricing. The third uses the marginal posterior mode of $\sigma$, estimated from the sampled volatility distribution, and the fourth is a non-Bayesian likelihood benchmark. The marginal volatility mode is not described as a joint MAP estimator: a joint posterior mode depends on the full parameterization, whereas the implemented comparator is a one-dimensional summary of the marginal posterior for the pricing-relevant parameter.
 
 A useful diagnostic is
 \begin{equation}
