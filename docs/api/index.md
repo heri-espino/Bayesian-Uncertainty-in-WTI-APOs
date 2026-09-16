@@ -51,6 +51,20 @@ This is the canonical inventory of reusable public functions/classes. It is gene
 :show-inheritance:
 ```
 
+## Yahoo individual WTI futures
+
+```{automodule} bayesian_asian_options.wti_yahoo_futures
+:members:
+:show-inheritance:
+```
+
+## U.S. Treasury rate curves
+
+```{automodule} bayesian_asian_options.rates
+:members:
+:show-inheritance:
+```
+
 ## CME-style WTI APO pricing
 
 ```{automodule} bayesian_asian_options.wti_apo_pricing
@@ -65,7 +79,7 @@ This is the canonical inventory of reusable public functions/classes. It is gene
 :show-inheritance:
 ```
 
-## Yahoo WTI auxiliary data utilities
+## Yahoo continuous/front-month auxiliary utilities
 
 ```{automodule} bayesian_asian_options.wti_yahoo
 :members:

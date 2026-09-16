@@ -35,8 +35,9 @@ Representative imports:
 
 ```python
 from bayesian_asian_options.bayesian_gbm import random_walk_metropolis_gbm
-from bayesian_asian_options.asian_pricing import asian_arithmetic_call_mc
-from bayesian_asian_options.wti_apo_pricing import wti_average_price_option_mc
+from bayesian_asian_options.rates import treasury_curve_on_or_before
+from bayesian_asian_options.wti_yahoo_futures import reconstruct_first_nearby_history
+from bayesian_asian_options.wti_apo_pricing import wti_apo_cross_section_mc
 ```
 
 CuPy is optional and platform-specific. For a CUDA-12 workstation, see
@@ -72,22 +73,22 @@ The internal manuscript preserves the selected Wiley layout:
 \documentclass[HARVARD,Utopia2COL]{WileyNJDv5}
 ```
 
-Build it with XeLaTeX through the repository wrapper rather than compiling source files in
-place:
+Build it with:
 
 ```bash
 python paper/build.py
 ```
 
-The generated PDF and all intermediate files remain under the gitignored `paper/build/`.
-A compiler-free structural check is available for CI and agents:
+Generated TeX intermediates remain under the gitignored `paper/build/`; the final generated
+PDF is `paper/espino_2026_bayess-on-wti.pdf` and is also gitignored. A compiler-free
+structural check is available for CI and agents:
 
 ```bash
 python paper/build.py --check
 ```
 
 See `paper/README.md` for the manuscript directory contract. The older REMEF-oriented draft
-is retained intact under `archive/paper_remef/` for provenance.
+is retained under `archive/paper_remef/` for provenance.
 
 ## Documentation and API discovery
 
@@ -115,14 +116,43 @@ manifests.
 
 ## WTI empirical application
 
-The CME WTI Average Price Option application does not treat one fixed futures contract as
-the Asian underlying. The pipeline reconstructs calendar-month first-nearby CL fixings,
-separates realized and remaining fixings, uses the observed term structure for remaining
-expectations, defines moneyness observation by observation relative to the expected final
-average, and compares Full Bayes / posterior-mean / MAP / MLE prices with observed market
-settlements.
+The CME WTI Average Price Option application does not treat one fixed futures contract or
+Yahoo `CL=F` as the contractual Asian underlying. The real-market pipeline uses:
 
-All downloaded strikes are retained in the raw panel. Liquidity/sample filters and
+- committed Barchart WTI APO histories as the option-price benchmark;
+- **individual** Yahoo Finance CL futures such as `CLV26.NYM`, `CLX26.NYM`, and `CLZ26.NYM`;
+- an explicit first-nearby reconstruction whose roll-switch return is excluded from the
+  physical-measure volatility likelihood;
+- the contemporaneous individual-contract futures curve for remaining APO fixings;
+- date-specific U.S. Treasury par-yield data for discounting.
+
+Yahoo daily `Close` remains labeled a settlement proxy and can be checked against a local
+CME/Barchart reference table. The current Treasury pilot uses an explicit approximation:
+the maturity-interpolated **par yield** is treated as a continuously compounded zero-rate
+proxy. It is not described as a bootstrapped zero/OIS curve.
+
+The first real-market driver is:
+
+```bash
+python -m experiments.wti_apo_empirical \
+    --valuation-date 2026-09-04 \
+    --apo-expiry 2026-10 \
+    --download-treasury
+```
+
+For the university workstation, use:
+
+```bash
+python -m scripts.run_university_wti_apo --check-only
+python -m scripts.run_university_wti_apo --quick
+python -m scripts.run_university_wti_apo
+```
+
+Yahoo futures histories are cached under `data/wti_yahoo_contracts/`; Treasury CSVs are
+read from `data/rates/treasury/`. Both source-data caches are gitignored by default, while
+metadata, hashes, diagnostics, manifests, and permitted derived results remain reproducible.
+
+All downloaded APO strikes are retained in the raw panel. Liquidity/sample filters and
 representative-contract rankings are separate operations. In particular,
 `richest_option_series.csv` is a data-completeness diagnostic, not a liquidity ranking.
 See `docs/empirical_wti.md` and `research/EMPIRICAL_WTI_DESIGN.md`.
