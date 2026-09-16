@@ -13,9 +13,12 @@ WILEY_DIR = PAPER_DIR / "vendor" / "wiley_njd_v5"
 
 REQUIRED = [
     ROOT / "AGENTS.md",
+    ROOT / "CONTRIBUTING.md",
     ROOT / "pyproject.toml",
     ROOT / "docs" / "index.md",
     ROOT / "docs" / "architecture.md",
+    ROOT / "docs" / "repository_layout.md",
+    ROOT / "docs" / "development.md",
     PACKAGE_DIR / "__init__.py",
     PAPER_DIR / "README.md",
     PAPER_DIR / "build.py",
