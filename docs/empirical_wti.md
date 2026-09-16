@@ -8,7 +8,7 @@ The empirical application deliberately uses different sources for different obje
 
 - **WTI APO market marks:** committed Barchart option histories under `data/csv`;
 - **physical-measure volatility inference:** Yahoo Finance `CL=F`, explicitly labelled as a continuous/front-month proxy;
-- **valuation-date CL term structure and APO fixing contracts:** committed Barchart `Daily Prices` histories under `data/csv/CL`;
+- **realized first-nearby fixings and valuation-date CL term structure:** committed Barchart `Daily Prices` histories under `data/csv/CL`;
 - **CL last-trade dates:** the explicit versioned table `data/csv/CL/contract_expiries.csv`;
 - **USD discounting:** U.S. Treasury Daily Treasury Par Yield Curve Rates;
 - **optional validation:** a small external reference table can be supplied locally.
@@ -58,7 +58,7 @@ This is an explicit measurement compromise, not a contractual claim. Yahoo does 
 
 If a later source provides a complete historical monthly CL strip, the preferred robustness specification is to reconstruct the first-nearby series contract by contract and exclude every return that spans a roll.
 
-## 4. Load the Barchart CL term structure
+## 4. Load the Barchart CL histories
 
 The committed futures files live under:
 
@@ -84,38 +84,50 @@ panel, manifest = load_barchart_cl_strip(
 )
 ```
 
-For an averaging month `M`, daily first-nearby fixings use the `M+1` delivery contract until its last-trade date and then the `M+2` delivery contract. Thus the October-2026 pilot requires `CLX26` and `CLZ26`, not a historical strip of old Yahoo contracts.
+For an averaging month `M`, daily first-nearby fixings use the `M+1` delivery contract until its last-trade date and then the `M+2` delivery contract. Thus the October-2026 APO requires `CLX26` and `CLZ26`. The September-2026 APO uses `CLV26` and `CLX26`.
 
 On the 2026-09-04 valuation date the committed files contain `CLX26 = 88.57` and `CLZ26 = 85.46` in the Barchart `Latest` field. These values are preserved in the run-level valuation-curve audit.
 
-## 5. Reconstruct the APO fixing curve
+## 5. Reconstruct realized and remaining APO fixings
 
-Last-trade dates are read from the explicit study table rather than inferred through an undocumented roll heuristic:
+Last-trade dates are read from the explicit study table rather than inferred through an undocumented roll heuristic. The same contract mapping is used for both already realized fixings and remaining fixings.
 
 ```python
 from bayesian_asian_options.barchart_cl import (
     barchart_cl_curve_on_date,
     load_cl_expiry_table,
 )
-from bayesian_asian_options.wti_first_nearby import build_forward_fixing_curve
+from bayesian_asian_options.wti_first_nearby import (
+    build_forward_fixing_curve,
+    build_realized_fixing_curve,
+)
 
 expiries = load_cl_expiry_table(
     "data/csv/CL/contract_expiries.csv",
-    contracts=["CLX26", "CLZ26"],
+    contracts=["CLV26", "CLX26"],
 )
+
+realized = build_realized_fixing_curve(
+    realized_fixing_dates,
+    expiries,
+    panel,
+)
+
 curve_t = barchart_cl_curve_on_date(
     panel,
-    "2026-09-04",
-    contracts=["CLX26", "CLZ26"],
+    valuation_date,
+    contracts=remaining_contracts,
 )
-forward_fixings = build_forward_fixing_curve(
-    fixing_dates=remaining_fixing_dates,
-    contract_expiries=expiries,
-    futures_curve=curve_t,
+remaining = build_forward_fixing_curve(
+    remaining_fixing_dates,
+    expiries,
+    curve_t,
 )
 ```
 
-The current October-2026 pilot still uses a weekday fixing schedule. General production-panel work must replace that fallback with an explicit CME energy settlement calendar before final publication tables are produced.
+The canonical one-date driver uses an **end-of-day convention**: a fixing dated on the valuation date is known for that same end-of-day option mark. Dates strictly later than the valuation date remain stochastic. Missing realized contract/date observations raise an error and are never forward-filled.
+
+The current implementation still uses a weekday fixing schedule. This is intentionally fail-closed for partial fixing: if that provisional calendar includes a market holiday with no actual CL settlement, the panel audit marks the date unavailable instead of fabricating a fixing. An explicit CME energy settlement calendar remains required before final publication-scale cross-maturity tables.
 
 ## 6. Construct expected final average and moneyness
 
@@ -137,7 +149,13 @@ $$
 m_{t,K,T}=\log\left(\frac{K}{\widehat A_{t,T}^{Q}}\right).
 $$
 
-A strike is not permanently ATM/ITM/OTM.
+The contract-level outputs additionally record
+
+$$
+\phi_t = \frac{|R_t|}{N},
+$$
+
+as `fraction_fixed`, together with `n_realized_fixings` and `n_remaining_fixings`. A strike is not permanently ATM/ITM/OTM.
 
 ## 7. Use a date-specific Treasury curve
 
@@ -177,9 +195,19 @@ python -m experiments.wti_apo_empirical \
     --download-treasury
 ```
 
-The run directory contains the continuous-proxy inference series, inference-return audit, MCMC diagnostics, posterior draws/summary, valuation-date CL curve, explicit expiry table, APO fixing state, pricing grid, contract-level prices/errors, Barchart CL source manifest, and the JSON reproducibility manifest.
+The same driver now supports partial fixing. For example, a September-2026 end-of-day valuation inside the September averaging month can be run with:
 
-The manifest schema stores repository inputs as repository-relative paths. External paths are reduced to an `<external>/filename` form so workstation/user directories are not exposed. It also records the Git commit and dirty-tree state plus Python, platform, NumPy, pandas, and SciPy versions; hostnames and user names are deliberately omitted.
+```bash
+python -m experiments.wti_apo_empirical \
+    --valuation-date 2026-09-04 \
+    --apo-expiry 2026-09 \
+    --cl-data-dir data/csv/CL \
+    --download-treasury
+```
+
+The run directory contains the continuous-proxy inference series, inference-return audit, MCMC diagnostics, posterior draws/summary, valuation-date CL curve for remaining fixings, explicit expiry table, combined realized/remaining `apo_fixing_state.csv`, pricing grid, contract-level prices/errors, Barchart CL source manifest, and the JSON reproducibility manifest.
+
+Manifest schema version 3 records the realized/remaining fixing counts, `fraction_fixed`, the end-of-day timing convention, and the fail-on-missing-realized-fixing policy. Repository inputs use repository-relative paths. External paths are reduced to an `<external>/filename` form so workstation/user directories are not exposed. The manifest also records the Git commit and dirty-tree state plus Python, platform, NumPy, pandas, and SciPy versions; hostnames and user names are deliberately omitted.
 
 ## 11. University-PC launcher
 
@@ -195,7 +223,11 @@ python -m scripts.run_university_wti_apo
 
 ## 12. Multi-date panel and liquidity samples
 
-The date-panel orchestrator discovers valuation dates for which both the APO cross-section and the two required Barchart CL contracts are available. It never replaces the single-date driver; it invokes that driver once per date and then builds derived panel summaries.
+The date-panel orchestrator now admits both pre-averaging and partial-fixing dates. For each candidate date it independently verifies:
+
+1. an eligible APO cross-section exists;
+2. every realized first-nearby fixing through the end-of-day valuation timestamp exists at the exact mapped CL contract/date;
+3. the valuation-date CL curve contains every contract needed by the remaining fixing dates.
 
 Inspect candidate dates first:
 
@@ -203,16 +235,22 @@ Inspect candidate dates first:
 python -m experiments.wti_apo_date_panel --apo-expiry 2026-10 --list-dates
 ```
 
-Run a lower-cost panel smoke test:
+For the first partial-fixing experiment, inspect the already committed September data:
 
 ```bash
-python -m experiments.wti_apo_date_panel --apo-expiry 2026-10 --quick
+python -m experiments.wti_apo_date_panel \
+    --apo-expiry 2026-09 \
+    --start-date 2026-09-01 \
+    --end-date 2026-09-04 \
+    --list-dates
 ```
+
+Run a lower-cost panel smoke test with the same date range by replacing `--list-dates` with `--quick`. A production run omits both flags.
 
 A normal all-date run writes three separate samples so a liquidity robustness run cannot overwrite the baseline aggregation:
 
 ```text
-results/wti_apo_empirical/panel_202610/
+results/wti_apo_empirical/panel_202609/
 ├── panel_date_audit.csv
 ├── all_dates/
 │   ├── panel_contract_pricing.csv
@@ -244,7 +282,7 @@ python -m experiments.wti_apo_date_panel \
 
 `--require-positive-volume` remains available when computation should be restricted to dates with at least one positive-volume observation. Those outputs are written only to `positive_volume_dates/` and `positive_volume_contracts/`, so they do not overwrite `all_dates/`.
 
-The root `panel_date_audit.csv` reports raw/main-sample option counts, positive-volume counts, total reported volume, and whether both required CL curve contracts exist on each date.
+The root `panel_date_audit.csv` reports raw/main-sample option counts, liquidity, realized and remaining fixing counts, `fraction_fixed`, realized-fixing availability, remaining-curve availability, eligibility, and any availability failure message.
 
 ## 13. Source validation
 

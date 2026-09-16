@@ -1,9 +1,15 @@
 """Run and aggregate the canonical WTI APO experiment over valuation dates.
 
-This module is orchestration only. It discovers dates for which both the APO
-cross-section and the required committed Barchart CL curve are available,
+This module is orchestration only. It discovers dates for which the APO cross
+section and the required committed Barchart CL information are available,
 invokes :mod:`experiments.wti_apo_empirical` once per date, and writes three
-non-overlapping empirical sample views:
+empirical sample views.
+
+A date may be before or inside the averaging month.  For in-month valuations,
+the audit requires every realized first-nearby fixing through the end-of-day
+valuation timestamp and requires an exact valuation-date CL curve only for the
+contracts used by the remaining fixing dates.  Missing realized fixings are not
+forward-filled.
 
 ``all_dates``
     Every eligible valuation date and every contract in its main sample.
@@ -32,11 +38,20 @@ from bayesian_asian_options.barchart_apo import (
     build_apo_panel,
     discover_barchart_histories,
 )
-from bayesian_asian_options.barchart_cl import load_barchart_cl_strip
+from bayesian_asian_options.barchart_cl import (
+    barchart_cl_curve_on_date,
+    load_barchart_cl_strip,
+    load_cl_expiry_table,
+)
+from bayesian_asian_options.wti_first_nearby import (
+    assign_first_nearby_contract,
+    build_realized_fixing_curve,
+)
 from experiments.wti_apo_empirical import (
     ROOT,
     _candidate_curve_contracts,
     _pilot_fixing_dates,
+    _split_fixing_dates,
     main as run_single_date,
 )
 
@@ -48,44 +63,109 @@ _METHODS = [
     ("MLE", "mle"),
 ]
 
+_AUDIT_COLUMNS = [
+    "valuation_date",
+    "n_raw_options",
+    "n_main_sample",
+    "n_positive_volume",
+    "total_volume",
+    "n_realized_fixings",
+    "n_remaining_fixings",
+    "fraction_fixed",
+    "realized_fixings_available",
+    "curve_available",
+    "eligible",
+    "availability_note",
+]
+
+
+def _fixing_availability(
+    *,
+    valuation_date: pd.Timestamp,
+    fixing_dates: pd.DatetimeIndex,
+    futures: pd.DataFrame,
+    expiry_table: pd.DataFrame,
+) -> dict[str, object]:
+    """Audit realized-fixing and remaining-curve availability for one date."""
+    realized_dates, remaining_dates = _split_fixing_dates(
+        fixing_dates,
+        valuation_date,
+    )
+    n_fixings = len(fixing_dates)
+    n_realized = len(realized_dates)
+    n_remaining = len(remaining_dates)
+
+    realized_available = True
+    realized_note = ""
+    if n_realized:
+        try:
+            build_realized_fixing_curve(
+                realized_dates,
+                expiry_table,
+                futures,
+            )
+        except ValueError as exc:
+            realized_available = False
+            realized_note = str(exc)
+
+    curve_available = True
+    curve_note = ""
+    if n_remaining:
+        mapping = assign_first_nearby_contract(remaining_dates, expiry_table)
+        required = mapping["contract"].drop_duplicates().tolist()
+        try:
+            barchart_cl_curve_on_date(
+                futures,
+                valuation_date,
+                contracts=required,
+            )
+        except ValueError as exc:
+            curve_available = False
+            curve_note = str(exc)
+
+    notes = [value for value in [realized_note, curve_note] if value]
+    return {
+        "n_realized_fixings": int(n_realized),
+        "n_remaining_fixings": int(n_remaining),
+        "fraction_fixed": float(n_realized / n_fixings) if n_fixings else np.nan,
+        "realized_fixings_available": bool(realized_available),
+        "curve_available": bool(curve_available),
+        "availability_note": " | ".join(notes),
+    }
+
 
 def _date_audit(
     *,
     option_data_dir: Path,
     cl_data_dir: Path,
+    cl_expiry_file: Path,
     apo_expiry: str,
     min_open_interest: float,
     exclude_min_tick: bool,
 ) -> pd.DataFrame:
-    """Return availability/liquidity diagnostics by candidate valuation date."""
+    """Return option, liquidity, partial-fixing, and curve diagnostics by date."""
     option_paths = discover_barchart_histories(option_data_dir)
     options = build_apo_panel(option_paths, deduplicate_contracts=True)
     options["trade_date"] = pd.to_datetime(options["trade_date"]).dt.normalize()
     options = options[options["expiry_month"] == apo_expiry].copy()
 
-    first_fixing = _pilot_fixing_dates(apo_expiry).min()
-    options = options[options["trade_date"] < first_fixing].copy()
+    fixing_dates = _pilot_fixing_dates(apo_expiry)
+    if len(fixing_dates):
+        options = options[options["trade_date"] <= fixing_dates.max()].copy()
     if options.empty:
-        return pd.DataFrame(
-            columns=[
-                "valuation_date",
-                "n_raw_options",
-                "n_main_sample",
-                "n_positive_volume",
-                "total_volume",
-                "curve_available",
-                "eligible",
-            ]
-        )
+        return pd.DataFrame(columns=_AUDIT_COLUMNS)
 
     curve_contracts = _candidate_curve_contracts(apo_expiry)
     futures, _ = load_barchart_cl_strip(cl_data_dir, contracts=curve_contracts)
     futures["trade_date"] = pd.to_datetime(futures["trade_date"]).dt.normalize()
-    curve_counts = futures.groupby("trade_date")["contract"].nunique()
-    curve_dates = set(curve_counts[curve_counts >= len(curve_contracts)].index)
+    expiry_table = load_cl_expiry_table(
+        cl_expiry_file,
+        contracts=curve_contracts,
+    )
 
     rows: list[dict[str, object]] = []
     for date, group in options.groupby("trade_date", sort=True):
+        target = pd.Timestamp(date).normalize()
         filtered = apply_main_sample_filters(
             group,
             min_open_interest=min_open_interest,
@@ -97,19 +177,30 @@ def _date_audit(
             volume = pd.Series(0.0, index=filtered.index, dtype=float)
         n_positive_volume = int((volume.fillna(0.0) > 0.0).sum())
         total_volume = float(volume.fillna(0.0).sum())
-        curve_available = pd.Timestamp(date) in curve_dates
+
+        availability = _fixing_availability(
+            valuation_date=target,
+            fixing_dates=fixing_dates,
+            futures=futures,
+            expiry_table=expiry_table,
+        )
+        eligible = bool(
+            len(filtered) > 0
+            and availability["realized_fixings_available"]
+            and availability["curve_available"]
+        )
         rows.append(
             {
-                "valuation_date": pd.Timestamp(date).date().isoformat(),
+                "valuation_date": target.date().isoformat(),
                 "n_raw_options": int(len(group)),
                 "n_main_sample": int(len(filtered)),
                 "n_positive_volume": n_positive_volume,
                 "total_volume": total_volume,
-                "curve_available": bool(curve_available),
-                "eligible": bool(curve_available and len(filtered) > 0),
+                **availability,
+                "eligible": eligible,
             }
         )
-    return pd.DataFrame(rows)
+    return pd.DataFrame(rows, columns=_AUDIT_COLUMNS)
 
 
 def _selected_dates(
@@ -168,6 +259,17 @@ def _enrich_pricing_frame(
             if column in row:
                 out[f"run_{column}"] = row[column]
 
+    fixing = manifest.get("fixing_calendar", {})
+    if isinstance(fixing, dict):
+        for column in [
+            "n_realized_fixings",
+            "n_remaining_fixings",
+            "fraction_fixed",
+        ]:
+            manifest_value = fixing.get(column)
+            if column not in out.columns and manifest_value is not None:
+                out[column] = manifest_value
+
     discounting = manifest.get("discounting", {})
     if isinstance(discounting, dict):
         out["time_to_payoff_years"] = discounting.get("time_to_payoff_years")
@@ -185,7 +287,11 @@ def _error_summary_by_date(pricing: pd.DataFrame) -> pd.DataFrame:
     rows: list[dict[str, object]] = []
     for date, group in pricing.groupby("valuation_date_panel", sort=True):
         for method, prefix in _METHODS:
-            err = pd.to_numeric(group[f"{prefix}_error"], errors="coerce").dropna().to_numpy()
+            err = (
+                pd.to_numeric(group[f"{prefix}_error"], errors="coerce")
+                .dropna()
+                .to_numpy()
+            )
             if len(err) == 0:
                 continue
             rows.append(
@@ -209,7 +315,11 @@ def _overall_error_summary(pricing: pd.DataFrame) -> pd.DataFrame:
 
     rows: list[dict[str, object]] = []
     for method, prefix in _METHODS:
-        err = pd.to_numeric(pricing[f"{prefix}_error"], errors="coerce").dropna().to_numpy()
+        err = (
+            pd.to_numeric(pricing[f"{prefix}_error"], errors="coerce")
+            .dropna()
+            .to_numpy()
+        )
         if len(err) == 0:
             continue
         rows.append(
@@ -232,7 +342,11 @@ def _sample_frames(
     """Split an eligible-date panel into the three documented sample views."""
     if pricing.empty:
         return {
-            "all_dates": (pricing.copy(), posterior.copy(), "all eligible dates and main-sample contracts"),
+            "all_dates": (
+                pricing.copy(),
+                posterior.copy(),
+                "all eligible dates and main-sample contracts",
+            ),
             "positive_volume_dates": (
                 pricing.copy(),
                 posterior.iloc[0:0].copy(),
@@ -256,11 +370,21 @@ def _sample_frames(
     positive_dates &= observed_dates
 
     positive_date_pricing = pricing[date_col.isin(positive_dates)].copy()
-    positive_contract_pricing = pricing[pricing["positive_volume"].fillna(False)].copy()
+    positive_contract_pricing = pricing[
+        pricing["positive_volume"].fillna(False)
+    ].copy()
 
-    posterior_dates = posterior["valuation_date"].astype(str) if not posterior.empty else pd.Series(dtype=str)
-    positive_date_posterior = posterior[posterior_dates.isin(positive_dates)].copy()
-    positive_contract_dates = set(positive_contract_pricing["valuation_date_panel"].astype(str))
+    posterior_dates = (
+        posterior["valuation_date"].astype(str)
+        if not posterior.empty
+        else pd.Series(dtype=str)
+    )
+    positive_date_posterior = posterior[
+        posterior_dates.isin(positive_dates)
+    ].copy()
+    positive_contract_dates = set(
+        positive_contract_pricing["valuation_date_panel"].astype(str)
+    )
     positive_contract_posterior = posterior[
         posterior_dates.isin(positive_contract_dates)
     ].copy()
@@ -306,7 +430,9 @@ def _write_sample(
     )
     posterior.to_csv(sample_dir / "panel_posterior_summary.csv", index=False)
 
-    dates = sorted(set(pricing.get("valuation_date_panel", pd.Series(dtype=str)).astype(str)))
+    dates = sorted(
+        set(pricing.get("valuation_date_panel", pd.Series(dtype=str)).astype(str))
+    )
     manifest = {
         "sample_name": sample_name,
         "description": description,
@@ -319,7 +445,9 @@ def _write_sample(
             pricing.get("positive_volume", pd.Series(dtype=bool)).fillna(False).sum()
         ),
         "derived_from": "canonical single-date run folders",
-        "note": "derived aggregation only; single-date manifests remain the provenance authority",
+        "note": (
+            "derived aggregation only; single-date manifests remain the provenance authority"
+        ),
     }
     (sample_dir / "sample_manifest.json").write_text(
         json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"
@@ -371,9 +499,15 @@ def _collect_panel_outputs(
             )
         )
 
-    pricing = pd.concat(pricing_frames, ignore_index=True) if pricing_frames else pd.DataFrame()
+    pricing = (
+        pd.concat(pricing_frames, ignore_index=True)
+        if pricing_frames
+        else pd.DataFrame()
+    )
     posterior = (
-        pd.concat(posterior_frames, ignore_index=True) if posterior_frames else pd.DataFrame()
+        pd.concat(posterior_frames, ignore_index=True)
+        if posterior_frames
+        else pd.DataFrame()
     )
 
     panel_dir = output_dir / f"panel_{expiry_code}"
@@ -419,8 +553,12 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     )
     parser.add_argument("--list-dates", action="store_true")
     parser.add_argument("--quick", action="store_true")
-    parser.add_argument("--option-data-dir", type=Path, default=ROOT / "data" / "csv")
-    parser.add_argument("--cl-data-dir", type=Path, default=ROOT / "data" / "csv" / "CL")
+    parser.add_argument(
+        "--option-data-dir", type=Path, default=ROOT / "data" / "csv"
+    )
+    parser.add_argument(
+        "--cl-data-dir", type=Path, default=ROOT / "data" / "csv" / "CL"
+    )
     parser.add_argument(
         "--cl-expiry-file",
         type=Path,
@@ -445,6 +583,7 @@ def main(argv: list[str] | None = None) -> None:
     audit = _date_audit(
         option_data_dir=args.option_data_dir,
         cl_data_dir=args.cl_data_dir,
+        cl_expiry_file=args.cl_expiry_file,
         apo_expiry=args.apo_expiry,
         min_open_interest=args.min_open_interest,
         exclude_min_tick=not args.include_min_tick,

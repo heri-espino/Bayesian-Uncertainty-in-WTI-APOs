@@ -4,6 +4,7 @@ import pandas as pd
 
 from experiments.wti_apo_date_panel import (
     _error_summary_by_date,
+    _fixing_availability,
     _sample_frames,
     _selected_dates,
     _write_sample,
@@ -53,6 +54,71 @@ def test_selected_dates_can_be_explicitly_requested() -> None:
         end_date=None,
         require_positive_volume=False,
     ) == ["2026-09-02"]
+
+
+def test_fixing_availability_supports_partial_fixing() -> None:
+    fixing_dates = pd.DatetimeIndex(
+        pd.to_datetime(["2026-09-01", "2026-09-02", "2026-09-03"])
+    )
+    expiries = pd.DataFrame(
+        {
+            "contract": ["CLV26"],
+            "last_trade_date": pd.to_datetime(["2026-09-22"]),
+        }
+    )
+    futures = pd.DataFrame(
+        {
+            "trade_date": pd.to_datetime(
+                ["2026-09-01", "2026-09-02", "2026-09-03"]
+            ),
+            "contract": ["CLV26", "CLV26", "CLV26"],
+            "latest": [90.0, 91.0, 92.0],
+        }
+    )
+
+    result = _fixing_availability(
+        valuation_date=pd.Timestamp("2026-09-02"),
+        fixing_dates=fixing_dates,
+        futures=futures,
+        expiry_table=expiries,
+    )
+
+    assert result["n_realized_fixings"] == 2
+    assert result["n_remaining_fixings"] == 1
+    assert result["fraction_fixed"] == 2 / 3
+    assert result["realized_fixings_available"] is True
+    assert result["curve_available"] is True
+    assert result["availability_note"] == ""
+
+
+def test_fixing_availability_rejects_missing_realized_fixing() -> None:
+    fixing_dates = pd.DatetimeIndex(
+        pd.to_datetime(["2026-09-01", "2026-09-02", "2026-09-03"])
+    )
+    expiries = pd.DataFrame(
+        {
+            "contract": ["CLV26"],
+            "last_trade_date": pd.to_datetime(["2026-09-22"]),
+        }
+    )
+    futures = pd.DataFrame(
+        {
+            "trade_date": pd.to_datetime(["2026-09-02", "2026-09-03"]),
+            "contract": ["CLV26", "CLV26"],
+            "latest": [91.0, 92.0],
+        }
+    )
+
+    result = _fixing_availability(
+        valuation_date=pd.Timestamp("2026-09-02"),
+        fixing_dates=fixing_dates,
+        futures=futures,
+        expiry_table=expiries,
+    )
+
+    assert result["realized_fixings_available"] is False
+    assert result["curve_available"] is True
+    assert "2026-09-01:CLV26" in str(result["availability_note"])
 
 
 def test_sample_frames_separate_date_and_contract_volume_filters() -> None:

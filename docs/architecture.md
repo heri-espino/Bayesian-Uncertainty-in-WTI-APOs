@@ -45,7 +45,7 @@ duplicating model implementations.
 ### CME WTI APO mechanics
 
 `bayesian_asian_options.wti_first_nearby`
-: First-nearby CL mapping from explicit last-trade dates.
+: First-nearby CL mapping from explicit last-trade dates, exact-date reconstruction of already realized first-nearby fixings, and mapping of remaining fixing dates to the contemporaneous futures curve.
 
 `bayesian_asian_options.wti_apo_pricing`
 : CME-style calls/puts from realized fixings plus the futures term structure for remaining fixings.
@@ -64,7 +64,8 @@ duplicating model implementations.
 Yahoo CL=F history ---------------------------> P-measure sigma inference
 
 Barchart APO histories ----------------------> observed option benchmark
-Barchart individual CL histories + expiries -> first-nearby fixing curve
+Barchart individual CL histories + expiries -> realized first-nearby fixings
+                                           \-> remaining fixing curve at valuation date
 U.S. Treasury dated par curve ---------------> discount factor
                                                    |
                                                    v
@@ -80,14 +81,17 @@ the contractual futures term structure entering the APO payoff.
 ## Empirical orchestration
 
 `experiments/wti_apo_empirical.py` is the **single canonical one-date driver**. It owns the
-source-role separation, historical inference, fixing-curve construction, dated discounting,
-pricing grid, market comparison, and reproducibility manifest. Do not fork this logic into
-source-specific or `hybrid` experiment drivers.
+source-role separation, historical inference, realized/remaining fixing-state reconstruction,
+dated discounting, pricing grid, market comparison, and reproducibility manifest. Before the
+averaging month the realized set is empty; inside the averaging month, exact first-nearby
+contract/date observations through the end-of-day valuation timestamp are fixed and only the
+remaining dates are stochastic. Do not fork this logic into source-specific or `hybrid`
+experiment drivers.
 
 `experiments/wti_apo_date_panel.py` is orchestration only. It audits candidate dates,
-selects dates with an APO cross-section and both required Barchart CL curve contracts,
-invokes the canonical one-date driver once per date, and aggregates the resulting
-contract/error/posterior tables. It does not reimplement pricing or inference logic.
+requires both the realized fixing history and the date-specific CL curve needed by remaining
+fixings, invokes the canonical one-date driver once per eligible date, and aggregates the
+resulting contract/error/posterior tables. It does not reimplement pricing or inference logic.
 
 Run manifests use repository-relative paths for repository inputs and redact external
 workstation directory prefixes. They capture the Git commit/dirty-tree state and runtime
@@ -109,9 +113,10 @@ experiment belongs in the package and must be added to the API documentation and
 1. `mu` belongs to inference under $\mathbb P$ and does not enter baseline pricing under $\mathbb Q$.
 2. Posterior uncertainty is propagated only through parameters that matter for the pricing model, principally `sigma` in the baseline.
 3. The empirical WTI APO payoff uses calendar-month first-nearby CL levels, not one fixed futures contract or Yahoo `CL=F`.
-4. Historical market marks are external benchmarks; posterior-generated prices cannot define truth.
-5. Data completeness, liquidity, figure ranking, and estimation-sample inclusion are separate concepts.
-6. Long runs remain reproducible/restartable through explicit seeds, manifests, hashes, and checkpoints.
-7. Source fields retain their provenance: Barchart `Latest` is a settlement proxy unless separately validated as an official CME settlement.
+4. Realized first-nearby fixings are exact mapped contract/date observations; missing realized observations are not forward-filled.
+5. Historical market marks are external benchmarks; posterior-generated prices cannot define truth.
+6. Data completeness, liquidity, figure ranking, and estimation-sample inclusion are separate concepts.
+7. Long runs remain reproducible/restartable through explicit seeds, manifests, hashes, and checkpoints.
+8. Source fields retain their provenance: Barchart `Latest` is a settlement proxy unless separately validated as an official CME settlement.
 
 See `AGENTS.md` for the mandatory maintenance policy and {doc}`development` for the branch/PR lifecycle.
