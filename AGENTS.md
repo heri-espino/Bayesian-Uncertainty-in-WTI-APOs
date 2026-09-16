@@ -93,6 +93,15 @@ Do not change these silently:
 - `richest` means data completeness, not liquidity or economic importance;
 - deterministic seeds, manifests, hashes, and restartable checkpoints are part of the reproducibility contract.
 
+For the empirical WTI pipeline, additionally preserve these source/measurement rules:
+
+- contract-specific Yahoo symbols (`CLV26.NYM`, `CLX26.NYM`, etc.) are required for the valuation-date CL curve and for the first-nearby contracts entering future APO fixings; do not silently substitute `CL=F` for that contractual term structure;
+- Yahoo does not reliably retain old individual CL symbols after delisting. The current physical-measure inference pilot therefore uses `CL=F` only as an explicitly labelled continuous/front-month proxy, with its undocumented historical roll convention recorded as a limitation;
+- if a later data source permits contract-reconstructed physical returns, every return spanning a contract switch must be excluded from the volatility likelihood rather than treating contango/backwardation as a one-day WTI return;
+- Yahoo daily `Close` is a settlement **proxy** and must remain labeled as such until validated against CME/Barchart observations;
+- contract settlement/expiration dates should come from explicit metadata/reference data. The current October-2026 pilot may use its named weekend-only implementation of the standard CL termination rule solely as a fallback for missing Yahoo metadata; production dates affected by exchange holidays require a validated CME calendar;
+- discounting is date-specific. The current pilot uses the U.S. Treasury daily par curve and explicitly labels the interpolated-par-yield zero-rate approximation; do not call it a bootstrapped zero/OIS curve.
+
 Alternative models may relax an invariant only when the alternative is clearly named and
 the research design, tests, and API documentation are updated together.
 
@@ -101,6 +110,11 @@ the research design, tests, and API documentation are updated together.
 Do not commit newly acquired proprietary market data until redistribution rights have been
 verified. Preserve source provenance and prefer code, schemas, hashes, diagnostics, and
 permitted derived summaries.
+
+Yahoo continuous-proxy snapshots under `data/wti_yahoo/`, Yahoo individual-contract snapshots
+under `data/wti_yahoo_contracts/`, and local Treasury CSVs under `data/rates/treasury/` are
+workstation caches/source inputs and are gitignored by default. Their README files, parsers,
+query metadata, hashes, and derived scientific outputs remain versioned.
 
 ## Enforcement
 
