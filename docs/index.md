@@ -26,6 +26,7 @@ python -m pip install -e ".[dev,docs,market]"
 - Synthetic validation and the empirical CME WTI Average Price Option application are separate experimental layers.
 - Raw market-data provenance and data-quality diagnostics remain distinct from economic sample-selection rules.
 - Representative contracts are selected only for figures/case studies; they do not define the estimation sample.
+- `main` is the only long-lived development branch; merged or superseded feature branches should be deleted.
 
 ## Documentation map
 
@@ -36,6 +37,7 @@ python -m pip install -e ".[dev,docs,market]"
 quickstart
 architecture
 repository_layout
+development
 empirical_wti
 agent_guide
 api/index
