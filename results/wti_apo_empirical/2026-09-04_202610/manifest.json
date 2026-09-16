@@ -1,0 +1,58 @@
+{
+  "apo_expiry": "2026-10",
+  "curve_contracts_loaded": [
+    "CLX26",
+    "CLZ26"
+  ],
+  "curve_contracts_used": [
+    "CLX26",
+    "CLZ26"
+  ],
+  "curve_price_field": "Latest",
+  "curve_price_interpretation": "end-of-day settlement proxy; not asserted to be official CME settlement",
+  "curve_source": "committed Barchart CL Daily Prices histories",
+  "discounting": {
+    "curve_source_date": "2026-09-04",
+    "discount_factor": 0.9940725498042015,
+    "limitation": "not a bootstrapped zero/OIS curve",
+    "method": "interpolated par yield treated as continuous zero-rate proxy",
+    "source": "U.S. Treasury Daily Treasury Par Yield Curve Rates",
+    "time_to_payoff_years": 0.15331964407939766
+  },
+  "expiry_reference_file": "C:\\Users\\175199\\Documents\\Metropolis-Hastings-for-Asian-Options-Using-Bayesian-Inference-and-Black-Scholes--Article-\\data\\csv\\CL\\contract_expiries.csv",
+  "fixing_calendar": {
+    "convention": "weekday pilot schedule",
+    "expiry_metadata_rule": "explicit versioned CL last-trade-date table",
+    "n_fixings": 22
+  },
+  "futures_reference_validation": null,
+  "generated_at_utc": "2026-09-16T13:54:09.561492+00:00",
+  "history_start": "2024-01-01",
+  "market_option_source": "committed Barchart APO histories",
+  "mcmc": {
+    "burn_in_per_chain": 4000,
+    "chains": 4,
+    "mode_definition": "marginal KDE mode of sigma; not a joint MAP estimate",
+    "mu_rhat": 1.0008891710752974,
+    "n_iter_per_chain": 20000,
+    "seed": 20260904,
+    "sigma_rhat": 1.0001091605769372
+  },
+  "n_usable_returns": 673,
+  "physical_inference_limitation": "Yahoo does not document the historical CL=F roll convention precisely enough to call this a contract-reconstructed first-nearby series",
+  "physical_inference_sha256": "48c6d44adf0fd1693e09ecc19c4ab4f3c6c4f174be15fd6fff82a85b507a43d9",
+  "physical_inference_source": "Yahoo CL=F continuous/front-month proxy via yfinance",
+  "pricing": {
+    "antithetic": true,
+    "common_random_numbers": true,
+    "n_contracts": 29,
+    "n_paths_per_sigma": 100000,
+    "seed": 25260904,
+    "sigma_grid_size": 41
+  },
+  "valuation_curve": {
+    "CLX26": 88.57,
+    "CLZ26": 85.46
+  },
+  "valuation_date": "2026-09-04"
+}
