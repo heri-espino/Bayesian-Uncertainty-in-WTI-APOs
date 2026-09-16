@@ -35,6 +35,7 @@ paper/espino_2026_bayess-on-wti.pdf
 # Yahoo Finance market-data snapshots remain local. Version code, query metadata,
 # hashes and derived scientific summaries rather than redistributing raw Yahoo data.
 data/wti_yahoo/*.csv
+data/wti_yahoo/*.json
 data/wti_yahoo_contracts/*.csv
 data/wti_yahoo_contracts/*.json
 
