@@ -1,0 +1,15 @@
+contract,last_trade_date,source
+CLV26,2026-09-22,CME_CL_termination_rule_explicit_study_table
+CLX26,2026-10-20,CME_CL_termination_rule_explicit_study_table
+CLZ26,2026-11-20,CME_CL_termination_rule_explicit_study_table
+CLF27,2026-12-21,CME_CL_termination_rule_explicit_study_table
+CLJ27,2027-03-22,CME_CL_termination_rule_explicit_study_table
+CLK27,2027-04-20,CME_CL_termination_rule_explicit_study_table
+CLV27,2027-09-21,CME_CL_termination_rule_explicit_study_table
+CLX27,2027-10-20,CME_CL_termination_rule_explicit_study_table
+CLJ28,2028-03-21,CME_CL_termination_rule_explicit_study_table
+CLK28,2028-04-20,CME_CL_termination_rule_explicit_study_table
+CLV28,2028-09-20,CME_CL_termination_rule_explicit_study_table
+CLX28,2028-10-20,CME_CL_termination_rule_explicit_study_table
+CLN29,2029-06-20,CME_CL_termination_rule_explicit_study_table
+CLQ29,2029-07-20,CME_CL_termination_rule_explicit_study_table
