@@ -104,10 +104,10 @@ The CME WTI Average Price Option application separates the data object used for 
 
 A live test showed that Yahoo may remove older delisted individual CL symbols, so the canonical pilot does **not** require individual Yahoo contract downloads. Barchart `Latest` is retained as the source field and used as an end-of-day settlement proxy; it is not presented as an official CME settlement without separate validation.
 
-The first real-market driver is:
+There is one canonical real-market driver:
 
 ```bash
-python -m experiments.wti_apo_empirical_hybrid \
+python -m experiments.wti_apo_empirical \
     --valuation-date 2026-09-04 \
     --apo-expiry 2026-10 \
     --cl-data-dir data/csv/CL \
@@ -123,6 +123,8 @@ python -m scripts.run_university_wti_apo
 ```
 
 The October-2026 pilot uses `CLX26` and `CLZ26`; the committed 2026-09-04 Barchart `Latest` values are 88.57 and 85.46 respectively. The workstation runner therefore needs network access only for Yahoo `CL=F` and, if no local rate file is present, the U.S. Treasury.
+
+Run manifests use repository-relative paths for repository inputs, redact external directory prefixes, and record the Git commit, dirty-tree status, Python/platform information, and NumPy/pandas/SciPy versions. Hostnames and user names are intentionally not recorded.
 
 The Treasury pilot uses an explicit approximation: the maturity-interpolated **par yield** is treated as a continuously compounded zero-rate proxy. It is not described as a bootstrapped zero/OIS curve.
 
