@@ -1,4 +1,4 @@
-"""University-workstation launcher for the first real WTI APO experiment.
+"""University-workstation launcher for the canonical real WTI APO experiment.
 
 Examples
 --------
@@ -40,7 +40,10 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         "--refresh-futures",
         dest="refresh_inference",
         action="store_true",
-        help="Refresh Yahoo CL=F inference data. --refresh-futures remains as a backwards-compatible alias.",
+        help=(
+            "Refresh Yahoo CL=F inference data. --refresh-futures remains as a "
+            "backwards-compatible alias."
+        ),
     )
     parser.add_argument("--include-min-tick", action="store_true")
     parser.add_argument("--futures-reference-csv", type=Path, default=None)
@@ -81,11 +84,18 @@ def _print_check(args: argparse.Namespace) -> None:
     print(f"Repository: {ROOT}")
     print(f"Option data exists: {args.option_data_dir.exists()} ({args.option_data_dir})")
     print(f"yfinance installed: {importlib.util.find_spec('yfinance') is not None}")
-    treasury_files = sorted(args.treasury_dir.glob("*.csv")) if args.treasury_dir.exists() else []
-    cl_files = sorted(args.cl_data_dir.glob("CL*.csv")) if args.cl_data_dir.exists() else []
+    treasury_files = (
+        sorted(args.treasury_dir.glob("*.csv")) if args.treasury_dir.exists() else []
+    )
+    cl_files = (
+        sorted(args.cl_data_dir.glob("CL*.csv")) if args.cl_data_dir.exists() else []
+    )
     print(f"Local Treasury CSVs: {len(treasury_files)}")
     print(f"Barchart CL files: {len(cl_files)} ({args.cl_data_dir})")
-    print(f"CL expiry reference exists: {args.cl_expiry_file.exists()} ({args.cl_expiry_file})")
+    print(
+        f"CL expiry reference exists: {args.cl_expiry_file.exists()} "
+        f"({args.cl_expiry_file})"
+    )
     print(f"Yahoo CL=F inference cache: {args.inference_cache_dir}")
     print(
         "Network requirements for a fresh run: Yahoo Finance CL=F history; "
@@ -103,7 +113,7 @@ def main(argv: list[str] | None = None) -> None:
     command = [
         sys.executable,
         "-m",
-        "experiments.wti_apo_empirical_hybrid",
+        "experiments.wti_apo_empirical",
         "--valuation-date",
         args.valuation_date,
         "--apo-expiry",
@@ -134,21 +144,31 @@ def main(argv: list[str] | None = None) -> None:
     if args.quick:
         command.extend(
             [
-                "--chains", "2",
-                "--n-iter", "4000",
-                "--burn-in", "1000",
-                "--pricing-paths", "20000",
-                "--sigma-grid-size", "21",
+                "--chains",
+                "2",
+                "--n-iter",
+                "4000",
+                "--burn-in",
+                "1000",
+                "--pricing-paths",
+                "20000",
+                "--sigma-grid-size",
+                "21",
             ]
         )
     else:
         command.extend(
             [
-                "--chains", "4",
-                "--n-iter", "20000",
-                "--burn-in", "4000",
-                "--pricing-paths", "100000",
-                "--sigma-grid-size", "41",
+                "--chains",
+                "4",
+                "--n-iter",
+                "20000",
+                "--burn-in",
+                "4000",
+                "--pricing-paths",
+                "100000",
+                "--sigma-grid-size",
+                "41",
             ]
         )
 
