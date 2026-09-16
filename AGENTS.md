@@ -93,6 +93,14 @@ Do not change these silently:
 - `richest` means data completeness, not liquidity or economic importance;
 - deterministic seeds, manifests, hashes, and restartable checkpoints are part of the reproducibility contract.
 
+For the empirical WTI pipeline, additionally preserve these source/measurement rules:
+
+- use contract-specific Yahoo symbols (`CLV26.NYM`, `CLX26.NYM`, etc.) for CL histories/curve points; do not silently substitute `CL=F` as the contractual first-nearby series;
+- Yahoo daily `Close` is a settlement **proxy** and must remain labeled as such until validated against CME/Barchart observations;
+- a return spanning a CL contract switch is excluded from the physical-measure volatility likelihood; do not treat contango/backwardation at the roll as a one-day WTI return;
+- contract settlement/expiration dates must come from explicit metadata/reference data, not from a hidden approximate roll rule;
+- discounting is date-specific. The current pilot uses the U.S. Treasury daily par curve and explicitly labels the interpolated-par-yield zero-rate approximation; do not call it a bootstrapped zero/OIS curve.
+
 Alternative models may relax an invariant only when the alternative is clearly named and
 the research design, tests, and API documentation are updated together.
 
@@ -101,6 +109,11 @@ the research design, tests, and API documentation are updated together.
 Do not commit newly acquired proprietary market data until redistribution rights have been
 verified. Preserve source provenance and prefer code, schemas, hashes, diagnostics, and
 permitted derived summaries.
+
+Yahoo individual-contract snapshots under `data/wti_yahoo_contracts/` and local Treasury CSVs
+under `data/rates/treasury/` are workstation caches/source inputs and are gitignored by
+default. Their README files, parsers, query metadata, hashes, and derived scientific outputs
+remain versioned.
 
 ## Enforcement
 
