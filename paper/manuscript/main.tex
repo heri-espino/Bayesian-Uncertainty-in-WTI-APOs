@@ -19,7 +19,7 @@
 \corres{Corresponding author: Heriberto Espino Montelongo. \email{[corresponding email]}}
 
 \abstract[Abstract]{
-Parameter uncertainty is often treated as secondary in derivative valuation, even though volatility is estimated from finite and potentially unstable samples. This paper develops a Bayesian framework that separates statistical learning under the physical measure from no-arbitrage valuation under the risk-neutral measure and propagates posterior uncertainty in volatility into arithmetic-average option prices. The framework is evaluated first in repeated-sampling experiments, where the true risk-neutral price is known, and then in an empirical application to CME WTI Average Price Options. The empirical database contains 213 unique call and put contracts and 11,179 option-date observations spanning expiries from September 2026 to June 2029. The contract-specific implementation respects the calendar-month average of first-nearby WTI futures settlements and distinguishes realized from remaining fixings. Preliminary synthetic evidence indicates that posterior integration and posterior-mean plug-in pricing can be nearly indistinguishable in regular settings, while MAP pricing is less stable in small samples. The empirical design asks when that apparent irrelevance breaks down as maturity, moneyness, posterior dispersion, and oil-market volatility change.
+Parameter uncertainty is often treated as secondary in derivative valuation, even though volatility is estimated from finite and potentially unstable samples. This paper develops a Bayesian framework that separates statistical learning under the physical measure from no-arbitrage valuation under the risk-neutral measure and propagates posterior uncertainty in volatility into arithmetic-average option prices. The framework is evaluated first in repeated-sampling experiments, where the true risk-neutral price is known, and then in an empirical application to CME WTI Average Price Options. The empirical database contains 213 unique call and put contracts and 11,179 option-date observations spanning expiries from September 2026 to June 2029. A first contract-consistent October-2026 panel contains 310 option-date observations across 12 eligible valuation dates. In the current computational pilot, full posterior integration and posterior-mean plug-in pricing are nearly indistinguishable: pooled RMSE is 0.5083 versus 0.5089 in the full October panel and 0.1783 versus 0.1788 in the six contract-date observations with positive reported volume. The evidence therefore indicates that, within the constant-volatility one-factor baseline, posterior integration adds little to the point price relative to pricing at posterior mean volatility, while overall model-to-market discrepancies remain much larger. The strict positive-volume sample is small and the multi-date panel is currently based on the lower-cost computational preset, so these empirical estimates are treated as working-draft baseline evidence pending a production-budget rerun rather than as final method rankings.
 }
 
 \keywords{Bayesian option pricing; Asian options; WTI crude oil; parameter uncertainty; commodity derivatives}
@@ -27,7 +27,7 @@ Parameter uncertainty is often treated as secondary in derivative valuation, eve
 \maketitle
 
 \begin{center}
-\textit{Internal working draft --- not for circulation. Empirical pricing results remain in progress.}
+\textit{Internal working draft --- not for circulation.}
 \end{center}
 
 \input{sections/01_introduction}
