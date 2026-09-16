@@ -44,6 +44,13 @@ This is the canonical inventory of reusable public functions/classes. It is gene
 :show-inheritance:
 ```
 
+## Barchart WTI futures ingestion
+
+```{automodule} bayesian_asian_options.barchart_cl
+:members:
+:show-inheritance:
+```
+
 ## WTI first-nearby mapping
 
 ```{automodule} bayesian_asian_options.wti_first_nearby
