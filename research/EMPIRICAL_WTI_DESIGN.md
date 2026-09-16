@@ -135,12 +135,58 @@ common random numbers.
 
 The experiment reports Full Bayes, posterior-mean, marginal-sigma-mode, and MLE model prices
 against the Barchart APO market marks. The sigma mode is explicitly a marginal posterior
-mode, not a joint MAP estimate. No empirical method-ranking claim enters the manuscript until
-the live run and source audits have completed successfully.
+mode, not a joint MAP estimate.
+
+The completed full-precision pilot used 673 historical returns, four MCMC chains with 20,000
+iterations per chain and 4,000 burn-in iterations, 100,000 pricing paths per sigma-grid
+point, and 41 sigma-grid points. The posterior mean volatility was 0.415259 with posterior
+standard deviation 0.011385 and a 95% interval of [0.393623, 0.438053]. The sigma R-hat was
+1.000109 and the mu R-hat was 1.000889.
+
+For the 29 option observations retained on that date, Full Bayes produced MAE 0.248330 and
+RMSE 0.299866; the posterior-mean plug-in produced MAE 0.249114 and RMSE 0.300588. The sigma
+posterior-mode plug-in and MLE plug-in had RMSE 0.317528 and 0.302679, respectively. These
+numbers are treated as pilot evidence, not as a method ranking or final publication table.
+The Full-Bayes/posterior-mean difference is small relative to the overall model-vs-market
+pricing discrepancy in this cross-section.
+
+All 29 retained option observations on 2026-09-04 have zero reported daily volume but
+positive open interest. Their Barchart prices are therefore treated as end-of-day market
+marks, not same-day transaction prices. A multi-date analysis must report positive-volume
+and zero-volume observations separately rather than interpreting the pilot RMSE as a clean
+transaction-price benchmark.
 
 The October-2026 pilot currently uses a weekday fixing schedule because the selected month
 has no full-day CME energy closure. General production-panel work must replace this pilot
 fallback with an explicit exchange settlement calendar.
+
+## Multi-date panel extension
+
+`experiments/wti_apo_date_panel.py` operationalizes the next empirical step without
+duplicating the single-date pricing implementation. It first constructs a date audit for one
+APO expiry and keeps only dates for which both the option cross-section and the required two
+Barchart CL curve contracts are available. The audit records raw and main-sample option
+counts, the number of positive-volume observations, total reported volume, and curve
+availability.
+
+The panel runner invokes the canonical `experiments.wti_apo_empirical` driver once per
+selected date and aggregates contract-level prices, error summaries, and posterior summaries.
+This makes it possible to study `Delta_FB-PM` against posterior volatility dispersion,
+effective moneyness, time to expiry, option type, and liquidity diagnostics across dates.
+The `--require-positive-volume` switch provides a transparent transaction-activity
+sensitivity sample rather than silently dropping zero-volume market marks.
+
+## Reproducibility metadata
+
+The canonical driver writes manifest schema version 2. Repository inputs are stored as
+repository-relative paths; external paths are reduced to `<external>/filename` so workstation
+user directories are not exposed. The manifest records the Git commit, dirty-tree state,
+Python/platform information, and NumPy/pandas/SciPy versions. Hostnames and user names are
+intentionally omitted.
+
+The first committed pilot predates this schema. Its workstation-specific expiry-reference
+path was normalized after the run without changing any numerical output; the legacy manifest
+records that metadata-only normalization explicitly.
 
 ## Data audit
 
