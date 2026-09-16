@@ -44,6 +44,8 @@ literature/                                          literature corpus/index
 archive/                                             superseded papers/notebooks/presentations
 ```
 
+`main` is the only long-lived development branch. New work should use short-lived feature branches that are deleted after merge or explicit supersession. See `CONTRIBUTING.md` and `docs/development.md` for the branch/PR lifecycle and the read-only branch audit utility.
+
 The root `AGENTS.md` is mandatory reading for coding agents and maintainers. It defines the package and manuscript contracts and the scientific guardrails that must be preserved.
 
 ## JFM manuscript
@@ -83,6 +85,7 @@ Start at `docs/index.md`. `docs/api/index.md` is the canonical function/class in
 ```bash
 python -m scripts.check_repo_structure
 python paper/build.py --check
+python -m pytest -q
 python -m experiments.synthetic_validation --quick
 python -m experiments.build_wti_apo_panel --input-dir data/csv --output-dir results/wti_apo
 ```
