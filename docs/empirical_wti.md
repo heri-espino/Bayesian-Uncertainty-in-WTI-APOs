@@ -193,7 +193,34 @@ python -m scripts.run_university_wti_apo
 
 `--quick` is the end-to-end smoke run. A fresh run now requires network access only for Yahoo `CL=F` and, when no local Treasury CSV exists, the U.S. Treasury download. Individual CL curve contracts are read locally from `data/csv/CL`.
 
-## 12. Source validation
+## 12. Multi-date panel
+
+The date-panel orchestrator discovers valuation dates for which both the APO cross-section and the two required Barchart CL contracts are available. It never replaces the single-date driver; it invokes that driver once per date and aggregates the resulting outputs.
+
+Inspect candidate dates first:
+
+```bash
+python -m experiments.wti_apo_date_panel --apo-expiry 2026-10 --list-dates
+```
+
+Run a lower-cost panel smoke test:
+
+```bash
+python -m experiments.wti_apo_date_panel --apo-expiry 2026-10 --quick
+```
+
+To focus on valuation dates with at least one positive-volume option observation:
+
+```bash
+python -m experiments.wti_apo_date_panel \
+    --apo-expiry 2026-10 \
+    --quick \
+    --require-positive-volume
+```
+
+Panel outputs are written under `results/wti_apo_empirical/panel_<YYYYMM>/` and include `panel_date_audit.csv`, `panel_contract_pricing.csv`, `panel_error_summary.csv`, and `panel_posterior_summary.csv`. The date audit reports raw/main-sample option counts, positive-volume counts, total reported volume, and whether both required CL curve contracts exist on each date.
+
+## 13. Source validation
 
 An optional external table with schema `trade_date,contract,close` can be passed with:
 
