@@ -28,7 +28,7 @@ For each scenario the external target is
 \end{equation}
 computed from a high-precision risk-neutral pricing grid. Importantly, $C_0$ is not a posterior draw and is not constructed from any of the estimators being compared. This prevents the mechanical advantage that the posterior mean would obtain if squared error were evaluated against the posterior distribution that defines it.
 
-For method $M\in\{FB,PM,MAP,MLE\}$ and $R$ independent histories, the main statistics are
+For method $M\in\{FB,PM,Mode,MLE\}$ and $R$ independent histories, the main statistics are
 \begin{align}
  \operatorname{Bias}_M
  &=R^{-1}\sum_{j=1}^{R}(\widehat C_{M,j}-C_0),\\
@@ -42,31 +42,31 @@ We additionally record coverage of central 95\% posterior price intervals and an
 
 \subsection{Empirical option panel}
 
-The raw empirical sample contains every downloaded WTI APO history rather than a hand-selected set of strikes. The unit of observation is option $i$ on trading date $t$, identified by option type, strike, expiry month, and symbol. The raw panel currently contains 213 unique contracts and 11,179 option-date observations. The sample is intentionally unbalanced because strike availability and liquidity decline at longer maturities.
+The raw empirical sample contains every downloaded WTI APO history rather than a hand-selected set of strikes. The unit of observation is option $i$ on trading date $t$, identified by option type, strike, expiry month, and symbol. The raw panel contains 213 unique contracts and 11,179 option-date observations. The sample is intentionally unbalanced because strike availability and liquidity decline at longer maturities.
 
-Three layers are kept separate. The \emph{raw panel} preserves all parsed observations. The \emph{main empirical panel} applies transparent data-quality and pricing-availability rules that can be reproduced from code. The \emph{representative-contract set} is used only for figures and economic discussion. A contract can therefore be visually representative without determining the statistical sample.
+Three data layers remain separate. The \emph{raw panel} preserves all parsed observations. The \emph{main empirical panel} applies transparent data-quality and pricing-availability rules that can be reproduced from code. The \emph{representative-contract set} is used only for figures and economic discussion. A contract can therefore be visually representative without determining the statistical sample.
 
-The main sample does not require positive daily volume because an exchange settlement can exist on a day with no reported trade. Instead, volume, open interest, and minimum-tick indicators enter the diagnostics and robustness analysis. Alternative samples impose progressively stronger open-interest thresholds and remove observations pinned at the minimum quoted price. Results are reported with observation counts after every filter.
+The main sample does not require positive daily volume because an end-of-day mark can exist on a day with no reported trade. Instead, volume, open interest, and minimum-tick indicators enter the diagnostics and robustness analysis. The October-2026 baseline is reported under three nested liquidity views. The \emph{all-dates} sample contains all 310 retained contract-date observations across 12 eligible valuation dates. The \emph{positive-volume-date} sample retains all 136 contracts observed on the five dates for which at least one main-sample contract reports positive daily volume. The strict \emph{positive-volume-contract} sample retains only the six contract-date observations that themselves report positive volume. These definitions prevent a date with some trading activity from being confused with a contract that actually traded.
 
 \subsection{Reconstructing first-nearby fixings and moneyness}
 
-Each option-date observation must be linked to the information set required by the actual APO payoff. The empirical pipeline therefore reconstructs: (i) realized first-nearby settlements for fixing dates already elapsed, (ii) the relevant CL futures contracts for remaining fixing dates, and (iii) the contemporaneous futures term structure used to initialize those remaining fixings. This mapping produces $\widehat A^Q_{t,T}$ in Equation~\eqref{eq:expected_average} and the observation-specific moneyness measure in Equation~\eqref{eq:moneyness}.
+Each option-date observation must be linked to the information set required by the actual APO payoff. The empirical pipeline reconstructs: (i) realized first-nearby settlements for fixing dates already elapsed, (ii) the relevant CL futures contracts for remaining fixing dates, and (iii) the contemporaneous futures term structure used to initialize those remaining fixings. This mapping produces $\widehat A^Q_{t,T}$ in Equation~\eqref{eq:expected_average} and the observation-specific moneyness measure in Equation~\eqref{eq:moneyness}.
 
-This step is deliberately separated from the option-history ingestion. A generic continuous futures ticker is useful for exploratory historical-return analysis but is not treated as a contractual substitute for the sequence of first-nearby fixings that determines the APO payoff. The final empirical tables will report the source and roll convention for the CL curve used in valuation.
+This step is deliberately separated from option-history ingestion. The current physical-measure inference sample uses Yahoo \texttt{CL=F} only as a labelled continuous/front-month historical-return proxy. It is not treated as a contractual substitute for the sequence of first-nearby fixings that determines the APO payoff. The valuation curve instead uses the committed Barchart individual-contract histories under \texttt{data/csv/CL}, with explicit contract last-trade dates. For the October-2026 panel the relevant curve contracts are \texttt{CLX26} and \texttt{CLZ26}. Barchart \texttt{Latest} is treated as an end-of-day settlement proxy rather than asserted to be an official CME settlement.
 
 \subsection{Rolling parameter uncertainty}
 
-The empirical comparison requires a posterior available at each valuation date rather than a single posterior estimated using the full sample. Let $\mathcal D_t$ denote the historical information set available at date $t$. For a fixed or expanding estimation window, the posterior
+The empirical comparison requires a posterior available at each valuation date rather than a single posterior estimated using the full sample. Let $\mathcal D_t$ denote the historical information set available at date $t$. For an expanding historical sample beginning in January 2024, the posterior
 \begin{equation}
  p(\sigma\mid\mathcal D_t)
 \end{equation}
-is estimated without using future returns. Each option-date observation is then priced by the four rules in Equation~\eqref{eq:estimators}. This creates a panel of model prices and posterior diagnostics aligned with observed option settlements.
+is estimated without using future returns. Each option-date observation is then priced using full posterior integration, posterior-mean volatility, the marginal posterior mode of volatility, and the historical MLE. The marginal volatility mode is a plug-in comparator and is not described as a joint MAP estimator.
 
-The principal out-of-sample pricing errors are
+The principal pricing errors are
 \begin{equation}
  e^M_{i,t}=P^{M}_{i,t}-P^{mkt}_{i,t},
- \end{equation}
-where $P^{mkt}_{i,t}$ is the validated end-of-day settlement or mark and $M$ indexes the pricing rule. Absolute and squared errors are aggregated overall and by economically relevant states. Because option settlements can themselves contain microstructure or administrative components, results are also stratified by open interest and trading activity.
+\end{equation}
+where $P^{mkt}_{i,t}$ is the Barchart end-of-day market mark and $M$ indexes the pricing rule. Absolute and squared errors are aggregated overall and within the liquidity samples defined above. Because end-of-day marks can contain microstructure or administrative components, the strict positive-volume-contract sample is interpreted separately from the broader mark-based samples.
 
 \subsection{Volatility regimes and heterogeneous effects}
 
@@ -90,10 +90,14 @@ The mechanism in Equation~\eqref{eq:taylor_gap} is examined by relating the full
  \right)+u_{i,t},
  \label{eq:gap_panel}
 \end{equation}
-where $L_{i,t}$ contains liquidity diagnostics. The purpose of this regression is mechanism description, not a causal interpretation of market volatility.
+where $L_{i,t}$ contains liquidity diagnostics. The purpose of this regression is mechanism description, not a causal interpretation of market volatility. The October-2026 panel provides the first empirical measurement of the gap; broader maturity and regime coverage remains an extension because the currently committed contract-specific CL histories do not yet support equivalent panels for every expiry month.
 
 \subsection{Primary empirical comparisons}
 
-The first empirical question is whether full posterior integration reduces pricing error relative to the posterior-mean, MAP, and MLE plug-ins. The second is whether any difference is concentrated in states predicted by Equation~\eqref{eq:taylor_gap}. The analysis therefore reports both average performance and conditional performance across maturity, moneyness, volatility regime, option type, and fraction of the averaging month already fixed.
+The primary empirical object is the within-observation pricing-rule gap
+\begin{equation}
+ \Delta_{FB,PM,i,t}=P^{FB}_{i,t}-P^{PM}_{i,t},
+\end{equation}
+considered jointly with model-to-market errors. This distinction matters because two pricing rules can have nearly identical errors simply because they produce nearly identical model prices. The October-2026 baseline therefore reports both the level of pricing error and the magnitude of $\Delta_{FB,PM}$.
 
-Statistical comparisons will use paired option-date errors because all pricing rules are evaluated on the same market observations and, where possible, the same Monte Carlo random numbers. Standard errors will account for dependence within contracts and dates in the final specification. The exact clustering rule will be fixed before examining the final model-ranking results.
+The completed baseline comparison uses common Monte Carlo random numbers across pricing rules and reports mean error, MAE, and RMSE for all eligible observations and the two liquidity-restricted samples. Statistical tests of paired error differences, richer volatility-regime conditioning, and clustered standard errors are reserved for a broader panel in which the strict positive-volume sample is large enough to support inference. The six currently observed positive-volume contract-date observations are sufficient for a transparent robustness check but not for a strong asymptotic model-ranking claim.
