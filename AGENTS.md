@@ -95,11 +95,12 @@ Do not change these silently:
 
 For the empirical WTI pipeline, additionally preserve these source/measurement rules:
 
-- contract-specific Yahoo symbols (`CLV26.NYM`, `CLX26.NYM`, etc.) are required for the valuation-date CL curve and for the first-nearby contracts entering future APO fixings; do not silently substitute `CL=F` for that contractual term structure;
-- Yahoo does not reliably retain old individual CL symbols after delisting. The current physical-measure inference pilot therefore uses `CL=F` only as an explicitly labelled continuous/front-month proxy, with its undocumented historical roll convention recorded as a limitation;
+- the canonical valuation-date CL curve comes from the committed Barchart individual-contract `Daily Prices` histories under `data/csv/CL`; do not silently substitute Yahoo `CL=F` for that contractual term structure;
+- Barchart `Latest` is retained as the source field and may be used as an end-of-day settlement proxy, but it must not be called an official CME settlement without separate validation;
+- the current physical-measure inference pilot uses Yahoo `CL=F` only as an explicitly labelled continuous/front-month proxy, with its undocumented historical roll convention recorded as a limitation;
 - if a later data source permits contract-reconstructed physical returns, every return spanning a contract switch must be excluded from the volatility likelihood rather than treating contango/backwardation as a one-day WTI return;
-- Yahoo daily `Close` is a settlement **proxy** and must remain labeled as such until validated against CME/Barchart observations;
-- contract settlement/expiration dates should come from explicit metadata/reference data. The current October-2026 pilot may use its named weekend-only implementation of the standard CL termination rule solely as a fallback for missing Yahoo metadata; production dates affected by exchange holidays require a validated CME calendar;
+- CL last-trade dates used by the fixing map come from the explicit versioned reference table `data/csv/CL/contract_expiries.csv`; do not replace it with a hidden approximate roll rule;
+- Yahoo individual-contract pages are optional validation/fallback material only and are not required by the canonical pilot because delisted symbols can disappear;
 - discounting is date-specific. The current pilot uses the U.S. Treasury daily par curve and explicitly labels the interpolated-par-yield zero-rate approximation; do not call it a bootstrapped zero/OIS curve.
 
 Alternative models may relax an invariant only when the alternative is clearly named and
@@ -111,10 +112,12 @@ Do not commit newly acquired proprietary market data until redistribution rights
 verified. Preserve source provenance and prefer code, schemas, hashes, diagnostics, and
 permitted derived summaries.
 
-Yahoo continuous-proxy snapshots under `data/wti_yahoo/`, Yahoo individual-contract snapshots
-under `data/wti_yahoo_contracts/`, and local Treasury CSVs under `data/rates/treasury/` are
-workstation caches/source inputs and are gitignored by default. Their README files, parsers,
-query metadata, hashes, and derived scientific outputs remain versioned.
+The author has committed the Barchart CL source histories under `data/csv/CL` for the current
+private research workflow. Before making the repository or those raw files public, verify
+Barchart redistribution terms. Yahoo continuous-proxy snapshots under `data/wti_yahoo/` and
+local Treasury CSVs under `data/rates/treasury/` are workstation caches/source inputs and are
+gitignored by default. Their README files, parsers, query metadata, hashes, and derived
+scientific outputs remain versioned.
 
 ## Enforcement
 
