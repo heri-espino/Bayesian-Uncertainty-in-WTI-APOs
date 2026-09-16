@@ -19,6 +19,7 @@ REQUIRED = [
     ROOT / "docs" / "architecture.md",
     ROOT / "docs" / "repository_layout.md",
     ROOT / "docs" / "development.md",
+    ROOT / "experiments" / "wti_apo_empirical.py",
     PACKAGE_DIR / "__init__.py",
     PAPER_DIR / "README.md",
     PAPER_DIR / "build.py",
@@ -37,6 +38,9 @@ FORBIDDEN_ROOT = [
     ".DS_Store",
     "Wiley_New_Journal_Design_version_5__NJD_v5_",
 ]
+FORBIDDEN_PATHS = [
+    ROOT / "experiments" / "wti_apo_empirical_hybrid.py",
+]
 LEGACY_IMPORT = re.compile(r"(^|\n)\s*(?:from|import)\s+src(?:\.|\s|$)")
 EXPECTED_WILEY_CLASS = r"\documentclass[HARVARD,Utopia2COL]{WileyNJDv5}"
 GENERATED_TEX_SUFFIXES = {
@@ -53,6 +57,9 @@ def main() -> None:
     for name in FORBIDDEN_ROOT:
         if (ROOT / name).exists():
             errors.append(f"forbidden root-level path returned: {name}")
+    for path in FORBIDDEN_PATHS:
+        if path.exists():
+            errors.append(f"superseded path returned: {path.relative_to(ROOT)}")
 
     scan_roots = [PACKAGE_DIR, ROOT / "experiments", ROOT / "tests", ROOT / "scripts"]
     for base in scan_roots:
