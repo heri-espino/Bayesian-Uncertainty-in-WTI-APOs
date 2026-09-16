@@ -41,22 +41,26 @@ git pull --ff-only origin main
 git fetch --prune
 ```
 
-The repository includes a read-only audit utility for branches already fully merged into `origin/main`:
+The repository includes a branch audit utility for refs already fully merged into `origin/main`:
 
 ```bash
 python -m scripts.branch_audit --fetch
 python -m scripts.branch_audit --fetch --delete-commands
 ```
 
-The second command only prints candidate deletion commands. It never deletes branches itself and deliberately does not classify branches that still have unique unmerged commits.
-
-Delete a merged remote branch if GitHub did not delete it automatically:
+The first command is read-only. The second prints candidate deletion commands for review. To delete only the branches that Git itself reports as fully merged, use the explicit confirmation mode:
 
 ```bash
-git push origin --delete <branch-name>
+python -m scripts.branch_audit --fetch --delete-merged --yes
 ```
 
-On PowerShell the same command is used. Delete a local branch only after confirming that its pull request was merged or intentionally superseded:
+`--delete-merged` never classifies or removes a branch that still has commits not reachable from `origin/main`. Such branches require a separate review of their PR/history. An intentionally superseded branch can then be deleted manually once its useful work is confirmed elsewhere:
+
+```bash
+git push origin --delete <superseded-branch>
+```
+
+On PowerShell the same commands are used. Delete a local branch only after confirming that its pull request was merged or intentionally superseded:
 
 ```powershell
 git branch -d <branch-name>
