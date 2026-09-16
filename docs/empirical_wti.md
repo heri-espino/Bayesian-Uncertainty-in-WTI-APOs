@@ -157,7 +157,7 @@ The current pilot interpolates the Treasury **par** curve and treats that yield 
 
 Historical returns are modeled under $\mathbb P$. The physical drift `mu` remains an inferred forecasting parameter but does not enter the risk-neutral APO pricing dynamics.
 
-The first real-market driver runs multiple Metropolis chains and records chain-level acceptance rates plus Gelman-Rubin $\hat R$ for `mu` and `sigma`.
+The real-market driver runs multiple Metropolis chains and records chain-level acceptance rates plus Gelman-Rubin $\hat R$ for `mu` and `sigma`.
 
 ## 9. Price the observed cross-section under Q
 
@@ -165,12 +165,12 @@ The first real-market driver runs multiple Metropolis chains and records chain-l
 
 The reported pricing rules are Full Bayes, posterior-mean plug-in, marginal-sigma-mode plug-in, and historical MLE plug-in. The external benchmark is the observed Barchart end-of-day APO mark.
 
-## 10. First real experiment
+## 10. Canonical real-market experiment
 
-The canonical first pilot is the October-2026 APO cross-section observed on 2026-09-04.
+There is one canonical driver for the Barchart-CL/Yahoo-CL=F/Treasury workflow:
 
 ```bash
-python -m experiments.wti_apo_empirical_hybrid \
+python -m experiments.wti_apo_empirical \
     --valuation-date 2026-09-04 \
     --apo-expiry 2026-10 \
     --cl-data-dir data/csv/CL \
@@ -178,6 +178,8 @@ python -m experiments.wti_apo_empirical_hybrid \
 ```
 
 The run directory contains the continuous-proxy inference series, inference-return audit, MCMC diagnostics, posterior draws/summary, valuation-date CL curve, explicit expiry table, APO fixing state, pricing grid, contract-level prices/errors, Barchart CL source manifest, and the JSON reproducibility manifest.
+
+The manifest schema stores repository inputs as repository-relative paths. External paths are reduced to an `<external>/filename` form so workstation/user directories are not exposed. It also records the Git commit and dirty-tree state plus Python, platform, NumPy, pandas, and SciPy versions; hostnames and user names are deliberately omitted.
 
 ## 11. University-PC launcher
 
@@ -191,7 +193,34 @@ python -m scripts.run_university_wti_apo
 
 `--quick` is the end-to-end smoke run. A fresh run now requires network access only for Yahoo `CL=F` and, when no local Treasury CSV exists, the U.S. Treasury download. Individual CL curve contracts are read locally from `data/csv/CL`.
 
-## 12. Source validation
+## 12. Multi-date panel
+
+The date-panel orchestrator discovers valuation dates for which both the APO cross-section and the two required Barchart CL contracts are available. It never replaces the single-date driver; it invokes that driver once per date and aggregates the resulting outputs.
+
+Inspect candidate dates first:
+
+```bash
+python -m experiments.wti_apo_date_panel --apo-expiry 2026-10 --list-dates
+```
+
+Run a lower-cost panel smoke test:
+
+```bash
+python -m experiments.wti_apo_date_panel --apo-expiry 2026-10 --quick
+```
+
+To focus on valuation dates with at least one positive-volume option observation:
+
+```bash
+python -m experiments.wti_apo_date_panel \
+    --apo-expiry 2026-10 \
+    --quick \
+    --require-positive-volume
+```
+
+Panel outputs are written under `results/wti_apo_empirical/panel_<YYYYMM>/` and include `panel_date_audit.csv`, `panel_contract_pricing.csv`, `panel_error_summary.csv`, and `panel_posterior_summary.csv`. The date audit reports raw/main-sample option counts, positive-volume counts, total reported volume, and whether both required CL curve contracts exist on each date.
+
+## 13. Source validation
 
 An optional external table with schema `trade_date,contract,close` can be passed with:
 

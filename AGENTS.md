@@ -115,7 +115,9 @@ For the empirical WTI pipeline, additionally preserve these source/measurement r
 - if a later data source permits contract-reconstructed physical returns, every return spanning a contract switch must be excluded from the volatility likelihood rather than treating contango/backwardation as a one-day WTI return;
 - CL last-trade dates used by the fixing map come from the explicit versioned reference table `data/csv/CL/contract_expiries.csv`; do not replace it with a hidden approximate roll rule;
 - Yahoo individual-contract pages are optional validation/fallback material only and are not required by the canonical pilot because delisted symbols can disappear;
-- discounting is date-specific. The current pilot uses the U.S. Treasury daily par curve and explicitly labels the interpolated-par-yield zero-rate approximation; do not call it a bootstrapped zero/OIS curve.
+- discounting is date-specific. The current pilot uses the U.S. Treasury daily par curve and explicitly labels the interpolated-par-yield zero-rate approximation; do not call it a bootstrapped zero/OIS curve;
+- `experiments/wti_apo_empirical.py` is the single canonical one-date empirical driver. Multi-date orchestration may delegate to it, but do not recreate parallel `hybrid`/source-specific pricing drivers;
+- run manifests must use repository-relative paths for repository inputs and redact external directory prefixes. Record Git/runtime versions needed for reproducibility without storing workstation user names or hostnames.
 
 Alternative models may relax an invariant only when the alternative is clearly named and
 the research design, tests, and API documentation are updated together.

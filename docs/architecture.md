@@ -77,6 +77,22 @@ U.S. Treasury dated par curve ---------------> discount factor
 The source objects are deliberately separate. A continuous ticker is not substituted for
 the contractual futures term structure entering the APO payoff.
 
+## Empirical orchestration
+
+`experiments/wti_apo_empirical.py` is the **single canonical one-date driver**. It owns the
+source-role separation, historical inference, fixing-curve construction, dated discounting,
+pricing grid, market comparison, and reproducibility manifest. Do not fork this logic into
+source-specific or `hybrid` experiment drivers.
+
+`experiments/wti_apo_date_panel.py` is orchestration only. It audits candidate dates,
+selects dates with an APO cross-section and both required Barchart CL curve contracts,
+invokes the canonical one-date driver once per date, and aggregates the resulting
+contract/error/posterior tables. It does not reimplement pricing or inference logic.
+
+Run manifests use repository-relative paths for repository inputs and redact external
+workstation directory prefixes. They capture the Git commit/dirty-tree state and runtime
+versions needed for reproduction while deliberately omitting hostnames and user names.
+
 ## Dependency direction
 
 ```text
