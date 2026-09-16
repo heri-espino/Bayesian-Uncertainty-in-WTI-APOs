@@ -1,14 +1,19 @@
-"""First real-market WTI Average Price Option pricing experiment.
+"""Canonical real-market WTI Average Price Option pricing experiment.
 
-The pilot prices one observed APO expiry/date cross-section using:
-1. contract-specific Yahoo Finance CL futures histories and curve points;
-2. a reconstructed first-nearby historical return series with roll returns removed;
-3. Bayesian GBM volatility inference under P;
-4. date-specific U.S. Treasury discounting;
-5. the CME-style first-nearby arithmetic-average pricer under Q.
+The empirical driver intentionally separates the source used for historical
+physical-measure inference from the contract-specific futures curve used for
+risk-neutral valuation:
 
-The default pilot is October-2026 APOs observed on 2026-09-04.  Raw Yahoo
-downloads are cached locally and are intentionally gitignored.
+* Yahoo ``CL=F`` is a labelled continuous/front-month proxy for historical
+  returns under :math:`P`;
+* committed Barchart ``Daily Prices`` histories provide the individual CL
+  futures curve entering the APO first-nearby fixing schedule;
+* U.S. Treasury daily par-yield data provide dated discounting under the
+  documented pilot approximation.
+
+The default pilot prices the October-2026 APO cross-section observed on
+2026-09-04.  Output manifests use repository-relative paths and record the code
+commit plus runtime package versions without storing a hostname or user path.
 """
 
 from __future__ import annotations
@@ -17,14 +22,24 @@ import argparse
 from datetime import datetime, timezone
 import json
 from pathlib import Path
+import platform
+import subprocess
+import sys
 
 import numpy as np
 import pandas as pd
+import scipy
 
 from bayesian_asian_options.barchart_apo import (
     apply_main_sample_filters,
     build_apo_panel,
     discover_barchart_histories,
+)
+from bayesian_asian_options.barchart_cl import (
+    barchart_cl_curve_on_date,
+    compare_barchart_cl_reference,
+    load_barchart_cl_strip,
+    load_cl_expiry_table,
 )
 from bayesian_asian_options.bayesian_gbm import gbm_mle, random_walk_metropolis_gbm
 from bayesian_asian_options.rates import (
@@ -37,17 +52,56 @@ from bayesian_asian_options.wti_first_nearby import (
     assign_first_nearby_contract,
     build_forward_fixing_curve,
 )
-from bayesian_asian_options.wti_yahoo_futures import (
-    cl_contract_strip,
-    compare_futures_reference,
-    download_or_load_yahoo_cl_strip,
-    expiry_table_from_yahoo_metadata,
-    futures_curve_on_date,
-    reconstruct_first_nearby_history,
+from bayesian_asian_options.wti_yahoo import (
+    dataframe_sha256,
+    download_yahoo_wti,
+    normalize_yahoo_history,
+    prepare_wti_model_sample,
 )
+from bayesian_asian_options.wti_yahoo_futures import cl_contract_symbol
 
+
+ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_VALUATION_DATE = "2026-09-04"
 DEFAULT_APO_EXPIRY = "2026-10"
+
+
+def _portable_path(path: str | Path) -> str:
+    """Return a manifest-safe path without workstation-specific directories."""
+    resolved = Path(path).expanduser().resolve()
+    try:
+        return resolved.relative_to(ROOT.resolve()).as_posix()
+    except ValueError:
+        return f"<external>/{resolved.name}"
+
+
+def _git_output(*args: str) -> str | None:
+    try:
+        result = subprocess.run(
+            ["git", *args],
+            cwd=ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+    except (OSError, subprocess.CalledProcessError):
+        return None
+    return result.stdout.strip()
+
+
+def _runtime_metadata() -> dict[str, object]:
+    """Return reproducibility metadata that excludes host/user identifiers."""
+    commit = _git_output("rev-parse", "HEAD")
+    status = _git_output("status", "--porcelain")
+    return {
+        "git_commit": commit,
+        "git_dirty": None if status is None else bool(status),
+        "python": platform.python_version(),
+        "platform": platform.platform(),
+        "numpy": np.__version__,
+        "pandas": pd.__version__,
+        "scipy": scipy.__version__,
+    }
 
 
 def _rhat(chains: np.ndarray) -> float:
@@ -81,14 +135,18 @@ def _month_bounds(expiry_month: str) -> tuple[pd.Timestamp, pd.Timestamp]:
 
 
 def _pilot_fixing_dates(expiry_month: str) -> pd.DatetimeIndex:
-    """Weekday fixing schedule used by the first October-2026 pilot.
-
-    The selected pilot month has no full-day CME energy closure.  General
-    production runs should replace this fallback with an explicit CME settlement
-    calendar/fixing-date file; the manifest records the convention.
-    """
+    """Return the weekday fixing schedule used by the current empirical pilot."""
     start, end = _month_bounds(expiry_month)
     return pd.bdate_range(start, end)
+
+
+def _candidate_curve_contracts(apo_expiry: str) -> list[str]:
+    """Return the two CL delivery months used during one APO averaging month."""
+    period = pd.Period(apo_expiry, freq="M")
+    return [
+        cl_contract_symbol((period + offset).year, (period + offset).month)
+        for offset in (1, 2)
+    ]
 
 
 def _load_option_cross_section(
@@ -118,6 +176,89 @@ def _load_option_cross_section(
     if panel.empty:
         raise ValueError("All option observations were removed by the main-sample filters")
     return panel.sort_values(["option_type", "strike"]).reset_index(drop=True)
+
+
+def _load_or_download_continuous_inference(
+    *,
+    cache_dir: Path,
+    history_start: str,
+    valuation_date: pd.Timestamp,
+    refresh: bool,
+) -> tuple[pd.DataFrame, np.ndarray, dict[str, object]]:
+    """Return a cached/downloaded Yahoo CL=F inference sample through valuation date."""
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    csv_path = cache_dir / "CL_F_inference.csv"
+    meta_path = cache_dir / "CL_F_inference.json"
+    end_exclusive = valuation_date + pd.Timedelta(days=1)
+
+    use_cache = csv_path.exists() and not refresh
+    history: pd.DataFrame
+    metadata: dict[str, object]
+    if use_cache:
+        history = normalize_yahoo_history(pd.read_csv(csv_path))
+        min_date = pd.Timestamp(history["date"].min()).normalize()
+        max_date = pd.Timestamp(history["date"].max()).normalize()
+        if min_date > pd.Timestamp(history_start) or max_date < valuation_date:
+            use_cache = False
+
+    if not use_cache:
+        history, raw_meta = download_yahoo_wti(
+            ticker="CL=F",
+            start=history_start,
+            end=end_exclusive.date().isoformat(),
+        )
+        history.to_csv(csv_path, index=False, date_format="%Y-%m-%d")
+        metadata = dict(raw_meta)
+        metadata.update(
+            {
+                "role": "physical-measure volatility inference proxy",
+                "interpretation": (
+                    "Yahoo continuous/front-month proxy; historical roll rule "
+                    "not treated as contractual first-nearby"
+                ),
+                "sha256": dataframe_sha256(history),
+            }
+        )
+        meta_path.write_text(
+            json.dumps(metadata, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+    else:
+        metadata = (
+            json.loads(meta_path.read_text(encoding="utf-8"))
+            if meta_path.exists()
+            else {
+                "provider": "Yahoo Finance via yfinance",
+                "ticker": "CL=F",
+                "role": "physical-measure volatility inference proxy",
+                "interpretation": (
+                    "Yahoo continuous/front-month proxy; historical roll rule "
+                    "not treated as contractual first-nearby"
+                ),
+                "sha256": dataframe_sha256(history),
+            }
+        )
+
+    sample = prepare_wti_model_sample(
+        history,
+        start=history_start,
+        end=end_exclusive.date().isoformat(),
+    )
+    if sample.n_returns < 100:
+        raise RuntimeError(
+            f"Only {sample.n_returns} usable CL=F returns are available for the requested inference window"
+        )
+    return sample.history, sample.log_returns, metadata
+
+
+def _return_audit(history: pd.DataFrame) -> pd.DataFrame:
+    out = history[["date", "close"]].copy()
+    out["log_return"] = np.nan
+    if len(out) > 1:
+        values = out["close"].to_numpy(dtype=float)
+        out.loc[out.index[1:], "log_return"] = np.diff(np.log(values))
+    out["usable_inference_return"] = out["log_return"].notna()
+    return out
 
 
 def _run_mcmc(
@@ -248,9 +389,13 @@ def _price_cross_section(
                 "strike": float(contract["strike"]),
                 "market_price": market,
                 "open_interest": float(contract["open_interest"]),
-                "volume": float(contract["volume"]) if pd.notna(contract["volume"]) else np.nan,
+                "volume": float(contract["volume"])
+                if pd.notna(contract["volume"])
+                else np.nan,
                 "expected_average": expected_average,
-                "log_moneyness": float(np.log(float(contract["strike"]) / expected_average)),
+                "log_moneyness": float(
+                    np.log(float(contract["strike"]) / expected_average)
+                ),
                 "full_bayes_price": fb,
                 "postmean_plugin_price": pm,
                 "sigma_mode_plugin_price": mode_price,
@@ -299,20 +444,33 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--apo-expiry", default=DEFAULT_APO_EXPIRY)
     parser.add_argument("--history-start", default="2024-01-01")
     parser.add_argument("--option-data-dir", type=Path, default=Path("data/csv"))
+    parser.add_argument("--cl-data-dir", type=Path, default=Path("data/csv/CL"))
     parser.add_argument(
-        "--futures-cache-dir",
+        "--cl-expiry-file",
         type=Path,
-        default=Path("data/wti_yahoo_contracts"),
+        default=Path("data/csv/CL/contract_expiries.csv"),
     )
     parser.add_argument(
-        "--treasury-dir",
-        type=Path,
-        default=Path("data/rates/treasury"),
+        "--inference-cache-dir", type=Path, default=Path("data/wti_yahoo")
+    )
+    parser.add_argument(
+        "--treasury-dir", type=Path, default=Path("data/rates/treasury")
     )
     parser.add_argument("--download-treasury", action="store_true")
-    parser.add_argument("--refresh-futures", action="store_true")
+    parser.add_argument(
+        "--refresh-inference",
+        "--refresh-futures",
+        dest="refresh_inference",
+        action="store_true",
+        help=(
+            "Refresh Yahoo CL=F inference data; --refresh-futures is retained as "
+            "a backwards-compatible alias."
+        ),
+    )
     parser.add_argument("--futures-reference-csv", type=Path, default=None)
-    parser.add_argument("--output-dir", type=Path, default=Path("results/wti_apo_empirical"))
+    parser.add_argument(
+        "--output-dir", type=Path, default=Path("results/wti_apo_empirical")
+    )
     parser.add_argument("--min-open-interest", type=float, default=1.0)
     parser.add_argument("--include-min-tick", action="store_true")
     parser.add_argument("--chains", type=int, default=4)
@@ -331,8 +489,8 @@ def main(argv: list[str] | None = None) -> None:
     fixing_dates = _pilot_fixing_dates(args.apo_expiry)
     if valuation_date >= fixing_dates.min():
         raise SystemExit(
-            "The first empirical driver currently targets pre-averaging valuation dates; "
-            "partial-fixing panel support is the next extension."
+            "The canonical pilot currently targets pre-averaging valuation dates; "
+            "partial-fixing panel support remains a separate extension."
         )
 
     option_cross_section = _load_option_cross_section(
@@ -343,30 +501,14 @@ def main(argv: list[str] | None = None) -> None:
         exclude_min_tick=not args.include_min_tick,
     )
 
-    _, averaging_end = _month_bounds(args.apo_expiry)
-    contracts = cl_contract_strip(args.history_start, averaging_end, lead_months=2)
-    futures_panel, futures_metadata = download_or_load_yahoo_cl_strip(
-        contracts,
-        directory=args.futures_cache_dir,
-        refresh=args.refresh_futures,
-    )
-    expiry_table = expiry_table_from_yahoo_metadata(futures_metadata)
-
-    first_nearby = reconstruct_first_nearby_history(
-        futures_panel,
-        expiry_table,
-        start=args.history_start,
-        end=valuation_date,
-    )
-    inference_returns = first_nearby.loc[
-        first_nearby["usable_inference_return"], "log_return"
-    ].to_numpy(dtype=float)
-    if len(inference_returns) < 100:
-        raise RuntimeError(
-            f"Only {len(inference_returns)} usable within-contract returns; "
-            "the Yahoo strip is too incomplete for the requested inference window"
+    inference_history, inference_returns, inference_meta = (
+        _load_or_download_continuous_inference(
+            cache_dir=args.inference_cache_dir,
+            history_start=args.history_start,
+            valuation_date=valuation_date,
+            refresh=args.refresh_inference,
         )
-
+    )
     sigma_samples, chain_diagnostics, posterior = _run_mcmc(
         inference_returns,
         chains=args.chains,
@@ -375,9 +517,19 @@ def main(argv: list[str] | None = None) -> None:
         seed=args.seed,
     )
 
+    curve_contracts = _candidate_curve_contracts(args.apo_expiry)
+    futures_panel, curve_manifest = load_barchart_cl_strip(
+        args.cl_data_dir,
+        contracts=curve_contracts,
+    )
+    expiry_table = load_cl_expiry_table(
+        args.cl_expiry_file,
+        contracts=curve_contracts,
+    )
+
     future_mapping = assign_first_nearby_contract(fixing_dates, expiry_table)
     required_curve_contracts = future_mapping["contract"].drop_duplicates().tolist()
-    valuation_curve = futures_curve_on_date(
+    valuation_curve = barchart_cl_curve_on_date(
         futures_panel,
         valuation_date,
         contracts=required_curve_contracts,
@@ -389,7 +541,8 @@ def main(argv: list[str] | None = None) -> None:
     )
     forward_fixings = forward_curve["settlement"].to_numpy(dtype=float)
     fixing_times = (
-        (pd.to_datetime(forward_curve["fixing_date"]) - valuation_date).dt.days.to_numpy(dtype=float)
+        (pd.to_datetime(forward_curve["fixing_date"]) - valuation_date)
+        .dt.days.to_numpy(dtype=float)
         / 365.25
     )
     realized_fixings = np.array([], dtype=float)
@@ -397,13 +550,15 @@ def main(argv: list[str] | None = None) -> None:
     args.treasury_dir.mkdir(parents=True, exist_ok=True)
     rate_paths = sorted(args.treasury_dir.glob("*.csv"))
     if not rate_paths and args.download_treasury:
-        destination = args.treasury_dir / f"treasury_par_yields_{valuation_date.year}.csv"
+        destination = (
+            args.treasury_dir / f"treasury_par_yields_{valuation_date.year}.csv"
+        )
         download_treasury_par_yield_csv(valuation_date.year, destination)
         rate_paths = [destination]
     if not rate_paths:
         raise SystemExit(
-            f"No Treasury CSVs found in {args.treasury_dir}. "
-            "Place the downloaded daily Treasury par-yield files there or use --download-treasury."
+            f"No Treasury CSVs found in {args.treasury_dir}; "
+            "use --download-treasury or add the official files"
         )
     treasury = load_treasury_par_yields(rate_paths)
     curve = treasury_curve_on_or_before(treasury, valuation_date)
@@ -426,36 +581,60 @@ def main(argv: list[str] | None = None) -> None:
     )
     errors = _error_summary(pricing)
 
-    run_dir = args.output_dir / f"{valuation_date.date()}_{args.apo_expiry.replace('-', '')}"
+    run_dir = args.output_dir / (
+        f"{valuation_date.date()}_{args.apo_expiry.replace('-', '')}"
+    )
     run_dir.mkdir(parents=True, exist_ok=True)
-    first_nearby.to_csv(run_dir / "first_nearby_series.csv", index=False)
-    first_nearby[
-        ["trade_date", "contract", "roll_switch", "log_return", "usable_inference_return"]
-    ].to_csv(run_dir / "first_nearby_return_audit.csv", index=False)
+    inference_history.to_csv(run_dir / "inference_proxy_series.csv", index=False)
+    _return_audit(inference_history).to_csv(
+        run_dir / "inference_return_audit.csv", index=False
+    )
     chain_diagnostics.to_csv(run_dir / "mcmc_diagnostics.csv", index=False)
     pd.DataFrame([posterior]).to_csv(run_dir / "posterior_summary.csv", index=False)
     np.savez_compressed(run_dir / "posterior_draws.npz", sigma=sigma_samples)
+    valuation_curve.to_csv(run_dir / "valuation_cl_curve.csv", index=False)
+    expiry_table.to_csv(run_dir / "cl_expiry_table.csv", index=False)
     forward_curve.to_csv(run_dir / "apo_fixing_state.csv", index=False)
     pricing_grid.to_csv(run_dir / "pricing_grid.csv", index=False)
     pricing.to_csv(run_dir / "contract_pricing.csv", index=False)
     errors.to_csv(run_dir / "error_summary.csv", index=False)
-    futures_metadata.to_csv(run_dir / "futures_download_manifest.csv", index=False)
+    curve_manifest.to_csv(run_dir / "barchart_cl_manifest.csv", index=False)
 
-    validation_file = None
+    validation_file: Path | None = None
     if args.futures_reference_csv is not None:
         reference = pd.read_csv(args.futures_reference_csv)
-        validation = compare_futures_reference(futures_panel, reference)
+        validation = compare_barchart_cl_reference(futures_panel, reference)
         validation_file = run_dir / "futures_source_validation.csv"
         validation.to_csv(validation_file, index=False)
 
+    curve_snapshot = {
+        str(row.contract): float(row.settlement)
+        for row in valuation_curve[["contract", "settlement"]].itertuples(index=False)
+    }
     manifest = {
+        "manifest_schema_version": 2,
         "generated_at_utc": generated_at.isoformat(),
+        "runtime": _runtime_metadata(),
         "valuation_date": valuation_date.date().isoformat(),
         "apo_expiry": args.apo_expiry,
         "market_option_source": "committed Barchart APO histories",
-        "futures_source": "Yahoo Finance individual CL contracts via yfinance",
-        "futures_close_interpretation": "daily Close used as settlement proxy",
-        "first_nearby_return_rule": "exclude every return spanning a contract switch",
+        "physical_inference_source": (
+            "Yahoo CL=F continuous/front-month proxy via yfinance"
+        ),
+        "physical_inference_sha256": inference_meta.get("sha256"),
+        "physical_inference_limitation": (
+            "Yahoo does not document the historical CL=F roll convention precisely enough "
+            "to call this a contract-reconstructed first-nearby series"
+        ),
+        "curve_source": "committed Barchart CL Daily Prices histories",
+        "curve_price_field": "Latest",
+        "curve_price_interpretation": (
+            "end-of-day settlement proxy; not asserted to be official CME settlement"
+        ),
+        "curve_contracts_loaded": curve_contracts,
+        "curve_contracts_used": required_curve_contracts,
+        "valuation_curve": curve_snapshot,
+        "expiry_reference_file": _portable_path(args.cl_expiry_file),
         "history_start": args.history_start,
         "n_usable_returns": int(len(inference_returns)),
         "mcmc": {
@@ -469,11 +648,8 @@ def main(argv: list[str] | None = None) -> None:
         },
         "fixing_calendar": {
             "convention": "weekday pilot schedule",
-            "note": (
-                "Default October-2026 pilot has no full-day CME energy closure; "
-                "general production panel must use an explicit exchange settlement calendar."
-            ),
             "n_fixings": int(len(fixing_dates)),
+            "expiry_metadata_rule": "explicit versioned CL last-trade-date table",
         },
         "discounting": {
             "source": "U.S. Treasury Daily Treasury Par Yield Curve Rates",
@@ -491,7 +667,9 @@ def main(argv: list[str] | None = None) -> None:
             "common_random_numbers": True,
             "antithetic": True,
         },
-        "futures_reference_validation": None if validation_file is None else str(validation_file),
+        "futures_reference_validation": (
+            None if validation_file is None else _portable_path(validation_file)
+        ),
     }
     (run_dir / "manifest.json").write_text(
         json.dumps(manifest, indent=2, sort_keys=True) + "\n",
@@ -499,7 +677,11 @@ def main(argv: list[str] | None = None) -> None:
     )
 
     print(f"Run directory: {run_dir}")
-    print(f"Usable within-contract returns: {len(inference_returns)}")
+    print("Inference source: Yahoo CL=F continuous/front-month proxy")
+    print(f"Usable inference returns: {len(inference_returns)}")
+    print(f"Barchart CL curve contracts: {', '.join(curve_contracts)}")
+    print("Valuation-date CL curve:")
+    print(valuation_curve[["contract", "settlement"]].to_string(index=False))
     print(
         "sigma posterior mean / 95% interval: "
         f"{posterior['sigma_posterior_mean']:.6f} "
