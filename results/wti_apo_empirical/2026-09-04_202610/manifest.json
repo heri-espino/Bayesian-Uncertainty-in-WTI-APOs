@@ -19,7 +19,7 @@
     "source": "U.S. Treasury Daily Treasury Par Yield Curve Rates",
     "time_to_payoff_years": 0.15331964407939766
   },
-  "expiry_reference_file": "C:\\Users\\175199\\Documents\\Metropolis-Hastings-for-Asian-Options-Using-Bayesian-Inference-and-Black-Scholes--Article-\\data\\csv\\CL\\contract_expiries.csv",
+  "expiry_reference_file": "data/csv/CL/contract_expiries.csv",
   "fixing_calendar": {
     "convention": "weekday pilot schedule",
     "expiry_metadata_rule": "explicit versioned CL last-trade-date table",
@@ -38,6 +38,7 @@
     "seed": 20260904,
     "sigma_rhat": 1.0001091605769372
   },
+  "metadata_normalization": "workstation-specific expiry_reference_file path replaced with repository-relative path after the run; numerical outputs unchanged",
   "n_usable_returns": 673,
   "physical_inference_limitation": "Yahoo does not document the historical CL=F roll convention precisely enough to call this a contract-reconstructed first-nearby series",
   "physical_inference_sha256": "48c6d44adf0fd1693e09ecc19c4ab4f3c6c4f174be15fd6fff82a85b507a43d9",
