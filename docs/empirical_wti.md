@@ -193,9 +193,9 @@ python -m scripts.run_university_wti_apo
 
 `--quick` is the end-to-end smoke run. A fresh run now requires network access only for Yahoo `CL=F` and, when no local Treasury CSV exists, the U.S. Treasury download. Individual CL curve contracts are read locally from `data/csv/CL`.
 
-## 12. Multi-date panel
+## 12. Multi-date panel and liquidity samples
 
-The date-panel orchestrator discovers valuation dates for which both the APO cross-section and the two required Barchart CL contracts are available. It never replaces the single-date driver; it invokes that driver once per date and aggregates the resulting outputs.
+The date-panel orchestrator discovers valuation dates for which both the APO cross-section and the two required Barchart CL contracts are available. It never replaces the single-date driver; it invokes that driver once per date and then builds derived panel summaries.
 
 Inspect candidate dates first:
 
@@ -209,16 +209,42 @@ Run a lower-cost panel smoke test:
 python -m experiments.wti_apo_date_panel --apo-expiry 2026-10 --quick
 ```
 
-To focus on valuation dates with at least one positive-volume option observation:
+A normal all-date run writes three separate samples so a liquidity robustness run cannot overwrite the baseline aggregation:
+
+```text
+results/wti_apo_empirical/panel_202610/
+├── panel_date_audit.csv
+├── all_dates/
+│   ├── panel_contract_pricing.csv
+│   ├── panel_error_summary.csv
+│   ├── panel_overall_error_summary.csv
+│   ├── panel_posterior_summary.csv
+│   └── sample_manifest.json
+├── positive_volume_dates/
+│   └── ...
+└── positive_volume_contracts/
+    └── ...
+```
+
+The sample definitions are deliberately different:
+
+- `all_dates`: every eligible date and every main-sample contract on those dates;
+- `positive_volume_dates`: every contract on dates where at least one main-sample contract reports positive daily volume;
+- `positive_volume_contracts`: only contract-date observations whose own reported daily volume is strictly positive.
+
+The contract-level sample recomputes MAE/RMSE after filtering; it never reuses an error summary calculated from zero-volume contracts.
+
+If the expensive single-date runs already exist, rebuild all three aggregate views without rerunning MCMC or Monte Carlo:
 
 ```bash
 python -m experiments.wti_apo_date_panel \
     --apo-expiry 2026-10 \
-    --quick \
-    --require-positive-volume
+    --aggregate-only
 ```
 
-Panel outputs are written under `results/wti_apo_empirical/panel_<YYYYMM>/` and include `panel_date_audit.csv`, `panel_contract_pricing.csv`, `panel_error_summary.csv`, and `panel_posterior_summary.csv`. The date audit reports raw/main-sample option counts, positive-volume counts, total reported volume, and whether both required CL curve contracts exist on each date.
+`--require-positive-volume` remains available when computation should be restricted to dates with at least one positive-volume observation. Those outputs are written only to `positive_volume_dates/` and `positive_volume_contracts/`, so they do not overwrite `all_dates/`.
+
+The root `panel_date_audit.csv` reports raw/main-sample option counts, positive-volume counts, total reported volume, and whether both required CL curve contracts exist on each date.
 
 ## 13. Source validation
 

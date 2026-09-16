@@ -170,11 +170,31 @@ counts, the number of positive-volume observations, total reported volume, and c
 availability.
 
 The panel runner invokes the canonical `experiments.wti_apo_empirical` driver once per
-selected date and aggregates contract-level prices, error summaries, and posterior summaries.
-This makes it possible to study `Delta_FB-PM` against posterior volatility dispersion,
-effective moneyness, time to expiry, option type, and liquidity diagnostics across dates.
-The `--require-positive-volume` switch provides a transparent transaction-activity
-sensitivity sample rather than silently dropping zero-volume market marks.
+selected date and aggregates contract-level prices and posterior summaries. The aggregation
+layer then creates three explicitly different empirical samples:
+
+1. `all_dates`: every eligible date and every main-sample contract on those dates;
+2. `positive_volume_dates`: every contract on dates where at least one main-sample contract
+   has positive reported daily volume;
+3. `positive_volume_contracts`: only contract-date observations whose own reported daily
+   volume is strictly positive.
+
+These objects answer different questions and are never allowed to overwrite one another.
+The first is the broad market-mark panel, the second conditions on dates with some observed
+trading activity, and the third is the narrowest transaction-activity robustness sample.
+Error summaries for the third sample are recomputed after the contract-level filter rather
+than reusing statistics from all contracts on the same dates.
+
+For the currently committed October-2026 date audit, 12 pre-averaging dates are eligible.
+Five dates contain at least one positive-volume main-sample option, but only six
+contract-date observations across those dates have positive reported daily volume. This
+thin transaction-activity sample is reported as a robustness layer rather than silently
+substituted for the broader market-mark panel.
+
+Derived panel aggregations live in separate subdirectories under
+`results/wti_apo_empirical/panel_<YYYYMM>/`. They can be rebuilt from the canonical
+single-date folders with `--aggregate-only`, so changing a sample definition does not
+require rerunning MCMC or Monte Carlo pricing.
 
 ## Reproducibility metadata
 
