@@ -1,14 +1,15 @@
 """Run the canonical WTI APO experiment over multiple pre-averaging dates.
 
-This module is orchestration only.  It discovers dates for which both the APO
+This module is orchestration only. It discovers dates for which both the APO
 cross-section and the required committed Barchart CL curve are available, then
-invokes :mod:`experiments.wti_apo_empirical` once per date.  The resulting run
+invokes :mod:`experiments.wti_apo_empirical` once per date. The resulting run
 folders remain canonical; this driver only aggregates their summaries.
 """
 
 from __future__ import annotations
 
 import argparse
+import json
 from pathlib import Path
 
 import pandas as pd
@@ -69,7 +70,10 @@ def _date_audit(
             min_open_interest=min_open_interest,
             exclude_min_tick=exclude_min_tick,
         )
-        volume = pd.to_numeric(filtered.get("volume"), errors="coerce")
+        if "volume" in filtered:
+            volume = pd.to_numeric(filtered["volume"], errors="coerce")
+        else:
+            volume = pd.Series(0.0, index=filtered.index, dtype=float)
         n_positive_volume = int((volume.fillna(0.0) > 0.0).sum())
         total_volume = float(volume.fillna(0.0).sum())
         curve_available = pd.Timestamp(date) in curve_dates
@@ -114,6 +118,7 @@ def _selected_dates(
 
 
 def _collect_panel_outputs(output_dir: Path, apo_expiry: str, dates: list[str]) -> None:
+    """Aggregate single-date outputs into analysis-ready panel tables."""
     pricing_frames: list[pd.DataFrame] = []
     error_frames: list[pd.DataFrame] = []
     posterior_frames: list[pd.DataFrame] = []
@@ -124,18 +129,52 @@ def _collect_panel_outputs(output_dir: Path, apo_expiry: str, dates: list[str]) 
         pricing_path = run_dir / "contract_pricing.csv"
         error_path = run_dir / "error_summary.csv"
         posterior_path = run_dir / "posterior_summary.csv"
+        manifest_path = run_dir / "manifest.json"
+
+        posterior: pd.DataFrame | None = None
+        if posterior_path.exists():
+            posterior = pd.read_csv(posterior_path)
+            posterior.insert(0, "valuation_date", date)
+            posterior_frames.append(posterior.copy())
+
+        manifest: dict[str, object] = {}
+        if manifest_path.exists():
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+
         if pricing_path.exists():
             frame = pd.read_csv(pricing_path)
             frame.insert(0, "valuation_date_panel", date)
+            frame["positive_volume"] = pd.to_numeric(
+                frame["volume"], errors="coerce"
+            ).fillna(0.0) > 0.0
+            frame["abs_fb_minus_pm"] = frame["fb_minus_pm"].abs()
+            if posterior is not None and not posterior.empty:
+                row = posterior.iloc[0]
+                for column in [
+                    "sigma_mle",
+                    "sigma_posterior_mean",
+                    "sigma_posterior_sd",
+                    "sigma_q025",
+                    "sigma_q50",
+                    "sigma_q975",
+                    "mu_rhat",
+                    "sigma_rhat",
+                ]:
+                    if column in row:
+                        frame[f"run_{column}"] = row[column]
+            discounting = manifest.get("discounting", {})
+            if isinstance(discounting, dict):
+                frame["time_to_payoff_years"] = discounting.get(
+                    "time_to_payoff_years"
+                )
+                frame["discount_factor"] = discounting.get("discount_factor")
+            frame["n_usable_returns"] = manifest.get("n_usable_returns")
             pricing_frames.append(frame)
+
         if error_path.exists():
             frame = pd.read_csv(error_path)
             frame.insert(0, "valuation_date", date)
             error_frames.append(frame)
-        if posterior_path.exists():
-            frame = pd.read_csv(posterior_path)
-            frame.insert(0, "valuation_date", date)
-            posterior_frames.append(frame)
 
     panel_dir = output_dir / f"panel_{expiry_code}"
     panel_dir.mkdir(parents=True, exist_ok=True)
