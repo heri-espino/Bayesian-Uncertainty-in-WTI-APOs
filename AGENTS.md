@@ -117,6 +117,8 @@ For the empirical WTI pipeline, additionally preserve these source/measurement r
 - Yahoo individual-contract pages are optional validation/fallback material only and are not required by the canonical pilot because delisted symbols can disappear;
 - discounting is date-specific. The current pilot uses the U.S. Treasury daily par curve and explicitly labels the interpolated-par-yield zero-rate approximation; do not call it a bootstrapped zero/OIS curve;
 - `experiments/wti_apo_empirical.py` is the single canonical one-date empirical driver. Multi-date orchestration may delegate to it, but do not recreate parallel `hybrid`/source-specific pricing drivers;
+- panel samples must be namespaced by their actual selection rule. In particular, a positive-volume-date sample (all contracts on an active date) is not the same object as a positive-volume-contract sample (only observations with own volume > 0), and one sample must never overwrite another;
+- error summaries for a filtered panel must be recomputed from the contract rows retained by that filter; never reuse an MAE/RMSE table calculated on a broader sample;
 - run manifests must use repository-relative paths for repository inputs and redact external directory prefixes. Record Git/runtime versions needed for reproducibility without storing workstation user names or hostnames.
 
 Alternative models may relax an invariant only when the alternative is clearly named and

@@ -40,7 +40,43 @@ Model-vs-market error summary:
 
 These are **pilot results**, not a method ranking or a final publication table. In this cross-section the Full-Bayes and posterior-mean prices are extremely close relative to the overall model-vs-market discrepancy. The observed option records on this valuation date have zero reported daily volume but positive open interest, so the Barchart values are treated as end-of-day market marks rather than same-day transaction prices.
 
-## Files in each run
+## Multi-date October-2026 panel
+
+The current date audit identifies 12 eligible pre-averaging valuation dates with both APO observations and the two required Barchart CL curve contracts. Five dates have at least one main-sample contract with positive reported daily volume: 2026-08-27, 2026-08-28, 2026-08-31, 2026-09-01, and 2026-09-02. Across those dates only six contract-date observations have positive reported daily volume, so date-level and contract-level liquidity filters must not be conflated.
+
+Panel aggregations are derived from the canonical single-date folders and are namespaced:
+
+```text
+panel_202610/
+├── panel_date_audit.csv
+├── all_dates/
+├── positive_volume_dates/
+└── positive_volume_contracts/
+```
+
+Each sample directory contains:
+
+- `panel_contract_pricing.csv`;
+- `panel_error_summary.csv`, recomputed by valuation date from the contracts actually in that sample;
+- `panel_overall_error_summary.csv`, pooled across contract-date observations in that sample;
+- `panel_posterior_summary.csv` for the dates represented in the sample;
+- `sample_manifest.json` with the exact sample definition and counts.
+
+The three sample definitions are:
+
+- `all_dates`: all eligible dates and all main-sample contracts;
+- `positive_volume_dates`: all contracts on dates where at least one contract has positive reported volume;
+- `positive_volume_contracts`: only contract-date observations whose own reported volume is strictly positive.
+
+The older flat aggregate files directly under `panel_202610/` were removed because a second panel run could overwrite the first sample silently. Existing single-date run folders remain the provenance authority and contain all numerical results. After updating the code, regenerate the namespaced aggregates without rerunning MCMC or pricing:
+
+```bash
+python -m experiments.wti_apo_date_panel \
+    --apo-expiry 2026-10 \
+    --aggregate-only
+```
+
+## Files in each single-date run
 
 - `manifest.json`: source roles, seeds, settings, curve values, discounting, and runtime provenance;
 - `posterior_summary.csv`: MLE/posterior volatility summary and R-hat diagnostics;
