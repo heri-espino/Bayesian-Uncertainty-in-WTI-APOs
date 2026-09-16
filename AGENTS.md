@@ -6,8 +6,8 @@ architecture unless a deliberate migration is documented and completed atomicall
 ## Read before editing
 
 Before writing code, read `docs/index.md`, `docs/architecture.md`, `docs/api/index.md`,
-`docs/agent_guide.md`, `paper/README.md`, and the relevant files under `research/`. Search
-the Sphinx API reference before implementing a new function.
+`docs/agent_guide.md`, `docs/development.md`, `paper/README.md`, and the relevant files under
+`research/`. Search the Sphinx API reference before implementing a new function.
 
 ## Required package structure
 
@@ -40,6 +40,20 @@ Every new public library function/class/module must ship in the same change with
 
 Private helpers begin with `_`. Do not silently rename or remove public APIs; update all
 callers, tests, examples, and docs in the same change.
+
+## Branch and pull-request lifecycle
+
+`main` is the only long-lived development branch. New work starts from current `main` in a
+short-lived, narrowly scoped feature branch. Do not revive or reuse a branch after its PR
+has been merged.
+
+After a PR is merged, delete its remote branch. If work is explicitly superseded, close the
+old PR, confirm that its useful changes are preserved elsewhere, and delete that branch as
+well. Git history, closed/merged PRs, manifests, and `archive/` are the provenance record;
+obsolete branches are not an archival mechanism.
+
+Prefer branch names with a clear role such as `feature/`, `fix/`, `paper/`, `data/`, or
+`chore/`. Keep one coherent scientific or infrastructure change per PR.
 
 ## Manuscript structure is also normative
 
