@@ -157,7 +157,7 @@ The current pilot interpolates the Treasury **par** curve and treats that yield 
 
 Historical returns are modeled under $\mathbb P$. The physical drift `mu` remains an inferred forecasting parameter but does not enter the risk-neutral APO pricing dynamics.
 
-The first real-market driver runs multiple Metropolis chains and records chain-level acceptance rates plus Gelman-Rubin $\hat R$ for `mu` and `sigma`.
+The real-market driver runs multiple Metropolis chains and records chain-level acceptance rates plus Gelman-Rubin $\hat R$ for `mu` and `sigma`.
 
 ## 9. Price the observed cross-section under Q
 
@@ -165,12 +165,12 @@ The first real-market driver runs multiple Metropolis chains and records chain-l
 
 The reported pricing rules are Full Bayes, posterior-mean plug-in, marginal-sigma-mode plug-in, and historical MLE plug-in. The external benchmark is the observed Barchart end-of-day APO mark.
 
-## 10. First real experiment
+## 10. Canonical real-market experiment
 
-The canonical first pilot is the October-2026 APO cross-section observed on 2026-09-04.
+There is one canonical driver for the Barchart-CL/Yahoo-CL=F/Treasury workflow:
 
 ```bash
-python -m experiments.wti_apo_empirical_hybrid \
+python -m experiments.wti_apo_empirical \
     --valuation-date 2026-09-04 \
     --apo-expiry 2026-10 \
     --cl-data-dir data/csv/CL \
@@ -178,6 +178,8 @@ python -m experiments.wti_apo_empirical_hybrid \
 ```
 
 The run directory contains the continuous-proxy inference series, inference-return audit, MCMC diagnostics, posterior draws/summary, valuation-date CL curve, explicit expiry table, APO fixing state, pricing grid, contract-level prices/errors, Barchart CL source manifest, and the JSON reproducibility manifest.
+
+The manifest schema stores repository inputs as repository-relative paths. External paths are reduced to an `<external>/filename` form so workstation/user directories are not exposed. It also records the Git commit and dirty-tree state plus Python, platform, NumPy, pandas, and SciPy versions; hostnames and user names are deliberately omitted.
 
 ## 11. University-PC launcher
 
