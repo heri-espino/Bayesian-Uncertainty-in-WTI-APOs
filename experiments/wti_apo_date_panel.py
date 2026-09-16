@@ -1,9 +1,21 @@
-"""Run the canonical WTI APO experiment over multiple pre-averaging dates.
+"""Run and aggregate the canonical WTI APO experiment over valuation dates.
 
 This module is orchestration only. It discovers dates for which both the APO
-cross-section and the required committed Barchart CL curve are available, then
-invokes :mod:`experiments.wti_apo_empirical` once per date. The resulting run
-folders remain canonical; this driver only aggregates their summaries.
+cross-section and the required committed Barchart CL curve are available,
+invokes :mod:`experiments.wti_apo_empirical` once per date, and writes three
+non-overlapping empirical sample views:
+
+``all_dates``
+    Every eligible valuation date and every contract in its main sample.
+``positive_volume_dates``
+    Every contract on dates where at least one main-sample contract reports
+    positive daily volume.
+``positive_volume_contracts``
+    Only contract-date observations whose own reported daily volume is positive.
+
+The single-date run folders remain canonical scientific outputs. Panel tables are
+derived summaries and can be rebuilt from those folders with ``--aggregate-only``
+without rerunning MCMC or Monte Carlo pricing.
 """
 
 from __future__ import annotations
@@ -12,6 +24,7 @@ import argparse
 import json
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 
 from bayesian_asian_options.barchart_apo import (
@@ -26,6 +39,14 @@ from experiments.wti_apo_empirical import (
     _pilot_fixing_dates,
     main as run_single_date,
 )
+
+
+_METHODS = [
+    ("Full Bayes", "fb"),
+    ("Posterior mean", "pm"),
+    ("Sigma posterior mode", "sigma_mode"),
+    ("MLE", "mle"),
+]
 
 
 def _date_audit(
@@ -117,19 +138,218 @@ def _selected_dates(
     return selected["valuation_date"].astype(str).tolist()
 
 
-def _collect_panel_outputs(output_dir: Path, apo_expiry: str, dates: list[str]) -> None:
-    """Aggregate single-date outputs into analysis-ready panel tables."""
+def _enrich_pricing_frame(
+    frame: pd.DataFrame,
+    *,
+    date: str,
+    posterior: pd.DataFrame | None,
+    manifest: dict[str, object],
+) -> pd.DataFrame:
+    """Attach run-level inference/discounting metadata to contract prices."""
+    out = frame.copy()
+    out.insert(0, "valuation_date_panel", date)
+    out["positive_volume"] = pd.to_numeric(
+        out["volume"], errors="coerce"
+    ).fillna(0.0) > 0.0
+    out["abs_fb_minus_pm"] = out["fb_minus_pm"].abs()
+
+    if posterior is not None and not posterior.empty:
+        row = posterior.iloc[0]
+        for column in [
+            "sigma_mle",
+            "sigma_posterior_mean",
+            "sigma_posterior_sd",
+            "sigma_q025",
+            "sigma_q50",
+            "sigma_q975",
+            "mu_rhat",
+            "sigma_rhat",
+        ]:
+            if column in row:
+                out[f"run_{column}"] = row[column]
+
+    discounting = manifest.get("discounting", {})
+    if isinstance(discounting, dict):
+        out["time_to_payoff_years"] = discounting.get("time_to_payoff_years")
+        out["discount_factor"] = discounting.get("discount_factor")
+    out["n_usable_returns"] = manifest.get("n_usable_returns")
+    return out
+
+
+def _error_summary_by_date(pricing: pd.DataFrame) -> pd.DataFrame:
+    """Recompute method errors by date for an arbitrary contract-level sample."""
+    columns = ["valuation_date", "method", "n", "mean_error", "mae", "rmse"]
+    if pricing.empty:
+        return pd.DataFrame(columns=columns)
+
+    rows: list[dict[str, object]] = []
+    for date, group in pricing.groupby("valuation_date_panel", sort=True):
+        for method, prefix in _METHODS:
+            err = pd.to_numeric(group[f"{prefix}_error"], errors="coerce").dropna().to_numpy()
+            if len(err) == 0:
+                continue
+            rows.append(
+                {
+                    "valuation_date": str(date),
+                    "method": method,
+                    "n": int(len(err)),
+                    "mean_error": float(np.mean(err)),
+                    "mae": float(np.mean(np.abs(err))),
+                    "rmse": float(np.sqrt(np.mean(err**2))),
+                }
+            )
+    return pd.DataFrame(rows, columns=columns)
+
+
+def _overall_error_summary(pricing: pd.DataFrame) -> pd.DataFrame:
+    """Return pooled contract-date errors for an arbitrary panel sample."""
+    columns = ["method", "n_contract_dates", "mean_error", "mae", "rmse"]
+    if pricing.empty:
+        return pd.DataFrame(columns=columns)
+
+    rows: list[dict[str, object]] = []
+    for method, prefix in _METHODS:
+        err = pd.to_numeric(pricing[f"{prefix}_error"], errors="coerce").dropna().to_numpy()
+        if len(err) == 0:
+            continue
+        rows.append(
+            {
+                "method": method,
+                "n_contract_dates": int(len(err)),
+                "mean_error": float(np.mean(err)),
+                "mae": float(np.mean(np.abs(err))),
+                "rmse": float(np.sqrt(np.mean(err**2))),
+            }
+        )
+    return pd.DataFrame(rows, columns=columns)
+
+
+def _sample_frames(
+    pricing: pd.DataFrame,
+    posterior: pd.DataFrame,
+    audit: pd.DataFrame,
+) -> dict[str, tuple[pd.DataFrame, pd.DataFrame, str]]:
+    """Split an eligible-date panel into the three documented sample views."""
+    if pricing.empty:
+        return {
+            "all_dates": (pricing.copy(), posterior.copy(), "all eligible dates and main-sample contracts"),
+            "positive_volume_dates": (
+                pricing.copy(),
+                posterior.iloc[0:0].copy(),
+                "all contracts on dates with at least one positive-volume main-sample contract",
+            ),
+            "positive_volume_contracts": (
+                pricing.copy(),
+                posterior.iloc[0:0].copy(),
+                "only contract-date observations with reported daily volume > 0",
+            ),
+        }
+
+    date_col = pricing["valuation_date_panel"].astype(str)
+    eligible_audit = audit[audit["eligible"]].copy()
+    positive_dates = set(
+        eligible_audit.loc[
+            eligible_audit["n_positive_volume"] > 0, "valuation_date"
+        ].astype(str)
+    )
+    observed_dates = set(date_col)
+    positive_dates &= observed_dates
+
+    positive_date_pricing = pricing[date_col.isin(positive_dates)].copy()
+    positive_contract_pricing = pricing[pricing["positive_volume"].fillna(False)].copy()
+
+    posterior_dates = posterior["valuation_date"].astype(str) if not posterior.empty else pd.Series(dtype=str)
+    positive_date_posterior = posterior[posterior_dates.isin(positive_dates)].copy()
+    positive_contract_dates = set(positive_contract_pricing["valuation_date_panel"].astype(str))
+    positive_contract_posterior = posterior[
+        posterior_dates.isin(positive_contract_dates)
+    ].copy()
+
+    return {
+        "all_dates": (
+            pricing.copy(),
+            posterior.copy(),
+            "all eligible dates and main-sample contracts",
+        ),
+        "positive_volume_dates": (
+            positive_date_pricing,
+            positive_date_posterior,
+            "all contracts on dates with at least one positive-volume main-sample contract",
+        ),
+        "positive_volume_contracts": (
+            positive_contract_pricing,
+            positive_contract_posterior,
+            "only contract-date observations with reported daily volume > 0",
+        ),
+    }
+
+
+def _write_sample(
+    *,
+    panel_dir: Path,
+    sample_name: str,
+    pricing: pd.DataFrame,
+    posterior: pd.DataFrame,
+    description: str,
+    apo_expiry: str,
+) -> None:
+    """Write one namespaced derived panel sample without touching other samples."""
+    sample_dir = panel_dir / sample_name
+    sample_dir.mkdir(parents=True, exist_ok=True)
+
+    pricing.to_csv(sample_dir / "panel_contract_pricing.csv", index=False)
+    _error_summary_by_date(pricing).to_csv(
+        sample_dir / "panel_error_summary.csv", index=False
+    )
+    _overall_error_summary(pricing).to_csv(
+        sample_dir / "panel_overall_error_summary.csv", index=False
+    )
+    posterior.to_csv(sample_dir / "panel_posterior_summary.csv", index=False)
+
+    dates = sorted(set(pricing.get("valuation_date_panel", pd.Series(dtype=str)).astype(str)))
+    manifest = {
+        "sample_name": sample_name,
+        "description": description,
+        "apo_expiry": apo_expiry,
+        "n_dates": len(dates),
+        "first_valuation_date": dates[0] if dates else None,
+        "last_valuation_date": dates[-1] if dates else None,
+        "n_contract_dates": int(len(pricing)),
+        "n_positive_volume_contract_dates": int(
+            pricing.get("positive_volume", pd.Series(dtype=bool)).fillna(False).sum()
+        ),
+        "derived_from": "canonical single-date run folders",
+        "note": "derived aggregation only; single-date manifests remain the provenance authority",
+    }
+    (sample_dir / "sample_manifest.json").write_text(
+        json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+
+
+def _collect_panel_outputs(
+    output_dir: Path,
+    apo_expiry: str,
+    dates: list[str],
+    audit: pd.DataFrame,
+    *,
+    positive_dates_only: bool,
+) -> None:
+    """Aggregate canonical runs and write collision-free empirical sample views."""
     pricing_frames: list[pd.DataFrame] = []
-    error_frames: list[pd.DataFrame] = []
     posterior_frames: list[pd.DataFrame] = []
     expiry_code = apo_expiry.replace("-", "")
 
     for date in dates:
         run_dir = output_dir / f"{date}_{expiry_code}"
         pricing_path = run_dir / "contract_pricing.csv"
-        error_path = run_dir / "error_summary.csv"
         posterior_path = run_dir / "posterior_summary.csv"
         manifest_path = run_dir / "manifest.json"
+
+        if not pricing_path.exists():
+            raise FileNotFoundError(
+                f"Missing canonical output for {date}: {pricing_path}. "
+                "Run without --aggregate-only first or remove the date from the request."
+            )
 
         posterior: pd.DataFrame | None = None
         if posterior_path.exists():
@@ -141,54 +361,39 @@ def _collect_panel_outputs(output_dir: Path, apo_expiry: str, dates: list[str]) 
         if manifest_path.exists():
             manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
 
-        if pricing_path.exists():
-            frame = pd.read_csv(pricing_path)
-            frame.insert(0, "valuation_date_panel", date)
-            frame["positive_volume"] = pd.to_numeric(
-                frame["volume"], errors="coerce"
-            ).fillna(0.0) > 0.0
-            frame["abs_fb_minus_pm"] = frame["fb_minus_pm"].abs()
-            if posterior is not None and not posterior.empty:
-                row = posterior.iloc[0]
-                for column in [
-                    "sigma_mle",
-                    "sigma_posterior_mean",
-                    "sigma_posterior_sd",
-                    "sigma_q025",
-                    "sigma_q50",
-                    "sigma_q975",
-                    "mu_rhat",
-                    "sigma_rhat",
-                ]:
-                    if column in row:
-                        frame[f"run_{column}"] = row[column]
-            discounting = manifest.get("discounting", {})
-            if isinstance(discounting, dict):
-                frame["time_to_payoff_years"] = discounting.get(
-                    "time_to_payoff_years"
-                )
-                frame["discount_factor"] = discounting.get("discount_factor")
-            frame["n_usable_returns"] = manifest.get("n_usable_returns")
-            pricing_frames.append(frame)
+        frame = pd.read_csv(pricing_path)
+        pricing_frames.append(
+            _enrich_pricing_frame(
+                frame,
+                date=date,
+                posterior=posterior,
+                manifest=manifest,
+            )
+        )
 
-        if error_path.exists():
-            frame = pd.read_csv(error_path)
-            frame.insert(0, "valuation_date", date)
-            error_frames.append(frame)
+    pricing = pd.concat(pricing_frames, ignore_index=True) if pricing_frames else pd.DataFrame()
+    posterior = (
+        pd.concat(posterior_frames, ignore_index=True) if posterior_frames else pd.DataFrame()
+    )
 
     panel_dir = output_dir / f"panel_{expiry_code}"
     panel_dir.mkdir(parents=True, exist_ok=True)
-    if pricing_frames:
-        pd.concat(pricing_frames, ignore_index=True).to_csv(
-            panel_dir / "panel_contract_pricing.csv", index=False
-        )
-    if error_frames:
-        pd.concat(error_frames, ignore_index=True).to_csv(
-            panel_dir / "panel_error_summary.csv", index=False
-        )
-    if posterior_frames:
-        pd.concat(posterior_frames, ignore_index=True).to_csv(
-            panel_dir / "panel_posterior_summary.csv", index=False
+    samples = _sample_frames(pricing, posterior, audit)
+
+    if positive_dates_only:
+        names = ["positive_volume_dates", "positive_volume_contracts"]
+    else:
+        names = ["all_dates", "positive_volume_dates", "positive_volume_contracts"]
+
+    for name in names:
+        sample_pricing, sample_posterior, description = samples[name]
+        _write_sample(
+            panel_dir=panel_dir,
+            sample_name=name,
+            pricing=sample_pricing,
+            posterior=sample_posterior,
+            description=description,
+            apo_expiry=apo_expiry,
         )
 
 
@@ -199,7 +404,19 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--dates", nargs="*", default=None)
     parser.add_argument("--start-date", default=None)
     parser.add_argument("--end-date", default=None)
-    parser.add_argument("--require-positive-volume", action="store_true")
+    parser.add_argument(
+        "--require-positive-volume",
+        action="store_true",
+        help=(
+            "Run/read only dates with at least one positive-volume contract. Outputs are "
+            "namespaced under positive_volume_dates/ and positive_volume_contracts/."
+        ),
+    )
+    parser.add_argument(
+        "--aggregate-only",
+        action="store_true",
+        help="Rebuild namespaced panel summaries from existing single-date run folders.",
+    )
     parser.add_argument("--list-dates", action="store_true")
     parser.add_argument("--quick", action="store_true")
     parser.add_argument("--option-data-dir", type=Path, default=ROOT / "data" / "csv")
@@ -250,52 +467,61 @@ def main(argv: list[str] | None = None) -> None:
     if not dates:
         raise SystemExit("No eligible valuation dates match the requested panel filters")
 
-    for date in dates:
-        child_args = [
-            "--valuation-date",
-            date,
-            "--apo-expiry",
-            args.apo_expiry,
-            "--history-start",
-            args.history_start,
-            "--option-data-dir",
-            str(args.option_data_dir),
-            "--cl-data-dir",
-            str(args.cl_data_dir),
-            "--cl-expiry-file",
-            str(args.cl_expiry_file),
-            "--inference-cache-dir",
-            str(args.inference_cache_dir),
-            "--treasury-dir",
-            str(args.treasury_dir),
-            "--output-dir",
-            str(args.output_dir),
-            "--download-treasury",
-            "--min-open-interest",
-            str(args.min_open_interest),
-        ]
-        if args.include_min_tick:
-            child_args.append("--include-min-tick")
-        if args.quick:
-            child_args.extend(
-                [
-                    "--chains",
-                    "2",
-                    "--n-iter",
-                    "4000",
-                    "--burn-in",
-                    "1000",
-                    "--pricing-paths",
-                    "20000",
-                    "--sigma-grid-size",
-                    "21",
-                ]
-            )
-        print(f"\n=== {date} / {args.apo_expiry} ===")
-        run_single_date(child_args)
+    if not args.aggregate_only:
+        for date in dates:
+            child_args = [
+                "--valuation-date",
+                date,
+                "--apo-expiry",
+                args.apo_expiry,
+                "--history-start",
+                args.history_start,
+                "--option-data-dir",
+                str(args.option_data_dir),
+                "--cl-data-dir",
+                str(args.cl_data_dir),
+                "--cl-expiry-file",
+                str(args.cl_expiry_file),
+                "--inference-cache-dir",
+                str(args.inference_cache_dir),
+                "--treasury-dir",
+                str(args.treasury_dir),
+                "--output-dir",
+                str(args.output_dir),
+                "--download-treasury",
+                "--min-open-interest",
+                str(args.min_open_interest),
+            ]
+            if args.include_min_tick:
+                child_args.append("--include-min-tick")
+            if args.quick:
+                child_args.extend(
+                    [
+                        "--chains",
+                        "2",
+                        "--n-iter",
+                        "4000",
+                        "--burn-in",
+                        "1000",
+                        "--pricing-paths",
+                        "20000",
+                        "--sigma-grid-size",
+                        "21",
+                    ]
+                )
+            print(f"\n=== {date} / {args.apo_expiry} ===")
+            run_single_date(child_args)
 
-    _collect_panel_outputs(args.output_dir, args.apo_expiry, dates)
-    print(f"\nCompleted {len(dates)} valuation dates. Panel outputs: {panel_dir}")
+    _collect_panel_outputs(
+        args.output_dir,
+        args.apo_expiry,
+        dates,
+        audit,
+        positive_dates_only=args.require_positive_volume,
+    )
+    print(
+        f"\nAggregated {len(dates)} valuation dates. Namespaced panel outputs: {panel_dir}"
+    )
 
 
 if __name__ == "__main__":
