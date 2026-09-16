@@ -1,0 +1,39 @@
+# Barchart CL futures histories
+
+This directory contains the author-supplied Barchart `Daily Prices` CSVs for the individual NYMEX WTI (CL) contracts needed by the observed APO maturities.
+
+The 14 contract files are:
+
+```text
+CLV26  CLX26  CLZ26  CLF27
+CLJ27  CLK27  CLV27  CLX27
+CLJ28  CLK28  CLV28  CLX28
+CLN29  CLQ29
+```
+
+They cover the two first-nearby delivery contracts required during each APO averaging month already present in the empirical option dataset.
+
+The source schema is:
+
+```text
+Time, Open, High, Low, Latest, Change, %Change, Volume, Open Int
+```
+
+`Latest` is retained as the Barchart source field. The empirical pilot uses it as an end-of-day futures price / settlement proxy; it is not claimed to be an official CME settlement without separate validation.
+
+`contract_expiries.csv` is a versioned study reference table with the CL last-trade dates required by the first-nearby fixing map. Pricing code reads that table explicitly rather than applying a hidden roll rule.
+
+The canonical loader is:
+
+```python
+from bayesian_asian_options.barchart_cl import load_barchart_cl_strip
+
+panel, manifest = load_barchart_cl_strip(
+    "data/csv/CL",
+    contracts=["CLX26", "CLZ26"],
+)
+```
+
+The October-2026 pilot valued on 2026-09-04 uses `CLX26` and `CLZ26` for its future first-nearby fixings. Historical volatility inference remains a separate Yahoo `CL=F` proxy until a complete historical monthly CL strip is available.
+
+Before making the repository or raw files public, verify Barchart redistribution/licensing terms. The scientific code, hashes, schemas, manifests and derived results should remain reproducible even if raw source files later need to be distributed separately.
