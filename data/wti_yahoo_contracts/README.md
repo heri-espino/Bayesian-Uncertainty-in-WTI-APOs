@@ -1,10 +1,12 @@
-# Local Yahoo CL contract cache
+# Yahoo WTI individual-contract cache
 
-This directory is the default cache for individual NYMEX WTI futures histories downloaded by `bayesian_asian_options.wti_yahoo_futures`.
+This directory is the local cache for contract-specific NYMEX WTI futures histories downloaded through `yfinance`, using symbols such as `CLV26.NYM`, `CLX26.NYM`, and `CLZ26.NYM`.
 
-Generated files such as `CLV26.csv` and `CLV26.json` are gitignored. The CSV stores normalized daily Yahoo Finance OHLCV history; the JSON stores source metadata, SHA-256, and the Yahoo futures settlement/expiration date when available.
+The current empirical pilot uses these individual contracts only where the actual APO mechanics require them: the valuation-date futures curve and the first-nearby contracts associated with the averaging-month fixing dates. A live workstation test showed that Yahoo may return 404 / `YFTzMissingError` for older delisted symbols such as `CLG24.NYM`; therefore the project must not assume that a complete historical strip of individual Yahoo contracts is available indefinitely.
 
-Yahoo `Close` is treated as an end-of-day **settlement proxy**. It is not renamed an official CME settlement. Publication runs should retain source-validation reports against permitted CME/Barchart reference observations.
+Physical-measure volatility inference in the current pilot uses the separate Yahoo `CL=F` continuous/front-month proxy under `data/wti_yahoo/`. That series is explicitly labelled a proxy because Yahoo does not document its historical roll convention precisely enough to call it a reconstructed contractual first-nearby series.
+
+Yahoo daily `Close` for individual contracts remains a settlement proxy until cross-validated against CME/Barchart observations. CSV and JSON cache files in this directory are gitignored; source code, hashes, manifests, diagnostics, and permitted derived summaries remain versioned.
 
 Recreate the cache with:
 

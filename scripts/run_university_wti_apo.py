@@ -40,6 +40,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--futures-reference-csv", type=Path, default=None)
     parser.add_argument("--option-data-dir", type=Path, default=ROOT / "data" / "csv")
     parser.add_argument(
+        "--inference-cache-dir",
+        type=Path,
+        default=ROOT / "data" / "wti_yahoo",
+    )
+    parser.add_argument(
         "--futures-cache-dir",
         type=Path,
         default=ROOT / "data" / "wti_yahoo_contracts",
@@ -67,10 +72,12 @@ def _print_check(args: argparse.Namespace) -> None:
     print(f"yfinance installed: {importlib.util.find_spec('yfinance') is not None}")
     treasury_files = sorted(args.treasury_dir.glob("*.csv")) if args.treasury_dir.exists() else []
     print(f"Local Treasury CSVs: {len(treasury_files)}")
-    print(f"Yahoo futures cache: {args.futures_cache_dir}")
+    print(f"Yahoo CL=F inference cache: {args.inference_cache_dir}")
+    print(f"Yahoo individual-contract curve cache: {args.futures_cache_dir}")
     print(
-        "Network requirements for a fresh run: Yahoo Finance individual CL histories; "
-        "U.S. Treasury only if the local Treasury directory is empty."
+        "Network requirements for a fresh run: Yahoo Finance CL=F history plus only the "
+        "individual CL contracts needed for the valuation-date curve; U.S. Treasury only "
+        "if the local Treasury directory is empty."
     )
 
 
@@ -83,7 +90,7 @@ def main(argv: list[str] | None = None) -> None:
     command = [
         sys.executable,
         "-m",
-        "experiments.wti_apo_empirical",
+        "experiments.wti_apo_empirical_hybrid",
         "--valuation-date",
         args.valuation_date,
         "--apo-expiry",
@@ -92,6 +99,8 @@ def main(argv: list[str] | None = None) -> None:
         args.history_start,
         "--option-data-dir",
         str(args.option_data_dir),
+        "--inference-cache-dir",
+        str(args.inference_cache_dir),
         "--futures-cache-dir",
         str(args.futures_cache_dir),
         "--treasury-dir",
