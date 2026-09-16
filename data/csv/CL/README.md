@@ -21,6 +21,8 @@ Time, Open, High, Low, Latest, Change, %Change, Volume, Open Int
 
 `Latest` is retained as the Barchart source field. The empirical pilot uses it as an end-of-day futures price / settlement proxy; it is not claimed to be an official CME settlement without separate validation.
 
+The Barchart UI was queried with a two-year history setting, but the downloaded CSVs contain only the observations Barchart actually returned for each listed contract. Several longer-dated contracts currently have only roughly August--September 2026 observations. The source manifest records each file's first/last date and row count. Therefore these files are sufficient for the 2026-09-04 pilot and nearby valuation dates, but they do not by themselves reconstruct the entire 2025--2026 historical futures curve panel.
+
 `contract_expiries.csv` is a versioned study reference table with the CL last-trade dates required by the first-nearby fixing map. Pricing code reads that table explicitly rather than applying a hidden roll rule.
 
 The canonical loader is:
