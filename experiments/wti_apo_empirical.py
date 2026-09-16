@@ -6,14 +6,18 @@ risk-neutral valuation:
 
 * Yahoo ``CL=F`` is a labelled continuous/front-month proxy for historical
   returns under :math:`P`;
-* committed Barchart ``Daily Prices`` histories provide the individual CL
-  futures curve entering the APO first-nearby fixing schedule;
+* committed Barchart ``Daily Prices`` histories provide realized first-nearby
+  fixings and the individual CL futures curve entering the remaining APO
+  fixing schedule;
 * U.S. Treasury daily par-yield data provide dated discounting under the
   documented pilot approximation.
 
 The default pilot prices the October-2026 APO cross-section observed on
-2026-09-04.  Output manifests use repository-relative paths and record the code
-commit plus runtime package versions without storing a hostname or user path.
+2026-09-04.  The same driver also supports valuation dates inside the averaging
+month: end-of-day fixings through the valuation date are treated as realized,
+while later fixings are priced from the contemporaneous futures curve. Output
+manifests use repository-relative paths and record the code commit plus runtime
+package versions without storing a hostname or user path.
 """
 
 from __future__ import annotations
@@ -51,6 +55,7 @@ from bayesian_asian_options.wti_apo_pricing import wti_apo_cross_section_mc
 from bayesian_asian_options.wti_first_nearby import (
     assign_first_nearby_contract,
     build_forward_fixing_curve,
+    build_realized_fixing_curve,
 )
 from bayesian_asian_options.wti_yahoo import (
     dataframe_sha256,
@@ -138,6 +143,22 @@ def _pilot_fixing_dates(expiry_month: str) -> pd.DatetimeIndex:
     """Return the weekday fixing schedule used by the current empirical pilot."""
     start, end = _month_bounds(expiry_month)
     return pd.bdate_range(start, end)
+
+
+def _split_fixing_dates(
+    fixing_dates: pd.DatetimeIndex,
+    valuation_date: str | pd.Timestamp,
+) -> tuple[pd.DatetimeIndex, pd.DatetimeIndex]:
+    """Split the APO calendar into realized and remaining end-of-day fixings.
+
+    Barchart option marks and CL ``Latest`` observations are end-of-day fields.
+    Accordingly, a fixing dated on the valuation date is treated as known for
+    that same end-of-day valuation.  Dates strictly after the valuation date
+    remain stochastic.
+    """
+    target = pd.Timestamp(valuation_date).normalize()
+    dates = pd.DatetimeIndex(pd.to_datetime(fixing_dates)).normalize()
+    return dates[dates <= target], dates[dates > target]
 
 
 def _candidate_curve_contracts(apo_expiry: str) -> list[str]:
@@ -366,11 +387,17 @@ def _price_cross_section(
                 }
             )
 
-    rows: list[dict[str, float | str | int | bool]] = []
+    n_realized = int(len(realized_fixings))
+    n_remaining = int(len(forward_fixings))
+    n_fixings = n_realized + n_remaining
+    if n_fixings == 0:
+        raise ValueError("The APO fixing schedule is empty")
+    fraction_fixed = n_realized / n_fixings
     expected_average = float(
-        (realized_fixings.sum() + forward_fixings.sum())
-        / (len(realized_fixings) + len(forward_fixings))
+        (realized_fixings.sum() + forward_fixings.sum()) / n_fixings
     )
+
+    rows: list[dict[str, float | str | int | bool]] = []
     for i, contract in contracts.iterrows():
         price_grid = grid_matrix[:, i]
         posterior_prices = np.interp(sigma_samples, grid, price_grid)
@@ -392,6 +419,9 @@ def _price_cross_section(
                 "volume": float(contract["volume"])
                 if pd.notna(contract["volume"])
                 else np.nan,
+                "n_realized_fixings": n_realized,
+                "n_remaining_fixings": n_remaining,
+                "fraction_fixed": fraction_fixed,
                 "expected_average": expected_average,
                 "log_moneyness": float(
                     np.log(float(contract["strike"]) / expected_average)
@@ -436,6 +466,35 @@ def _error_summary(pricing: pd.DataFrame) -> pd.DataFrame:
             }
         )
     return pd.DataFrame(rows)
+
+
+def _combine_fixing_state(
+    realized_curve: pd.DataFrame,
+    forward_curve: pd.DataFrame,
+) -> pd.DataFrame:
+    """Return one auditable table containing realized and remaining APO fixings."""
+    frames: list[pd.DataFrame] = []
+    if not realized_curve.empty:
+        realized = realized_curve.copy()
+        realized.insert(0, "fixing_status", "realized")
+        frames.append(realized)
+    if not forward_curve.empty:
+        remaining = forward_curve.copy()
+        remaining.insert(0, "fixing_status", "remaining")
+        frames.append(remaining)
+    if not frames:
+        return pd.DataFrame(
+            columns=[
+                "fixing_status",
+                "fixing_date",
+                "contract",
+                "contract_last_trade_date",
+                "settlement",
+            ]
+        )
+    return pd.concat(frames, ignore_index=True, sort=False).sort_values(
+        "fixing_date"
+    ).reset_index(drop=True)
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -487,11 +546,16 @@ def main(argv: list[str] | None = None) -> None:
     generated_at = datetime.now(timezone.utc)
     valuation_date = pd.Timestamp(args.valuation_date).normalize()
     fixing_dates = _pilot_fixing_dates(args.apo_expiry)
-    if valuation_date >= fixing_dates.min():
+    payoff_date = pd.Timestamp(fixing_dates.max()).normalize()
+    if valuation_date > payoff_date:
         raise SystemExit(
-            "The canonical pilot currently targets pre-averaging valuation dates; "
-            "partial-fixing panel support remains a separate extension."
+            f"Valuation date {valuation_date.date()} is after the last pilot fixing "
+            f"date {payoff_date.date()} for {args.apo_expiry}."
         )
+    realized_dates, remaining_dates = _split_fixing_dates(
+        fixing_dates,
+        valuation_date,
+    )
 
     option_cross_section = _load_option_cross_section(
         args.option_data_dir,
@@ -527,25 +591,51 @@ def main(argv: list[str] | None = None) -> None:
         contracts=curve_contracts,
     )
 
-    future_mapping = assign_first_nearby_contract(fixing_dates, expiry_table)
-    required_curve_contracts = future_mapping["contract"].drop_duplicates().tolist()
-    valuation_curve = barchart_cl_curve_on_date(
-        futures_panel,
-        valuation_date,
-        contracts=required_curve_contracts,
-    )
-    forward_curve = build_forward_fixing_curve(
-        fixing_dates,
+    realized_curve = build_realized_fixing_curve(
+        realized_dates,
         expiry_table,
-        valuation_curve,
+        futures_panel,
     )
-    forward_fixings = forward_curve["settlement"].to_numpy(dtype=float)
-    fixing_times = (
-        (pd.to_datetime(forward_curve["fixing_date"]) - valuation_date)
-        .dt.days.to_numpy(dtype=float)
-        / 365.25
-    )
-    realized_fixings = np.array([], dtype=float)
+    realized_fixings = realized_curve["settlement"].to_numpy(dtype=float)
+
+    if len(remaining_dates):
+        future_mapping = assign_first_nearby_contract(remaining_dates, expiry_table)
+        required_curve_contracts = (
+            future_mapping["contract"].drop_duplicates().tolist()
+        )
+        valuation_curve = barchart_cl_curve_on_date(
+            futures_panel,
+            valuation_date,
+            contracts=required_curve_contracts,
+        )
+        forward_curve = build_forward_fixing_curve(
+            remaining_dates,
+            expiry_table,
+            valuation_curve,
+        )
+        forward_fixings = forward_curve["settlement"].to_numpy(dtype=float)
+        fixing_times = (
+            (pd.to_datetime(forward_curve["fixing_date"]) - valuation_date)
+            .dt.days.to_numpy(dtype=float)
+            / 365.25
+        )
+    else:
+        required_curve_contracts = []
+        valuation_curve = pd.DataFrame(
+            columns=["contract", "settlement", "source_field", "price_interpretation"]
+        )
+        forward_curve = pd.DataFrame(
+            columns=[
+                "fixing_date",
+                "contract",
+                "contract_last_trade_date",
+                "settlement",
+            ]
+        )
+        forward_fixings = np.array([], dtype=float)
+        fixing_times = np.array([], dtype=float)
+
+    fixing_state = _combine_fixing_state(realized_curve, forward_curve)
 
     args.treasury_dir.mkdir(parents=True, exist_ok=True)
     rate_paths = sorted(args.treasury_dir.glob("*.csv"))
@@ -562,8 +652,7 @@ def main(argv: list[str] | None = None) -> None:
         )
     treasury = load_treasury_par_yields(rate_paths)
     curve = treasury_curve_on_or_before(treasury, valuation_date)
-    payoff_date = pd.Timestamp(fixing_dates.max()).normalize()
-    time_to_expiry = (payoff_date - valuation_date).days / 365.25
+    time_to_expiry = max(0.0, (payoff_date - valuation_date).days / 365.25)
     discount_factor = curve.proxy_discount_factor(time_to_expiry)
 
     pricing, pricing_grid = _price_cross_section(
@@ -594,7 +683,7 @@ def main(argv: list[str] | None = None) -> None:
     np.savez_compressed(run_dir / "posterior_draws.npz", sigma=sigma_samples)
     valuation_curve.to_csv(run_dir / "valuation_cl_curve.csv", index=False)
     expiry_table.to_csv(run_dir / "cl_expiry_table.csv", index=False)
-    forward_curve.to_csv(run_dir / "apo_fixing_state.csv", index=False)
+    fixing_state.to_csv(run_dir / "apo_fixing_state.csv", index=False)
     pricing_grid.to_csv(run_dir / "pricing_grid.csv", index=False)
     pricing.to_csv(run_dir / "contract_pricing.csv", index=False)
     errors.to_csv(run_dir / "error_summary.csv", index=False)
@@ -611,8 +700,11 @@ def main(argv: list[str] | None = None) -> None:
         str(row.contract): float(row.settlement)
         for row in valuation_curve[["contract", "settlement"]].itertuples(index=False)
     }
+    n_fixings = int(len(fixing_dates))
+    n_realized = int(len(realized_dates))
+    n_remaining = int(len(remaining_dates))
     manifest = {
-        "manifest_schema_version": 2,
+        "manifest_schema_version": 3,
         "generated_at_utc": generated_at.isoformat(),
         "runtime": _runtime_metadata(),
         "valuation_date": valuation_date.date().isoformat(),
@@ -648,7 +740,17 @@ def main(argv: list[str] | None = None) -> None:
         },
         "fixing_calendar": {
             "convention": "weekday pilot schedule",
-            "n_fixings": int(len(fixing_dates)),
+            "valuation_timestamp_convention": (
+                "end-of-day; fixing on valuation date is treated as realized"
+            ),
+            "n_fixings": n_fixings,
+            "n_realized_fixings": n_realized,
+            "n_remaining_fixings": n_remaining,
+            "fraction_fixed": n_realized / n_fixings,
+            "realized_fixing_source": (
+                "exact mapped contract/date Barchart Daily Prices Latest"
+            ),
+            "missing_realized_policy": "fail; never forward-fill a missing fixing",
             "expiry_metadata_rule": "explicit versioned CL last-trade-date table",
         },
         "discounting": {
@@ -679,9 +781,17 @@ def main(argv: list[str] | None = None) -> None:
     print(f"Run directory: {run_dir}")
     print("Inference source: Yahoo CL=F continuous/front-month proxy")
     print(f"Usable inference returns: {len(inference_returns)}")
-    print(f"Barchart CL curve contracts: {', '.join(curve_contracts)}")
-    print("Valuation-date CL curve:")
-    print(valuation_curve[["contract", "settlement"]].to_string(index=False))
+    print(f"Barchart CL histories loaded: {', '.join(curve_contracts)}")
+    print(
+        "Fixing state: "
+        f"{n_realized} realized / {n_remaining} remaining "
+        f"({n_realized / n_fixings:.1%} fixed)"
+    )
+    if required_curve_contracts:
+        print("Valuation-date CL curve:")
+        print(valuation_curve[["contract", "settlement"]].to_string(index=False))
+    else:
+        print("Valuation-date CL curve: no remaining stochastic fixings")
     print(
         "sigma posterior mean / 95% interval: "
         f"{posterior['sigma_posterior_mean']:.6f} "
