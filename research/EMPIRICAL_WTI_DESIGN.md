@@ -25,21 +25,35 @@ the final download date never defines the historical estimation sample.
 count, calendar span, and field completeness. It is not a liquidity or economic-interest
 score. Raw data, main-sample filters, and representative-contract rankings remain separate.
 
-## Historical CL source and roll-safe returns
+## Market-data source architecture
 
-The automated empirical pipeline uses **individual** Yahoo Finance NYMEX WTI contracts such
-as `CLV26.NYM`, `CLX26.NYM`, and `CLZ26.NYM`. Yahoo `CL=F` remains useful as an exploratory
-front-month proxy but is not treated as the contractual first-nearby series.
+The current empirical design separates physical-measure inference from the contract-specific
+curve used for valuation.
 
-For physical-measure inference, the first-nearby history is reconstructed from the
-individual contracts. If the active contract changes between adjacent observations, the
-corresponding log return is excluded. The difference between two contracts at the roll can
-reflect contango or backwardation and must not be interpreted as a one-day WTI diffusion
-shock.
+- **APO market marks:** committed Barchart option histories under `data/csv`.
+- **Historical volatility inference:** Yahoo `CL=F`, explicitly labelled as a continuous/front-month proxy.
+- **Valuation-date CL curve:** committed Barchart `Daily Prices` histories under `data/csv/CL`.
+- **CL last-trade dates:** explicit versioned study table `data/csv/CL/contract_expiries.csv`.
+- **Discounting:** U.S. Treasury Daily Treasury Par Yield Curve Rates.
 
-Yahoo daily `Close` is retained as an end-of-day **settlement proxy**. The pipeline supports
-a local validation table so selected closes can be compared with CME/Barchart reference
-observations without requiring proprietary source data to be committed.
+A live workstation run showed that Yahoo may return 404 / `YFTzMissingError` for older
+delisted monthly CL symbols. The canonical pilot therefore does not require Yahoo individual
+contract histories. Yahoo `CL=F` is not used as the APO fixing curve.
+
+Barchart `Latest` is retained as an end-of-day **settlement proxy**. It is not asserted to be
+an official CME settlement without separate validation.
+
+## Physical-measure return sample
+
+The current pilot estimates the GBM volatility posterior from Yahoo `CL=F` returns using only
+information available through the valuation date. This is an explicit measurement
+compromise: Yahoo does not document the historical `CL=F` roll convention precisely enough
+to call the series a self-reconstructed CME first-nearby history.
+
+If a later source provides a complete monthly CL history, the preferred robustness
+specification is to reconstruct first-nearby returns contract by contract and exclude every
+return spanning a roll. The difference between two contracts at a roll can reflect contango
+or backwardation and must not be interpreted as a one-day diffusion shock.
 
 ## Effective moneyness
 
@@ -63,7 +77,7 @@ ATM/moderate/deep buckets are descriptive reporting conventions, not acquisition
 
 ## Pricing baseline
 
-For remaining fixing date `j`, use the current futures level associated with the
+For remaining fixing date `j`, use the valuation-date Barchart CL level associated with the
 first-nearby contract, `F_j(0)`, and the transparent one-factor Q baseline
 
 \[
@@ -74,6 +88,11 @@ The observed term structure and roll enter through `F_j(0)`. Posterior uncertain
 propagated through `sigma`. Richer term-structure or stochastic-volatility models are
 robustness extensions rather than hidden changes to the baseline.
 
+For an averaging month `M`, the current-month CL contract has terminated before the averaging
+month begins. First-nearby fixings therefore use the `M+1` delivery contract until its
+last-trade date and the `M+2` delivery contract thereafter. The 14 committed Barchart CL
+files cover the two contracts required by each observed APO maturity.
+
 ## Date-specific discounting
 
 A single constant discount rate is not used for the empirical panel. The baseline source is
@@ -82,7 +101,7 @@ approximation explicit: interpolate the dated Treasury **par** curve in maturity
 that interpolated yield as a continuously compounded zero-rate proxy,
 
 \[
-D(t,T)\approx \exp[-y^{par}_{t}(T-t)(T-t)].
+D(t,T)\approx \exp[-y^{par}_{t}(\tau)\tau],\qquad \tau=T-t.
 \]
 
 This is a transparent pilot approximation, not a claim that Treasury par yields are
@@ -108,16 +127,16 @@ volatility regime, option type, partial-fixing status, and liquidity diagnostics
 ## First real-market pilot
 
 The first implemented pricing experiment is the October-2026 APO cross-section observed on
-2026-09-04. The experiment reconstructs the first-nearby CL history, removes roll-switch
-returns, runs multiple Metropolis chains using only information available by the valuation
-date, reconstructs the October first-nearby curve from exact-date individual Yahoo closes,
-uses a date-specific Treasury discount factor, and prices the observed calls/puts over a
-common sigma grid with common random numbers.
+2026-09-04. Physical-measure inference uses Yahoo `CL=F`; the valuation curve uses the
+committed Barchart `CLX26` and `CLZ26` histories. On 2026-09-04 their Barchart `Latest`
+values are 88.57 and 85.46, respectively. The fixing map uses the explicit last-trade-date
+reference table, a date-specific Treasury discount factor, and a common sigma grid with
+common random numbers.
 
-It reports Full Bayes, posterior-mean, marginal-sigma-mode, and MLE model prices against the
-Barchart market marks. The sigma mode is explicitly a marginal posterior mode, not a joint
-MAP estimate. No empirical method-ranking claim enters the manuscript until the run and its
-source validation have completed successfully.
+The experiment reports Full Bayes, posterior-mean, marginal-sigma-mode, and MLE model prices
+against the Barchart APO market marks. The sigma mode is explicitly a marginal posterior
+mode, not a joint MAP estimate. No empirical method-ranking claim enters the manuscript until
+the live run and source audits have completed successfully.
 
 The October-2026 pilot currently uses a weekday fixing schedule because the selected month
 has no full-day CME energy closure. General production-panel work must replace this pilot
@@ -127,5 +146,9 @@ fallback with an explicit exchange settlement calendar.
 
 `experiments/build_wti_apo_panel.py` recursively scans `data/csv`, decodes expiry from each
 JAO symbol rather than trusting the folder name, de-duplicates repeated downloads, and
-writes a folder/expiry mismatch report. The known `JAOU8` Sep-2028 file located under the
-`jun2029` folder remains a useful integrity check.
+writes a folder/expiry mismatch report. The CL futures directory is ignored by APO discovery
+because its filenames do not match the JAO option convention.
+
+The committed Barchart CL source files are separately parsed by
+`bayesian_asian_options.barchart_cl`. Run-level manifests record source file names, SHA-256
+hashes, observation ranges, and the exact valuation-date CL curve used for pricing.
