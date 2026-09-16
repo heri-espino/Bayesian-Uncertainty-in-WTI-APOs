@@ -41,7 +41,16 @@ git pull --ff-only origin main
 git fetch --prune
 ```
 
-Delete the merged remote branch if GitHub did not delete it automatically:
+The repository includes a read-only audit utility for branches already fully merged into `origin/main`:
+
+```bash
+python -m scripts.branch_audit --fetch
+python -m scripts.branch_audit --fetch --delete-commands
+```
+
+The second command only prints candidate deletion commands. It never deletes branches itself and deliberately does not classify branches that still have unique unmerged commits.
+
+Delete a merged remote branch if GitHub did not delete it automatically:
 
 ```bash
 git push origin --delete <branch-name>
