@@ -35,19 +35,30 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--valuation-date", default="2026-09-04")
     parser.add_argument("--apo-expiry", default="2026-10")
     parser.add_argument("--history-start", default="2024-01-01")
-    parser.add_argument("--refresh-futures", action="store_true")
+    parser.add_argument(
+        "--refresh-inference",
+        "--refresh-futures",
+        dest="refresh_inference",
+        action="store_true",
+        help="Refresh Yahoo CL=F inference data. --refresh-futures remains as a backwards-compatible alias.",
+    )
     parser.add_argument("--include-min-tick", action="store_true")
     parser.add_argument("--futures-reference-csv", type=Path, default=None)
     parser.add_argument("--option-data-dir", type=Path, default=ROOT / "data" / "csv")
     parser.add_argument(
+        "--cl-data-dir",
+        type=Path,
+        default=ROOT / "data" / "csv" / "CL",
+    )
+    parser.add_argument(
+        "--cl-expiry-file",
+        type=Path,
+        default=ROOT / "data" / "csv" / "CL" / "contract_expiries.csv",
+    )
+    parser.add_argument(
         "--inference-cache-dir",
         type=Path,
         default=ROOT / "data" / "wti_yahoo",
-    )
-    parser.add_argument(
-        "--futures-cache-dir",
-        type=Path,
-        default=ROOT / "data" / "wti_yahoo_contracts",
     )
     parser.add_argument(
         "--treasury-dir",
@@ -71,13 +82,15 @@ def _print_check(args: argparse.Namespace) -> None:
     print(f"Option data exists: {args.option_data_dir.exists()} ({args.option_data_dir})")
     print(f"yfinance installed: {importlib.util.find_spec('yfinance') is not None}")
     treasury_files = sorted(args.treasury_dir.glob("*.csv")) if args.treasury_dir.exists() else []
+    cl_files = sorted(args.cl_data_dir.glob("CL*.csv")) if args.cl_data_dir.exists() else []
     print(f"Local Treasury CSVs: {len(treasury_files)}")
+    print(f"Barchart CL files: {len(cl_files)} ({args.cl_data_dir})")
+    print(f"CL expiry reference exists: {args.cl_expiry_file.exists()} ({args.cl_expiry_file})")
     print(f"Yahoo CL=F inference cache: {args.inference_cache_dir}")
-    print(f"Yahoo individual-contract curve cache: {args.futures_cache_dir}")
     print(
-        "Network requirements for a fresh run: Yahoo Finance CL=F history plus only the "
-        "individual CL contracts needed for the valuation-date curve; U.S. Treasury only "
-        "if the local Treasury directory is empty."
+        "Network requirements for a fresh run: Yahoo Finance CL=F history; "
+        "U.S. Treasury only if the local Treasury directory is empty. "
+        "Individual CL curve data are read locally from committed Barchart CSVs."
     )
 
 
@@ -99,18 +112,20 @@ def main(argv: list[str] | None = None) -> None:
         args.history_start,
         "--option-data-dir",
         str(args.option_data_dir),
+        "--cl-data-dir",
+        str(args.cl_data_dir),
+        "--cl-expiry-file",
+        str(args.cl_expiry_file),
         "--inference-cache-dir",
         str(args.inference_cache_dir),
-        "--futures-cache-dir",
-        str(args.futures_cache_dir),
         "--treasury-dir",
         str(args.treasury_dir),
         "--output-dir",
         str(args.output_dir),
         "--download-treasury",
     ]
-    if args.refresh_futures:
-        command.append("--refresh-futures")
+    if args.refresh_inference:
+        command.append("--refresh-inference")
     if args.include_min_tick:
         command.append("--include-min-tick")
     if args.futures_reference_csv is not None:
