@@ -28,7 +28,7 @@ For each scenario the external target is
 \end{equation}
 computed from a high-precision risk-neutral pricing grid. Importantly, $C_0$ is not a posterior draw and is not constructed from any of the estimators being compared. This prevents the mechanical advantage that the posterior mean would obtain if squared error were evaluated against the posterior distribution that defines it.
 
-For method $M\in\{FB,PM,MAP,MLE\}$ and $R$ independent histories, the main statistics are
+For method $M\in\{FB,PM,Mode,MLE\}$ and $R$ independent histories, the main statistics are
 \begin{align}
  \operatorname{Bias}_M
  &=R^{-1}\sum_{j=1}^{R}(\widehat C_{M,j}-C_0),\\
