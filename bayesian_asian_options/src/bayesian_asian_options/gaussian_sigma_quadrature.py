@@ -40,6 +40,138 @@ def trapezoid_weights(grid: np.ndarray) -> np.ndarray:
     return w
 
 
+def _quadrature_density_and_node_cdf(
+    grid: np.ndarray,
+    weights: np.ndarray,
+) -> tuple[np.ndarray, np.ndarray]:
+    """Recover normalized node densities and a correct trapezoidal CDF.
+
+    ``normalized_sigma_weights`` returns *integration masses* ``q_i f_i / Z`` at the
+    quadrature nodes, where ``q_i`` are the composite-trapezoid node weights.  A cumulative
+    sum of those masses is suitable for expectations but is not the posterior CDF at the
+    grid nodes: an interior ``q_i`` includes half of the interval to the right of ``x_i``.
+
+    This helper first recovers ``f_i / Z`` by dividing by ``q_i`` and then accumulates the
+    actual trapezoidal interval masses.  The distinction matters when the posterior becomes
+    narrow relative to the grid, as in large-sample simulation-based calibration.
+    """
+    x = np.asarray(grid, dtype=float)
+    q = trapezoid_weights(x)
+    w = np.asarray(weights, dtype=float)
+    if w.ndim < 1 or w.shape[-1] != x.size:
+        raise ValueError("last weights dimension must match grid")
+    if np.any(~np.isfinite(w)) or np.any(w < 0):
+        raise ValueError("quadrature weights must be finite and non-negative")
+    totals = np.sum(w, axis=-1, keepdims=True)
+    if np.any(totals <= 0):
+        raise ValueError("quadrature weights must have positive total mass")
+    w = w / totals
+
+    density = w / q
+    dx = np.diff(x)
+    interval_mass = 0.5 * (density[..., :-1] + density[..., 1:]) * dx
+    cdf = np.concatenate(
+        [np.zeros(w.shape[:-1] + (1,), dtype=float), np.cumsum(interval_mass, axis=-1)],
+        axis=-1,
+    )
+    # Roundoff can make the final value differ microscopically from one.
+    cdf /= cdf[..., -1:]
+    cdf[..., -1] = 1.0
+    return density, cdf
+
+
+def quadrature_cdf_at(
+    grid: np.ndarray,
+    weights: np.ndarray,
+    values: np.ndarray | float,
+) -> np.ndarray:
+    """Evaluate a trapezoidal quadrature posterior CDF at arbitrary values.
+
+    The density is treated as piecewise linear between grid nodes, matching the composite
+    trapezoid rule used to normalize the posterior.  ``values`` must broadcast to the batch
+    dimensions of ``weights`` (all dimensions except the final grid dimension).
+    """
+    x = np.asarray(grid, dtype=float)
+    density, node_cdf = _quadrature_density_and_node_cdf(x, weights)
+    batch_shape = density.shape[:-1]
+    value_array = np.broadcast_to(np.asarray(values, dtype=float), batch_shape)
+    out = np.empty(batch_shape, dtype=float)
+    dx = np.diff(x)
+
+    for index in np.ndindex(batch_shape):
+        value = float(value_array[index])
+        if value <= x[0]:
+            out[index] = 0.0
+            continue
+        if value >= x[-1]:
+            out[index] = 1.0
+            continue
+        j = int(np.searchsorted(x, value, side="right") - 1)
+        fraction = (value - x[j]) / dx[j]
+        d0 = float(density[index + (j,)])
+        d1 = float(density[index + (j + 1,)])
+        partial_mass = dx[j] * (
+            d0 * fraction + 0.5 * (d1 - d0) * fraction**2
+        )
+        out[index] = float(node_cdf[index + (j,)]) + partial_mass
+    return np.clip(out, 0.0, 1.0)
+
+
+def quadrature_quantile(
+    grid: np.ndarray,
+    weights: np.ndarray,
+    probability: float,
+) -> np.ndarray:
+    """Return posterior quantiles consistent with trapezoidal normalization.
+
+    Within each grid interval the normalized density is linearly interpolated, so the CDF is
+    quadratic.  The inverse below solves that local quadratic rather than treating node
+    integration weights as point probabilities.
+    """
+    if not 0.0 <= probability <= 1.0:
+        raise ValueError("probability must lie in [0, 1]")
+    x = np.asarray(grid, dtype=float)
+    density, node_cdf = _quadrature_density_and_node_cdf(x, weights)
+    batch_shape = density.shape[:-1]
+    out = np.empty(batch_shape, dtype=float)
+    dx = np.diff(x)
+
+    if probability == 0.0:
+        out.fill(x[0])
+        return out
+    if probability == 1.0:
+        out.fill(x[-1])
+        return out
+
+    for index in np.ndindex(batch_shape):
+        cdf = node_cdf[index]
+        j = int(np.searchsorted(cdf, probability, side="right") - 1)
+        j = max(0, min(j, x.size - 2))
+        delta = float(probability - cdf[j])
+        h = float(dx[j])
+        d0 = float(density[index + (j,)])
+        d1 = float(density[index + (j + 1,)])
+        target = delta / h
+        a = 0.5 * (d1 - d0)
+        b = d0
+
+        if abs(a) <= 1e-14 * max(1.0, abs(b)):
+            fraction = target / b if b > 0 else 0.0
+        else:
+            discriminant = max(b * b + 4.0 * a * target, 0.0)
+            root = np.sqrt(discriminant)
+            candidates = ((-b + root) / (2.0 * a), (-b - root) / (2.0 * a))
+            valid = [value for value in candidates if -1e-12 <= value <= 1.0 + 1e-12]
+            if valid:
+                fraction = valid[0]
+            else:
+                interval_probability = float(cdf[j + 1] - cdf[j])
+                fraction = delta / interval_probability if interval_probability > 0 else 0.0
+
+        out[index] = x[j] + float(np.clip(fraction, 0.0, 1.0)) * h
+    return out
+
+
 def gaussian_gbm_marginal_log_posterior_sigma(
     sigma_grid: np.ndarray,
     *,

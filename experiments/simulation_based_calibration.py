@@ -24,6 +24,8 @@ from scipy.stats import kstest
 from bayesian_asian_options.gaussian_sigma_quadrature import (
     gaussian_gbm_marginal_log_posterior_sigma,
     normalized_sigma_weights,
+    quadrature_cdf_at,
+    quadrature_quantile,
 )
 
 
@@ -103,41 +105,6 @@ def _simulate_stats(
     return sums, sumsquares
 
 
-def _weighted_quantile(grid: np.ndarray, cumulative: np.ndarray, q: float) -> np.ndarray:
-    out = np.empty(cumulative.shape[0], dtype=float)
-    for i, cdf in enumerate(cumulative):
-        idx = int(np.searchsorted(cdf, q, side="left"))
-        if idx <= 0:
-            out[i] = grid[0]
-        elif idx >= len(grid):
-            out[i] = grid[-1]
-        else:
-            c0, c1 = cdf[idx - 1], cdf[idx]
-            if c1 <= c0:
-                out[i] = grid[idx]
-            else:
-                frac = (q - c0) / (c1 - c0)
-                out[i] = grid[idx - 1] + frac * (grid[idx] - grid[idx - 1])
-    return out
-
-
-def _cdf_at_truth(grid: np.ndarray, cumulative: np.ndarray, truth: np.ndarray) -> np.ndarray:
-    out = np.empty(len(truth), dtype=float)
-    for i, value in enumerate(truth):
-        if value <= grid[0]:
-            out[i] = 0.0
-            continue
-        if value >= grid[-1]:
-            out[i] = 1.0
-            continue
-        idx = int(np.searchsorted(grid, value, side="right"))
-        g0, g1 = grid[idx - 1], grid[idx]
-        c0 = cumulative[i, idx - 1]
-        c1 = cumulative[i, idx]
-        out[i] = c0 + (value - g0) / (g1 - g0) * (c1 - c0)
-    return np.clip(out, 0.0, 1.0)
-
-
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--preset", choices=("research", "monster"), default="research")
@@ -193,15 +160,18 @@ def main() -> None:
             )
             weights = normalized_sigma_weights(logp, grid, xp=xp)
             weights_np = _to_numpy(weights, resolved)
-            cumulative = np.cumsum(weights_np, axis=1)
-            cumulative[:, -1] = 1.0
-            rank = _cdf_at_truth(grid, cumulative, sigma_true)
-            q025 = _weighted_quantile(grid, cumulative, 0.025)
-            q10 = _weighted_quantile(grid, cumulative, 0.10)
-            q25 = _weighted_quantile(grid, cumulative, 0.25)
-            q75 = _weighted_quantile(grid, cumulative, 0.75)
-            q90 = _weighted_quantile(grid, cumulative, 0.90)
-            q975 = _weighted_quantile(grid, cumulative, 0.975)
+
+            # The quadrature weights are integration masses, not point probabilities.  Ranks
+            # and quantiles must therefore reconstruct the trapezoidal interval CDF rather
+            # than cumulatively summing node weights.  The latter assigns half of the next
+            # interval to each interior node and becomes visibly biased for narrow posteriors.
+            rank = quadrature_cdf_at(grid, weights_np, sigma_true)
+            q025 = quadrature_quantile(grid, weights_np, 0.025)
+            q10 = quadrature_quantile(grid, weights_np, 0.10)
+            q25 = quadrature_quantile(grid, weights_np, 0.25)
+            q75 = quadrature_quantile(grid, weights_np, 0.75)
+            q90 = quadrature_quantile(grid, weights_np, 0.90)
+            q975 = quadrature_quantile(grid, weights_np, 0.975)
             post_mean = weights_np @ grid
             rows.append(
                 pd.DataFrame(
@@ -277,6 +247,7 @@ def main() -> None:
         "total_datasets": int(len(raw)),
         "sigma_grid_points": cfg.sigma_grid_points,
         "posterior_grid_evaluations": int(len(raw) * cfg.sigma_grid_points),
+        "cdf_construction": "piecewise-linear density with trapezoidal interval integration",
         "calibration_targets": {"rank_mean": 0.5, "rank_variance": 1.0 / 12.0, "coverage_50": 0.50, "coverage_80": 0.80, "coverage_95": 0.95},
     }
     (args.output_root / f"sbc_report_{args.preset}.json").write_text(

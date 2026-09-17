@@ -47,6 +47,7 @@ data/rates/treasury/*.csv
 results/**/*.npz
 results/**/checkpoints/
 results/**/*_raw.csv
+results/**/*_raw_*.csv
 results/**/progress.json
 results/**/pricing_progress.json
 
