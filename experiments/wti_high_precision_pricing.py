@@ -9,13 +9,15 @@ error for the PI-PM gap.
 
 An arithmetic-average control variate is used because its Q expectation is known exactly from
 the realized fixings and contemporaneous futures strip.  Common random numbers are preserved
-across sigma nodes within each randomization.
+across sigma nodes within each randomization.  Every completed sigma/randomization cell is
+checkpointed, so an interrupted monster run resumes rather than discarding GPU work.
 """
 
 from __future__ import annotations
 
 import argparse
 import json
+import os
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -37,7 +39,7 @@ class Config:
     sigma_grid_points: int = 61
     n_paths: int = 1_000_000
     randomizations: int = 3
-    chunk_size: int = 100_000
+    chunk_size: int = 250_000
     root_seed: int = 20260917
 
 
@@ -47,7 +49,7 @@ class MonsterConfig(Config):
     sigma_grid_points: int = 121
     n_paths: int = 5_000_000
     randomizations: int = 4
-    chunk_size: int = 250_000
+    chunk_size: int = 1_000_000
 
 
 def _backend(name: str):
@@ -103,7 +105,11 @@ def _apo_option_mc_chunked(
     expected_average = float((realized.sum() + forwards.sum()) / n_total_fixings)
     n_future = len(forwards)
     if n_future == 0:
-        payoff = max(expected_average - strike, 0.0) if kind == "call" else max(strike - expected_average, 0.0)
+        payoff = (
+            max(expected_average - strike, 0.0)
+            if kind == "call"
+            else max(strike - expected_average, 0.0)
+        )
         price = discount * payoff
         return price, 0.0, price, 0.0
 
@@ -139,8 +145,6 @@ def _apo_option_mc_chunked(
         sum_xy += _scalar(xp.sum(x * y), resolved)
         count += m
         del z_half, z, w, future, average, payoff, y, x
-        if resolved == "cupy":
-            xp.get_default_memory_pool().free_all_blocks()
 
     n = float(count)
     mean_y = sum_y / n
@@ -176,8 +180,12 @@ def _candidate_targets(runs_root: Path, expiries: list[str], per_family: int) ->
                         "option_type": str(row.option_type),
                         "strike": float(row.strike),
                         "market_price": float(row.market_price),
-                        "pi_pm_abs": abs(float(row.full_bayes_price) - float(row.postmean_plugin_price)),
-                        "market_abs_error": abs(float(row.full_bayes_price) - float(row.market_price)),
+                        "pi_pm_abs": abs(
+                            float(row.full_bayes_price) - float(row.postmean_plugin_price)
+                        ),
+                        "market_abs_error": abs(
+                            float(row.full_bayes_price) - float(row.market_price)
+                        ),
                         "volume": float(row.volume) if pd.notna(row.volume) else np.nan,
                     }
                 )
@@ -191,6 +199,26 @@ def _candidate_targets(runs_root: Path, expiries: list[str], per_family: int) ->
         ignore_index=True,
     )
     return selected.drop_duplicates(["run_dir", "contract_id"]).reset_index(drop=True)
+
+
+def _save_target_checkpoint(
+    path: Path,
+    *,
+    grid: np.ndarray,
+    seed_curves: np.ndarray,
+    seed_ses: np.ndarray,
+    seed_raw_ses: np.ndarray,
+) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_suffix(".tmp.npz")
+    np.savez_compressed(
+        temporary,
+        grid=grid,
+        seed_curves=seed_curves,
+        seed_ses=seed_ses,
+        seed_raw_ses=seed_raw_ses,
+    )
+    os.replace(temporary, path)
 
 
 def parse_args() -> argparse.Namespace:
@@ -208,6 +236,8 @@ def main() -> None:
     args = parse_args()
     cfg: Config = MonsterConfig() if args.preset == "monster" else Config()
     args.output_root.mkdir(parents=True, exist_ok=True)
+    checkpoint_dir = args.output_root / "checkpoints" / args.preset
+    checkpoint_dir.mkdir(parents=True, exist_ok=True)
     report_path = args.output_root / f"high_precision_report_{args.preset}.json"
     if report_path.exists() and not args.force:
         print(f"Reusing completed output: {report_path}", flush=True)
@@ -225,11 +255,28 @@ def main() -> None:
         discount = float(manifest["discounting"]["discount_factor"])
         sigma_draws, posterior_source = _posterior_draws(run_dir, manifest)
         sigma_mean = float(np.mean(sigma_draws))
-        lo = max(0.005, float(np.quantile(sigma_draws, 0.0005)) * 0.85)
-        hi = max(lo + 0.02, float(np.quantile(sigma_draws, 0.9995)) * 1.15)
+        lo = max(0.005, float(np.min(sigma_draws)) * 0.95)
+        hi = max(lo + 0.02, float(np.max(sigma_draws)) * 1.05)
         grid = np.linspace(lo, hi, cfg.sigma_grid_points)
-        seed_curves = np.empty((cfg.randomizations, cfg.sigma_grid_points), dtype=float)
-        seed_ses = np.empty_like(seed_curves)
+        checkpoint = checkpoint_dir / f"target_{target_index:03d}.npz"
+
+        if checkpoint.exists() and not args.force:
+            with np.load(checkpoint, allow_pickle=False) as data:
+                stored_grid = data["grid"].astype(float)
+                if not np.array_equal(stored_grid, grid):
+                    raise RuntimeError(
+                        f"checkpoint grid mismatch for target {target_index}; remove {checkpoint} "
+                        "or use --force after changing the experiment configuration"
+                    )
+                seed_curves = data["seed_curves"].astype(float)
+                seed_ses = data["seed_ses"].astype(float)
+                seed_raw_ses = data["seed_raw_ses"].astype(float)
+        else:
+            seed_curves = np.full(
+                (cfg.randomizations, cfg.sigma_grid_points), np.nan, dtype=float
+            )
+            seed_ses = np.full_like(seed_curves, np.nan)
+            seed_raw_ses = np.full_like(seed_curves, np.nan)
 
         print(
             f"High-precision target {target_index + 1}/{len(targets)}: {target.valuation_date} "
@@ -240,7 +287,9 @@ def main() -> None:
         for seed_id in range(cfg.randomizations):
             seed = cfg.root_seed + 100_000 * target_index + 10_000 * seed_id
             for j, sigma in enumerate(grid):
-                price, se, raw, raw_se = _apo_option_mc_chunked(
+                if np.isfinite(seed_curves[seed_id, j]):
+                    continue
+                price, se, _raw, raw_se = _apo_option_mc_chunked(
                     realized=realized,
                     forwards=forwards,
                     times=times,
@@ -255,6 +304,25 @@ def main() -> None:
                 )
                 seed_curves[seed_id, j] = price
                 seed_ses[seed_id, j] = se
+                seed_raw_ses[seed_id, j] = raw_se
+                _save_target_checkpoint(
+                    checkpoint,
+                    grid=grid,
+                    seed_curves=seed_curves,
+                    seed_ses=seed_ses,
+                    seed_raw_ses=seed_raw_ses,
+                )
+                print(
+                    f"  target {target_index + 1}: randomization {seed_id + 1}/{cfg.randomizations}, "
+                    f"sigma {j + 1}/{cfg.sigma_grid_points}",
+                    flush=True,
+                )
+
+        if np.any(~np.isfinite(seed_curves)):
+            raise RuntimeError(f"incomplete high-precision checkpoint: {checkpoint}")
+
+        for seed_id in range(cfg.randomizations):
+            for j, sigma in enumerate(grid):
                 curve_rows.append(
                     {
                         "target_index": target_index,
@@ -263,9 +331,9 @@ def main() -> None:
                         "contract_id": target.contract_id,
                         "seed_id": seed_id,
                         "sigma": float(sigma),
-                        "mc_price": price,
-                        "mc_standard_error": se,
-                        "raw_standard_error": raw_se,
+                        "mc_price": float(seed_curves[seed_id, j]),
+                        "mc_standard_error": float(seed_ses[seed_id, j]),
+                        "raw_standard_error": float(seed_raw_ses[seed_id, j]),
                     }
                 )
 
@@ -288,7 +356,9 @@ def main() -> None:
         seed_pi = np.empty(cfg.randomizations)
         seed_pm = np.empty(cfg.randomizations)
         for seed_id in range(cfg.randomizations):
-            seed_pi[seed_id] = float(np.mean(np.interp(sigma_draws, grid, seed_curves[seed_id])))
+            seed_pi[seed_id] = float(
+                np.mean(np.interp(sigma_draws, grid, seed_curves[seed_id]))
+            )
             seed_pm[seed_id] = float(np.interp(sigma_mean, grid, seed_curves[seed_id]))
             seed_gaps[seed_id] = seed_pi[seed_id] - seed_pm[seed_id]
 
@@ -310,15 +380,23 @@ def main() -> None:
                 "mc_pi": mc_pi,
                 "mc_pm": mc_pm,
                 "mc_pi_minus_pm": mc_pi - mc_pm,
-                "mc_pi_minus_pm_mcse": float(np.std(seed_gaps, ddof=1) / np.sqrt(cfg.randomizations)) if cfg.randomizations > 1 else np.nan,
+                "mc_pi_minus_pm_mcse": (
+                    float(np.std(seed_gaps, ddof=1) / np.sqrt(cfg.randomizations))
+                    if cfg.randomizations > 1
+                    else np.nan
+                ),
                 "curran_pi": curran_pi,
                 "curran_pm": curran_pm,
                 "curran_pi_minus_pm": curran_pi - curran_pm,
                 "curran_minus_mc_pi": curran_pi - mc_pi,
                 "curran_minus_mc_pm": curran_pm - mc_pm,
                 "max_mean_grid_mcse": float(np.max(seed_ses.mean(axis=0))),
-                "seed_pi_sd": float(np.std(seed_pi, ddof=1)) if cfg.randomizations > 1 else np.nan,
-                "seed_pm_sd": float(np.std(seed_pm, ddof=1)) if cfg.randomizations > 1 else np.nan,
+                "seed_pi_sd": (
+                    float(np.std(seed_pi, ddof=1)) if cfg.randomizations > 1 else np.nan
+                ),
+                "seed_pm_sd": (
+                    float(np.std(seed_pm, ddof=1)) if cfg.randomizations > 1 else np.nan
+                ),
             }
         )
 
@@ -326,18 +404,25 @@ def main() -> None:
         args.output_root / f"high_precision_curves_{args.preset}.csv", index=False
     )
     summary = pd.DataFrame(summary_rows)
-    summary.to_csv(args.output_root / f"high_precision_summary_{args.preset}.csv", index=False)
+    summary.to_csv(
+        args.output_root / f"high_precision_summary_{args.preset}.csv", index=False
+    )
     report = {
         "preset": args.preset,
         "targets": int(len(targets)),
         "sigma_grid_points": cfg.sigma_grid_points,
         "paths_per_sigma_per_randomization": cfg.n_paths,
         "randomizations": cfg.randomizations,
-        "path_sigma_evaluations": int(len(targets) * cfg.sigma_grid_points * cfg.n_paths * cfg.randomizations),
+        "path_sigma_evaluations": int(
+            len(targets) * cfg.sigma_grid_points * cfg.n_paths * cfg.randomizations
+        ),
         "selection": "union of largest baseline PI-PM gaps, largest settlement errors, and largest settlement errors among positive-volume contracts",
         "control_variate": "discounted arithmetic average minus its exact Q expectation",
+        "checkpoint_policy": "Each completed target/randomization/sigma cell is atomically checkpointed and reused after interruption.",
     }
-    report_path.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    report_path.write_text(
+        json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
     print(f"Completed high-precision benchmark: {args.output_root}", flush=True)
 
 
