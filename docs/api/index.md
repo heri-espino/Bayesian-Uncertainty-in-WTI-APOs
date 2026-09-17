@@ -9,6 +9,20 @@ This is the canonical inventory of reusable public functions/classes. It is gene
 :show-inheritance:
 ```
 
+## Student-t physical-measure robustness
+
+```{automodule} bayesian_asian_options.bayesian_student_t
+:members:
+:show-inheritance:
+```
+
+## Exact Gaussian sigma quadrature
+
+```{automodule} bayesian_asian_options.gaussian_sigma_quadrature
+:members:
+:show-inheritance:
+```
+
 ## Generic Asian pricing
 
 ```{automodule} bayesian_asian_options.asian_pricing
