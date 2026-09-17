@@ -40,3 +40,25 @@ def test_metropolis_returns_positive_sigma_and_valid_acceptance():
     assert result.sigma.shape == (800,)
     assert np.all(result.sigma > 0)
     assert 0.0 < result.acceptance_rate < 1.0
+
+
+def test_metropolis_accepts_explicit_prior_hyperparameters():
+    data = gbm_log_returns(mu=0.08, sigma=0.25, dt=1 / 252, n_obs=80, seed=13)
+    baseline = random_walk_metropolis_gbm(
+        data,
+        1 / 252,
+        n_iter=800,
+        burn_in=200,
+        seed=14,
+    )
+    alternative = random_walk_metropolis_gbm(
+        data,
+        1 / 252,
+        n_iter=800,
+        burn_in=200,
+        sigma_prior_alpha=4.0,
+        sigma_prior_beta=0.6,
+        seed=14,
+    )
+    assert np.all(alternative.sigma > 0)
+    assert not np.array_equal(baseline.sigma, alternative.sigma)
