@@ -4,7 +4,10 @@ from scipy.stats import invgamma, multivariate_normal
 from bayesian_asian_options.gaussian_sigma_quadrature import (
     gaussian_gbm_marginal_log_posterior_sigma,
     gaussian_sufficient_statistics_simulation,
+    normalized_sigma_weights,
     posterior_sigma_quadrature,
+    quadrature_cdf_at,
+    quadrature_quantile,
 )
 
 
@@ -59,3 +62,19 @@ def test_quadrature_weights_normalize_and_recover_sigma_with_long_sample():
     np.testing.assert_allclose(result.weights.sum(axis=-1), 1.0, atol=1e-12)
     assert abs(float(result.mean[0]) - 0.30) < 0.02
     assert float(result.variance[0]) > 0.0
+
+
+def test_quadrature_cdf_is_exact_for_uniform_density_on_nonuniform_grid():
+    grid = np.array([0.0, 0.1, 0.4, 1.0])
+    weights = normalized_sigma_weights(np.zeros((2, len(grid))), grid)
+    values = np.array([0.05, 0.75])
+    ranks = quadrature_cdf_at(grid, weights, values)
+    np.testing.assert_allclose(ranks, values, atol=1e-12)
+
+
+def test_quadrature_quantiles_are_exact_for_uniform_density_on_nonuniform_grid():
+    grid = np.array([0.0, 0.1, 0.4, 1.0])
+    weights = normalized_sigma_weights(np.zeros((2, len(grid))), grid)
+    for probability in (0.025, 0.25, 0.5, 0.9, 0.975):
+        quantiles = quadrature_quantile(grid, weights, probability)
+        np.testing.assert_allclose(quantiles, probability, atol=1e-12)
