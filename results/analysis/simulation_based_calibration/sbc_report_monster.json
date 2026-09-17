@@ -1,0 +1,21 @@
+{
+  "backend": "cupy",
+  "calibration_targets": {
+    "coverage_50": 0.5,
+    "coverage_80": 0.8,
+    "coverage_95": 0.95,
+    "rank_mean": 0.5,
+    "rank_variance": 0.08333333333333333
+  },
+  "posterior_grid_evaluations": 819400000,
+  "preset": "monster",
+  "replications_per_n": 50000,
+  "sample_sizes": [
+    21,
+    63,
+    252,
+    1260
+  ],
+  "sigma_grid_points": 4097,
+  "total_datasets": 200000
+}

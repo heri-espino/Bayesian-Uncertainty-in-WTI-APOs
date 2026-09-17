@@ -1,0 +1,16 @@
+{
+  "burn_in_per_chain": 20000,
+  "chains": 8,
+  "checkpoint_policy": "Student-t posterior draws are checkpointed by unique valuation date and reused after interruption.",
+  "completed_runs": 16,
+  "contract_rows": 402,
+  "expiries": [
+    "2026-09",
+    "2026-10"
+  ],
+  "interpretation": "Heavy-tail robustness under P only; Q pricing dynamics and market state are unchanged from the baseline experiment.",
+  "n_iter_per_chain": 100000,
+  "preset": "monster",
+  "thin": 5,
+  "unique_valuation_dates": 12
+}

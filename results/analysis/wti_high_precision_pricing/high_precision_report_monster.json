@@ -1,0 +1,11 @@
+{
+  "checkpoint_policy": "Each completed target/randomization/sigma cell is atomically checkpointed and reused after interruption.",
+  "control_variate": "discounted arithmetic average minus its exact Q expectation",
+  "path_sigma_evaluations": 43560000000,
+  "paths_per_sigma_per_randomization": 5000000,
+  "preset": "monster",
+  "randomizations": 4,
+  "selection": "union of largest baseline PI-PM gaps, largest settlement errors, and largest settlement errors among positive-volume contracts",
+  "sigma_grid_points": 121,
+  "targets": 18
+}
