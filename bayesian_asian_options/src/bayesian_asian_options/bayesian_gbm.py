@@ -118,17 +118,26 @@ def random_walk_metropolis_gbm(
     burn_in: int = 4_000,
     theta_init: tuple[float, float] = (0.05, np.log(0.25)),
     proposal_sd: tuple[float, float] = (0.30, 0.08),
+    mu_prior_sd: float = 1.0,
+    sigma_prior_alpha: float = 2.0,
+    sigma_prior_beta: float = 0.1,
     seed: int | None = None,
 ) -> MCMCResult:
     """Sample the physical-measure GBM posterior by Random-Walk Metropolis.
 
     ``theta_init`` and ``proposal_sd`` are expressed in ``(mu, log_sigma)``.
+    ``mu_prior_sd``, ``sigma_prior_alpha``, and ``sigma_prior_beta`` are passed
+    directly to :func:`log_posterior_mu_logsigma`; their defaults preserve the
+    baseline prior used by the paper.  Exposing them allows explicit prior
+    sensitivity experiments without creating a second inference implementation.
     The function returns sigma on its natural positive scale.
     """
     if n_iter < 2:
         raise ValueError("n_iter must be at least two")
     if burn_in < 0 or burn_in >= n_iter:
         raise ValueError("burn_in must satisfy 0 <= burn_in < n_iter")
+    if mu_prior_sd <= 0 or sigma_prior_alpha <= 0 or sigma_prior_beta <= 0:
+        raise ValueError("prior hyperparameters must be positive")
 
     proposal = np.asarray(proposal_sd, dtype=float)
     if proposal.shape != (2,) or np.any(proposal <= 0):
@@ -137,12 +146,26 @@ def random_walk_metropolis_gbm(
     rng = np.random.default_rng(seed)
     chain = np.empty((n_iter, 2), dtype=float)
     chain[0] = np.asarray(theta_init, dtype=float)
-    current_logp = log_posterior_mu_logsigma(chain[0], log_returns, dt)
+    current_logp = log_posterior_mu_logsigma(
+        chain[0],
+        log_returns,
+        dt,
+        mu_prior_sd=mu_prior_sd,
+        sigma_prior_alpha=sigma_prior_alpha,
+        sigma_prior_beta=sigma_prior_beta,
+    )
     accepted = 0
 
     for i in range(1, n_iter):
         candidate = chain[i - 1] + rng.normal(0.0, proposal, size=2)
-        candidate_logp = log_posterior_mu_logsigma(candidate, log_returns, dt)
+        candidate_logp = log_posterior_mu_logsigma(
+            candidate,
+            log_returns,
+            dt,
+            mu_prior_sd=mu_prior_sd,
+            sigma_prior_alpha=sigma_prior_alpha,
+            sigma_prior_beta=sigma_prior_beta,
+        )
         if np.log(rng.uniform()) < candidate_logp - current_logp:
             chain[i] = candidate
             current_logp = candidate_logp
