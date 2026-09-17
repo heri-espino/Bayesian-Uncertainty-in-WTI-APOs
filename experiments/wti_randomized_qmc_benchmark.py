@@ -5,6 +5,10 @@ stress test.  For each selected target it generates scrambled Sobol Brownian pat
 same low-discrepancy paths over a dense sigma grid, and prices the complete posterior map.
 Independent Sobol scrambles provide an empirical randomization error for PI, PM, and PI-PM.
 
+Unlike the pseudo-random benchmark, this QMC engine deliberately uses no fitted control
+variate.  Agreement therefore reflects two materially different numerical estimators rather
+than two variants sharing the same variance-reduction regression.
+
 The target set defaults to the contracts selected by ``wti_high_precision_pricing`` when that
 file exists; otherwise it recreates the same mechanical adverse-target selection.
 """
@@ -118,7 +122,6 @@ def _qmc_price(
     sigma: float,
     discount: float,
 ) -> float:
-    n_paths = int(brownian.shape[0])
     n_future = len(forwards)
     total = len(realized) + n_future
     expected_average = float((np.sum(realized) + np.sum(forwards)) / total)
@@ -140,24 +143,8 @@ def _qmc_price(
         payoff = xp.maximum(average - float(strike), 0.0)
     else:
         payoff = xp.maximum(float(strike) - average, 0.0)
-    y = float(discount) * payoff
-
-    # The arithmetic average itself is a zero-mean control after subtracting its exact Q
-    # expectation.  Estimating beta within each randomized QMC replicate preserves the target
-    # expectation; cross-scramble dispersion is the numerical uncertainty diagnostic.
-    x = float(discount) * (average - expected_average)
-    mean_y = _scalar(xp.mean(y), resolved)
-    mean_x = _scalar(xp.mean(x), resolved)
-    xc = x - mean_x
-    yc = y - mean_y
-    var_x = _scalar(xp.mean(xc * xc), resolved)
-    if var_x > 0:
-        cov_xy = _scalar(xp.mean(xc * yc), resolved)
-        beta = cov_xy / var_x
-        price = mean_y - beta * mean_x
-    else:
-        price = mean_y
-    del future, average, payoff, y, x, xc, yc
+    price = float(discount) * _scalar(xp.mean(payoff), resolved)
+    del future, average, payoff
     return float(price)
 
 
@@ -344,7 +331,7 @@ def main() -> None:
             len(targets) * n_paths * cfg.scrambles * cfg.sigma_grid_points
         ),
         "randomization": "independently scrambled Sobol sequences; cross-scramble dispersion is used for numerical uncertainty",
-        "control_variate": "discounted arithmetic average minus its exact Q expectation",
+        "variance_reduction": "none beyond randomized low-discrepancy sampling; this is deliberate to keep the engine independent of the pseudo-random control-variate benchmark",
         "checkpoint_policy": "Each completed scramble/sigma price is checkpointed and reused after interruption.",
     }
     report_path.write_text(
