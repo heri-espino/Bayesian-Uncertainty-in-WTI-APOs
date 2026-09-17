@@ -1,0 +1,12 @@
+{
+  "checkpoint_policy": "Each completed scramble/sigma price is checkpointed and reused after interruption.",
+  "path_sigma_evaluations": 16240345088,
+  "paths_per_scramble": 2097152,
+  "preset": "monster",
+  "randomization": "independently scrambled Sobol sequences; cross-scramble dispersion is used for numerical uncertainty",
+  "scrambles": 8,
+  "sigma_grid_points": 121,
+  "sobol_power": 21,
+  "targets": 8,
+  "variance_reduction": "none beyond randomized low-discrepancy sampling; this is deliberate to keep the engine independent of the pseudo-random control-variate benchmark"
+}
