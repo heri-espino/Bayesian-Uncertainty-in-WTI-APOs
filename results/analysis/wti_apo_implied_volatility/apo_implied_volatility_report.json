@@ -1,0 +1,22 @@
+{
+  "completed_dates": 16,
+  "contract_date_rows": 402,
+  "definition": "APO-implied Q volatility under the paper's one-factor lognormal futures dynamics, using Curran (1994) conditioning and observed Barchart APO settlements",
+  "expiries": [
+    "2026-09",
+    "2026-10"
+  ],
+  "interpretation_guardrail": "These are risk-neutral volatilities implied by the APO cross-section itself. They are not an independent external Q-volatility source and should not be presented as one.",
+  "iv_solved_fraction": 1.0,
+  "iv_solved_rows": 402,
+  "median_apo_implied_sigma_q": 0.48350611070181204,
+  "median_full_sample_sigma_q": 0.4576960246777355,
+  "median_full_sample_sigma_q_minus_sigma_p": 0.04250999001526967,
+  "median_sigma_p_posterior_mean": 0.41546248991708323,
+  "min_calibration_contracts": 3,
+  "out_of_sample_design": "Leave-one-contract-out calibration excludes each target contract; cross-option-type transfer calibrates on calls and evaluates puts, and vice versa.",
+  "sigma_bounds": [
+    1e-06,
+    3.0
+  ]
+}
