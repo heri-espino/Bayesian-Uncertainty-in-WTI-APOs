@@ -1,0 +1,71 @@
+{
+  "backend": "cupy",
+  "completed_at_utc": "2026-09-17T19:17:06.995886+00:00",
+  "config": {
+    "forward_level": 100.0,
+    "fraction_fixed_values": [
+      0.0,
+      0.25,
+      0.5,
+      0.75,
+      0.9,
+      0.975
+    ],
+    "historical_dt": 0.003968253968253968,
+    "maturity_days": [
+      21,
+      63,
+      126,
+      252
+    ],
+    "moneyness_values": [
+      0.6,
+      0.75,
+      0.9,
+      1.0,
+      1.1,
+      1.25,
+      1.5
+    ],
+    "mu_prior_sd": 1.0,
+    "mu_true": 0.08,
+    "r": 0.03,
+    "replications": 5000,
+    "root_seed": 20260917,
+    "sample_sizes": [
+      21,
+      42,
+      63,
+      126,
+      252,
+      504,
+      1260
+    ],
+    "sigma_grid_max": 2.5,
+    "sigma_grid_min": 0.005,
+    "sigma_grid_points": 4097,
+    "sigma_prior_alpha": 2.0,
+    "sigma_prior_beta": 0.1,
+    "sigma_true_values": [
+      0.1,
+      0.2,
+      0.35,
+      0.5,
+      0.8
+    ],
+    "total_fixings": 22
+  },
+  "config_fingerprint": "200169bc7780a11d",
+  "contract_scenarios": 168,
+  "git_commit": "01bcc665cf085b95d72f9dc5a90bc61701000bba",
+  "interpretation": "Exact-in-mu, dense-grid quadrature under the paper's Gaussian GBM posterior; Curran pricing is used to map posterior sigma uncertainty into WTI-like arithmetic-average option values.",
+  "logical_cpu_count": 32,
+  "max_observed_abs_pi_minus_pm": 0.13836448229415188,
+  "max_p99_abs_pi_minus_pm": 0.1270730579715583,
+  "platform": "Windows-10-10.0.26100-SP0",
+  "posterior_grid_evaluations": 716975000,
+  "preset": "monster",
+  "script_version": "1.0.0",
+  "summary_rows": 5880,
+  "synthetic_datasets": 175000
+}
