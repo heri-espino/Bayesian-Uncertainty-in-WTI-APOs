@@ -1,0 +1,14 @@
+{
+  "expiries": [
+    "2026-09",
+    "2026-10"
+  ],
+  "information_guardrail": "Every sigma_Q prediction uses only APO implied-volatility observations from dates strictly earlier than the target valuation date.",
+  "methods": [
+    "expanding_smile",
+    "previous_day_smile"
+  ],
+  "prediction_rows": 690,
+  "same_day_iv_usage": "Observed same-day IV is retained only as an ex-post diagnostic target and is never used in fitting or pricing the target date.",
+  "target_dates": 10
+}
