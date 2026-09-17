@@ -1,0 +1,49 @@
+{
+  "available_returns": 673,
+  "configuration_id": "688a23b142146234",
+  "contract_id": "jaov6_10300c",
+  "interpretation": "This isolates sensitivity to estimation-window length and inverse-gamma hyperparameters. It does not replace the Monte Carlo market-pricing baseline or constitute robustness to every possible prior family.",
+  "max_abs_pi_change_vs_baseline_same_window": 0.038441493327852516,
+  "max_abs_pi_minus_pm": 0.014717382008851088,
+  "max_sigma_rhat": 1.0043970135464113,
+  "mcmc": {
+    "burn_in_per_chain": 600,
+    "chains": 2,
+    "n_iter_per_chain": 3000,
+    "root_seed": 20260917
+  },
+  "option_type": "call",
+  "pricing_engine": "Curran (1994) geometric-conditioning approximation under the baseline one-factor futures Q model",
+  "priors": [
+    {
+      "alpha": 2.0,
+      "beta": 0.1,
+      "mean_sigma": 0.1,
+      "name": "baseline",
+      "sd_sigma": null
+    },
+    {
+      "alpha": 3.0,
+      "beta": 0.8,
+      "mean_sigma": 0.4,
+      "name": "wti_centered_broad",
+      "sd_sigma": 0.4
+    },
+    {
+      "alpha": 10.0,
+      "beta": 3.6,
+      "mean_sigma": 0.4,
+      "name": "wti_centered_moderate",
+      "sd_sigma": 0.1414213562373095
+    }
+  ],
+  "source_run": "results\\wti_apo_empirical\\2026-09-04_202610",
+  "strike": 103.0,
+  "windows": [
+    63,
+    126,
+    252,
+    504,
+    673
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "apo_expiry": "2026-10",
+  "benchmark_definition": "Curran (1994) geometric-conditioning approximation under the paper's same one-factor lognormal futures dynamics and stored first-nearby fixing state",
+  "caution": "This experiment does not assert that the implemented Curran approximation is an exact reproduction of CME's complete settlement implementation.",
+  "completed_dates": 12,
+  "contract_date_rows": 310,
+  "curran_sigma_grid_points": 401,
+  "legacy_posterior_policy": "If posterior_draws.npz is absent, replay the canonical empirical MCMC from inference_return_audit.csv and manifest settings, and verify the reconstructed posterior mean against posterior_summary.csv before pricing.",
+  "market_field_interpretation": "Barchart Latest is treated as the end-of-day settlement supplied in the source histories",
+  "max_abs_curran_pi_minus_mc_pi": 0.03259401865771405,
+  "mean_abs_curran_pi_minus_mc_pi": 0.015326635804728254,
+  "mean_abs_curran_pi_minus_pm": 0.0007542102429950253,
+  "mean_abs_curran_pm_minus_mc_pm": 0.015320425498787224,
+  "mean_abs_mc_pi_minus_pm": 0.0007451322749686829,
+  "positive_volume_rows": 6,
+  "posterior_source_date_counts": {
+    "reconstructed_from_inference_return_audit": 12
+  },
+  "source_runs_root": "results\\wti_apo_empirical"
+}
