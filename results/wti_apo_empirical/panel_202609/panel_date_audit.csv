@@ -1,0 +1,213 @@
+valuation_date,n_raw_options,n_main_sample,n_positive_volume,total_volume,n_realized_fixings,n_remaining_fixings,fraction_fixed,realized_fixings_available,curve_available,eligible,availability_note
+2025-11-06,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2025-11-06 for: CLV26, CLX26"
+2025-11-07,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2025-11-07 for: CLV26, CLX26"
+2025-11-10,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2025-11-10 for: CLV26, CLX26"
+2025-11-11,1,1,1,500.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2025-11-11 for: CLV26, CLX26"
+2025-11-12,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2025-11-12 for: CLV26, CLX26"
+2025-11-13,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2025-11-13 for: CLV26, CLX26"
+2025-11-14,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2025-11-14 for: CLV26, CLX26"
+2025-11-17,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2025-11-17 for: CLV26, CLX26"
+2025-11-18,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2025-11-18 for: CLV26, CLX26"
+2025-11-19,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2025-11-19 for: CLV26, CLX26"
+2025-11-20,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2025-11-20 for: CLV26, CLX26"
+2025-11-21,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2025-11-21 for: CLV26, CLX26"
+2025-11-24,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2025-11-24 for: CLV26, CLX26"
+2025-11-25,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2025-11-25 for: CLV26, CLX26"
+2025-11-26,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2025-11-26 for: CLV26, CLX26"
+2025-11-28,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2025-11-28 for: CLV26, CLX26"
+2025-12-01,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2025-12-01 for: CLV26, CLX26"
+2025-12-02,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2025-12-02 for: CLV26, CLX26"
+2025-12-03,1,1,1,100.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2025-12-03 for: CLV26, CLX26"
+2025-12-04,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2025-12-04 for: CLV26, CLX26"
+2025-12-05,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2025-12-05 for: CLV26, CLX26"
+2025-12-08,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2025-12-08 for: CLV26, CLX26"
+2025-12-09,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2025-12-09 for: CLV26, CLX26"
+2025-12-10,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2025-12-10 for: CLV26, CLX26"
+2025-12-11,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2025-12-11 for: CLV26, CLX26"
+2025-12-12,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2025-12-12 for: CLV26, CLX26"
+2025-12-15,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2025-12-15 for: CLV26, CLX26"
+2025-12-16,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2025-12-16 for: CLV26, CLX26"
+2025-12-17,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2025-12-17 for: CLV26, CLX26"
+2025-12-18,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2025-12-18 for: CLV26, CLX26"
+2025-12-19,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2025-12-19 for: CLV26, CLX26"
+2025-12-22,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2025-12-22 for: CLV26, CLX26"
+2025-12-23,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2025-12-23 for: CLV26, CLX26"
+2025-12-24,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2025-12-24 for: CLV26, CLX26"
+2025-12-26,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2025-12-26 for: CLV26, CLX26"
+2025-12-29,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2025-12-29 for: CLV26, CLX26"
+2025-12-30,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2025-12-30 for: CLV26, CLX26"
+2025-12-31,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2025-12-31 for: CLV26, CLX26"
+2026-01-02,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-01-02 for: CLV26, CLX26"
+2026-01-05,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-01-05 for: CLV26, CLX26"
+2026-01-06,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-01-06 for: CLV26, CLX26"
+2026-01-07,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-01-07 for: CLV26, CLX26"
+2026-01-08,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-01-08 for: CLV26, CLX26"
+2026-01-09,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-01-09 for: CLV26, CLX26"
+2026-01-12,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-01-12 for: CLV26, CLX26"
+2026-01-13,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-01-13 for: CLV26, CLX26"
+2026-01-14,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-01-14 for: CLV26, CLX26"
+2026-01-15,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-01-15 for: CLV26, CLX26"
+2026-01-16,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-01-16 for: CLV26, CLX26"
+2026-01-20,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-01-20 for: CLV26, CLX26"
+2026-01-21,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-01-21 for: CLV26, CLX26"
+2026-01-22,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-01-22 for: CLV26, CLX26"
+2026-01-23,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-01-23 for: CLV26, CLX26"
+2026-01-26,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-01-26 for: CLV26, CLX26"
+2026-01-27,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-01-27 for: CLV26, CLX26"
+2026-01-28,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-01-28 for: CLV26, CLX26"
+2026-01-29,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-01-29 for: CLV26, CLX26"
+2026-01-30,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-01-30 for: CLV26, CLX26"
+2026-02-02,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-02-02 for: CLV26, CLX26"
+2026-02-03,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-02-03 for: CLV26, CLX26"
+2026-02-04,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-02-04 for: CLV26, CLX26"
+2026-02-05,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-02-05 for: CLV26, CLX26"
+2026-02-06,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-02-06 for: CLV26, CLX26"
+2026-02-09,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-02-09 for: CLV26, CLX26"
+2026-02-10,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-02-10 for: CLV26, CLX26"
+2026-02-11,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-02-11 for: CLV26, CLX26"
+2026-02-12,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-02-12 for: CLV26, CLX26"
+2026-02-13,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-02-13 for: CLV26, CLX26"
+2026-02-17,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-02-17 for: CLV26, CLX26"
+2026-02-18,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-02-18 for: CLV26, CLX26"
+2026-02-19,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-02-19 for: CLV26, CLX26"
+2026-02-20,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-02-20 for: CLV26, CLX26"
+2026-02-23,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-02-23 for: CLV26, CLX26"
+2026-02-24,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-02-24 for: CLV26, CLX26"
+2026-02-25,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-02-25 for: CLV26, CLX26"
+2026-02-26,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-02-26 for: CLV26, CLX26"
+2026-02-27,1,1,1,250.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-02-27 for: CLV26, CLX26"
+2026-03-02,1,1,1,250.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-03-02 for: CLV26, CLX26"
+2026-03-03,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-03-03 for: CLV26, CLX26"
+2026-03-04,1,1,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-03-04 for: CLV26, CLX26"
+2026-03-05,1,1,1,180.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-03-05 for: CLV26, CLX26"
+2026-03-06,1,1,1,650.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-03-06 for: CLV26, CLX26"
+2026-03-09,3,3,1,95.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-03-09 for: CLV26, CLX26"
+2026-03-10,3,3,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-03-10 for: CLV26, CLX26"
+2026-03-11,4,4,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-03-11 for: CLV26, CLX26"
+2026-03-12,6,6,3,260.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-03-12 for: CLV26, CLX26"
+2026-03-13,8,8,1,20.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-03-13 for: CLV26, CLX26"
+2026-03-16,8,8,1,8.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-03-16 for: CLV26, CLX26"
+2026-03-17,9,9,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-03-17 for: CLV26, CLX26"
+2026-03-18,9,9,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-03-18 for: CLV26, CLX26"
+2026-03-19,10,10,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-03-19 for: CLV26, CLX26"
+2026-03-20,12,12,1,32.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-03-20 for: CLV26, CLX26"
+2026-03-23,15,15,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-03-23 for: CLV26, CLX26"
+2026-03-24,15,15,1,3.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-03-24 for: CLV26, CLX26"
+2026-03-25,16,16,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-03-25 for: CLV26, CLX26"
+2026-03-26,16,16,1,100.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-03-26 for: CLV26, CLX26"
+2026-03-27,16,16,3,136.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-03-27 for: CLV26, CLX26"
+2026-03-30,16,16,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-03-30 for: CLV26, CLX26"
+2026-03-31,17,17,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-03-31 for: CLV26, CLX26"
+2026-04-01,17,17,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-04-01 for: CLV26, CLX26"
+2026-04-02,17,17,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-04-02 for: CLV26, CLX26"
+2026-04-06,17,17,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-04-06 for: CLV26, CLX26"
+2026-04-07,17,17,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-04-07 for: CLV26, CLX26"
+2026-04-08,17,17,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-04-08 for: CLV26, CLX26"
+2026-04-09,17,17,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-04-09 for: CLV26, CLX26"
+2026-04-10,17,17,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-04-10 for: CLV26, CLX26"
+2026-04-13,17,17,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-04-13 for: CLV26, CLX26"
+2026-04-14,17,17,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-04-14 for: CLV26, CLX26"
+2026-04-15,17,17,1,20.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-04-15 for: CLV26, CLX26"
+2026-04-16,17,17,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-04-16 for: CLV26, CLX26"
+2026-04-17,17,17,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-04-17 for: CLV26, CLX26"
+2026-04-20,17,17,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-04-20 for: CLV26, CLX26"
+2026-04-21,17,17,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-04-21 for: CLV26, CLX26"
+2026-04-22,17,17,1,15.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-04-22 for: CLV26, CLX26"
+2026-04-23,18,18,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-04-23 for: CLV26, CLX26"
+2026-04-24,18,18,1,70.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-04-24 for: CLV26, CLX26"
+2026-04-27,18,18,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-04-27 for: CLV26, CLX26"
+2026-04-28,18,18,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-04-28 for: CLV26, CLX26"
+2026-04-29,18,18,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-04-29 for: CLV26, CLX26"
+2026-04-30,19,19,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-04-30 for: CLV26, CLX26"
+2026-05-01,19,19,1,100.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-05-01 for: CLV26, CLX26"
+2026-05-04,19,19,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-05-04 for: CLV26, CLX26"
+2026-05-05,19,19,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-05-05 for: CLV26, CLX26"
+2026-05-06,19,19,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-05-06 for: CLV26, CLX26"
+2026-05-07,20,20,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-05-07 for: CLV26, CLX26"
+2026-05-08,20,20,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-05-08 for: CLV26, CLX26"
+2026-05-11,20,20,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-05-11 for: CLV26, CLX26"
+2026-05-12,20,20,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-05-12 for: CLV26, CLX26"
+2026-05-13,20,20,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-05-13 for: CLV26, CLX26"
+2026-05-14,20,20,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-05-14 for: CLV26, CLX26"
+2026-05-15,20,20,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-05-15 for: CLV26, CLX26"
+2026-05-18,23,23,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-05-18 for: CLV26, CLX26"
+2026-05-19,23,23,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-05-19 for: CLV26, CLX26"
+2026-05-20,23,23,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-05-20 for: CLV26, CLX26"
+2026-05-21,23,23,1,20.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-05-21 for: CLV26, CLX26"
+2026-05-22,23,23,1,280.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-05-22 for: CLV26, CLX26"
+2026-05-26,23,23,1,280.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-05-26 for: CLV26, CLX26"
+2026-05-27,23,23,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-05-27 for: CLV26, CLX26"
+2026-05-28,23,23,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-05-28 for: CLV26, CLX26"
+2026-05-29,23,23,1,20.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-05-29 for: CLV26, CLX26"
+2026-06-01,23,23,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-06-01 for: CLV26, CLX26"
+2026-06-02,23,23,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-06-02 for: CLV26, CLX26"
+2026-06-03,23,23,3,200.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-06-03 for: CLV26, CLX26"
+2026-06-04,23,23,1,100.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-06-04 for: CLV26, CLX26"
+2026-06-05,23,23,1,320.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-06-05 for: CLV26, CLX26"
+2026-06-08,23,23,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-06-08 for: CLV26, CLX26"
+2026-06-09,23,23,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-06-09 for: CLV26, CLX26"
+2026-06-10,23,23,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-06-10 for: CLV26, CLX26"
+2026-06-11,24,24,1,280.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-06-11 for: CLV26, CLX26"
+2026-06-12,24,24,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-06-12 for: CLV26, CLX26"
+2026-06-15,24,24,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-06-15 for: CLV26, CLX26"
+2026-06-16,24,24,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-06-16 for: CLV26, CLX26"
+2026-06-17,24,24,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-06-17 for: CLV26, CLX26"
+2026-06-18,24,24,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-06-18 for: CLV26, CLX26"
+2026-06-22,24,24,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-06-22 for: CLV26, CLX26"
+2026-06-23,24,24,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-06-23 for: CLV26, CLX26"
+2026-06-24,24,24,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-06-24 for: CLV26, CLX26"
+2026-06-25,24,24,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-06-25 for: CLV26, CLX26"
+2026-06-26,24,24,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-06-26 for: CLV26, CLX26"
+2026-06-29,24,24,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-06-29 for: CLV26, CLX26"
+2026-06-30,24,24,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-06-30 for: CLV26, CLX26"
+2026-07-01,24,24,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-07-01 for: CLV26, CLX26"
+2026-07-02,24,24,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-07-02 for: CLV26, CLX26"
+2026-07-06,24,24,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-07-06 for: CLV26, CLX26"
+2026-07-07,24,24,1,350.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-07-07 for: CLV26, CLX26"
+2026-07-08,24,24,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-07-08 for: CLV26, CLX26"
+2026-07-09,24,24,0,0.0,0,22,0.0,True,False,False,No exact Barchart CL price on 2026-07-09 for: CLX26
+2026-07-10,24,24,1,900.0,0,22,0.0,True,False,False,No exact Barchart CL price on 2026-07-10 for: CLX26
+2026-07-13,24,24,0,0.0,0,22,0.0,True,False,False,No exact Barchart CL price on 2026-07-13 for: CLX26
+2026-07-14,24,24,0,0.0,0,22,0.0,True,False,False,No exact Barchart CL price on 2026-07-14 for: CLX26
+2026-07-15,24,24,0,0.0,0,22,0.0,True,False,False,No exact Barchart CL price on 2026-07-15 for: CLX26
+2026-07-16,24,24,0,0.0,0,22,0.0,True,False,False,No exact Barchart CL price on 2026-07-16 for: CLX26
+2026-07-17,24,24,0,0.0,0,22,0.0,True,False,False,No exact Barchart CL price on 2026-07-17 for: CLX26
+2026-07-20,24,24,0,0.0,0,22,0.0,True,False,False,No exact Barchart CL price on 2026-07-20 for: CLX26
+2026-07-21,24,24,1,4.0,0,22,0.0,True,False,False,No exact Barchart CL price on 2026-07-21 for: CLX26
+2026-07-22,24,24,1,21.0,0,22,0.0,True,False,False,No exact Barchart CL price on 2026-07-22 for: CLX26
+2026-07-23,25,25,1,1.0,0,22,0.0,True,False,False,No exact Barchart CL price on 2026-07-23 for: CLX26
+2026-07-24,29,29,0,0.0,0,22,0.0,True,False,False,No exact Barchart CL price on 2026-07-24 for: CLX26
+2026-07-27,29,29,0,0.0,0,22,0.0,True,False,False,No exact Barchart CL price on 2026-07-27 for: CLX26
+2026-07-28,29,29,0,0.0,0,22,0.0,True,False,False,No exact Barchart CL price on 2026-07-28 for: CLX26
+2026-07-29,29,29,0,0.0,0,22,0.0,True,False,False,No exact Barchart CL price on 2026-07-29 for: CLX26
+2026-07-30,29,29,0,0.0,0,22,0.0,True,False,False,No exact Barchart CL price on 2026-07-30 for: CLX26
+2026-07-31,29,29,0,0.0,0,22,0.0,True,False,False,No exact Barchart CL price on 2026-07-31 for: CLX26
+2026-08-03,29,29,0,0.0,0,22,0.0,True,False,False,No exact Barchart CL price on 2026-08-03 for: CLX26
+2026-08-04,29,29,0,0.0,0,22,0.0,True,False,False,No exact Barchart CL price on 2026-08-04 for: CLX26
+2026-08-05,29,29,0,0.0,0,22,0.0,True,False,False,No exact Barchart CL price on 2026-08-05 for: CLX26
+2026-08-06,29,29,1,30.0,0,22,0.0,True,False,False,No exact Barchart CL price on 2026-08-06 for: CLX26
+2026-08-07,29,29,0,0.0,0,22,0.0,True,False,False,No exact Barchart CL price on 2026-08-07 for: CLX26
+2026-08-10,29,29,0,0.0,0,22,0.0,True,False,False,No exact Barchart CL price on 2026-08-10 for: CLX26
+2026-08-11,29,29,0,0.0,0,22,0.0,True,False,False,No exact Barchart CL price on 2026-08-11 for: CLX26
+2026-08-12,29,29,0,0.0,0,22,0.0,True,False,False,No exact Barchart CL price on 2026-08-12 for: CLX26
+2026-08-13,29,29,0,0.0,0,22,0.0,True,False,False,No exact Barchart CL price on 2026-08-13 for: CLX26
+2026-08-14,29,29,0,0.0,0,22,0.0,True,False,False,No exact Barchart CL price on 2026-08-14 for: CLX26
+2026-08-17,29,29,0,0.0,0,22,0.0,True,False,False,No exact Barchart CL price on 2026-08-17 for: CLX26
+2026-08-18,29,29,1,7.0,0,22,0.0,True,False,False,No exact Barchart CL price on 2026-08-18 for: CLX26
+2026-08-19,29,29,2,508.0,0,22,0.0,True,False,False,No exact Barchart CL price on 2026-08-19 for: CLX26
+2026-08-20,29,29,0,0.0,0,22,0.0,True,False,False,No exact Barchart CL price on 2026-08-20 for: CLX26
+2026-08-21,30,30,1,1000.0,0,22,0.0,True,False,False,No exact Barchart CL price on 2026-08-21 for: CLX26
+2026-08-24,30,30,1,1000.0,0,22,0.0,True,False,False,No exact Barchart CL price on 2026-08-24 for: CLX26
+2026-08-25,30,28,1,50.0,0,22,0.0,True,True,True,
+2026-08-26,30,27,0,0.0,0,22,0.0,True,True,True,
+2026-08-27,30,27,1,15.0,0,22,0.0,True,True,True,
+2026-08-28,30,26,1,15.0,0,22,0.0,True,True,True,
+2026-08-31,30,26,1,15.0,0,22,0.0,True,True,True,
+2026-09-01,30,27,1,30.0,1,21,0.045454545454545456,True,True,True,
+2026-09-02,30,23,1,30.0,2,20,0.09090909090909091,True,True,True,
+2026-09-03,30,22,1,15.0,3,19,0.13636363636363635,True,True,True,
+2026-09-04,30,20,0,0.0,4,18,0.18181818181818182,True,True,True,
+2026-09-08,30,17,0,0.0,6,16,0.2727272727272727,False,True,False,Missing realized first-nearby settlements for fixing dates: 2026-09-07:CLV26
+2026-09-09,30,16,0,0.0,7,15,0.3181818181818182,False,True,False,Missing realized first-nearby settlements for fixing dates: 2026-09-07:CLV26
+2026-09-10,30,18,0,0.0,8,14,0.36363636363636365,False,True,False,Missing realized first-nearby settlements for fixing dates: 2026-09-07:CLV26
+2026-09-11,30,0,0,0.0,9,13,0.4090909090909091,False,True,False,Missing realized first-nearby settlements for fixing dates: 2026-09-07:CLV26
