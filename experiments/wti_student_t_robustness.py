@@ -2,7 +2,7 @@
 
 The experiment replaces only the Gaussian return innovations under P with standardized
 Student-t innovations.  Pricing under Q, the observed futures curve, realized APO fixings,
-and the Curran pricing map are held fixed.  This isolates whether the empirical conclusion
+and the Curran price map are held fixed.  This isolates whether the empirical conclusion
 about posterior parameter integration is an artifact of Gaussian historical returns.
 
 Examples
@@ -170,6 +170,8 @@ def main() -> None:
     args = parse_args()
     cfg: Config = MonsterConfig() if args.preset == "monster" else Config()
     args.output_root.mkdir(parents=True, exist_ok=True)
+    checkpoint_dir = args.output_root / "checkpoints" / args.preset
+    checkpoint_dir.mkdir(parents=True, exist_ok=True)
     contract_path = args.output_root / f"student_t_contract_pricing_{args.preset}.csv"
     if contract_path.exists() and not args.force:
         print(f"Reusing completed output: {contract_path}", flush=True)
@@ -189,17 +191,36 @@ def main() -> None:
         valuation_date = str(manifest["valuation_date"])
         expiry = str(manifest["apo_expiry"])
         if valuation_date not in posterior_cache:
-            returns = _usable_returns(run_dir, manifest)
-            print(
-                f"Student-t posterior {valuation_date}: n={len(returns)}, chains={cfg.chains}, "
-                f"iter={cfg.n_iter}",
-                flush=True,
-            )
-            posterior_cache[valuation_date] = _student_posterior(
-                returns,
-                cfg=cfg,
-                date_key=run_index + 1,
-            )
+            checkpoint = checkpoint_dir / f"{valuation_date}.npz"
+            if checkpoint.exists() and not args.force:
+                with np.load(checkpoint, allow_pickle=False) as data:
+                    posterior_cache[valuation_date] = {
+                        "mu": data["mu"].astype(float),
+                        "sigma": data["sigma"].astype(float),
+                        "nu": data["nu"].astype(float),
+                        "acceptance": data["acceptance"].astype(float),
+                    }
+                print(f"Reusing Student-t posterior checkpoint {valuation_date}", flush=True)
+            else:
+                returns = _usable_returns(run_dir, manifest)
+                print(
+                    f"Student-t posterior {valuation_date}: n={len(returns)}, chains={cfg.chains}, "
+                    f"iter={cfg.n_iter}",
+                    flush=True,
+                )
+                posterior = _student_posterior(
+                    returns,
+                    cfg=cfg,
+                    date_key=run_index + 1,
+                )
+                posterior_cache[valuation_date] = posterior
+                np.savez_compressed(
+                    checkpoint,
+                    mu=np.asarray(posterior["mu"], dtype=float),
+                    sigma=np.asarray(posterior["sigma"], dtype=float),
+                    nu=np.asarray(posterior["nu"], dtype=float),
+                    acceptance=np.asarray(posterior["acceptance"], dtype=float),
+                )
         posterior = posterior_cache[valuation_date]
         sigma_draws = np.asarray(posterior["sigma"], dtype=float)
         sigma_mean = float(np.mean(sigma_draws))
@@ -287,6 +308,7 @@ def main() -> None:
         "n_iter_per_chain": cfg.n_iter,
         "burn_in_per_chain": cfg.burn_in,
         "thin": cfg.thin,
+        "checkpoint_policy": "Student-t posterior draws are checkpointed by unique valuation date and reused after interruption.",
         "interpretation": "Heavy-tail robustness under P only; Q pricing dynamics and market state are unchanged from the baseline experiment.",
     }
     (args.output_root / f"student_t_report_{args.preset}.json").write_text(
