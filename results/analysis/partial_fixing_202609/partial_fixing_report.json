@@ -1,0 +1,21 @@
+{
+  "contracts": 27,
+  "correlation_fraction_fixed_abs_gap": -0.10480408540513486,
+  "correlation_fraction_fixed_gap_per_sigma_variance": -0.11654583749277467,
+  "dates": 4,
+  "fraction_fixed_max": 0.1818181818181818,
+  "fraction_fixed_min": 0.0454545454545454,
+  "interpretation": "A negative within-contract slope is consistent with declining effective volatility exposure as realized fixings accumulate. It is descriptive, not causal, because moneyness, the futures curve, and time to payoff also change.",
+  "positive_volume_within_contract": {
+    "informative_contracts": 1,
+    "rows": 2,
+    "slope_abs_gap_on_fraction_fixed": -0.0018426228960809986
+  },
+  "rows": 92,
+  "source_panel": "results\\wti_apo_empirical\\panel_202609\\all_dates\\panel_contract_pricing.csv",
+  "within_contract": {
+    "informative_contracts": 23,
+    "rows": 88,
+    "slope_abs_gap_on_fraction_fixed": -0.0008228980787584848
+  }
+}
