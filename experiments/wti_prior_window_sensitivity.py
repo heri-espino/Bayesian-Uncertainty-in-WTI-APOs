@@ -27,6 +27,7 @@ Example
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 from dataclasses import dataclass
 from pathlib import Path
@@ -179,9 +180,35 @@ def _preset(name: str) -> tuple[int, int, int]:
     raise ValueError(name)
 
 
+def _configuration_id(
+    *,
+    windows: tuple[int, ...],
+    chains: int,
+    n_iter: int,
+    burn_in: int,
+    seed: int,
+    contract_id: str,
+) -> str:
+    payload = {
+        "windows": windows,
+        "chains": chains,
+        "n_iter": n_iter,
+        "burn_in": burn_in,
+        "seed": seed,
+        "contract_id": contract_id,
+        "priors": [(p.name, p.alpha, p.beta) for p in PRIORS],
+    }
+    text = json.dumps(payload, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()[:16]
+
+
+def _json_number(value: float) -> float | None:
+    return float(value) if np.isfinite(value) else None
+
+
 def run(
     run_dir: Path,
-    output_dir: Path,
+    output_root: Path,
     *,
     contract_id: str | None,
     windows: tuple[int, ...],
@@ -189,16 +216,27 @@ def run(
     n_iter: int,
     burn_in: int,
     seed: int,
-) -> tuple[pd.DataFrame, pd.DataFrame, dict[str, Any]]:
+) -> tuple[pd.DataFrame, pd.DataFrame, dict[str, Any], Path]:
     returns_all = _load_returns(run_dir)
     contract, realized, forwards, fixing_times, discount, _ = _load_contract_state(
         run_dir, contract_id
     )
+    effective_windows = tuple(
+        sorted(set(min(int(n), len(returns_all)) for n in windows) | {len(returns_all)})
+    )
+    configuration_id = _configuration_id(
+        windows=effective_windows,
+        chains=chains,
+        n_iter=n_iter,
+        burn_in=burn_in,
+        seed=seed,
+        contract_id=str(contract["contract_id"]),
+    )
+    output_dir = output_root / configuration_id
     output_dir.mkdir(parents=True, exist_ok=True)
     checkpoint_dir = output_dir / "checkpoints"
     checkpoint_dir.mkdir(parents=True, exist_ok=True)
 
-    effective_windows = sorted(set(min(int(n), len(returns_all)) for n in windows) | {len(returns_all)})
     posterior_objects: list[tuple[int, PriorProfile, np.ndarray, dict[str, float]]] = []
     for n_obs in effective_windows:
         returns = returns_all[-n_obs:]
@@ -306,19 +344,26 @@ def run(
     )
 
     report = {
+        "configuration_id": configuration_id,
         "source_run": str(run_dir),
         "contract_id": str(contract["contract_id"]),
         "option_type": str(contract["option_type"]),
         "strike": float(contract["strike"]),
         "available_returns": int(len(returns_all)),
-        "windows": effective_windows,
+        "windows": list(effective_windows),
+        "mcmc": {
+            "chains": chains,
+            "n_iter_per_chain": n_iter,
+            "burn_in_per_chain": burn_in,
+            "root_seed": seed,
+        },
         "priors": [
             {
                 "name": prior.name,
                 "alpha": prior.alpha,
                 "beta": prior.beta,
-                "mean_sigma": prior.mean,
-                "sd_sigma": prior.sd,
+                "mean_sigma": _json_number(prior.mean),
+                "sd_sigma": _json_number(prior.sd),
             }
             for prior in PRIORS
         ],
@@ -334,13 +379,13 @@ def run(
             "or constitute robustness to every possible prior family."
         ),
     }
-    return results, comparison, report
+    return results, comparison, report, output_dir
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--run-dir", type=Path, default=DEFAULT_RUN)
-    parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT)
+    parser.add_argument("--output-root", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--contract-id", default=None)
     parser.add_argument("--windows", default="63,126,252,504")
     parser.add_argument("--preset", choices=("quick", "research", "extreme"), default="research")
@@ -354,9 +399,9 @@ def main() -> None:
     if not windows or any(n < 20 for n in windows):
         raise ValueError("windows must contain integers >= 20")
     chains, n_iter, burn_in = _preset(args.preset)
-    results, comparison, report = run(
+    results, comparison, report, output_dir = run(
         args.run_dir,
-        args.output_dir,
+        args.output_root,
         contract_id=args.contract_id,
         windows=windows,
         chains=chains,
@@ -364,12 +409,13 @@ def main() -> None:
         burn_in=burn_in,
         seed=args.seed,
     )
-    results.to_csv(args.output_dir / "prior_window_results.csv", index=False)
-    comparison.to_csv(args.output_dir / "prior_window_vs_baseline.csv", index=False)
-    with (args.output_dir / "prior_window_report.json").open("w", encoding="utf-8") as fh:
+    results.to_csv(output_dir / "prior_window_results.csv", index=False)
+    comparison.to_csv(output_dir / "prior_window_vs_baseline.csv", index=False)
+    with (output_dir / "prior_window_report.json").open("w", encoding="utf-8") as fh:
         json.dump(report, fh, indent=2, sort_keys=True)
         fh.write("\n")
     print(json.dumps(report, indent=2, sort_keys=True))
+    print(f"output_dir={output_dir}")
 
 
 if __name__ == "__main__":
