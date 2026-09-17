@@ -13,7 +13,7 @@ from __future__ import annotations
 
 import numpy as np
 from scipy.optimize import brentq
-from scipy.special import ndtr
+from scipy.special import logsumexp, ndtr
 
 from bayesian_asian_options.accelerated_pricing import (
     AcceleratedMonteCarloEstimate,
@@ -195,26 +195,34 @@ def curran_arithmetic_futures_option(
                 0.0,
             )
 
-            def conditional_arithmetic_mean(x: float) -> float:
-                conditional_levels = np.exp(
+            # Solve the exercise boundary in log space.  This remains stable when sigma is
+            # extremely small: a strike that is economically far from the deterministic
+            # average can be millions of sd_g away even though it is only a modest distance
+            # on the log-price scale.
+            log_effective_strike = float(np.log(effective_strike))
+            log_n_future = float(np.log(n_future))
+
+            def log_conditional_arithmetic_mean(x: float) -> float:
+                log_levels = (
                     mu
                     + beta * (x - mu_g)
                     + 0.5 * conditional_variance
                 )
-                return float(np.mean(conditional_levels))
+                return float(logsumexp(log_levels) - log_n_future)
 
             def root_function(x: float) -> float:
-                return conditional_arithmetic_mean(x) - effective_strike
+                return log_conditional_arithmetic_mean(x) - log_effective_strike
 
-            # All Brownian covariances are non-negative, hence the conditional arithmetic
-            # mean is monotone. Expand a normal-scale bracket defensively for extreme strikes.
-            lo = mu_g - 10.0 * sd_g
-            hi = mu_g + 10.0 * sd_g
-            for _ in range(12):
+            # Brownian covariances are non-negative, so the conditional arithmetic mean is
+            # monotone.  Start with both a statistical and an absolute log-price scale, then
+            # double the absolute half-width until the root is bracketed.
+            half_width = max(10.0 * sd_g, 0.25)
+            for _ in range(20):
+                lo = mu_g - half_width
+                hi = mu_g + half_width
                 if root_function(lo) <= 0 <= root_function(hi):
                     break
-                lo -= 5.0 * sd_g
-                hi += 5.0 * sd_g
+                half_width *= 2.0
             else:
                 raise RuntimeError("failed to bracket Curran exercise boundary")
             x_star = float(brentq(root_function, lo, hi))
