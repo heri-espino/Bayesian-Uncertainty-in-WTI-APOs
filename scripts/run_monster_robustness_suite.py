@@ -18,12 +18,19 @@ import sys
 
 
 ROOT = Path(__file__).resolve().parents[1]
-IMPLIED_REPORT = ROOT / "results" / "analysis" / "wti_apo_implied_volatility" / "apo_implied_volatility_report.json"
+IMPLIED_REPORT = (
+    ROOT
+    / "results"
+    / "analysis"
+    / "wti_apo_implied_volatility"
+    / "apo_implied_volatility_report.json"
+)
 
 STAGES = (
     "implied-vol",
     "mechanism-map",
     "high-precision",
+    "qmc",
     "student-t",
     "forward-q",
     "sbc",
@@ -63,7 +70,13 @@ def main() -> None:
         else:
             _run(
                 "APO implied volatility prerequisite",
-                ["-m", "experiments.wti_apo_implied_volatility", "--expiries", "2026-09", "2026-10"],
+                [
+                    "-m",
+                    "experiments.wti_apo_implied_volatility",
+                    "--expiries",
+                    "2026-09",
+                    "2026-10",
+                ],
             )
 
     if "mechanism-map" not in skipped:
@@ -82,7 +95,7 @@ def main() -> None:
 
     if "high-precision" not in skipped:
         _run(
-            "high-precision GPU pricing benchmark",
+            "high-precision pseudo-random GPU pricing benchmark",
             [
                 "-m",
                 "experiments.wti_high_precision_pricing",
@@ -94,10 +107,30 @@ def main() -> None:
             ],
         )
 
+    if "qmc" not in skipped:
+        _run(
+            "randomized Sobol QMC pricing benchmark",
+            [
+                "-m",
+                "experiments.wti_randomized_qmc_benchmark",
+                "--preset",
+                "monster",
+                "--backend",
+                args.backend,
+                *force,
+            ],
+        )
+
     if "student-t" not in skipped:
         _run(
             "Student-t physical-measure robustness",
-            ["-m", "experiments.wti_student_t_robustness", "--preset", "monster", *force],
+            [
+                "-m",
+                "experiments.wti_student_t_robustness",
+                "--preset",
+                "monster",
+                *force,
+            ],
         )
 
     if "forward-q" not in skipped:
