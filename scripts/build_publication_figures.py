@@ -556,8 +556,8 @@ def _forest_panel(
     metric: str,
 ) -> None:
     experiments = [
-        ("forward_q_expanding_smile", "Expanding smile", "o"),
-        ("forward_q_previous_day_smile", "Previous-day smile", "s"),
+        ("forward_q_expanding_smile", "Expanding smile", "o", PALETTE["teal"]),
+        ("forward_q_previous_day_smile", "Previous-day smile", "s", PALETTE["purple"]),
     ]
     samples = [
         "all",
@@ -569,7 +569,9 @@ def _forest_panel(
     y_base = np.arange(len(samples), dtype=float)
     offsets = (-0.10, 0.10)
 
-    for offset, (experiment, label, marker) in zip(offsets, experiments, strict=True):
+    for offset, (experiment, label, marker, color) in zip(
+        offsets, experiments, strict=True
+    ):
         group = boot.loc[boot["experiment"].eq(experiment)].set_index("sample")
         rows = group.loc[samples]
         value = rows[f"delta_{metric}"].to_numpy(dtype=float)
@@ -581,20 +583,42 @@ def _forest_panel(
             y_base + offset,
             xerr=xerr,
             fmt=marker,
-            markersize=4.5,
-            capsize=2.5,
-            linewidth=1.0,
+            markersize=4.6,
+            color=color,
+            ecolor=color,
+            capsize=2.4,
+            linewidth=1.05,
             label=label,
         )
 
-    ax.axvline(0.0, linestyle="--", linewidth=1.0)
-    ax.set_yticks(y_base)
-    ax.set_yticklabels([_pretty_sample(s) for s in samples])
-    ax.invert_yaxis()
-    ax.set_xlabel(fr"$\Delta {metric.upper()}$ vs historical PI")
-    ax.set_title(
-        f"{metric.upper()} difference (negative = forward smile improves)"
+    sample_labels = []
+    for sample in samples:
+        row = boot.loc[
+            boot["experiment"].eq("forward_q_expanding_smile")
+            & boot["sample"].eq(sample)
+        ]
+        if row.empty:
+            sample_labels.append(_pretty_sample(sample))
+        else:
+            sample_labels.append(
+                f"{_pretty_sample(sample)} ($n={int(row.iloc[0]['n'])}$)"
+            )
+
+    ax.axvline(
+        0.0,
+        linestyle="--",
+        linewidth=0.95,
+        color=PALETTE["midgray"],
     )
+    ax.set_yticks(y_base)
+    ax.set_yticklabels(sample_labels)
+    ax.invert_yaxis()
+    ax.set_xlabel(
+        fr"$\Delta {metric.upper()}="
+        fr"{metric.upper()}_{{\mathrm{{forward}}}}-"
+        fr"{metric.upper()}_{{\mathrm{{historical\ PI}}}}$"
+    )
+    ax.set_title(f"{metric.upper()} difference")
     ax.legend(frameon=False)
 
 
@@ -603,15 +627,15 @@ def build_figure_3(
     formats: Iterable[str],
 ) -> tuple[list[str], dict[str, object]]:
     boot = pd.read_csv(BOOTSTRAP_PATH)
-    fig, axes = plt.subplots(1, 2, figsize=(7.25, 3.4), sharey=True)
+    fig, axes = plt.subplots(1, 2, figsize=(7.20, 3.35), sharey=True)
     _forest_panel(axes[0], boot, metric="mae")
     _panel_label(axes[0], "A")
     _forest_panel(axes[1], boot, metric="rmse")
     _panel_label(axes[1], "B")
     fig.suptitle(
-        "Strict forward-in-time volatility improvement: valuation-date cluster bootstrap",
-        y=1.03,
-        fontsize=11,
+        "Strict forward-in-time volatility improvement",
+        y=1.02,
+        fontsize=10.5,
     )
     fig.tight_layout()
     outputs = _save(fig, output_dir / "fig03_forward_q_cluster_bootstrap", formats)
@@ -629,7 +653,7 @@ def build_figure_3(
 
 def _target_label(row: pd.Series) -> str:
     date = pd.Timestamp(row["valuation_date"]).strftime("%m-%d")
-    return f"{date}  K={row['strike']:g}"
+    return f"{date}\n$K={row['strike']:g}$"
 
 
 def build_figure_4(
@@ -650,7 +674,7 @@ def build_figure_4(
     fig, axes = plt.subplots(
         2,
         1,
-        figsize=(7.25, 5.0),
+        figsize=(7.20, 4.90),
         sharex=True,
         gridspec_kw={"height_ratios": [2.1, 1.0]},
     )
@@ -662,22 +686,27 @@ def build_figure_4(
             matched["mc_pi_minus_pm"].to_numpy(dtype=float),
             matched["mc_pi_minus_pm_mcse"].to_numpy(dtype=float),
             "o",
+            PALETTE["ink"],
         ),
         (
             "Curran",
             matched["curran_pi_minus_pm_mc"].to_numpy(dtype=float),
             np.zeros(len(matched)),
             "D",
+            PALETTE["gold"],
         ),
         (
             "Randomized Sobol",
             matched["qmc_pi_minus_pm"].to_numpy(dtype=float),
             matched["qmc_gap_mcse"].to_numpy(dtype=float),
             "s",
+            PALETTE["wine"],
         ),
     ]
 
-    for offset, (label, value, se, marker) in zip(offsets, values, strict=True):
+    for offset, (label, value, se, marker, color) in zip(
+        offsets, values, strict=True
+    ):
         ax_top.errorbar(
             x + offset,
             value,
@@ -685,6 +714,8 @@ def build_figure_4(
             fmt=marker,
             markersize=4.3,
             linewidth=1.0,
+            color=color,
+            ecolor=color,
             capsize=2,
             label=label,
         )
@@ -700,15 +731,17 @@ def build_figure_4(
             1e6 * (matched["mc_pi_minus_pm"].to_numpy(dtype=float) - curran),
             1e6 * matched["mc_pi_minus_pm_mcse"].to_numpy(dtype=float),
             "o",
+            PALETTE["ink"],
         ),
         (
             "Sobol minus Curran",
             1e6 * (matched["qmc_pi_minus_pm"].to_numpy(dtype=float) - curran),
             1e6 * matched["qmc_gap_mcse"].to_numpy(dtype=float),
             "s",
+            PALETTE["wine"],
         ),
     ]
-    for offset, (label, value, se, marker) in zip(
+    for offset, (label, value, se, marker, color) in zip(
         (-0.09, 0.09), deviations, strict=True
     ):
         ax_bottom.errorbar(
@@ -718,11 +751,18 @@ def build_figure_4(
             fmt=marker,
             markersize=4.0,
             linewidth=1.0,
+            color=color,
+            ecolor=color,
             capsize=2,
             label=label,
         )
-    ax_bottom.axhline(0.0, linestyle="--", linewidth=1.0)
-    ax_bottom.set_ylabel(r"Gap difference $\times 10^6$")
+    ax_bottom.axhline(
+        0.0,
+        linestyle="--",
+        linewidth=0.95,
+        color=PALETTE["midgray"],
+    )
+    ax_bottom.set_ylabel(r"Difference from Curran ($\times 10^6$)")
     ax_bottom.set_xlabel("Empirical target")
     ax_bottom.legend(frameon=False, ncol=2)
     _panel_label(ax_bottom, "B")
@@ -731,7 +771,11 @@ def build_figure_4(
     ax_bottom.set_xticks(x)
     ax_bottom.set_xticklabels(labels, rotation=45, ha="right")
 
-    fig.suptitle("Numerical identification of the posterior-integration effect", y=1.01, fontsize=11)
+    fig.suptitle(
+        "Numerical identification of the posterior-integration effect",
+        y=1.005,
+        fontsize=10.5,
+    )
     fig.tight_layout()
     outputs = _save(fig, output_dir / "fig04_numerical_identification", formats)
     return outputs, {
@@ -768,12 +812,17 @@ def parse_args() -> argparse.Namespace:
         default=None,
         help="Optional explicit massive mechanism-map run directory.",
     )
+    parser.add_argument(
+        "--no-tex",
+        action="store_true",
+        help="Force STIX fallback instead of the Wiley Utopia TeX stack.",
+    )
     return parser.parse_args()
 
 
 def main() -> None:
     args = parse_args()
-    _configure_matplotlib()
+    font_mode = _configure_matplotlib(force_no_tex=args.no_tex)
     output_dir = args.output_dir
     if not output_dir.is_absolute():
         output_dir = ROOT / output_dir
@@ -784,6 +833,10 @@ def main() -> None:
     manifest: dict[str, object] = {
         "output_dir": _portable_path(output_dir),
         "formats": list(formats),
+        "font_mode": font_mode,
+        "hybrid_pdf": True,
+        "raster_dpi": 600,
+        "palette": PALETTE,
         "figures": {},
     }
 
@@ -810,6 +863,7 @@ def main() -> None:
         encoding="utf-8",
     )
     print(f"Built publication figures under {output_dir}")
+    print(f"Font mode: {font_mode}")
     for item in manifest["figures"].values():
         for output in item["outputs"]:
             print(f"  {output}")
