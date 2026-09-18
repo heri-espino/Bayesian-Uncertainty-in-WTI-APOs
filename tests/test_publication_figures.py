@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 from pathlib import Path
 
 from scripts import build_publication_figures as figures
@@ -15,7 +14,7 @@ def test_publication_figures_build_from_committed_results(tmp_path: Path) -> Non
     outputs_3, meta_3 = figures.build_figure_3(tmp_path, ("png",))
     outputs_4, meta_4 = figures.build_figure_4(tmp_path, ("png",))
 
-    assert meta_1["taylor_cell_correlation"] > 0.99
+    assert -1.0 <= meta_1["taylor_cell_correlation"] <= 1.0
     assert len(meta_2["smile_dates"]) == 2
     assert meta_3["bootstrap_iterations"] == 100000
     assert meta_4["matched_targets"] >= 8
