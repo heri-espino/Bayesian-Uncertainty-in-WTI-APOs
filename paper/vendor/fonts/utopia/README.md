@@ -1,12 +1,12 @@
 # Vendored Adobe Utopia support
 
-This directory keeps the upstream CTAN archives required to reproduce the typeface used by the active Wiley manuscript class:
+This directory keeps the upstream CTAN archives required to reproduce the text typeface used by the active Wiley manuscript class:
 
 ```tex
 \documentclass[HARVARD,Utopia2COL]{WileyNJDv5}
 ```
 
-The Wiley class loads `utopia` for text and `mathastext` for text-matched mathematics.
+The Wiley class loads `utopia` for text and `mathastext` for text-matched mathematics. The latter is vendored separately under `../mathastext/`.
 
 ## Upstream archives
 
@@ -23,7 +23,7 @@ Run:
 python -m scripts.vendor_utopia_fonts
 ```
 
-The helper expands the archives into the ignored `paper/build/vendor_fonts/utopia/` cache, creates a local TDS-style tree, generates `utopia.sty` from the PSNFSS DocStrip source when needed, and prepends the local tree to kpathsea search paths. It does not modify the system TeX installation.
+The helper combines these archives with the vendored `mathastext.dtx`, expands everything into the ignored `paper/build/vendor_fonts/utopia/` cache, creates a local TDS-style tree, extracts `utopia.sty` and `mathastext.sty` when needed, and prepends the local tree to kpathsea search paths. It does not modify the system TeX installation.
 
 The publication-figure builder invokes this automatically and prefers the vendored tree:
 
@@ -36,10 +36,6 @@ The resulting `figure_manifest.json` records `font_mode` as either:
 - `wiley-utopia-vendored`
 - `wiley-utopia-system`
 - `stix-fallback`
-
-## Remaining dependency
-
-`mathastext` is not supplied by either of these two upstream archives. It remains a normal TeX-distribution dependency because `WileyNJDv5.cls` loads it independently. If the manuscript already compiles under `Utopia2COL`, this dependency is normally already present.
 
 ## Sources
 
