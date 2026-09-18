@@ -6,7 +6,7 @@ from scripts import build_publication_figures as figures
 
 
 def test_publication_figures_build_from_committed_results(tmp_path: Path) -> None:
-    figures._configure_matplotlib()
+    figures._configure_matplotlib(force_no_tex=True)
     mechanism_run = figures._discover_monster_mechanism_run(None)
 
     outputs_1, meta_1 = figures.build_figure_1(mechanism_run, tmp_path, ("png",))
