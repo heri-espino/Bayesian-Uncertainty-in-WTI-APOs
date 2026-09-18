@@ -12,3 +12,4 @@ def test_vendored_utopia_archives_have_expected_structure() -> None:
     assert info["psnfss_has_psfonts_dtx"] is True
     assert info["psnfss_has_utopia_map"] is True
     assert info["psnfss_has_8r_enc"] is True
+    assert info["mathastext_dtx_present"] is True
