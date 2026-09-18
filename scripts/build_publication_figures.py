@@ -48,6 +48,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+from scripts.vendor_utopia_fonts import archives_available, prepare_vendored_texmf
+
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUTPUT_DIR = ROOT / "figures" / "publication"
@@ -125,10 +127,24 @@ def _kpsewhich(filename: str) -> bool:
     return proc.returncode == 0 and bool(proc.stdout.strip())
 
 
-def _wiley_utopia_available() -> bool:
-    if shutil.which("latex") is None:
-        return False
-    return _kpsewhich("utopia.sty") and _kpsewhich("mathastext.sty")
+def _wiley_utopia_mode() -> str | None:
+    """Prefer the repo-vendored Utopia stack, then fall back to system TeX."""
+    if shutil.which("latex") is None or not _kpsewhich("mathastext.sty"):
+        return None
+
+    if archives_available():
+        try:
+            prepare_vendored_texmf()
+        except Exception:
+            # A broken local cache must not prevent a system TeX fallback.
+            pass
+        else:
+            if _kpsewhich("utopia.sty") and _kpsewhich("mathastext.sty"):
+                return "wiley-utopia-vendored"
+
+    if _kpsewhich("utopia.sty") and _kpsewhich("mathastext.sty"):
+        return "wiley-utopia-system"
+    return None
 
 
 def _configure_matplotlib(*, force_no_tex: bool = False) -> str:
@@ -138,7 +154,8 @@ def _configure_matplotlib(*, force_no_tex: bool = False) -> str:
     except OSError:
         plt.style.use("default")
 
-    use_tex = (not force_no_tex) and _wiley_utopia_available()
+    utopia_mode = None if force_no_tex else _wiley_utopia_mode()
+    use_tex = utopia_mode is not None
     rc = {
         "text.usetex": use_tex,
         "font.family": "serif",
@@ -184,7 +201,7 @@ def _configure_matplotlib(*, force_no_tex: bool = False) -> str:
             r"\usepackage[defaultmathsizes,italic]{mathastext}"
             r"\usepackage{amsmath,amssymb}"
         )
-        font_mode = "wiley-utopia-tex"
+        font_mode = utopia_mode or "wiley-utopia-system"
     else:
         rc["mathtext.fontset"] = "stix"
         font_mode = "stix-fallback"
