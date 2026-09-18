@@ -37,9 +37,12 @@ from __future__ import annotations
 
 import argparse
 import json
+import shutil
+import subprocess
 from pathlib import Path
 from typing import Iterable
 
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -79,27 +82,113 @@ MECHANISM_SIGMA = 0.80
 MECHANISM_MONEYNESS = 1.50
 MECHANISM_HEATMAP_MATURITY_DAYS = 126
 
+PALETTE = {
+    "ink": "#17324D",
+    "teal": "#2A6F97",
+    "green": "#3A7D44",
+    "gold": "#C28F2C",
+    "wine": "#8E4B5B",
+    "purple": "#6C5B9A",
+    "charcoal": "#3B3F46",
+    "midgray": "#7F8790",
+    "light_gray": "#D9DDE3",
+    "very_light_gray": "#F4F6F8",
+}
 
-def _configure_matplotlib() -> None:
-    """Use a restrained journal-friendly style without requiring a TeX installation."""
-    plt.rcParams.update(
-        {
-            "font.family": "serif",
-            "mathtext.fontset": "cm",
-            "font.size": 9.0,
-            "axes.labelsize": 9.0,
-            "axes.titlesize": 9.5,
-            "legend.fontsize": 8.0,
-            "xtick.labelsize": 8.0,
-            "ytick.labelsize": 8.0,
-            "axes.spines.top": False,
-            "axes.spines.right": False,
-            "figure.dpi": 160,
-            "savefig.dpi": 300,
-            "pdf.fonttype": 42,
-            "ps.fonttype": 42,
-        }
+SIGMA_COLORS = {
+    0.10: PALETTE["green"],
+    0.20: PALETTE["teal"],
+    0.35: PALETTE["ink"],
+    0.50: PALETTE["purple"],
+    0.80: PALETTE["wine"],
+}
+
+MATURITY_STYLES = {
+    21: (PALETTE["green"], "o"),
+    63: (PALETTE["teal"], "s"),
+    126: (PALETTE["ink"], "^"),
+    252: (PALETTE["wine"], "D"),
+}
+
+
+def _kpsewhich(filename: str) -> bool:
+    executable = shutil.which("kpsewhich")
+    if executable is None:
+        return False
+    proc = subprocess.run(
+        [executable, filename],
+        capture_output=True,
+        text=True,
+        check=False,
     )
+    return proc.returncode == 0 and bool(proc.stdout.strip())
+
+
+def _wiley_utopia_available() -> bool:
+    if shutil.which("latex") is None:
+        return False
+    return _kpsewhich("utopia.sty") and _kpsewhich("mathastext.sty")
+
+
+def _configure_matplotlib(*, force_no_tex: bool = False) -> str:
+    """Match the active Wiley Utopia2COL manuscript when TeX is available."""
+    try:
+        plt.style.use("seaborn-v0_8-whitegrid")
+    except OSError:
+        plt.style.use("default")
+
+    use_tex = (not force_no_tex) and _wiley_utopia_available()
+    rc = {
+        "text.usetex": use_tex,
+        "font.family": "serif",
+        "font.size": 8.5,
+        "axes.labelsize": 8.5,
+        "axes.titlesize": 9.0,
+        "legend.fontsize": 7.5,
+        "xtick.labelsize": 7.5,
+        "ytick.labelsize": 7.5,
+        "axes.unicode_minus": False,
+        "figure.dpi": 180,
+        "savefig.dpi": 600,
+        "savefig.bbox": "tight",
+        "savefig.pad_inches": 0.035,
+        "pdf.fonttype": 42,
+        "ps.fonttype": 42,
+        "axes.spines.top": False,
+        "axes.spines.right": False,
+        "axes.linewidth": 0.75,
+        "axes.edgecolor": PALETTE["charcoal"],
+        "axes.facecolor": "white",
+        "axes.axisbelow": True,
+        "axes.grid": True,
+        "grid.color": PALETTE["light_gray"],
+        "grid.linewidth": 0.55,
+        "grid.alpha": 0.72,
+        "xtick.direction": "out",
+        "ytick.direction": "out",
+        "xtick.major.size": 3.0,
+        "ytick.major.size": 3.0,
+        "xtick.major.width": 0.7,
+        "ytick.major.width": 0.7,
+        "lines.linewidth": 1.45,
+        "lines.markersize": 4.0,
+        "legend.frameon": False,
+        "legend.borderaxespad": 0.25,
+        "legend.handlelength": 1.8,
+    }
+    if use_tex:
+        rc["text.latex.preamble"] = (
+            r"\usepackage[T1]{fontenc}"
+            r"\usepackage{utopia}"
+            r"\usepackage[defaultmathsizes,italic]{mathastext}"
+            r"\usepackage{amsmath,amssymb}"
+        )
+        font_mode = "wiley-utopia-tex"
+    else:
+        rc["mathtext.fontset"] = "stix"
+        font_mode = "stix-fallback"
+    mpl.rcParams.update(rc)
+    return font_mode
 
 
 def _portable_path(path: Path) -> str:
@@ -111,11 +200,23 @@ def _portable_path(path: Path) -> str:
 
 
 def _save(fig: plt.Figure, stem: Path, formats: Iterable[str]) -> list[str]:
+    """Save hybrid PDFs: vector text/axes with dense artists rasterized at 600 dpi."""
     outputs: list[str] = []
     stem.parent.mkdir(parents=True, exist_ok=True)
+    metadata = {
+        "Title": stem.stem,
+        "Author": "Heriberto Espino Montelongo",
+        "Subject": "Bayesian parameter uncertainty in WTI average price options",
+    }
     for fmt in formats:
         path = stem.with_suffix(f".{fmt}")
-        fig.savefig(path, bbox_inches="tight")
+        fig.savefig(
+            path,
+            dpi=600,
+            bbox_inches="tight",
+            pad_inches=0.035,
+            metadata=metadata if fmt == "pdf" else None,
+        )
         outputs.append(_portable_path(path))
     plt.close(fig)
     return outputs
