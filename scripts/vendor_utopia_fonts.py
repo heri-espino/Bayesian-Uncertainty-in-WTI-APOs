@@ -40,6 +40,82 @@ SOURCE_ROOT = CACHE_ROOT / "source"
 MARKER = CACHE_ROOT / "prepared.json"
 
 
+def _candidate_tex_bin_dirs() -> list[Path]:
+    """Return plausible per-user/system TeX bin directories, especially on Windows."""
+    candidates: list[Path] = []
+
+    def add(path: Path | None) -> None:
+        if path is not None and path not in candidates:
+            candidates.append(path)
+
+    local = os.environ.get("LOCALAPPDATA")
+    roaming = os.environ.get("APPDATA")
+    program_files = os.environ.get("ProgramFiles")
+    program_files_x86 = os.environ.get("ProgramFiles(x86)")
+    user_profile = os.environ.get("USERPROFILE")
+
+    for base in filter(None, (local, roaming, program_files, program_files_x86)):
+        root = Path(base)
+        add(root / "Programs" / "MiKTeX" / "miktex" / "bin" / "x64")
+        add(root / "MiKTeX" / "miktex" / "bin" / "x64")
+        add(root / "MiKTeX" / "miktex" / "bin")
+
+    texlive_roots = [Path("C:/texlive")]
+    if user_profile:
+        texlive_roots.append(Path(user_profile) / "texlive")
+    if local:
+        texlive_roots.append(Path(local) / "Programs" / "TeXLive")
+
+    for root in texlive_roots:
+        if root.is_dir():
+            for version_dir in sorted(root.glob("*"), reverse=True):
+                add(version_dir / "bin" / "windows")
+                add(version_dir / "bin" / "win32")
+
+    return [path for path in candidates if path.is_dir()]
+
+
+def _find_executable(name: str) -> str | None:
+    """Find a TeX executable on PATH or in common Windows install locations."""
+    found = shutil.which(name)
+    if found:
+        return found
+
+    names = [name]
+    if os.name == "nt" and not name.lower().endswith(".exe"):
+        names.append(name + ".exe")
+
+    for directory in _candidate_tex_bin_dirs():
+        for candidate_name in names:
+            candidate = directory / candidate_name
+            if candidate.is_file():
+                return str(candidate)
+    return None
+
+
+def ensure_tex_toolchain_on_path() -> dict[str, str | None]:
+    """Discover TeX tools and prepend their directory to PATH when necessary."""
+    tool_names = ("latex", "kpsewhich", "dvipng", "tex", "etex", "pdftex")
+    discovered = {name: _find_executable(name) for name in tool_names}
+
+    directories: list[str] = []
+    for path in discovered.values():
+        if path:
+            directory = str(Path(path).resolve().parent)
+            if directory not in directories:
+                directories.append(directory)
+
+    if directories:
+        current = os.environ.get("PATH", "")
+        current_parts = current.split(os.pathsep) if current else []
+        missing = [directory for directory in directories if directory not in current_parts]
+        if missing:
+            os.environ["PATH"] = os.pathsep.join(missing + current_parts)
+
+    # Re-resolve after PATH mutation so subprocesses and diagnostics see canonical paths.
+    return {name: shutil.which(name) or discovered[name] for name in tool_names}
+
+
 def _sha256(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as handle:
@@ -131,7 +207,7 @@ def _find_one(root: Path, basename: str) -> Path | None:
 
 
 def _run_docstrip(psnfss_source: Path, texmf: Path) -> bool:
-    latex = shutil.which("latex")
+    latex = _find_executable("latex")
     ins = _find_one(psnfss_source, "psfonts.ins")
     if latex is None or ins is None:
         return False
@@ -165,7 +241,7 @@ def _extract_mathastext(texmf: Path) -> bool:
     shutil.copy2(MATHASTEXT_DTX, source)
 
     engine = next(
-        (shutil.which(name) for name in ("etex", "tex", "pdftex") if shutil.which(name)),
+        (_find_executable(name) for name in ("etex", "tex", "pdftex") if _find_executable(name)),
         None,
     )
     if engine is None:
@@ -200,7 +276,7 @@ def _build_local_pdftex_map(texmf: Path, utopia_map: Path) -> None:
     target = target_dir / "pdftex.map"
 
     base_map = b""
-    kpsewhich = shutil.which("kpsewhich")
+    kpsewhich = _find_executable("kpsewhich")
     if kpsewhich is not None:
         proc = subprocess.run(
             [kpsewhich, "pdftex.map"],
@@ -223,6 +299,7 @@ def _build_local_pdftex_map(texmf: Path, utopia_map: Path) -> None:
 
 def prepare_vendored_texmf(*, force: bool = False) -> Path | None:
     """Prepare and return a local TDS tree, or None when archives are absent."""
+    ensure_tex_toolchain_on_path()
     if not archives_available():
         return None
 
@@ -302,10 +379,55 @@ def prepare_vendored_texmf(*, force: bool = False) -> Path | None:
     return TEXMF_ROOT
 
 
+def _kpsewhich_path(filename: str) -> str | None:
+    executable = _find_executable("kpsewhich")
+    if executable is None:
+        return None
+    proc = subprocess.run(
+        [executable, filename],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if proc.returncode != 0 or not proc.stdout.strip():
+        return None
+    return proc.stdout.strip()
+
+
+def diagnostic_report() -> dict[str, object]:
+    tools = ensure_tex_toolchain_on_path()
+    marker: dict[str, object] = {}
+    if MARKER.is_file():
+        try:
+            marker = json.loads(MARKER.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            marker = {"error": "Could not read prepared.json"}
+
+    return {
+        "tex_tools": tools,
+        "candidate_tex_bin_dirs": [str(p) for p in _candidate_tex_bin_dirs()],
+        "generated_utopia_sty": marker.get("generated_utopia_sty"),
+        "generated_mathastext_sty": marker.get("generated_mathastext_sty"),
+        "kpsewhich_utopia_sty": _kpsewhich_path("utopia.sty"),
+        "kpsewhich_mathastext_sty": _kpsewhich_path("mathastext.sty"),
+        "ready_for_matplotlib_usetex": bool(
+            tools.get("latex")
+            and tools.get("kpsewhich")
+            and _kpsewhich_path("utopia.sty")
+            and _kpsewhich_path("mathastext.sty")
+        ),
+    }
+
+
 def main() -> None:
     info = inspect_archives()
     texmf = prepare_vendored_texmf(force=True)
-    print(json.dumps({**info, "prepared_texmf": str(texmf) if texmf else None}, indent=2))
+    report = {
+        **info,
+        "prepared_texmf": str(texmf) if texmf else None,
+        **diagnostic_report(),
+    }
+    print(json.dumps(report, indent=2))
 
 
 if __name__ == "__main__":
