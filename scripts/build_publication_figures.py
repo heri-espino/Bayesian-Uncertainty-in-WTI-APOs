@@ -29,17 +29,21 @@ fig04_numerical_identification.{pdf,png}
 figure_manifest.json
     Source paths and plotting choices used for the build.
 
-The plotting code deliberately uses only matplotlib/pandas/numpy.  It does not require
-LaTeX, seaborn, CuPy, or a GPU.
+The plotting code uses only matplotlib/pandas/numpy at runtime.  When the exact Wiley
+Utopia TeX stack is installed, labels are rendered with the same Utopia + mathastext
+configuration used by WileyNJDv5; otherwise the script falls back deterministically to STIX.
 """
 
 from __future__ import annotations
 
 import argparse
 import json
+import shutil
+import subprocess
 from pathlib import Path
 from typing import Iterable
 
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -79,27 +83,113 @@ MECHANISM_SIGMA = 0.80
 MECHANISM_MONEYNESS = 1.50
 MECHANISM_HEATMAP_MATURITY_DAYS = 126
 
+PALETTE = {
+    "ink": "#17324D",
+    "teal": "#2A6F97",
+    "green": "#3A7D44",
+    "gold": "#C28F2C",
+    "wine": "#8E4B5B",
+    "purple": "#6C5B9A",
+    "charcoal": "#3B3F46",
+    "midgray": "#7F8790",
+    "light_gray": "#D9DDE3",
+    "very_light_gray": "#F4F6F8",
+}
 
-def _configure_matplotlib() -> None:
-    """Use a restrained journal-friendly style without requiring a TeX installation."""
-    plt.rcParams.update(
-        {
-            "font.family": "serif",
-            "mathtext.fontset": "cm",
-            "font.size": 9.0,
-            "axes.labelsize": 9.0,
-            "axes.titlesize": 9.5,
-            "legend.fontsize": 8.0,
-            "xtick.labelsize": 8.0,
-            "ytick.labelsize": 8.0,
-            "axes.spines.top": False,
-            "axes.spines.right": False,
-            "figure.dpi": 160,
-            "savefig.dpi": 300,
-            "pdf.fonttype": 42,
-            "ps.fonttype": 42,
-        }
+SIGMA_COLORS = {
+    0.10: PALETTE["green"],
+    0.20: PALETTE["teal"],
+    0.35: PALETTE["ink"],
+    0.50: PALETTE["purple"],
+    0.80: PALETTE["wine"],
+}
+
+MATURITY_STYLES = {
+    21: (PALETTE["green"], "o"),
+    63: (PALETTE["teal"], "s"),
+    126: (PALETTE["ink"], "^"),
+    252: (PALETTE["wine"], "D"),
+}
+
+
+def _kpsewhich(filename: str) -> bool:
+    executable = shutil.which("kpsewhich")
+    if executable is None:
+        return False
+    proc = subprocess.run(
+        [executable, filename],
+        capture_output=True,
+        text=True,
+        check=False,
     )
+    return proc.returncode == 0 and bool(proc.stdout.strip())
+
+
+def _wiley_utopia_available() -> bool:
+    if shutil.which("latex") is None:
+        return False
+    return _kpsewhich("utopia.sty") and _kpsewhich("mathastext.sty")
+
+
+def _configure_matplotlib(*, force_no_tex: bool = False) -> str:
+    """Match the active Wiley Utopia2COL manuscript when TeX is available."""
+    try:
+        plt.style.use("seaborn-v0_8-whitegrid")
+    except OSError:
+        plt.style.use("default")
+
+    use_tex = (not force_no_tex) and _wiley_utopia_available()
+    rc = {
+        "text.usetex": use_tex,
+        "font.family": "serif",
+        "font.size": 8.5,
+        "axes.labelsize": 8.5,
+        "axes.titlesize": 9.0,
+        "legend.fontsize": 7.5,
+        "xtick.labelsize": 7.5,
+        "ytick.labelsize": 7.5,
+        "axes.unicode_minus": False,
+        "figure.dpi": 180,
+        "savefig.dpi": 600,
+        "savefig.bbox": "tight",
+        "savefig.pad_inches": 0.035,
+        "pdf.fonttype": 42,
+        "ps.fonttype": 42,
+        "axes.spines.top": False,
+        "axes.spines.right": False,
+        "axes.linewidth": 0.75,
+        "axes.edgecolor": PALETTE["charcoal"],
+        "axes.facecolor": "white",
+        "axes.axisbelow": True,
+        "axes.grid": True,
+        "grid.color": PALETTE["light_gray"],
+        "grid.linewidth": 0.55,
+        "grid.alpha": 0.72,
+        "xtick.direction": "out",
+        "ytick.direction": "out",
+        "xtick.major.size": 3.0,
+        "ytick.major.size": 3.0,
+        "xtick.major.width": 0.7,
+        "ytick.major.width": 0.7,
+        "lines.linewidth": 1.45,
+        "lines.markersize": 4.0,
+        "legend.frameon": False,
+        "legend.borderaxespad": 0.25,
+        "legend.handlelength": 1.8,
+    }
+    if use_tex:
+        rc["text.latex.preamble"] = (
+            r"\usepackage[T1]{fontenc}"
+            r"\usepackage{utopia}"
+            r"\usepackage[defaultmathsizes,italic]{mathastext}"
+            r"\usepackage{amsmath,amssymb}"
+        )
+        font_mode = "wiley-utopia-tex"
+    else:
+        rc["mathtext.fontset"] = "stix"
+        font_mode = "stix-fallback"
+    mpl.rcParams.update(rc)
+    return font_mode
 
 
 def _portable_path(path: Path) -> str:
@@ -111,11 +201,23 @@ def _portable_path(path: Path) -> str:
 
 
 def _save(fig: plt.Figure, stem: Path, formats: Iterable[str]) -> list[str]:
+    """Save hybrid PDFs: vector text/axes with dense artists rasterized at 600 dpi."""
     outputs: list[str] = []
     stem.parent.mkdir(parents=True, exist_ok=True)
+    metadata = {
+        "Title": stem.stem,
+        "Author": "Heriberto Espino Montelongo",
+        "Subject": "Bayesian parameter uncertainty in WTI average price options",
+    }
     for fmt in formats:
         path = stem.with_suffix(f".{fmt}")
-        fig.savefig(path, bbox_inches="tight")
+        fig.savefig(
+            path,
+            dpi=600,
+            bbox_inches="tight",
+            pad_inches=0.035,
+            metadata=metadata if fmt == "pdf" else None,
+        )
         outputs.append(_portable_path(path))
     plt.close(fig)
     return outputs
@@ -163,6 +265,7 @@ def _panel_label(ax: plt.Axes, label: str) -> None:
         fontweight="bold",
         va="bottom",
         ha="left",
+        color=PALETTE["charcoal"],
     )
 
 
@@ -194,12 +297,12 @@ def build_figure_1(
     # A. Posterior dispersion shrinks with information.
     for sigma_true, group in posterior.groupby("sigma_true", sort=True):
         group = group.sort_values("n_obs")
+        sigma_key = round(float(sigma_true), 2)
         ax_a.plot(
             group["n_obs"],
             group["posterior_sigma_sd_mean"],
             marker="o",
-            linewidth=1.25,
-            markersize=3.5,
+            color=SIGMA_COLORS.get(sigma_key, PALETTE["charcoal"]),
             label=fr"$\sigma_0={sigma_true:.2f}$",
         )
     ax_a.set_xscale("log")
@@ -226,7 +329,10 @@ def build_figure_1(
         origin="lower",
         aspect="auto",
         interpolation="nearest",
+        cmap="magma",
+        rasterized=True,
     )
+    ax_b.grid(False)
     ax_b.set_xticks(np.arange(len(heat.columns)))
     ax_b.set_xticklabels([f"{x:.2f}" for x in heat.columns], rotation=45, ha="right")
     ax_b.set_yticks(np.arange(len(heat.index)))
@@ -248,12 +354,14 @@ def build_figure_1(
     ].copy()
     for maturity, group in curve.groupby("maturity_days", sort=True):
         group = group.sort_values("fraction_fixed")
+        color, marker = MATURITY_STYLES.get(
+            int(maturity), (PALETTE["charcoal"], "o")
+        )
         ax_c.plot(
             group["fraction_fixed"],
             group["mean_abs_pi_minus_pm"],
-            marker="o",
-            linewidth=1.25,
-            markersize=3.5,
+            marker=marker,
+            color=color,
             label=f"{int(maturity)} days",
         )
     ax_c.set_xlabel("Fraction already fixed")
@@ -269,18 +377,34 @@ def build_figure_1(
     # D. Taylor mechanism across every synthetic cell.
     x = summary["mean_taylor_gap"].to_numpy(dtype=float)
     y = summary["mean_pi_minus_pm"].to_numpy(dtype=float)
-    ax_d.scatter(x, y, s=8, alpha=0.16, linewidths=0)
     finite = np.isfinite(x) & np.isfinite(y)
+    hb = ax_d.hexbin(
+        x[finite],
+        y[finite],
+        gridsize=42,
+        mincnt=1,
+        cmap="Greys",
+        linewidths=0.0,
+        rasterized=True,
+    )
     lo = float(min(x[finite].min(), y[finite].min()))
     hi = float(max(x[finite].max(), y[finite].max()))
-    ax_d.plot([lo, hi], [lo, hi], linestyle="--", linewidth=1.0)
+    ax_d.plot(
+        [lo, hi],
+        [lo, hi],
+        linestyle="--",
+        linewidth=1.15,
+        color=PALETTE["wine"],
+    )
     corr = float(np.corrcoef(x[finite], y[finite])[0, 1])
     ax_d.set_xlabel(
         r"Taylor prediction $\frac{1}{2}C^{Q\prime\prime}(\bar\sigma)"
         r"\mathrm{Var}(\sigma\mid D)$"
     )
     ax_d.set_ylabel(r"Actual mean $PI-PM$")
-    ax_d.set_title(fr"Second-order mechanism, all cells ($r={corr:.4f}$)")
+    ax_d.set_title(fr"Second-order mechanism ($r={corr:.4f}$)")
+    cbar2 = fig.colorbar(hb, ax=ax_d, fraction=0.047, pad=0.04)
+    cbar2.set_label("Cell count")
     _panel_label(ax_d, "D")
 
     fig.suptitle("When posterior integration matters", y=1.01, fontsize=11)
@@ -311,14 +435,14 @@ def _plot_sigma_timeseries(ax: plt.Axes, by_date: pd.DataFrame, expiry: str) -> 
         group["valuation_date"],
         group["sigma_p_posterior_mean"],
         marker="o",
-        linewidth=1.25,
+        color=PALETTE["ink"],
         label=r"Historical posterior mean $\sigma_P$",
     )
     ax.plot(
         group["valuation_date"],
         group["full_sample_sigma_q"],
         marker="s",
-        linewidth=1.25,
+        color=PALETTE["gold"],
         label=r"APO-implied common $\sigma_Q$",
     )
     ax.set_ylabel("Annualized volatility")
@@ -336,7 +460,11 @@ def _plot_smile(
     day = contracts.loc[contracts["valuation_date"].eq(date)].copy()
     if day.empty:
         raise ValueError(f"No contract-level implied volatilities for {date.date()}")
-    for option_type, marker in (("call", "o"), ("put", "s")):
+    styles = {
+        "call": ("o", PALETTE["ink"], "Calls"),
+        "put": ("s", PALETTE["wine"], "Puts"),
+    }
+    for option_type, (marker, color, label) in styles.items():
         group = day.loc[day["option_type"].eq(option_type)].sort_values("log_moneyness")
         if group.empty:
             continue
@@ -344,9 +472,13 @@ def _plot_smile(
             group["log_moneyness"],
             group["apo_implied_sigma_q"],
             marker=marker,
-            s=20,
-            alpha=0.8,
-            label=option_type.capitalize(),
+            s=27,
+            alpha=0.92,
+            color=color,
+            edgecolor="white",
+            linewidth=0.4,
+            label=label,
+            rasterized=True,
         )
 
     date_summary = by_date.loc[by_date["valuation_date"].eq(date)]
@@ -354,8 +486,20 @@ def _plot_smile(
         raise ValueError(f"No date-level implied-volatility row for {date.date()}")
     sigma_p = float(date_summary.iloc[0]["sigma_p_posterior_mean"])
     sigma_q = float(date_summary.iloc[0]["full_sample_sigma_q"])
-    ax.axhline(sigma_p, linestyle=":", linewidth=1.1, label=r"Historical $\sigma_P$")
-    ax.axhline(sigma_q, linestyle="--", linewidth=1.1, label=r"Common APO $\sigma_Q$")
+    ax.axhline(
+        sigma_p,
+        linestyle=":",
+        linewidth=1.15,
+        color=PALETTE["midgray"],
+        label=r"Historical $\sigma_P$",
+    )
+    ax.axhline(
+        sigma_q,
+        linestyle="--",
+        linewidth=1.15,
+        color=PALETTE["gold"],
+        label=r"Common APO $\sigma_Q$",
+    )
     ax.set_xlabel(r"Log moneyness $\log(K/\widehat A^Q)$")
     ax.set_ylabel("APO-implied volatility")
     ax.set_title(str(date.date()))
@@ -412,8 +556,8 @@ def _forest_panel(
     metric: str,
 ) -> None:
     experiments = [
-        ("forward_q_expanding_smile", "Expanding smile", "o"),
-        ("forward_q_previous_day_smile", "Previous-day smile", "s"),
+        ("forward_q_expanding_smile", "Expanding smile", "o", PALETTE["teal"]),
+        ("forward_q_previous_day_smile", "Previous-day smile", "s", PALETTE["purple"]),
     ]
     samples = [
         "all",
@@ -425,7 +569,9 @@ def _forest_panel(
     y_base = np.arange(len(samples), dtype=float)
     offsets = (-0.10, 0.10)
 
-    for offset, (experiment, label, marker) in zip(offsets, experiments, strict=True):
+    for offset, (experiment, label, marker, color) in zip(
+        offsets, experiments, strict=True
+    ):
         group = boot.loc[boot["experiment"].eq(experiment)].set_index("sample")
         rows = group.loc[samples]
         value = rows[f"delta_{metric}"].to_numpy(dtype=float)
@@ -437,20 +583,42 @@ def _forest_panel(
             y_base + offset,
             xerr=xerr,
             fmt=marker,
-            markersize=4.5,
-            capsize=2.5,
-            linewidth=1.0,
+            markersize=4.6,
+            color=color,
+            ecolor=color,
+            capsize=2.4,
+            linewidth=1.05,
             label=label,
         )
 
-    ax.axvline(0.0, linestyle="--", linewidth=1.0)
-    ax.set_yticks(y_base)
-    ax.set_yticklabels([_pretty_sample(s) for s in samples])
-    ax.invert_yaxis()
-    ax.set_xlabel(fr"$\Delta {metric.upper()}$ vs historical PI")
-    ax.set_title(
-        f"{metric.upper()} difference (negative = forward smile improves)"
+    sample_labels = []
+    for sample in samples:
+        row = boot.loc[
+            boot["experiment"].eq("forward_q_expanding_smile")
+            & boot["sample"].eq(sample)
+        ]
+        if row.empty:
+            sample_labels.append(_pretty_sample(sample))
+        else:
+            sample_labels.append(
+                f"{_pretty_sample(sample)} ($n={int(row.iloc[0]['n'])}$)"
+            )
+
+    ax.axvline(
+        0.0,
+        linestyle="--",
+        linewidth=0.95,
+        color=PALETTE["midgray"],
     )
+    ax.set_yticks(y_base)
+    ax.set_yticklabels(sample_labels)
+    ax.invert_yaxis()
+    ax.set_xlabel(
+        fr"$\Delta {metric.upper()}="
+        fr"{metric.upper()}_{{\mathrm{{forward}}}}-"
+        fr"{metric.upper()}_{{\mathrm{{historical\ PI}}}}$"
+    )
+    ax.set_title(f"{metric.upper()} difference")
     ax.legend(frameon=False)
 
 
@@ -459,15 +627,15 @@ def build_figure_3(
     formats: Iterable[str],
 ) -> tuple[list[str], dict[str, object]]:
     boot = pd.read_csv(BOOTSTRAP_PATH)
-    fig, axes = plt.subplots(1, 2, figsize=(7.25, 3.4), sharey=True)
+    fig, axes = plt.subplots(1, 2, figsize=(7.20, 3.35), sharey=True)
     _forest_panel(axes[0], boot, metric="mae")
     _panel_label(axes[0], "A")
     _forest_panel(axes[1], boot, metric="rmse")
     _panel_label(axes[1], "B")
     fig.suptitle(
-        "Strict forward-in-time volatility improvement: valuation-date cluster bootstrap",
-        y=1.03,
-        fontsize=11,
+        "Strict forward-in-time volatility improvement",
+        y=1.02,
+        fontsize=10.5,
     )
     fig.tight_layout()
     outputs = _save(fig, output_dir / "fig03_forward_q_cluster_bootstrap", formats)
@@ -485,7 +653,7 @@ def build_figure_3(
 
 def _target_label(row: pd.Series) -> str:
     date = pd.Timestamp(row["valuation_date"]).strftime("%m-%d")
-    return f"{date}  K={row['strike']:g}"
+    return f"{date}\n$K={row['strike']:g}$"
 
 
 def build_figure_4(
@@ -506,7 +674,7 @@ def build_figure_4(
     fig, axes = plt.subplots(
         2,
         1,
-        figsize=(7.25, 5.0),
+        figsize=(7.20, 4.90),
         sharex=True,
         gridspec_kw={"height_ratios": [2.1, 1.0]},
     )
@@ -518,22 +686,27 @@ def build_figure_4(
             matched["mc_pi_minus_pm"].to_numpy(dtype=float),
             matched["mc_pi_minus_pm_mcse"].to_numpy(dtype=float),
             "o",
+            PALETTE["ink"],
         ),
         (
             "Curran",
             matched["curran_pi_minus_pm_mc"].to_numpy(dtype=float),
             np.zeros(len(matched)),
             "D",
+            PALETTE["gold"],
         ),
         (
             "Randomized Sobol",
             matched["qmc_pi_minus_pm"].to_numpy(dtype=float),
             matched["qmc_gap_mcse"].to_numpy(dtype=float),
             "s",
+            PALETTE["wine"],
         ),
     ]
 
-    for offset, (label, value, se, marker) in zip(offsets, values, strict=True):
+    for offset, (label, value, se, marker, color) in zip(
+        offsets, values, strict=True
+    ):
         ax_top.errorbar(
             x + offset,
             value,
@@ -541,6 +714,8 @@ def build_figure_4(
             fmt=marker,
             markersize=4.3,
             linewidth=1.0,
+            color=color,
+            ecolor=color,
             capsize=2,
             label=label,
         )
@@ -556,15 +731,17 @@ def build_figure_4(
             1e6 * (matched["mc_pi_minus_pm"].to_numpy(dtype=float) - curran),
             1e6 * matched["mc_pi_minus_pm_mcse"].to_numpy(dtype=float),
             "o",
+            PALETTE["ink"],
         ),
         (
             "Sobol minus Curran",
             1e6 * (matched["qmc_pi_minus_pm"].to_numpy(dtype=float) - curran),
             1e6 * matched["qmc_gap_mcse"].to_numpy(dtype=float),
             "s",
+            PALETTE["wine"],
         ),
     ]
-    for offset, (label, value, se, marker) in zip(
+    for offset, (label, value, se, marker, color) in zip(
         (-0.09, 0.09), deviations, strict=True
     ):
         ax_bottom.errorbar(
@@ -574,11 +751,18 @@ def build_figure_4(
             fmt=marker,
             markersize=4.0,
             linewidth=1.0,
+            color=color,
+            ecolor=color,
             capsize=2,
             label=label,
         )
-    ax_bottom.axhline(0.0, linestyle="--", linewidth=1.0)
-    ax_bottom.set_ylabel(r"Gap difference $\times 10^6$")
+    ax_bottom.axhline(
+        0.0,
+        linestyle="--",
+        linewidth=0.95,
+        color=PALETTE["midgray"],
+    )
+    ax_bottom.set_ylabel(r"Difference from Curran ($\times 10^6$)")
     ax_bottom.set_xlabel("Empirical target")
     ax_bottom.legend(frameon=False, ncol=2)
     _panel_label(ax_bottom, "B")
@@ -587,7 +771,11 @@ def build_figure_4(
     ax_bottom.set_xticks(x)
     ax_bottom.set_xticklabels(labels, rotation=45, ha="right")
 
-    fig.suptitle("Numerical identification of the posterior-integration effect", y=1.01, fontsize=11)
+    fig.suptitle(
+        "Numerical identification of the posterior-integration effect",
+        y=1.005,
+        fontsize=10.5,
+    )
     fig.tight_layout()
     outputs = _save(fig, output_dir / "fig04_numerical_identification", formats)
     return outputs, {
@@ -624,12 +812,17 @@ def parse_args() -> argparse.Namespace:
         default=None,
         help="Optional explicit massive mechanism-map run directory.",
     )
+    parser.add_argument(
+        "--no-tex",
+        action="store_true",
+        help="Force STIX fallback instead of the Wiley Utopia TeX stack.",
+    )
     return parser.parse_args()
 
 
 def main() -> None:
     args = parse_args()
-    _configure_matplotlib()
+    font_mode = _configure_matplotlib(force_no_tex=args.no_tex)
     output_dir = args.output_dir
     if not output_dir.is_absolute():
         output_dir = ROOT / output_dir
@@ -640,6 +833,10 @@ def main() -> None:
     manifest: dict[str, object] = {
         "output_dir": _portable_path(output_dir),
         "formats": list(formats),
+        "font_mode": font_mode,
+        "hybrid_pdf": True,
+        "raster_dpi": 600,
+        "palette": PALETTE,
         "figures": {},
     }
 
@@ -666,6 +863,7 @@ def main() -> None:
         encoding="utf-8",
     )
     print(f"Built publication figures under {output_dir}")
+    print(f"Font mode: {font_mode}")
     for item in manifest["figures"].values():
         for output in item["outputs"]:
             print(f"  {output}")
