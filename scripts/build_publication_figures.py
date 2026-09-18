@@ -102,13 +102,21 @@ def _configure_matplotlib() -> None:
     )
 
 
+def _portable_path(path: Path) -> str:
+    """Return a repo-relative path when possible, otherwise an absolute path."""
+    try:
+        return str(path.relative_to(ROOT))
+    except ValueError:
+        return str(path)
+
+
 def _save(fig: plt.Figure, stem: Path, formats: Iterable[str]) -> list[str]:
     outputs: list[str] = []
     stem.parent.mkdir(parents=True, exist_ok=True)
     for fmt in formats:
         path = stem.with_suffix(f".{fmt}")
         fig.savefig(path, bbox_inches="tight")
-        outputs.append(str(path.relative_to(ROOT)))
+        outputs.append(_portable_path(path))
     plt.close(fig)
     return outputs
 
@@ -630,7 +638,7 @@ def main() -> None:
     formats = tuple(dict.fromkeys(args.formats))
     requested = tuple(dict.fromkeys(args.figures))
     manifest: dict[str, object] = {
-        "output_dir": str(output_dir.relative_to(ROOT)),
+        "output_dir": _portable_path(output_dir),
         "formats": list(formats),
         "figures": {},
     }
@@ -661,7 +669,7 @@ def main() -> None:
     for item in manifest["figures"].values():
         for output in item["outputs"]:
             print(f"  {output}")
-    print(f"  {manifest_path.relative_to(ROOT)}")
+    print(f"  {_portable_path(manifest_path)}")
 
 
 if __name__ == "__main__":
