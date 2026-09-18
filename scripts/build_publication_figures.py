@@ -48,7 +48,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from scripts.vendor_utopia_fonts import archives_available, prepare_vendored_texmf
+from scripts.vendor_utopia_fonts import (
+    archives_available,
+    diagnostic_report,
+    ensure_tex_toolchain_on_path,
+    prepare_vendored_texmf,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -115,6 +120,7 @@ MATURITY_STYLES = {
 
 
 def _kpsewhich(filename: str) -> bool:
+    ensure_tex_toolchain_on_path()
     executable = shutil.which("kpsewhich")
     if executable is None:
         return False
@@ -129,7 +135,8 @@ def _kpsewhich(filename: str) -> bool:
 
 def _wiley_utopia_mode() -> str | None:
     """Prefer the fully repo-vendored Wiley Utopia stack, then system TeX."""
-    if shutil.which("latex") is None:
+    tools = ensure_tex_toolchain_on_path()
+    if tools.get("latex") is None:
         return None
 
     if archives_available():
@@ -881,6 +888,10 @@ def main() -> None:
     )
     print(f"Built publication figures under {output_dir}")
     print(f"Font mode: {font_mode}")
+    if font_mode == "stix-fallback":
+        report = diagnostic_report()
+        print("TeX diagnostic:")
+        print(json.dumps(report, indent=2))
     for item in manifest["figures"].values():
         for output in item["outputs"]:
             print(f"  {output}")
