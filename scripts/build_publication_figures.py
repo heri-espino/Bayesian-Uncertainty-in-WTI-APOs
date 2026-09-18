@@ -29,8 +29,9 @@ fig04_numerical_identification.{pdf,png}
 figure_manifest.json
     Source paths and plotting choices used for the build.
 
-The plotting code deliberately uses only matplotlib/pandas/numpy.  It does not require
-LaTeX, seaborn, CuPy, or a GPU.
+The plotting code uses only matplotlib/pandas/numpy at runtime.  When the exact Wiley
+Utopia TeX stack is installed, labels are rendered with the same Utopia + mathastext
+configuration used by WileyNJDv5; otherwise the script falls back deterministically to STIX.
 """
 
 from __future__ import annotations
@@ -264,6 +265,7 @@ def _panel_label(ax: plt.Axes, label: str) -> None:
         fontweight="bold",
         va="bottom",
         ha="left",
+        color=PALETTE["charcoal"],
     )
 
 
@@ -295,12 +297,12 @@ def build_figure_1(
     # A. Posterior dispersion shrinks with information.
     for sigma_true, group in posterior.groupby("sigma_true", sort=True):
         group = group.sort_values("n_obs")
+        sigma_key = round(float(sigma_true), 2)
         ax_a.plot(
             group["n_obs"],
             group["posterior_sigma_sd_mean"],
             marker="o",
-            linewidth=1.25,
-            markersize=3.5,
+            color=SIGMA_COLORS.get(sigma_key, PALETTE["charcoal"]),
             label=fr"$\sigma_0={sigma_true:.2f}$",
         )
     ax_a.set_xscale("log")
@@ -327,7 +329,10 @@ def build_figure_1(
         origin="lower",
         aspect="auto",
         interpolation="nearest",
+        cmap="magma",
+        rasterized=True,
     )
+    ax_b.grid(False)
     ax_b.set_xticks(np.arange(len(heat.columns)))
     ax_b.set_xticklabels([f"{x:.2f}" for x in heat.columns], rotation=45, ha="right")
     ax_b.set_yticks(np.arange(len(heat.index)))
@@ -349,12 +354,14 @@ def build_figure_1(
     ].copy()
     for maturity, group in curve.groupby("maturity_days", sort=True):
         group = group.sort_values("fraction_fixed")
+        color, marker = MATURITY_STYLES.get(
+            int(maturity), (PALETTE["charcoal"], "o")
+        )
         ax_c.plot(
             group["fraction_fixed"],
             group["mean_abs_pi_minus_pm"],
-            marker="o",
-            linewidth=1.25,
-            markersize=3.5,
+            marker=marker,
+            color=color,
             label=f"{int(maturity)} days",
         )
     ax_c.set_xlabel("Fraction already fixed")
@@ -370,18 +377,34 @@ def build_figure_1(
     # D. Taylor mechanism across every synthetic cell.
     x = summary["mean_taylor_gap"].to_numpy(dtype=float)
     y = summary["mean_pi_minus_pm"].to_numpy(dtype=float)
-    ax_d.scatter(x, y, s=8, alpha=0.16, linewidths=0)
     finite = np.isfinite(x) & np.isfinite(y)
+    hb = ax_d.hexbin(
+        x[finite],
+        y[finite],
+        gridsize=42,
+        mincnt=1,
+        cmap="Greys",
+        linewidths=0.0,
+        rasterized=True,
+    )
     lo = float(min(x[finite].min(), y[finite].min()))
     hi = float(max(x[finite].max(), y[finite].max()))
-    ax_d.plot([lo, hi], [lo, hi], linestyle="--", linewidth=1.0)
+    ax_d.plot(
+        [lo, hi],
+        [lo, hi],
+        linestyle="--",
+        linewidth=1.15,
+        color=PALETTE["wine"],
+    )
     corr = float(np.corrcoef(x[finite], y[finite])[0, 1])
     ax_d.set_xlabel(
         r"Taylor prediction $\frac{1}{2}C^{Q\prime\prime}(\bar\sigma)"
         r"\mathrm{Var}(\sigma\mid D)$"
     )
     ax_d.set_ylabel(r"Actual mean $PI-PM$")
-    ax_d.set_title(fr"Second-order mechanism, all cells ($r={corr:.4f}$)")
+    ax_d.set_title(fr"Second-order mechanism ($r={corr:.4f}$)")
+    cbar2 = fig.colorbar(hb, ax=ax_d, fraction=0.047, pad=0.04)
+    cbar2.set_label("Cell count")
     _panel_label(ax_d, "D")
 
     fig.suptitle("When posterior integration matters", y=1.01, fontsize=11)
@@ -412,14 +435,14 @@ def _plot_sigma_timeseries(ax: plt.Axes, by_date: pd.DataFrame, expiry: str) -> 
         group["valuation_date"],
         group["sigma_p_posterior_mean"],
         marker="o",
-        linewidth=1.25,
+        color=PALETTE["ink"],
         label=r"Historical posterior mean $\sigma_P$",
     )
     ax.plot(
         group["valuation_date"],
         group["full_sample_sigma_q"],
         marker="s",
-        linewidth=1.25,
+        color=PALETTE["gold"],
         label=r"APO-implied common $\sigma_Q$",
     )
     ax.set_ylabel("Annualized volatility")
@@ -437,7 +460,11 @@ def _plot_smile(
     day = contracts.loc[contracts["valuation_date"].eq(date)].copy()
     if day.empty:
         raise ValueError(f"No contract-level implied volatilities for {date.date()}")
-    for option_type, marker in (("call", "o"), ("put", "s")):
+    styles = {
+        "call": ("o", PALETTE["ink"], "Calls"),
+        "put": ("s", PALETTE["wine"], "Puts"),
+    }
+    for option_type, (marker, color, label) in styles.items():
         group = day.loc[day["option_type"].eq(option_type)].sort_values("log_moneyness")
         if group.empty:
             continue
@@ -445,9 +472,13 @@ def _plot_smile(
             group["log_moneyness"],
             group["apo_implied_sigma_q"],
             marker=marker,
-            s=20,
-            alpha=0.8,
-            label=option_type.capitalize(),
+            s=27,
+            alpha=0.92,
+            color=color,
+            edgecolor="white",
+            linewidth=0.4,
+            label=label,
+            rasterized=True,
         )
 
     date_summary = by_date.loc[by_date["valuation_date"].eq(date)]
@@ -455,8 +486,20 @@ def _plot_smile(
         raise ValueError(f"No date-level implied-volatility row for {date.date()}")
     sigma_p = float(date_summary.iloc[0]["sigma_p_posterior_mean"])
     sigma_q = float(date_summary.iloc[0]["full_sample_sigma_q"])
-    ax.axhline(sigma_p, linestyle=":", linewidth=1.1, label=r"Historical $\sigma_P$")
-    ax.axhline(sigma_q, linestyle="--", linewidth=1.1, label=r"Common APO $\sigma_Q$")
+    ax.axhline(
+        sigma_p,
+        linestyle=":",
+        linewidth=1.15,
+        color=PALETTE["midgray"],
+        label=r"Historical $\sigma_P$",
+    )
+    ax.axhline(
+        sigma_q,
+        linestyle="--",
+        linewidth=1.15,
+        color=PALETTE["gold"],
+        label=r"Common APO $\sigma_Q$",
+    )
     ax.set_xlabel(r"Log moneyness $\log(K/\widehat A^Q)$")
     ax.set_ylabel("APO-implied volatility")
     ax.set_title(str(date.date()))
