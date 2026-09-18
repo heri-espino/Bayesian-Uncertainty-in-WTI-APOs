@@ -1,29 +1,29 @@
 \section{Results}\label{sec:results}
 
-This section reports the completed baseline evidence from the repeated-sampling experiment and the first contract-consistent WTI APO pricing panel. The synthetic results isolate parameter-integration effects when the true volatility is known. The empirical results use October-2026 WTI APO market marks, the contemporaneous Barchart CL term structure, rolling physical-measure posteriors based on information available at each valuation date, and date-specific Treasury discounting.
+The completed evidence separates three questions. First, when does posterior integration differ materially from posterior-mean plug-in pricing? Second, are the small empirical PI--PM gaps numerically resolved? Third, how large is the posterior-integration effect relative to volatility specification in observed WTI APO prices?
 
-\subsection{Synthetic evidence: integration versus plug-in}
+\subsection{Repeated-sampling benchmark}
 
-Table~\ref{tab:synthetic_pilot} reports the initial repeated-sampling comparison. With only 63 daily observations, full Bayes has RMSE 0.469, compared with 0.469 for the posterior-mean plug-in, 0.487 for the marginal sigma-mode plug-in, and 0.470 for MLE. The full-Bayes and posterior-mean prices are effectively indistinguishable in both bias and absolute error. As the historical sample increases to 252 and 1,260 observations, all four methods converge and the difference between full Bayes and posterior-mean plug-in becomes numerically negligible.
+Table~\ref{tab:synthetic_pilot} reports the original repeated-sampling benchmark. Even with only 63 daily observations, posterior-integrated and posterior-mean plug-in pricing are nearly indistinguishable. As the historical sample increases, all four estimators converge and the PI--PM difference becomes numerically negligible.
 
 \begin{table*}[t]
 \centering
-\caption{Preliminary repeated-sampling pricing performance. The target is the risk-neutral price evaluated at the true volatility, not a posterior-generated target. The sigma-mode comparator is the marginal posterior mode of volatility rather than a joint MAP estimate.}\label{tab:synthetic_pilot}
+\caption{Repeated-sampling pricing performance. The target is the risk-neutral price evaluated at the true volatility, not a posterior-generated target. The sigma-mode comparator is the marginal posterior mode of volatility rather than a joint MAP estimate.}\label{tab:synthetic_pilot}
 \begin{tabular}{llrrrr}
 \toprule
 $N$ & Method & Bias & MAE & RMSE & 95\% coverage\\
 \midrule
-63 & Full Bayes & -0.0011 & 0.3543 & 0.4686 & 0.9500\\
+63 & Posterior-integrated & -0.0011 & 0.3543 & 0.4686 & 0.9500\\
 63 & Posterior-mean plug-in & -0.0012 & 0.3543 & 0.4687 & 0.9500\\
 63 & Sigma posterior-mode plug-in & -0.0919 & 0.3783 & 0.4867 & 0.9500\\
 63 & MLE plug-in & -0.0407 & 0.3576 & 0.4701 & 0.9500\\
 \addlinespace
-252 & Full Bayes & 0.0139 & 0.1988 & 0.2454 & 0.9625\\
+252 & Posterior-integrated & 0.0139 & 0.1988 & 0.2454 & 0.9625\\
 252 & Posterior-mean plug-in & 0.0139 & 0.1988 & 0.2454 & 0.9625\\
 252 & Sigma posterior-mode plug-in & -0.0212 & 0.1974 & 0.2446 & 0.9625\\
 252 & MLE plug-in & 0.0035 & 0.1992 & 0.2444 & 0.9625\\
 \addlinespace
-1260 & Full Bayes & -0.0048 & 0.1010 & 0.1243 & 0.9250\\
+1260 & Posterior-integrated & -0.0048 & 0.1010 & 0.1243 & 0.9250\\
 1260 & Posterior-mean plug-in & -0.0048 & 0.1010 & 0.1243 & 0.9250\\
 1260 & Sigma posterior-mode plug-in & -0.0128 & 0.1060 & 0.1302 & 0.9250\\
 1260 & MLE plug-in & -0.0067 & 0.1013 & 0.1243 & 0.9250\\
@@ -31,67 +31,45 @@ $N$ & Method & Bias & MAE & RMSE & 95\% coverage\\
 \end{tabular}
 \end{table*}
 
-The near equality of $\widehat C_{FB}$ and $\widehat C_{PM}$ is economically informative. In this baseline setting, posterior dispersion and curvature are not large enough for Jensen-type effects to generate a meaningful pricing difference. This is consistent with the mechanism in Equation~\eqref{eq:taylor_gap}: posterior integration is not expected to produce a premium merely because the analysis is Bayesian. The result also accords with the broader observation that parameter-uncertainty effects may be modest in sufficiently informative samples \cite{romboutsstentoft2014}.
+The near equality of $\widehat C_{PI}$ and $\widehat C_{PM}$ is not a generic Bayesian result. It is a property of the posterior dispersion and pricing curvature in these particular states. The massive mechanism experiment makes this distinction explicit.
 
-The marginal sigma-mode plug-in performs somewhat less stably in the smallest sample, but the ranking is not monotone at every sample size. The evidence therefore does not support a generic claim that one plug-in estimator is uniformly dominated. The production experiment expands volatility, moneyness, and maturity specifically to identify where the pricing map becomes nonlinear enough for posterior integration to separate from plug-in valuation.
+\subsection{Where posterior integration matters}
 
-\subsection{Posterior price uncertainty in a baseline case}
+The mechanism map covers 175,000 independently simulated historical datasets and 168 WTI-like contract states, using 716.975 million posterior-grid evaluations. Across the complete experiment, the largest observed absolute PI--PM gap is 0.1384. The largest cell-level 99th percentile is 0.1271. These values are orders of magnitude larger than the roughly $10^{-3}$ gaps observed in the WTI baseline, so the empirical near-equivalence of PI and PM is not an artifact of a pricing rule that can never separate.
 
-For the corrected baseline implementation, the high-precision risk-neutral benchmark is approximately 6.42. A representative posterior fit gives a full-Bayes value near 6.24, a posterior-mean plug-in near 6.24, a marginal sigma-mode plug-in near 6.22, and an MLE plug-in near 6.23. The corresponding central 95\% posterior price interval is approximately $[5.80,6.73]$.
+The adverse states have a clear economic structure. The largest gaps occur with short historical samples, high true volatility, long remaining horizons, little realized fixing, and strikes far from the expected average. For example, with $n=21$, $\sigma_0=0.80$, 126 days to maturity, no realized fixing, and moneyness 1.50, the mean PI--PM gap is 0.1176 and the 99th percentile is 0.1271. With $n=21$, $\sigma_0=0.50$, 252 days, no realized fixing, and moneyness 1.50, the mean gap is 0.1103 and the maximum observed gap is 0.1384.
 
-The interval has a different interpretation from the point-estimator comparison. Even when $C_{FB}$ and $C_{PM}$ are almost identical, the push-forward posterior in Equation~\eqref{eq:pushforward} can remain non-degenerate. Thus, ``integration does not change the point price much'' does not imply ``parameter uncertainty is zero.'' The empirical section below preserves this distinction by reporting both pricing-rule differences and model-to-market error.
+The mechanism in Equation~\eqref{eq:taylor_gap} explains these states remarkably well. In the most adverse cells, the correlation between the realized PI--PM gap and the second-order approximation is approximately 0.999, with through-origin slopes close to one. Posterior dispersion also behaves as expected: for $\sigma_0=0.80$, mean posterior standard deviation falls from approximately 0.122 at $n=21$ to 0.0159 at $n=1260$. The experiment therefore turns the qualitative Jensen argument into a quantitative state map: integration matters when \emph{both} posterior dispersion and price curvature are large.
 
-\subsection{Empirical data coverage and October-2026 panel}
+Partial fixing works in the opposite direction. As a larger fraction of the final arithmetic average becomes deterministic, the remaining volatility exposure shrinks and so does the opportunity for posterior integration to change the point price. This effect is visible even in high-volatility, extreme-moneyness cells and provides a contract-specific reason why parameter uncertainty can matter early in an averaging problem but fade rapidly as fixings accumulate.
 
-The Barchart ingestion audit produces the broad sample summarized in Table~\ref{tab:data_audit}. The maturity coverage is useful, but the cross section becomes thin at longer horizons. This is a feature of the observed market data rather than a reason to manufacture a balanced panel.
+\subsection{Contract-consistent October-2026 baseline}
 
-\begin{table}[t]
-\centering
-\caption{WTI APO data audit.}\label{tab:data_audit}
-\begin{tabular}{lr}
-\toprule
-Item & Count\\
-\midrule
-Raw CSV histories & 214\\
-Unique option contracts & 213\\
-Option-date observations & 11,179\\
-Expiry months represented & 8\\
-Folder/expiry mismatches & 1\\
-\bottomrule
-\end{tabular}
-\end{table}
+The first completed WTI baseline uses the October-2026 APO expiry. Across 12 eligible valuation dates, the main sample contains 310 option-date observations. Five dates contain at least one positive-volume contract, producing a 136-observation positive-volume-date sample, while only six individual contract-date observations themselves report positive daily volume.
 
-Trading activity is sparse for many contracts. Across several expiry/type groups, only a small percentage of dates report positive volume even when open interest is positive. This makes transaction-price language inappropriate for the full panel. The market benchmark is therefore an end-of-day Barchart mark, and liquidity is treated as an explicit sample dimension rather than assumed away.
-
-The first completed contract-consistent panel uses the October-2026 APO expiry. Both required futures-curve contracts, \texttt{CLX26} and \texttt{CLZ26}, are available from August 25 through September 10, 2026. Across those 12 eligible valuation dates, the main sample contains 310 option-date observations. Five dates contain at least one option with positive reported volume, producing a 136-observation positive-volume-date sample. Only six individual contract-date observations report positive daily volume themselves. The strict sample is therefore useful as a benchmark for stronger market participation, but it is too small to support broad statistical claims.
-
-The committed multi-date panel was rerun at the production computational budget: four MCMC chains, 20,000 iterations per chain, 4,000 burn-in iterations per chain, 100,000 Monte Carlo paths per volatility-grid point, and 41 grid points. The resulting single-date manifests and namespaced panel aggregates are the provenance source for the empirical values reported below.
-
-\subsection{Empirical pricing performance}
-
-Table~\ref{tab:oct26_empirical} reports pooled model-to-market errors for the three nested samples. The comparison is deliberately descriptive. All pricing rules are evaluated on the same observations, and the purpose is to measure how much posterior integration changes prices within the baseline model before attributing any difference to statistical superiority.
+Table~\ref{tab:oct26_empirical} reports pooled model-to-market errors. All rules use the same futures curves, realized fixings, discount factors, and market settlements; the comparison therefore isolates the incremental effect of the volatility decision rule within the maintained model.
 
 \begin{table*}[t]
 \centering
-\caption{Production-budget October-2026 WTI APO pricing errors under three liquidity definitions. Mean error is model price minus Barchart end-of-day market mark. The marginal posterior-mode estimator is a volatility plug-in, not a joint MAP estimator.}\label{tab:oct26_empirical}
+\caption{Production-budget October-2026 WTI APO pricing errors. Mean error is model price minus the Barchart end-of-day settlement field.}\label{tab:oct26_empirical}
 \begin{tabular}{llrrrr}
 \toprule
 Sample & Method & $N$ & Mean error & MAE & RMSE\\
 \midrule
 All eligible dates
- & Full Bayes & 310 & -0.4065 & 0.4079 & 0.5177\\
+ & Posterior-integrated & 310 & -0.4065 & 0.4079 & 0.5177\\
  & Posterior mean & 310 & -0.4072 & 0.4086 & 0.5183\\
  & Sigma posterior mode & 310 & -0.4122 & 0.4132 & 0.5200\\
  & MLE & 310 & -0.4088 & 0.4101 & 0.5197\\
 \addlinespace
 Positive-volume dates
- & Full Bayes & 136 & -0.3601 & 0.3633 & 0.4303\\
+ & Posterior-integrated & 136 & -0.3601 & 0.3633 & 0.4303\\
  & Posterior mean & 136 & -0.3609 & 0.3640 & 0.4310\\
  & Sigma posterior mode & 136 & -0.3697 & 0.3720 & 0.4413\\
  & MLE & 136 & -0.3625 & 0.3654 & 0.4324\\
 \addlinespace
 Positive-volume contracts
- & Full Bayes & 6 & -0.1388 & 0.1543 & 0.1864\\
+ & Posterior-integrated & 6 & -0.1388 & 0.1543 & 0.1864\\
  & Posterior mean & 6 & -0.1394 & 0.1547 & 0.1869\\
  & Sigma posterior mode & 6 & -0.1530 & 0.1651 & 0.2026\\
  & MLE & 6 & -0.1414 & 0.1560 & 0.1882\\
@@ -99,22 +77,56 @@ Positive-volume contracts
 \end{tabular}
 \end{table*}
 
-Two patterns are immediate. First, full Bayes and the posterior-mean plug-in are extremely close in every sample. The pooled RMSE difference is approximately 0.0006 in the 310-observation sample, 0.0008 on positive-volume dates, and 0.0005 in the strict six-observation positive-volume sample. These differences are small relative to the level of model-to-market error. Second, restricting attention to positive-volume contracts lowers the absolute errors substantially, but the sample shrinks from 310 to six observations. The reduction in error should therefore be interpreted primarily as evidence that benchmark quality and liquidity matter for absolute fit, not as a basis for a strong cross-method ranking.
+Posterior integration and the posterior-mean plug-in are extremely close in every sample. In the six positive-volume observations, average absolute $|\Delta_{PI,PM}|$ is approximately 0.00059 and the largest absolute gap is approximately 0.00100, compared with a posterior-integrated MAE of 0.1543. The relevant empirical conclusion is therefore not that posterior uncertainty vanishes, but that its nonlinear effect on the point price is small under the observed posterior and contract states.
 
-At the production budget, full Bayes has the lowest pooled RMSE among the four reported rules in each of the three October samples. The numerical differences are nevertheless too small, and the strict transaction-activity sample too sparse, to support a general superiority claim. The economically robust statement is instead the near equivalence of full Bayes and posterior-mean pricing within the baseline model.
+The sign of the model-to-market errors is equally important. All four historical-volatility rules underprice the option settlements on average. This common bias cannot be explained by choosing PI rather than PM because the two rules produce almost the same prices. It points instead toward a larger specification discrepancy.
 
-\subsection{The full-Bayes/posterior-mean gap}
+\subsection{The small PI--PM gap is numerically resolved}
 
-The main object of interest is
+Because the empirical PI--PM differences are sub-cent, they were repriced at budgets far beyond the production baseline. The pseudo-random benchmark selects 18 difficult empirical contracts and uses 121 volatility nodes, 5 million paths per node, and four independent randomizations, totaling 43.56 billion path--volatility evaluations. An independent Sobol experiment uses eight targets, 121 nodes, $2^{21}$ paths, and eight randomized scrambles, totaling 16.24 billion path--volatility evaluations.
+
+The three pricing engines agree on the quantity of interest. For representative difficult October calls, PI--PM gaps near 0.00135 are reproduced by pseudo-Monte Carlo, randomized Sobol, and Curran conditioning to within a few $10^{-6}$. The direct Monte Carlo standard error of the gap is also of order $10^{-6}$. For example, the August 27, 2026 $K=98$ call has a pseudo-Monte Carlo gap of 0.0013683, Curran gap 0.0013690, and randomized-Sobol gap 0.0013717. The August 28 $K=98$ call gives 0.0013394, 0.0013402, and 0.0013393, respectively.
+
+Thus the empirical near-equivalence of PI and PM is not caused by insufficient Monte Carlo precision. Numerical approximation error is materially smaller than the already-small statistical integration effect.
+
+\subsection{Historical versus APO-implied effective volatility}
+
+The September--October APO cross-section provides 402 contract-date observations for implied-volatility inversion. All 402 settlements can be mapped to a finite implied volatility under the maintained Curran-equivalent one-factor model. The median historical posterior mean is 0.4155. By contrast, the median date-level common volatility calibrated to the complete APO cross-section is 0.4577, a median difference of 0.0425. Contract-level implied volatilities have a still higher median of 0.4835 because the cross section contains pronounced strike variation.
+
+These values should not be interpreted as proof that the diffusion coefficient must differ between $\mathbb P$ and $\mathbb Q$. They are effective parameters required by the maintained pricing map. Their economic importance is that they expose a specification margin much larger than the PI--PM correction.
+
+Leave-one-contract-out calibration provides a first cross-sectional check. Across 399 targets, a common APO-calibrated volatility reduces MAE from 0.3450 for the historical-volatility PI baseline to 0.1557 and RMSE from 0.4625 to 0.1900. The improvement is not uniform, however. The nine positive-volume observations move in the opposite direction in aggregate, and cross-option-type transfer is weaker. These failures are consistent with the fact that one scalar volatility cannot reproduce the observed strike structure and that call/put samples occupy different moneyness regions.
+
+\subsection{Strict forward-in-time volatility validation}
+
+The stronger test predicts each target date using only implied-volatility observations from earlier dates. Table~\ref{tab:forward_q} reports the resulting errors over 345 holdout option-date observations. No same-day option settlement enters the fitted smile.
+
+\begin{table*}[t]
+\centering
+\caption{Strict forward-in-time APO volatility validation. The historical-volatility baseline is the posterior-integrated price on the same holdout observations.}\label{tab:forward_q}
+\begin{tabular}{llrrr}
+\toprule
+Sample & Volatility specification & $N$ & MAE & RMSE\\
+\midrule
+All holdouts & Historical posterior-integrated & 345 & 0.3583 & 0.4816\\
+All holdouts & Expanding prior-date smile & 345 & 0.1297 & 0.2512\\
+All holdouts & Previous-day smile & 345 & 0.1312 & 0.2312\\
+\addlinespace
+Positive-volume & Historical posterior-integrated & 8 & 0.1297 & 0.1639\\
+Positive-volume & Expanding prior-date smile & 8 & 0.0959 & 0.1339\\
+Positive-volume & Previous-day smile & 8 & 0.1002 & 0.1332\\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+In the full holdout panel, the expanding smile reduces MAE by approximately 64\% and RMSE by approximately 48\%; the previous-day smile reduces MAE by approximately 63\% and RMSE by approximately 52\%. Mean error also moves much closer to zero, from $-0.3571$ under the historical-volatility baseline to $-0.0685$ and $-0.0591$, respectively.
+
+The forward result changes the interpretation of the empirical exercise. The baseline negative pricing bias is not primarily a consequence of failing to integrate the historical volatility posterior. Information contained in the option-implied volatility surface, even when restricted to earlier dates, explains a much larger share of the subsequent pricing discrepancy. The empirical hierarchy is therefore
 \begin{equation}
- \Delta_{FB,PM,i,t}=P^{FB}_{i,t}-P^{PM}_{i,t}.
+ \text{posterior-integration refinement}
+ \ll
+ \text{historical-versus-APO-implied volatility specification}
 \end{equation}
-The six positive-volume contract-date observations make the magnitude of this gap transparent. Their average absolute $|\Delta_{FB,PM}|$ is approximately 0.00059, and the largest absolute gap is approximately 0.00100. By comparison, the full-Bayes MAE in the same six observations is 0.1543. Thus the difference created by posterior integration is more than two orders of magnitude smaller than the typical model-to-market error in this strict sample.
+for the observed September--October WTI panels.
 
-This result is consistent with the Taylor mechanism in Equation~\eqref{eq:taylor_gap}. Across the five positive-volume valuation dates, posterior mean volatility ranges approximately from 0.4151 to 0.4159 and posterior standard deviation ranges from about 0.01121 to 0.01132. The posterior is non-degenerate, but over this range the pricing map is sufficiently smooth that integrating over the posterior and evaluating at its mean produce almost the same point price. The empirical finding therefore supports a narrower conclusion than ``Bayes does not matter'': under the current one-factor constant-volatility APO baseline, posterior integration has little incremental effect on the point valuation relative to posterior-mean plug-in pricing.
-
-\subsection{Interpretation and remaining empirical scope}
-
-The current evidence separates two questions that are easy to conflate. The first is whether the baseline model fits market marks closely. The systematic negative mean errors in Table~\ref{tab:oct26_empirical} indicate that absolute fit is imperfect and may reflect volatility smile/skew, richer futures-curve dynamics, benchmark quality, or other model features omitted from the one-factor specification. The second is whether integrating parameter uncertainty materially improves on a point estimate \emph{within the same model}. The production-budget October-2026 panel indicates that this second effect is small.
-
-The result is not yet a statement about all WTI APO maturities or volatility regimes. The strict positive-volume sample contains only six observations, all from the October-2026 expiry and dates before the averaging month begins. Broader conclusions require additional contract-specific CL history, explicit exchange settlement calendars for all averaging months, alternative inference specifications, and a larger set of actively traded option observations. Those extensions are treated as robustness and scope questions rather than prerequisites for reporting the completed production-budget baseline.
+This hierarchy does not eliminate a role for Bayesian parameter uncertainty. The mechanism map shows exactly where it can become first-order. Rather, the market experiment identifies the dominant margin in the data presently available: improving the volatility state used by the pricing model matters substantially more than integrating a relatively concentrated historical posterior through a smooth local pricing map.

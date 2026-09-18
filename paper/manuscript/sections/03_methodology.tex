@@ -17,7 +17,7 @@ For equally spaced observations with interval $\Delta t$, log returns satisfy
  \right].
  \label{eq:return_likelihood}
 \end{equation}
-The likelihood is the product of the conditional return densities. The simple diffusion is intentionally used as a transparent benchmark: the paper's primary object is the incremental effect of parameter uncertainty, not a claim that constant-volatility GBM is a complete model of crude-oil dynamics.
+The likelihood is the product of the conditional return densities. The diffusion is intentionally simple: the paper's primary object is the incremental effect of parameter uncertainty and its interaction with the pricing map, not a claim that constant-volatility GBM is a complete model of crude-oil returns.
 
 The baseline prior specification is
 \begin{align}
@@ -25,7 +25,7 @@ The baseline prior specification is
  \sigma&\sim\operatorname{InvGamma}(2,0.1),\qquad \sigma>0.
  \label{eq:priors}
 \end{align}
-Prior sensitivity is evaluated separately. Sampling is performed in $(\mu,\eta)$ with $\eta=\log\sigma$ so that positivity is automatic. The transformed log posterior is
+Sampling is performed in $(\mu,\eta)$ with $\eta=\log\sigma$ so that positivity is automatic. The transformed log posterior is
 \begin{equation}
  \log \pi(\mu,\eta\mid\mathcal D)
  =\log L(\mu,e^\eta;\mathcal D)
@@ -47,7 +47,7 @@ with $\theta=(\mu,\eta)$. The acceptance probability is
  \frac{\pi(\theta'\mid\mathcal D)}{\pi(\theta\mid\mathcal D)}
  \right\},
 \end{equation}
-following the Metropolis--Hastings construction \cite{metropolis1953,hastings1970}. The empirical implementation uses multiple chains and reports Gelman--Rubin $\hat R$ diagnostics for $\mu$ and $\sigma$ rather than treating a single acceptance rate as sufficient evidence of convergence. Effective-sample-size calculations and broader prior sensitivity remain robustness extensions.
+following the Metropolis--Hastings construction \cite{metropolis1953,hastings1970}. The empirical implementation uses multiple chains and Gelman--Rubin $\hat R$ diagnostics for $\mu$ and $\sigma$. For the large synthetic mechanism and calibration experiments, $\mu$ is also integrated analytically under its Gaussian prior, leaving a one-dimensional posterior in $\sigma$ that is evaluated by dense quadrature. This provides an MCMC-independent numerical reference without changing the statistical model.
 
 \subsection{Risk-neutral valuation}
 
@@ -58,13 +58,13 @@ Historical inference and derivative valuation are kept conceptually and computat
 \end{equation}
 The historical drift $\mu$ in Equation~\eqref{eq:p_gbm} does not enter Equation~\eqref{eq:q_gbm}. Posterior uncertainty about $\mu$ is therefore relevant for physical forecasting but is not propagated into the no-arbitrage price in the baseline model.
 
-For a discretely monitored arithmetic-average call with fixing dates $t_1,\ldots,t_M$, conditional risk-neutral value is
+For a discretely monitored arithmetic-average option with fixing dates $t_1,\ldots,t_M$, conditional risk-neutral value is
 \begin{equation}
  C^Q(\sigma)=e^{-r\tau}
- \mathbb E_{\sigma}^{Q}\!\left[(A_T-K)^+\mid\mathcal F_t\right],
+ \mathbb E_{\sigma}^{Q}\!\left[\Pi(A_T,K)\mid\mathcal F_t\right],
  \label{eq:conditional_price}
 \end{equation}
-where $\tau=T-t$. The posterior for $\sigma$ induces a posterior distribution over theoretical prices through the push-forward
+where $\Pi(A_T,K)$ is the call or put payoff and $\tau=T-t$. The posterior for $\sigma$ induces a posterior distribution over theoretical prices through the push-forward
 \begin{equation}
  p(C\mid\mathcal D)=
  \int
@@ -78,36 +78,26 @@ This distribution quantifies parameter uncertainty in a model price. It is not a
 
 For the WTI APO application, the state variables are the first-nearby futures fixings in Equation~\eqref{eq:apo_average}. A parsimonious risk-neutral benchmark for a futures price is
 \begin{equation}
- dF_u=\sigma F_u\,dW_u^Q,
+ dF_u=\sigma F_u\,dW_u^Q.
  \label{eq:futures_q}
 \end{equation}
-with zero drift under the pricing measure for the appropriately margined futures contract in the stylized setup. The implementation does not replace the entire APO with one fixed CL contract. For each remaining fixing date it identifies the first-nearby contract applicable to that date and initializes the simulated fixing from the corresponding point of the observed futures term structure.
+The implementation does not replace the entire APO with one fixed CL contract. For each remaining fixing date it identifies the first-nearby contract applicable to that date and initializes the stochastic fixing from the corresponding point of the observed futures term structure.
 
-For a valuation date inside the averaging month, simulation starts from Equation~\eqref{eq:partial_fixing}: realized fixings enter deterministically and only the remaining first-nearby settlements are stochastic. This distinction implies that two contracts with the same strike and time to final settlement can have different effective volatility exposure if their realized-average components differ.
+For a valuation date inside the averaging month, simulation starts from Equation~\eqref{eq:partial_fixing}: realized fixings enter deterministically and only the remaining first-nearby settlements are stochastic. Two options with the same strike and final settlement date can therefore have different effective volatility exposure when their realized-average components differ.
 
-The baseline single-factor specification is deliberately interpretable. It can be extended to maturity-specific volatilities, correlated futures-curve factors, stochastic volatility, or mean-reverting commodity models. Those alternatives are treated as robustness extensions because changing the underlying dynamics and changing the treatment of parameter uncertainty are separate questions.
+The single-factor specification is deliberately interpretable. Under a constant-volatility GBM, the diffusion coefficient does not have to change mechanically when moving from $\mathbb P$ to $\mathbb Q$. Using a historical estimate of $\sigma$ in Equation~\eqref{eq:futures_q} is therefore coherent under the maintained model. A market-implied effective volatility can nevertheless differ because observed option prices reflect risk premia and because the one-factor constant-volatility benchmark may absorb omitted stochastic volatility, jumps, smile effects, or richer futures-curve dynamics.
 
-\subsection{Monte Carlo valuation}
+\subsection{Monte Carlo and conditioning-based valuation}
 
-Arithmetic-average options generally lack the simple closed form available for geometric averages. We therefore evaluate Equation~\eqref{eq:conditional_price} by Monte Carlo. In the standard Asian benchmark, antithetic sampling and a geometric-average control variate are used following the logic of \cite{kemnavorst1990}. Let
-\begin{align}
- Y&=e^{-r\tau}(A_T-K)^+,\\
- X&=e^{-r\tau}(G_T-K)^+,
-\end{align}
-where $G_T$ is the geometric average and $\mathbb E[X]$ is available analytically. The control-variate estimator is
-\begin{equation}
- Y_{cv}=Y-\beta\{X-\mathbb E[X]\},
- \qquad
- \beta=\frac{\operatorname{Cov}(Y,X)}{\operatorname{Var}(X)}.
- \label{eq:control}
-\end{equation}
-Common random numbers are used when evaluating nearby volatility values for the same contract. This reduces simulation noise in the mapping $\sigma\mapsto C^Q(\sigma)$ and makes the full-Bayes/plugin comparison primarily a comparison of statistical decision rules rather than independent Monte Carlo errors.
+Arithmetic-average options generally lack the simple closed form available for geometric averages. The baseline empirical prices are therefore evaluated by Monte Carlo with common random numbers across nearby volatility values. In the standard Asian benchmark, antithetic sampling and a geometric-average control variate follow the logic of \cite{kemnavorst1990}. More generally, variance-reduction controls are used only when their expectation is known under the exact state representation being simulated.
+
+For robustness, the same one-factor risk-neutral dynamics are also priced using the geometric-conditioning approximation of \cite{curran1994}. Curran pricing is not treated as the true exchange implementation; it is an independent numerical benchmark under the paper's maintained $Q$ dynamics. Difficult empirical contracts are further repriced using multi-million-path pseudo-random Monte Carlo and independently scrambled Sobol sequences. Agreement across these engines is used to determine whether the small posterior-integration effects are numerically resolved.
 
 \subsection{Competing valuation rules}
 
-Four estimators are compared:
+Four baseline estimators are compared:
 \begin{align}
- \widehat C_{FB}
+ \widehat C_{PI}
  &=\mathbb E[C^Q(\sigma)\mid\mathcal D],\\
  \widehat C_{PM}
  &=C^Q(\mathbb E[\sigma\mid\mathcal D]),\\
@@ -117,17 +107,17 @@ Four estimators are compared:
  &=C^Q(\widehat\sigma_{MLE}).
  \label{eq:estimators}
 \end{align}
-The first estimator integrates the pricing map over the posterior. The second collapses the posterior to its mean before pricing. The third uses the marginal posterior mode of $\sigma$, estimated from the sampled volatility distribution, and the fourth is a non-Bayesian likelihood benchmark. The marginal volatility mode is not described as a joint MAP estimator: a joint posterior mode depends on the full parameterization, whereas the implemented comparator is a one-dimensional summary of the marginal posterior for the pricing-relevant parameter.
+The first is the posterior-integrated rule, sometimes called full-Bayes pricing. The second collapses the posterior to its mean before pricing. The third uses the marginal posterior mode of $\sigma$, and the fourth is a non-Bayesian likelihood benchmark. The marginal volatility mode is not described as a joint MAP estimator.
 
-A useful diagnostic is
+The main within-model diagnostic is
 \begin{equation}
- \Delta_{FB,PM}
- =\widehat C_{FB}-\widehat C_{PM}.
+ \Delta_{PI,PM}
+ =\widehat C_{PI}-\widehat C_{PM}.
  \label{eq:fb_pm_gap}
 \end{equation}
 A second-order expansion gives
 \begin{equation}
- \Delta_{FB,PM}
+ \Delta_{PI,PM}
  \approx
  \frac{1}{2}C^{Q\prime\prime}(\bar\sigma)
  \operatorname{Var}(\sigma\mid\mathcal D),
@@ -135,4 +125,15 @@ A second-order expansion gives
  \bar\sigma=\mathbb E[\sigma\mid\mathcal D].
  \label{eq:taylor_gap}
 \end{equation}
-Equation~\eqref{eq:taylor_gap} supplies the main mechanism tested in both the synthetic and empirical sections: posterior integration can matter only to the extent that posterior uncertainty interacts with nonlinear exposure to volatility.
+Equation~\eqref{eq:taylor_gap} is the central mechanism: posterior integration matters only to the extent that posterior dispersion interacts with nonlinear exposure to volatility.
+
+\subsection{APO-implied effective risk-neutral volatility}
+
+To separate posterior integration from volatility specification, the paper also asks what volatility parameter the observed APO settlement requires under the same one-factor pricing map. For contract $i$ on date $t$, the contract-level implied value $\sigma^{APO}_{Q,i,t}$ solves
+\begin{equation}
+ C^Q_{i,t}(\sigma^{APO}_{Q,i,t})=P^{mkt}_{i,t},
+ \label{eq:apo_iv}
+\end{equation}
+when the settlement lies within the monotone model price map. Cross-sectional common-volatility estimates minimize settlement squared error across contracts on a date, while smile specifications allow implied volatility to vary with moneyness and option type.
+
+These quantities are best interpreted as \emph{Curran-equivalent APO-implied effective volatilities under the maintained one-factor model}. They are inferred from the APO cross-section itself and are therefore not an independent external $Q$-volatility source. Their role is diagnostic and predictive: they measure how far the volatility parameter needed by the option market lies from the historical constant-volatility estimate, and whether that information transfers to later valuation dates.
