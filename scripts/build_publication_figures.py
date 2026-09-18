@@ -128,8 +128,8 @@ def _kpsewhich(filename: str) -> bool:
 
 
 def _wiley_utopia_mode() -> str | None:
-    """Prefer the repo-vendored Utopia stack, then fall back to system TeX."""
-    if shutil.which("latex") is None or not _kpsewhich("mathastext.sty"):
+    """Prefer the fully repo-vendored Wiley Utopia stack, then system TeX."""
+    if shutil.which("latex") is None:
         return None
 
     if archives_available():

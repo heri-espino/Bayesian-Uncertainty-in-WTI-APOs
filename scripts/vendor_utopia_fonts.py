@@ -7,8 +7,9 @@ variables. No system-wide TeX installation is modified.
 
 The Utopia archive supplies Adobe Type 1 PFB/AFM files. PSNFSS supplies the LaTeX
 interface plus the nested freenfss.zip metrics/font-definition support and Utopia map.
-mathastext is still expected from the user's TeX distribution because WileyNJDv5 loads
-it independently of PSNFSS.
+mathastext is vendored separately from its CTAN .dtx source and extracted into the
+same local TDS tree. The three components together reproduce the typography stack
+loaded by WileyNJDv5 under Utopia2COL.
 
 Diagnostic:
     python -m scripts.vendor_utopia_fonts
@@ -30,6 +31,9 @@ VENDOR_ROOT = ROOT / "paper" / "vendor" / "fonts" / "utopia"
 UPSTREAM_ROOT = VENDOR_ROOT / "upstream"
 UTOPIA_ZIP = UPSTREAM_ROOT / "utopia.zip"
 PSNFSS_ZIP = UPSTREAM_ROOT / "psnfss.zip"
+MATHASTEXT_ROOT = ROOT / "paper" / "vendor" / "fonts" / "mathastext"
+MATHASTEXT_UPSTREAM = MATHASTEXT_ROOT / "upstream"
+MATHASTEXT_DTX = MATHASTEXT_UPSTREAM / "mathastext.dtx"
 CACHE_ROOT = ROOT / "paper" / "build" / "vendor_fonts" / "utopia"
 TEXMF_ROOT = CACHE_ROOT / "texmf"
 SOURCE_ROOT = CACHE_ROOT / "source"
@@ -48,16 +52,25 @@ def _fingerprint() -> dict[str, str]:
     return {
         "utopia_zip_sha256": _sha256(UTOPIA_ZIP),
         "psnfss_zip_sha256": _sha256(PSNFSS_ZIP),
+        "mathastext_dtx_sha256": _sha256(MATHASTEXT_DTX),
     }
 
 
 def archives_available() -> bool:
-    return UTOPIA_ZIP.is_file() and PSNFSS_ZIP.is_file()
+    return (
+        UTOPIA_ZIP.is_file()
+        and PSNFSS_ZIP.is_file()
+        and MATHASTEXT_DTX.is_file()
+    )
 
 
 def inspect_archives() -> dict[str, object]:
     if not archives_available():
-        missing = [str(p) for p in (UTOPIA_ZIP, PSNFSS_ZIP) if not p.is_file()]
+        missing = [
+            str(p)
+            for p in (UTOPIA_ZIP, PSNFSS_ZIP, MATHASTEXT_DTX)
+            if not p.is_file()
+        ]
         raise FileNotFoundError(f"Missing vendored font archive(s): {missing}")
 
     with zipfile.ZipFile(UTOPIA_ZIP) as zf:
@@ -90,6 +103,7 @@ def inspect_archives() -> dict[str, object]:
         "psnfss_has_psfonts_dtx": "psfonts.dtx" in psnfss_basenames,
         "psnfss_has_utopia_map": "utopia.map" in psnfss_basenames,
         "psnfss_has_8r_enc": "8r.enc" in psnfss_basenames,
+        "mathastext_dtx_present": MATHASTEXT_DTX.is_file(),
     }
 
 
@@ -100,6 +114,7 @@ def _prepend_env_path(name: str, value: Path) -> None:
 
 
 def _activate_texmf_paths(texmf: Path) -> None:
+    _prepend_env_path("TEXINPUTS", texmf / "tex" / "latex" / "mathastext")
     _prepend_env_path("TEXINPUTS", texmf / "tex" / "latex" / "psnfss")
     _prepend_env_path("TEXINPUTS", texmf / "tex")
     _prepend_env_path("TFMFONTS", texmf / "fonts" / "tfm")
@@ -139,6 +154,43 @@ def _run_docstrip(psnfss_source: Path, texmf: Path) -> bool:
     target.mkdir(parents=True, exist_ok=True)
     for sty in ins.parent.rglob("*.sty"):
         shutil.copy2(sty, target / sty.name)
+    return True
+
+
+def _extract_mathastext(texmf: Path) -> bool:
+    """Extract mathastext.sty from the vendored .dtx without installing globally."""
+    source_dir = SOURCE_ROOT / "mathastext"
+    source_dir.mkdir(parents=True, exist_ok=True)
+    source = source_dir / "mathastext.dtx"
+    shutil.copy2(MATHASTEXT_DTX, source)
+
+    engine = next(
+        (shutil.which(name) for name in ("etex", "tex", "pdftex") if shutil.which(name)),
+        None,
+    )
+    if engine is None:
+        return False
+
+    proc = subprocess.run(
+        [engine, source.name],
+        cwd=source_dir,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    generated = source_dir / "mathastext.sty"
+    if proc.returncode != 0 or not generated.is_file():
+        return False
+
+    target = texmf / "tex" / "latex" / "mathastext"
+    target.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(generated, target / "mathastext.sty")
+    for optional in ("README.md", "ChangeLog.md"):
+        candidate = source_dir / optional
+        if candidate.is_file():
+            doc_target = texmf / "doc" / "latex" / "mathastext"
+            doc_target.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(candidate, doc_target / optional)
     return True
 
 
@@ -229,6 +281,7 @@ def prepare_vendored_texmf(*, force: bool = False) -> Path | None:
         shutil.copy2(enc_source, enc_target)
 
     generated_utopia_sty = _run_docstrip(psnfss_source, TEXMF_ROOT)
+    generated_mathastext_sty = _extract_mathastext(TEXMF_ROOT)
     _activate_texmf_paths(TEXMF_ROOT)
 
     MARKER.parent.mkdir(parents=True, exist_ok=True)
@@ -237,6 +290,7 @@ def prepare_vendored_texmf(*, force: bool = False) -> Path | None:
             {
                 "fingerprint": fingerprint,
                 "generated_utopia_sty": generated_utopia_sty,
+                "generated_mathastext_sty": generated_mathastext_sty,
                 "texmf_root": str(TEXMF_ROOT),
             },
             indent=2,
