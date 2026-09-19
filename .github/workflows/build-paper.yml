@@ -50,6 +50,7 @@ jobs:
             texlive-science \
             dvipng \
             ghostscript \
+            cm-super \
             perl \
             poppler-utils
 
