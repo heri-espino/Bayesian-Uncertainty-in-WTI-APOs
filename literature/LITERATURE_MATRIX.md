@@ -121,10 +121,9 @@ WTI APO sample.
 | Robustness/interpretation of effective \(\sigma_Q\) | Roh et al. (2021); Tee & Ting (2017); Gilder & Tsiaras (2020) | A scalar implied volatility can absorb volatility risk premia, VOV, skew and other omitted risk-neutral features. |
 | Conclusion: complexity trade-off | Cummins & Esposito (2025) | Additional model complexity should be judged by incremental empirical performance. |
 
-## Remaining literature gaps discovered during synthesis
+## Direct-overlap precedents discovered during synthesis
 
-The eight-paper acquisition is complete, but the synthesis surfaced a smaller set of **more
-directly overlapping** papers that should be added before the final introduction rewrite.
+The eight-paper acquisition is complete. The synthesis surfaced a smaller set of **more directly overlapping** papers. Their bibliographic roles and legal/free sources are now verified in `DIRECT_PRECEDENTS_SOURCES.md`; the final PDFs/extractions should still be added to the local corpus for archival completeness.
 
 ### Critical
 
@@ -160,6 +159,17 @@ Bayesian posterior integration of historically inferred volatility, a mechanism 
 curvature and posterior dispersion, and empirical WTI APO validation. This is a search result,
 not proof of absence, so the manuscript should use "to our knowledge" only after the three
 critical papers above have been read and their reference lists checked.
+
+
+### Refined novelty boundary after the direct-precedent check
+
+The direct-precedent search eliminates three possible novelty claims:
+
+- **not first WTI APO pricing study:** Shiraya & Takahashi already model WTI average-price contract mechanics under stochastic-volatility dynamics and calibrate to vanilla WTI options;
+- **not first Bayesian propagation to exotic prices:** Gupta & Reisinger explicitly map a posterior over calibrated model parameters into exotic-option prices;
+- **not first empirical use of Barchart WTI APO data:** Gan, Wang & Yang use real Barchart WTI Average Price Option observations in a deep-learning pricing application.
+
+The manuscript should therefore claim novelty only at the intersection that remains unsupported by those antecedents: a controlled mechanism for the PI--PM correction, large-scale mapping of that mechanism over information and contract states, and an empirical decomposition of posterior integration versus volatility specification in a contract-consistent WTI APO setting.
 
 ## What is no longer a literature gap
 
