@@ -1,0 +1,48 @@
+name: Research task
+description: Track a scientific, empirical, manuscript, literature, or reproducibility task
+title: "[Workstream] "
+body:
+  - type: textarea
+    id: objective
+    attributes:
+      label: Objective
+      description: What scientific or operational problem does this task solve?
+      placeholder: State the question or deliverable clearly.
+    validations:
+      required: true
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Why this matters
+      description: Explain how this can change a claim, result, figure, table, robustness conclusion, or submission artifact.
+    validations:
+      required: true
+  - type: textarea
+    id: design
+    attributes:
+      label: Design / constraints
+      description: Record leakage rules, data restrictions, statistical assumptions, or implementation constraints.
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Use a Markdown checklist.
+      value: |
+        - [ ] Result or artifact is reproducible
+        - [ ] Relevant documentation is updated
+        - [ ] Manuscript implications are recorded
+    validations:
+      required: true
+  - type: dropdown
+    id: milestone
+    attributes:
+      label: Roadmap milestone
+      options:
+        - M1 — Literature & positioning
+        - M2 — Empirical validation
+        - M3 — Model robustness & paper integration
+        - M4 — Reproducibility freeze
+        - M5 — JFM submission
+        - Optional / post-submission
+    validations:
+      required: true
