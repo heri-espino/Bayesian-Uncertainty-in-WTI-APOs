@@ -120,34 +120,43 @@ def _price_targets(
 
 
 def _error_summary(frame: pd.DataFrame) -> pd.DataFrame:
+    """Summarize errors pooled across expiries and separately by expiry."""
     rows: list[dict[str, Any]] = []
-    for method in sorted(frame["method"].unique()):
-        method_frame = frame[frame["method"] == method]
-        samples: dict[str, pd.DataFrame] = {"all": method_frame}
-        samples["positive_volume"] = method_frame[method_frame["positive_volume"]]
-        for threshold in (1, 10, 100, 500):
-            samples[f"open_interest_ge_{threshold}"] = method_frame[
-                method_frame["open_interest"].fillna(-np.inf) >= threshold
-            ]
-        for sample_name, sample in samples.items():
-            if sample.empty:
-                continue
-            for label, column in (
-                ("forward_q", "forward_error"),
-                ("baseline_pi", "baseline_pi_error"),
-            ):
-                e = sample[column].to_numpy(dtype=float)
-                rows.append(
-                    {
-                        "method": method,
-                        "sample": sample_name,
-                        "model": label,
-                        "n": int(len(sample)),
-                        "mean_error": float(np.mean(e)),
-                        "mae": float(np.mean(np.abs(e))),
-                        "rmse": float(np.sqrt(np.mean(e**2))),
-                    }
-                )
+    scopes: list[tuple[str, str, pd.DataFrame]] = [("pooled", "all", frame)]
+    for expiry, group in frame.groupby("apo_expiry", sort=True):
+        scopes.append(("expiry", str(expiry), group.copy()))
+
+    for scope, expiry_label, scoped in scopes:
+        for method in sorted(scoped["method"].unique()):
+            method_frame = scoped[scoped["method"] == method]
+            samples: dict[str, pd.DataFrame] = {"all": method_frame}
+            samples["positive_volume"] = method_frame[method_frame["positive_volume"]]
+            for threshold in (1, 10, 100, 500):
+                samples[f"open_interest_ge_{threshold}"] = method_frame[
+                    method_frame["open_interest"].fillna(-np.inf) >= threshold
+                ]
+            for sample_name, sample in samples.items():
+                if sample.empty:
+                    continue
+                for label, column in (
+                    ("forward_q", "forward_error"),
+                    ("baseline_pi", "baseline_pi_error"),
+                ):
+                    e = sample[column].to_numpy(dtype=float)
+                    rows.append(
+                        {
+                            "scope": scope,
+                            "apo_expiry": expiry_label,
+                            "method": method,
+                            "sample": sample_name,
+                            "model": label,
+                            "n": int(len(sample)),
+                            "n_dates": int(sample["valuation_date"].nunique()),
+                            "mean_error": float(np.mean(e)),
+                            "mae": float(np.mean(np.abs(e))),
+                            "rmse": float(np.sqrt(np.mean(e**2))),
+                        }
+                    )
     return pd.DataFrame(rows)
 
 
