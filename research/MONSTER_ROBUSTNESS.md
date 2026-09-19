@@ -148,3 +148,28 @@ Commit the small final CSV/JSON summaries, figures, and reports. Do **not** comm
 - temporary GPU arrays or process logs.
 
 After the suite completes, inspect all outputs before moving numerical claims into `paper/manuscript/`.
+
+## Extended multi-expiry forward validation
+
+The committed-data coverage audit supports strict prior-date smile validation for September,
+October, and November 2026; March and September 2027; and March and September 2028. June 2029
+is excluded because its cross-section never reaches six usable contracts.
+
+Run the checkpointable production suite with:
+
+```powershell
+python -m scripts.run_extended_forward_validation
+```
+
+The runner skips completed canonical single-date folders, so it is safe to rerun after an
+interruption. It then rebuilds all expiry panels and writes a separate extended analysis tree
+under `results/analysis/wti_extended_forward/`.
+
+For a low-cost end-to-end smoke test that cannot overwrite production runs:
+
+```powershell
+python -m scripts.run_extended_forward_validation --quick --bootstrap-preset research
+```
+
+The forward error summary and cluster bootstrap are reported both pooled across expiries and
+separately by expiry. This prevents the pooled result from hiding expiry-specific reversals.
