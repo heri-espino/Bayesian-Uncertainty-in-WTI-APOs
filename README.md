@@ -70,6 +70,17 @@ python paper/build.py --check
 
 See `paper/README.md` for the manuscript directory contract. The older REMEF-oriented draft is retained under `archive/paper_remef/` for provenance.
 
+## Research roadmap
+
+The active research roadmap is tracked through GitHub Issues and the project wiki in the documentation:
+
+- `docs/project_wiki.md` — current scientific thesis and navigation;
+- `docs/research_roadmap.md` — milestones M1–M5, issue map, and Project-board design;
+- `docs/literature_strategy.md` — literature screening and novelty workflow;
+- `docs/submission_checklist.md` — Journal of Futures Markets submission gate.
+
+Milestone tracker Issues are #43–#47, with concrete research tasks in #33–#42.
+
 ## Documentation and API discovery
 
 After editable installation:
