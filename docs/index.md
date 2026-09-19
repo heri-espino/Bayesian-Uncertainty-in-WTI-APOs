@@ -34,6 +34,10 @@ python -m pip install -e ".[dev,docs,market]"
 :maxdepth: 2
 :caption: User guide
 
+project_wiki
+research_roadmap
+literature_strategy
+submission_checklist
 quickstart
 architecture
 repository_layout
