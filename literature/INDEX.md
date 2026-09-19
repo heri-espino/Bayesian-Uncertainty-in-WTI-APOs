@@ -1,3 +1,7 @@
+# Literature synthesis
+
+- [Literature matrix and novelty positioning](LITERATURE_MATRIX.md)
+
 # CMAT literature corpus
 
 Índice compacto para recuperación. Use Markdown primero, assets sólo si el texto/tablas son dudosos y PDF como fuente final de verificación.
