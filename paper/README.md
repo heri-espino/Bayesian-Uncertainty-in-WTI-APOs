@@ -61,6 +61,31 @@ python -m scripts.check_repo_structure
 `--check` validates paths and the selected Wiley class options without requiring a TeX
 installation, so it is suitable for CI.
 
+
+## GitHub Actions build
+
+The repository includes `.github/workflows/build-paper.yml` for a fully reproducible
+remote build. It installs the Linux TeX toolchain, prepares the vendored
+Utopia + PSNFSS + mathastext stack, rebuilds the four publication figures, requires
+`font_mode: wiley-utopia-vendored`, compiles the Wiley manuscript, and uploads the
+result as a GitHub Actions artifact.
+
+The workflow runs automatically when manuscript, figure-builder, or committed analysis
+outputs change, and it can also be launched manually from **Actions -> build-paper ->
+Run workflow**.
+
+The artifact contains:
+
+```text
+paper/espino_2026_bayess-on-wti.pdf
+figures/publication/*.pdf
+figures/publication/*.png
+figures/publication/figure_manifest.json
+```
+
+This is the preferred build path on machines where installing a local TeX distribution
+is inconvenient or restricted.
+
 ## Draft status
 
 The current manuscript is an internal working draft. It may contain explicitly identified

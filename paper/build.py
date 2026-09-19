@@ -24,6 +24,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PAPER_DIR = ROOT / "paper"
 SOURCE_DIR = PAPER_DIR / "manuscript"
 VENDOR_DIR = PAPER_DIR / "vendor" / "wiley_njd_v5"
+PUBLICATION_FIGURES_DIR = ROOT / "figures" / "publication"
 BUILD_DIR = PAPER_DIR / "build"
 STAGE_DIR = BUILD_DIR / "stage"
 MAIN_TEX = SOURCE_DIR / "main.tex"
@@ -79,6 +80,17 @@ def prepare_stage() -> None:
     # portable than requiring local font installation or symlink support.
     shutil.copytree(VENDOR_DIR, STAGE_DIR)
     shutil.copytree(SOURCE_DIR, STAGE_DIR, dirs_exist_ok=True)
+
+    # Stage publication figures when they have been generated.  Keeping the
+    # relative "figures/publication" path inside the isolated build tree lets
+    # manuscript sources include final figures without depending on files
+    # outside the stage.
+    if PUBLICATION_FIGURES_DIR.exists():
+        shutil.copytree(
+            PUBLICATION_FIGURES_DIR,
+            STAGE_DIR / "figures" / "publication",
+            dirs_exist_ok=True,
+        )
 
     # LaTeX releases from 2026 no longer expose etex's \reserveinserts
     # command because the extended allocation mechanism is built in.  Patch
