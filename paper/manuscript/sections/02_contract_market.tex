@@ -12,7 +12,7 @@ where $F^{(1)}_{t_j}$ denotes the settlement of the first-nearby CL futures cont
  H_C&=(A_T-K)^+,\\
  H_P&=(K-A_T)^+.
 \end{align}
-The first-nearby designation matters because the futures contract contributing to the average can change during the averaging period. The payoff is therefore not, in general, an average of repeated observations of one fixed futures maturity.
+The first-nearby designation matters because the futures contract contributing to the average can change during the averaging period. The payoff is therefore not, in general, an average of repeated observations of one fixed futures maturity. This contract feature is also explicit in the WTI average-option treatment of \cite{shirayatakahashi2011}, where two consecutive WTI futures maturities enter the monthly averaging window because the nearby futures contract expires before month-end.
 
 At an option valuation date $t$ inside the averaging month, let $\mathcal R_t$ denote fixing dates already realized and $\mathcal U_t$ the remaining fixing dates. The final average can be decomposed as
 \begin{equation}
@@ -52,7 +52,7 @@ The analysis does not attribute individual price moves mechanically to geopoliti
 
 \subsection{Barchart option histories}
 
-The empirical database was assembled from individual Barchart historical series for WTI Average Price Options. The downloaded maturities are September 2026, October 2026, November 2026, March 2027, September 2027, March 2028, September 2028, and June 2029. Calls and puts were retained as available. Rather than choosing only contracts that appear near the money on one date, the raw panel keeps all downloaded contracts and lets moneyness vary by date according to Equation~\eqref{eq:moneyness}.
+The empirical database was assembled from individual Barchart historical series for WTI Average Price Options. The use of Barchart WTI APO observations has an empirical precedent in \cite{ganwangyang2020}, who apply a model-free deep-learning approach to WTI average-option pricing; the present study instead uses the data to evaluate a structural physical/risk-neutral decomposition and posterior-integration mechanism. The downloaded maturities are September 2026, October 2026, November 2026, March 2027, September 2027, March 2028, September 2028, and June 2029. Calls and puts were retained as available. Rather than choosing only contracts that appear near the money on one date, the raw panel keeps all downloaded contracts and lets moneyness vary by date according to Equation~\eqref{eq:moneyness}.
 
 The ingestion pipeline recursively audits the raw CSV directory, parses option symbols, derives strike and option type, checks the symbol-implied expiry against the storage folder, and de-duplicates contracts before constructing the option-date panel. The current audit identifies 214 input files, 213 unique contracts, and 11,179 option-date observations. One file is stored under a folder inconsistent with its symbol-implied expiry; the parser records the mismatch and uses the contract symbol rather than silently trusting the directory name.
 
