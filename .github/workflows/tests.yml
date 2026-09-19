@@ -39,6 +39,10 @@ jobs:
           python -m experiments.build_wti_apo_panel
           --input-dir data/csv
           --output-dir /tmp/wti_apo
+      - name: Audit WTI APO expiry coverage
+        run: >-
+          python -m experiments.wti_expiry_coverage_audit
+          --output-dir /tmp/wti_expiry_coverage
       - name: Run system probe without requiring NVIDIA/CuPy
         run: python -m scripts.system_probe --output-dir /tmp/system_probe
       - name: Run reproducible synthetic validation smoke test
