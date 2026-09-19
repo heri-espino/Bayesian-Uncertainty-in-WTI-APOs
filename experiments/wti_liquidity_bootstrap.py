@@ -159,27 +159,35 @@ def main() -> None:
     rows: list[dict[str, Any]] = []
     sequence = 0
     for experiment, frame, model_error, baseline_error in datasets:
-        for sample_name, sample in _samples(frame).items():
-            # A cluster CI is undefined with fewer than two dates; retain that fact rather
-            # than silently falling back to an iid contract bootstrap.
-            if sample.empty or sample["valuation_date"].nunique() < 2:
-                continue
-            sequence += 1
-            stats = _cluster_bootstrap(
-                sample,
-                model_error=model_error,
-                baseline_error=baseline_error,
-                iterations=iterations,
-                seed=args.seed + sequence,
-            )
-            rows.append(
-                {
-                    "experiment": experiment,
-                    "sample": sample_name,
-                    "bootstrap_iterations": iterations,
-                    **stats,
-                }
-            )
+        scopes: list[tuple[str, str, pd.DataFrame]] = [("pooled", "all", frame)]
+        if "apo_expiry" in frame.columns:
+            for expiry, group in frame.groupby("apo_expiry", sort=True):
+                scopes.append(("expiry", str(expiry), group.copy()))
+
+        for scope, expiry_label, scoped in scopes:
+            for sample_name, sample in _samples(scoped).items():
+                # A cluster CI is undefined with fewer than two dates; retain that fact rather
+                # than silently falling back to an iid contract bootstrap.
+                if sample.empty or sample["valuation_date"].nunique() < 2:
+                    continue
+                sequence += 1
+                stats = _cluster_bootstrap(
+                    sample,
+                    model_error=model_error,
+                    baseline_error=baseline_error,
+                    iterations=iterations,
+                    seed=args.seed + sequence,
+                )
+                rows.append(
+                    {
+                        "scope": scope,
+                        "apo_expiry": expiry_label,
+                        "experiment": experiment,
+                        "sample": sample_name,
+                        "bootstrap_iterations": iterations,
+                        **stats,
+                    }
+                )
 
     result = pd.DataFrame(rows)
     args.output_root.mkdir(parents=True, exist_ok=True)
