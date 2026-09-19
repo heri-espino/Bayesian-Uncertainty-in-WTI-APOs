@@ -1,6 +1,7 @@
 # Literature synthesis
 
 - [Literature matrix and novelty positioning](LITERATURE_MATRIX.md)
+- [Verified direct-precedent sources](DIRECT_PRECEDENTS_SOURCES.md)
 
 # CMAT literature corpus
 
