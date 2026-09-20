@@ -65,7 +65,8 @@ BOOTSTRAP_PATH = (
     ROOT
     / "results"
     / "analysis"
-    / "wti_liquidity_bootstrap"
+    / "wti_extended_forward"
+    / "liquidity_bootstrap"
     / "liquidity_cluster_bootstrap_monster.csv"
 )
 HIGH_PRECISION_PATH = (
@@ -579,28 +580,39 @@ def _forest_panel(
     *,
     metric: str,
 ) -> None:
+    """Plot forward-minus-historical error differences by APO expiry."""
     experiments = [
         ("forward_q_expanding_smile", "Expanding smile", "o", PALETTE["teal"]),
         ("forward_q_previous_day_smile", "Previous-day smile", "s", PALETTE["purple"]),
     ]
-    samples = [
-        "all",
-        "open_interest_ge_10",
-        "open_interest_ge_100",
-        "open_interest_ge_500",
-        "positive_volume",
+    expiry_order = [
+        "2026-09",
+        "2026-10",
+        "2026-11",
+        "2027-03",
+        "2027-09",
+        "2028-03",
+        "2028-09",
     ]
-    y_base = np.arange(len(samples), dtype=float)
+    rows = boot.loc[
+        boot["scope"].eq("expiry")
+        & boot["sample"].eq("all")
+        & boot["apo_expiry"].isin(expiry_order)
+    ].copy()
+    y_base = np.arange(len(expiry_order), dtype=float)
     offsets = (-0.10, 0.10)
 
     for offset, (experiment, label, marker, color) in zip(
         offsets, experiments, strict=True
     ):
-        group = boot.loc[boot["experiment"].eq(experiment)].set_index("sample")
-        rows = group.loc[samples]
-        value = rows[f"delta_{metric}"].to_numpy(dtype=float)
-        lo = rows[f"delta_{metric}_ci025"].to_numpy(dtype=float)
-        hi = rows[f"delta_{metric}_ci975"].to_numpy(dtype=float)
+        group = (
+            rows.loc[rows["experiment"].eq(experiment)]
+            .set_index("apo_expiry")
+            .loc[expiry_order]
+        )
+        value = group[f"delta_{metric}"].to_numpy(dtype=float)
+        lo = group[f"delta_{metric}_ci025"].to_numpy(dtype=float)
+        hi = group[f"delta_{metric}_ci975"].to_numpy(dtype=float)
         xerr = np.vstack([value - lo, hi - value])
         ax.errorbar(
             value,
@@ -615,18 +627,13 @@ def _forest_panel(
             label=label,
         )
 
-    sample_labels = []
-    for sample in samples:
-        row = boot.loc[
-            boot["experiment"].eq("forward_q_expanding_smile")
-            & boot["sample"].eq(sample)
-        ]
-        if row.empty:
-            sample_labels.append(_pretty_sample(sample))
-        else:
-            sample_labels.append(
-                f"{_pretty_sample(sample)} ($n={int(row.iloc[0]['n'])}$)"
-            )
+    labels = []
+    expanding = rows.loc[
+        rows["experiment"].eq("forward_q_expanding_smile")
+    ].set_index("apo_expiry")
+    for expiry in expiry_order:
+        n = int(expanding.loc[expiry, "n"])
+        labels.append(f"{expiry} ($n={n}$)")
 
     ax.axvline(
         0.0,
@@ -635,14 +642,14 @@ def _forest_panel(
         color=PALETTE["midgray"],
     )
     ax.set_yticks(y_base)
-    ax.set_yticklabels(sample_labels)
+    ax.set_yticklabels(labels)
     ax.invert_yaxis()
     ax.set_xlabel(
         fr"$\Delta {metric.upper()}="
         fr"{metric.upper()}_{{\mathrm{{forward}}}}-"
         fr"{metric.upper()}_{{\mathrm{{historical\ PI}}}}$"
     )
-    ax.set_title(f"{metric.upper()} difference")
+    ax.set_title(f"{metric.upper()} difference by expiry")
     ax.legend(frameon=False)
 
 
@@ -651,13 +658,13 @@ def build_figure_3(
     formats: Iterable[str],
 ) -> tuple[list[str], dict[str, object]]:
     boot = pd.read_csv(BOOTSTRAP_PATH)
-    fig, axes = plt.subplots(1, 2, figsize=(7.20, 3.35), sharey=True)
+    fig, axes = plt.subplots(1, 2, figsize=(7.20, 3.70), sharey=True)
     _forest_panel(axes[0], boot, metric="mae")
     _panel_label(axes[0], "A")
     _forest_panel(axes[1], boot, metric="rmse")
     _panel_label(axes[1], "B")
     fig.suptitle(
-        "Strict forward-in-time volatility improvement",
+        "Strict forward-in-time volatility improvement across expiries",
         y=1.02,
         fontsize=10.5,
     )
@@ -665,13 +672,16 @@ def build_figure_3(
     outputs = _save(fig, output_dir / "fig03_forward_q_cluster_bootstrap", formats)
 
     selected = boot.loc[
-        boot["experiment"].isin(
+        boot["scope"].eq("expiry")
+        & boot["sample"].eq("all")
+        & boot["experiment"].isin(
             ["forward_q_expanding_smile", "forward_q_previous_day_smile"]
         )
     ].copy()
     return outputs, {
         "bootstrap_iterations": int(selected["bootstrap_iterations"].max()),
         "experiments": sorted(selected["experiment"].unique().tolist()),
+        "expiries": sorted(selected["apo_expiry"].unique().tolist()),
     }
 
 
