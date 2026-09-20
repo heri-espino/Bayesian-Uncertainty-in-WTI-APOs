@@ -1,0 +1,3 @@
+contract,settlement,open,high,low,volume,open_interest,source_file,source_field,price_interpretation
+CLF27,86.29,85.16,86.73,84.78,71849,111811,CLF27.csv,Latest,Barchart Daily Prices Latest; end-of-day settlement proxy
+CLZ26,89.32,88.1,89.87,87.59,143391,208901,CLZ26.csv,Latest,Barchart Daily Prices Latest; end-of-day settlement proxy

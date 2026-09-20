@@ -1,0 +1,12 @@
+{
+  "apo_expiry": "2026-11",
+  "derived_from": "canonical single-date run folders",
+  "description": "all eligible dates and main-sample contracts",
+  "first_valuation_date": "2026-08-25",
+  "last_valuation_date": "2026-09-10",
+  "n_contract_dates": 310,
+  "n_dates": 12,
+  "n_positive_volume_contract_dates": 8,
+  "note": "derived aggregation only; single-date manifests remain the provenance authority",
+  "sample_name": "all_dates"
+}
