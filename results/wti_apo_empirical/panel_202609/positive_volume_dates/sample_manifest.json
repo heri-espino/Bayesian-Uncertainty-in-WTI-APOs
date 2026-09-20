@@ -2,11 +2,11 @@
   "apo_expiry": "2026-09",
   "derived_from": "canonical single-date run folders",
   "description": "all contracts on dates with at least one positive-volume main-sample contract",
-  "first_valuation_date": "2026-09-01",
+  "first_valuation_date": "2026-08-25",
   "last_valuation_date": "2026-09-03",
-  "n_contract_dates": 72,
-  "n_dates": 3,
-  "n_positive_volume_contract_dates": 3,
+  "n_contract_dates": 179,
+  "n_dates": 7,
+  "n_positive_volume_contract_dates": 7,
   "note": "derived aggregation only; single-date manifests remain the provenance authority",
   "sample_name": "positive_volume_dates"
 }

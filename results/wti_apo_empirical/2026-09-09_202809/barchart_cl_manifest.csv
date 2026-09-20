@@ -1,0 +1,3 @@
+provider,contract,source_file,rows,first_observation,last_observation,price_field,price_interpretation,sha256
+Barchart Daily Prices,CLV28,CLV28.csv,17,2026-08-21,2026-09-15,Latest,end-of-day settlement proxy,ceb215e23e7b9427baf771bb573ae424b49bea8181bff3f3e8d0a5c8ca15a59f
+Barchart Daily Prices,CLX28,CLX28.csv,17,2026-08-21,2026-09-15,Latest,end-of-day settlement proxy,85024dd26482142c11db66d3181b60b1397408cadc8e272b0fcd6f0d26625b8d
