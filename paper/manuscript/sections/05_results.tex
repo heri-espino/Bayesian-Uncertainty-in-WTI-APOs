@@ -99,34 +99,43 @@ Leave-one-contract-out calibration provides a first cross-sectional check. Acros
 
 \subsection{Strict forward-in-time volatility validation}
 
-The stronger test predicts each target date using only implied-volatility observations from earlier dates. Table~\ref{tab:forward_q} reports the resulting errors over 345 holdout option-date observations. No same-day option settlement enters the fitted smile.
+The stronger test predicts each target date using only implied-volatility observations from earlier dates. The extended experiment spans seven APO expiries from September 2026 through September 2028 and contains 2,381 holdout option-date observations. No same-day option settlement enters the fitted smile.
+
+The extension reveals a pronounced term structure in the effective volatility required by the maintained pricing map. Median date-level common $\sigma_Q$ is 0.4478, 0.4572, and 0.4444 for the September, October, and November 2026 expiries, respectively; it then declines to 0.3609 for March 2027, 0.3001 for September 2027, 0.2647 for March 2028, and 0.2416 for September 2028. Over the same valuation dates, the historical posterior mean remains near 0.416. These $\sigma_Q$ values are model-equivalent parameters, not structural volatility estimates; the maturity pattern can absorb risk premia, smile effects, omitted futures-curve dynamics, and liquidity or marking effects.
 
 \begin{table*}[t]
 \centering
-\caption{Strict forward-in-time APO volatility validation. The historical-volatility baseline is the posterior-integrated price on the same holdout observations.}\label{tab:forward_q}
-\begin{tabular}{llrrr}
+\caption{Strict forward-in-time APO volatility validation by expiry. The historical-volatility baseline is the posterior-integrated price on the same holdout observations.}\label{tab:forward_q}
+\begin{tabular}{lrrrrrrr}
 \toprule
-Sample & Volatility specification & $N$ & MAE & RMSE\\
+Expiry & $N$ & \multicolumn{3}{c}{MAE} & \multicolumn{3}{c}{RMSE}\\
+\cmidrule(lr){3-5}\cmidrule(lr){6-8}
+ & & Historical PI & Expanding & Previous day & Historical PI & Expanding & Previous day\\
 \midrule
-All holdouts & Historical posterior-integrated & 345 & 0.3583 & 0.4816\\
-All holdouts & Expanding prior-date smile & 345 & 0.1297 & 0.2512\\
-All holdouts & Previous-day smile & 345 & 0.1312 & 0.2312\\
+2026-09 & 198 & 0.1090 & 0.0433 & 0.0443 & 0.1378 & 0.0754 & 0.0695\\
+2026-10 & 280 & 0.4159 & 0.1486 & 0.1543 & 0.5308 & 0.2772 & 0.2557\\
+2026-11 & 285 & 0.4276 & 0.1653 & 0.1729 & 0.5267 & 0.2696 & 0.2548\\
+2027-03 & 339 & 1.0599 & 0.1187 & 0.1070 & 1.0744 & 0.1560 & 0.1333\\
+2027-09 & 429 & 2.8963 & 0.0789 & 0.0867 & 2.9324 & 0.0979 & 0.1012\\
+2028-03 & 445 & 4.5398 & 0.1096 & 0.1022 & 4.5813 & 0.1392 & 0.1248\\
+2028-09 & 405 & 5.8103 & 0.0962 & 0.0885 & 5.8979 & 0.1268 & 0.1152\\
 \addlinespace
-Positive-volume & Historical posterior-integrated & 8 & 0.1297 & 0.1639\\
-Positive-volume & Expanding prior-date smile & 8 & 0.0959 & 0.1339\\
-Positive-volume & Previous-day smile & 8 & 0.1002 & 0.1332\\
+Pooled & 2,381 & 2.6187 & 0.1088 & 0.1075 & 3.4090 & 0.1725 & 0.1594\\
 \bottomrule
 \end{tabular}
 \end{table*}
 
-In the full holdout panel, the expanding smile reduces MAE by approximately 64\% and RMSE by approximately 48\%; the previous-day smile reduces MAE by approximately 63\% and RMSE by approximately 52\%. Mean error also moves much closer to zero, from $-0.3571$ under the historical-volatility baseline to $-0.0685$ and $-0.0591$, respectively.
+The result is not driven by one expiry. Both prior-date specifications improve MAE and RMSE relative to the historical-volatility baseline in every admitted expiry. In the pooled panel, the expanding smile lowers MAE by 95.8\% and RMSE by 94.9\%, while the previous-day smile lowers MAE by 95.9\% and RMSE by 95.3\%. Mean pricing error moves from +2.4030 under the historical-volatility baseline to $-0.0697$ and $-0.0352$, respectively. The sign change relative to the short-dated October baseline reflects the maturity structure above: a long-window historical volatility near 0.416 is below the effective APO level for some 2026 expiries but substantially above the effective level embedded in the 2027--2028 marks.
 
-The forward result changes the interpretation of the empirical exercise. The baseline negative pricing bias is not primarily a consequence of failing to integrate the historical volatility posterior. Information contained in the option-implied volatility surface, even when restricted to earlier dates, explains a much larger share of the subsequent pricing discrepancy. The empirical hierarchy is therefore
+Liquidity restrictions preserve the central result. The 62 positive-volume holdouts span 13 valuation-date clusters: historical PI has MAE 1.6340 and RMSE 2.3391, compared with 0.1003 and 0.1358 for the expanding smile and 0.1084 and 0.1333 for the previous-day smile. At open interest of at least 100, the corresponding forward MAEs are approximately 0.106--0.107 versus 1.990 for the historical baseline. The long-dated positive-volume counts remain sparse within individual expiries, however, so the strongest statement concerns the pooled transaction-active sample and the much denser open-interest-filtered cross sections.
+
+The forward result changes the interpretation of the empirical exercise. The observed pricing errors are not primarily a consequence of failing to integrate the historical volatility posterior. Information contained in the option-implied volatility surface, even when restricted to earlier dates, explains a much larger share of the subsequent pricing discrepancy. The empirical hierarchy is therefore
 \begin{equation}
  \text{posterior-integration refinement}
  \ll
  \text{historical-versus-APO-implied volatility specification}
 \end{equation}
-for the observed September--October WTI panels.
+across the observed maturity range.
 
-This hierarchy does not eliminate a role for Bayesian parameter uncertainty. The mechanism map shows exactly where it can become first-order. Rather, the market experiment identifies the dominant margin in the data presently available: improving the volatility state used by the pricing model matters substantially more than integrating a relatively concentrated historical posterior through a smooth local pricing map.
+This hierarchy does not eliminate a role for Bayesian parameter uncertainty. The mechanism map shows exactly where it can become first-order. Rather, the market experiment identifies the dominant margin in the available WTI data: improving the volatility state used by the pricing model matters substantially more than integrating a relatively concentrated historical posterior through a smooth local pricing map.
+
