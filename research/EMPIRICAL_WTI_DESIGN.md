@@ -251,3 +251,32 @@ American-style. Black-76 may be reported only as a near-ATM robustness approxima
 
 No empirical result from this route enters the manuscript until the acquisition manifest,
 coverage audit, time ordering, and licensing treatment are versioned.
+
+
+### Vanilla settlement inversion
+
+The first independent-Q implementation derives a contract-level surface before any
+aggregation to the APO horizon. For each final CME LO settlement on trading reference date
+(t), the matching CL futures settlement is joined through the Databento underlying
+instrument mapping. Let (F_t) be that futures settlement, (K) the option strike,
+(	au) time to the Databento-reported option expiration, and (r_t(	au)) the dated
+Treasury par-yield proxy already used elsewhere in the paper.
+
+The standard LO contract is American style, so the primary inversion uses a
+Cox--Ross--Rubinstein American futures-option tree. Under deterministic rates and the
+maintained lognormal one-factor futures model,
+
+[
+u=e^{sigmasqrt{Delta t}},qquad d=u^{-1},qquad
+p=rac{1-d}{u-d}.
+]
+
+At every node the option value is the maximum of immediate exercise and discounted
+continuation. Brent root finding then solves the settlement-pricing equation for
+(widehatsigma^{LO}_{Q,t,K}). Black--76 remains a European near-ATM robustness object,
+not the production inversion.
+
+The empirical surface is kept contract-level through this stage. Actual versus theoretical
+CME settlement flags, volume, open interest, inversion failures, smile shape, and tree-step
+convergence must be inspected before defining the scalar or maturity-interpolated Q state
+used for strict (t-1) APO prediction.
