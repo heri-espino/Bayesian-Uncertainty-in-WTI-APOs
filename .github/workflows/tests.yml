@@ -43,6 +43,10 @@ jobs:
         run: >-
           python -m experiments.wti_expiry_coverage_audit
           --output-dir /tmp/wti_expiry_coverage
+      - name: Audit vanilla CL external-Q histories
+        run: >-
+          python -m experiments.wti_vanilla_cl_audit
+          --output-dir /tmp/wti_vanilla_cl_audit
       - name: Run system probe without requiring NVIDIA/CuPy
         run: python -m scripts.system_probe --output-dir /tmp/system_probe
       - name: Run reproducible synthetic validation smoke test
