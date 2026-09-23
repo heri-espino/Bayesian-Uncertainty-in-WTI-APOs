@@ -1,0 +1,64 @@
+{
+  "completed": true,
+  "dataset": "GLBX.MDP3",
+  "date_window": {
+    "end_exclusive": "2026-09-11",
+    "start_inclusive": "2026-08-24"
+  },
+  "definition_date": "2026-08-24",
+  "downloaded": [
+    "data\\databento\\wti_external_q\\raw\\lo_statistics_2026-08-24_2026-09-11.csv",
+    "data\\databento\\wti_external_q\\raw\\cl_statistics_2026-08-24_2026-09-11.csv"
+  ],
+  "files": {
+    "data\\databento\\wti_external_q\\raw\\cl_statistics_2026-08-24_2026-09-11.csv": {
+      "rows": 13418,
+      "sha256": "ea085838f103faab7cc4028109a68f78d35ee43a48968ffb3204383a85c270cc"
+    },
+    "data\\databento\\wti_external_q\\raw\\lo_definitions_2026-08-24.csv": {
+      "rows": 26411,
+      "sha256": "a05c9ae2aafdc436fc5fe7200d7fe131f8735c913f14438b67eb259f8ae8a10a"
+    },
+    "data\\databento\\wti_external_q\\raw\\lo_selected_2026-08-24.csv": {
+      "rows": 80,
+      "sha256": "ca7b769f3b649447449c44e7f9ce3b000d14ac2dd3ad8356871e573cd34cf306"
+    },
+    "data\\databento\\wti_external_q\\raw\\lo_statistics_2026-08-24_2026-09-11.csv": {
+      "rows": 185481,
+      "sha256": "6b7b95bc2a636f2168b5d9b21fd203ebdf60d39a6606dcdb354c105343b78396"
+    }
+  },
+  "hard_cost_cap_usd": 5.0,
+  "mode": "download",
+  "new_download_estimate_usd": 0.014819130301,
+  "next_action": "Inspect stat_type=3 settlements and stat_type=14 IV availability before pricing.",
+  "notes": [
+    "API key is read only from DATABENTO_API_KEY and is not recorded.",
+    "Raw Databento files are local/proprietary inputs and are gitignored.",
+    "statistics stat_type=3 is settlement; stat_type=14 is settlement-associated IV when published."
+  ],
+  "option_parent": "LO.OPT",
+  "quotes_usd": {
+    "definition": 0.021743889898,
+    "futures_statistics": 0.000999718904,
+    "option_statistics": 0.013819411397
+  },
+  "raw_underlyings": [
+    "CLX6",
+    "CLZ6"
+  ],
+  "requested_underlyings": [
+    "CLX26",
+    "CLZ26"
+  ],
+  "reused_local": [
+    "data\\databento\\wti_external_q\\raw\\lo_definitions_2026-08-24.csv"
+  ],
+  "selected_call_count": 40,
+  "selected_option_count": 80,
+  "selected_put_count": 40,
+  "strike_range": [
+    85.0,
+    94.5
+  ]
+}
