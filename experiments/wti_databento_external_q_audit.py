@@ -1,17 +1,11 @@
 """Audit locally downloaded Databento WTI vanilla-option statistics.
 
-The audit is read-only with respect to market-data inputs. It summarizes official
-statistics by reference date (`ts_ref`), instrument, and statistic type before any
-implied-volatility inversion or APO-pricing experiment is attempted.
+The audit is read-only. It checks official CME settlement, volume and open-
+interest coverage before any implied-volatility inversion or APO pricing.
 
-For CME Globex GLBX.MDP3 the relevant official daily statistics are:
-- 3: settlement price
-- 6: cleared volume
-- 9: open interest
-
-CME can publish multiple updates for one reference date. Settlement `stat_flags` bit 0
-marks a final rather than preliminary settlement, and bit 1 marks actual rather than
-theoretical settlement.
+The current target window contains one weekday with no CME settlement:
+2026-09-07 (Labor Day). CME's 2026 settlement notice states that no settlement
+prices were derived or disseminated that day.
 """
 
 from __future__ import annotations
@@ -23,110 +17,42 @@ from typing import Any
 
 import pandas as pd
 
+from bayesian_asian_options.databento_wti import (
+    STAT_NAMES,
+    load_databento_csv,
+    normalize_statistics,
+)
+
 ROOT = Path(__file__).resolve().parents[1]
-
-STAT_NAMES = {
-    1: "opening_price",
-    2: "indicative_opening_price",
-    3: "settlement_price",
-    4: "session_low",
-    5: "session_high",
-    6: "cleared_volume",
-    7: "lowest_offer",
-    8: "highest_bid",
-    9: "open_interest",
-    10: "fixing_price",
-    17: "upper_price_limit",
-    18: "lower_price_limit",
-}
+DEFAULT_NO_SETTLEMENT_DATES = ("2026-09-07",)
 
 
-def _load_csv(path: Path) -> pd.DataFrame:
-    if not path.exists():
-        raise FileNotFoundError(path)
-    frame = pd.read_csv(path, index_col=0)
-    if frame.index.name and frame.index.name not in frame.columns:
-        frame = frame.reset_index()
-    return frame
-
-
-def _coerce_stat_type(series: pd.Series) -> pd.Series:
-    numeric = pd.to_numeric(series, errors="coerce")
-    if numeric.notna().all():
-        return numeric.astype("Int64")
-
-    names = {
-        "OPENING_PRICE": 1,
-        "INDICATIVE_OPENING_PRICE": 2,
-        "SETTLEMENT_PRICE": 3,
-        "TRADING_SESSION_LOW_PRICE": 4,
-        "TRADING_SESSION_HIGH_PRICE": 5,
-        "CLEARED_VOLUME": 6,
-        "LOWEST_OFFER": 7,
-        "HIGHEST_BID": 8,
-        "OPEN_INTEREST": 9,
-        "FIXING_PRICE": 10,
-        "UPPER_PRICE_LIMIT": 17,
-        "LOWER_PRICE_LIMIT": 18,
+def _attach_option_metadata(
+    option_stats: pd.DataFrame, selected: pd.DataFrame
+) -> pd.DataFrame:
+    required = {
+        "instrument_id",
+        "raw_symbol",
+        "underlying",
+        "strike_price",
+        "option_type",
     }
-    text = (
-        series.astype(str)
-        .str.strip()
-        .str.upper()
-        .str.replace("STATTYPE.", "", regex=False)
-        .str.replace(" ", "_", regex=False)
-    )
-    mapped = text.map(names)
-    return numeric.where(numeric.notna(), mapped).astype("Int64")
-
-
-def _reference_date(frame: pd.DataFrame) -> pd.Series:
-    for column in ("ts_ref", "ts_event", "ts_recv"):
-        if column not in frame.columns:
-            continue
-        values = frame[column]
-        numeric = pd.to_numeric(values, errors="coerce")
-        if numeric.notna().sum() >= max(1, int(0.9 * len(values))):
-            parsed = pd.to_datetime(numeric, unit="ns", utc=True, errors="coerce")
-        else:
-            parsed = pd.to_datetime(values, utc=True, errors="coerce")
-        if parsed.notna().any():
-            return parsed.dt.date.astype("string")
-    raise ValueError("Statistics data have no usable ts_ref/ts_event/ts_recv timestamp.")
-
-
-def _normalize_statistics(frame: pd.DataFrame) -> pd.DataFrame:
-    required = {"instrument_id", "stat_type"}
-    missing = required.difference(frame.columns)
-    if missing:
-        raise ValueError(f"Statistics data missing columns: {sorted(missing)}")
-
-    out = frame.copy()
-    out["instrument_id"] = pd.to_numeric(out["instrument_id"], errors="coerce").astype("Int64")
-    out["stat_type"] = _coerce_stat_type(out["stat_type"])
-    out["reference_date"] = _reference_date(out)
-    out["stat_name"] = out["stat_type"].map(STAT_NAMES).fillna("other")
-
-    if "stat_flags" in out.columns:
-        flags = pd.to_numeric(out["stat_flags"], errors="coerce").fillna(0).astype("int64")
-    else:
-        flags = pd.Series(0, index=out.index, dtype="int64")
-    out["settlement_final"] = out["stat_type"].eq(3) & flags.map(lambda x: bool(x & 1))
-    out["settlement_actual"] = out["stat_type"].eq(3) & flags.map(lambda x: bool(x & 2))
-    out["settlement_intraday"] = out["stat_type"].eq(3) & flags.map(lambda x: bool(x & 8))
-    return out
-
-
-def _attach_option_metadata(option_stats: pd.DataFrame, selected: pd.DataFrame) -> pd.DataFrame:
-    required = {"instrument_id", "raw_symbol", "underlying", "strike_price", "option_type"}
     missing = required.difference(selected.columns)
     if missing:
-        raise ValueError(f"Selected definitions missing columns: {sorted(missing)}")
+        raise ValueError(
+            f"Selected definitions missing columns: {sorted(missing)}"
+        )
 
     metadata = selected[list(required)].copy()
-    metadata["instrument_id"] = pd.to_numeric(metadata["instrument_id"], errors="coerce").astype("Int64")
-    metadata["strike_price"] = pd.to_numeric(metadata["strike_price"], errors="coerce")
-    metadata = metadata.drop_duplicates(subset=["instrument_id"], keep="last")
+    metadata["instrument_id"] = pd.to_numeric(
+        metadata["instrument_id"], errors="coerce"
+    ).astype("Int64")
+    metadata["strike_price"] = pd.to_numeric(
+        metadata["strike_price"], errors="coerce"
+    )
+    metadata = metadata.drop_duplicates(
+        subset=["instrument_id"], keep="last"
+    )
 
     merged = option_stats.merge(
         metadata,
@@ -138,12 +64,15 @@ def _attach_option_metadata(option_stats: pd.DataFrame, selected: pd.DataFrame) 
     unmatched = int(merged["_merge"].ne("both").sum())
     if unmatched:
         raise RuntimeError(
-            f"{unmatched} option-statistics rows could not be matched to selected definitions."
+            f"{unmatched} option-statistics rows could not be matched "
+            "to selected definitions."
         )
     return merged.drop(columns="_merge")
 
 
-def _stat_type_summary(frame: pd.DataFrame, source: str) -> pd.DataFrame:
+def _stat_type_summary(
+    frame: pd.DataFrame, source: str
+) -> pd.DataFrame:
     grouped = (
         frame.groupby(["stat_type", "stat_name"], dropna=False)
         .agg(
@@ -166,17 +95,22 @@ def build_audit(
     futures_stats: pd.DataFrame,
     target_start: str,
     target_end: str,
+    no_settlement_dates: tuple[str, ...] = DEFAULT_NO_SETTLEMENT_DATES,
 ) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, dict[str, Any]]:
     """Build coverage tables and a JSON-serializable readiness summary."""
-    options = _attach_option_metadata(_normalize_statistics(option_stats), selected)
-    futures = _normalize_statistics(futures_stats)
+    options = _attach_option_metadata(
+        normalize_statistics(option_stats), selected
+    )
+    futures = normalize_statistics(futures_stats)
 
     stat_summary = pd.concat(
-        [_stat_type_summary(options, "options"), _stat_type_summary(futures, "futures")],
+        [
+            _stat_type_summary(options, "options"),
+            _stat_type_summary(futures, "futures"),
+        ],
         ignore_index=True,
     )
 
-    instrument_rows: list[dict[str, Any]] = []
     selected_norm = selected.copy()
     selected_norm["instrument_id"] = pd.to_numeric(
         selected_norm["instrument_id"], errors="coerce"
@@ -184,13 +118,21 @@ def build_audit(
     selected_norm["strike_price"] = pd.to_numeric(
         selected_norm["strike_price"], errors="coerce"
     )
+
+    instrument_rows: list[dict[str, Any]] = []
     for instrument_id, meta in (
-        selected_norm.drop_duplicates("instrument_id").set_index("instrument_id").iterrows()
+        selected_norm.drop_duplicates("instrument_id")
+        .set_index("instrument_id")
+        .iterrows()
     ):
         sub = options.loc[options["instrument_id"].eq(instrument_id)]
         settlement = sub.loc[sub["stat_type"].eq(3)]
-        final_settlement = settlement.loc[settlement["settlement_final"]]
-        actual_settlement = settlement.loc[settlement["settlement_actual"]]
+        final_settlement = settlement.loc[
+            settlement["settlement_final"]
+        ]
+        actual_settlement = settlement.loc[
+            settlement["settlement_actual"]
+        ]
         volume = sub.loc[sub["stat_type"].eq(6)]
         oi = sub.loc[sub["stat_type"].eq(9)]
         instrument_rows.append(
@@ -201,11 +143,21 @@ def build_audit(
                 "strike_price": float(meta["strike_price"]),
                 "option_type": meta["option_type"],
                 "observed_rows": int(len(sub)),
-                "settlement_dates": int(settlement["reference_date"].nunique()),
-                "final_settlement_dates": int(final_settlement["reference_date"].nunique()),
-                "actual_settlement_dates": int(actual_settlement["reference_date"].nunique()),
-                "cleared_volume_dates": int(volume["reference_date"].nunique()),
-                "open_interest_dates": int(oi["reference_date"].nunique()),
+                "settlement_dates": int(
+                    settlement["reference_date"].nunique()
+                ),
+                "final_settlement_dates": int(
+                    final_settlement["reference_date"].nunique()
+                ),
+                "actual_settlement_dates": int(
+                    actual_settlement["reference_date"].nunique()
+                ),
+                "cleared_volume_dates": int(
+                    volume["reference_date"].nunique()
+                ),
+                "open_interest_dates": int(
+                    oi["reference_date"].nunique()
+                ),
             }
         )
     instrument_coverage = pd.DataFrame(instrument_rows).sort_values(
@@ -228,17 +180,35 @@ def build_audit(
         daily_rows.append(
             {
                 "reference_date": date,
-                "instruments_any_stat": int(day["instrument_id"].nunique()),
-                "settlement_instruments": int(settlements["instrument_id"].nunique()),
-                "final_settlement_instruments": int(finals["instrument_id"].nunique()),
-                "actual_settlement_instruments": int(actuals["instrument_id"].nunique()),
-                "cleared_volume_instruments": int(volume["instrument_id"].nunique()),
-                "open_interest_instruments": int(oi["instrument_id"].nunique()),
+                "instruments_any_stat": int(
+                    day["instrument_id"].nunique()
+                ),
+                "settlement_instruments": int(
+                    settlements["instrument_id"].nunique()
+                ),
+                "final_settlement_instruments": int(
+                    finals["instrument_id"].nunique()
+                ),
+                "actual_settlement_instruments": int(
+                    actuals["instrument_id"].nunique()
+                ),
+                "cleared_volume_instruments": int(
+                    volume["instrument_id"].nunique()
+                ),
+                "open_interest_instruments": int(
+                    oi["instrument_id"].nunique()
+                ),
                 "call_settlement_instruments": int(
-                    settlements.loc[settlements["option_type"].eq("call"), "instrument_id"].nunique()
+                    settlements.loc[
+                        settlements["option_type"].eq("call"),
+                        "instrument_id",
+                    ].nunique()
                 ),
                 "put_settlement_instruments": int(
-                    settlements.loc[settlements["option_type"].eq("put"), "instrument_id"].nunique()
+                    settlements.loc[
+                        settlements["option_type"].eq("put"),
+                        "instrument_id",
+                    ].nunique()
                 ),
             }
         )
@@ -246,55 +216,99 @@ def build_audit(
 
     selected_count = int(selected_norm["instrument_id"].nunique())
     settlement_instruments = int(
-        options.loc[options["stat_type"].eq(3), "instrument_id"].nunique()
+        options.loc[
+            options["stat_type"].eq(3), "instrument_id"
+        ].nunique()
     )
     final_instruments = int(
         options.loc[
-            options["stat_type"].eq(3) & options["settlement_final"], "instrument_id"
+            options["stat_type"].eq(3)
+            & options["settlement_final"],
+            "instrument_id",
         ].nunique()
     )
-    stat_types_options = sorted(int(x) for x in options["stat_type"].dropna().unique())
-    stat_types_futures = sorted(int(x) for x in futures["stat_type"].dropna().unique())
+    stat_types_options = sorted(
+        int(x) for x in options["stat_type"].dropna().unique()
+    )
+    stat_types_futures = sorted(
+        int(x) for x in futures["stat_type"].dropna().unique()
+    )
 
-    business_dates = [
-        d.date().isoformat() for d in pd.date_range(target_start, target_end, freq="B")
+    weekdays = [
+        d.date().isoformat()
+        for d in pd.date_range(target_start, target_end, freq="B")
     ]
-    observed_dates = set(options["reference_date"].dropna().astype(str))
+    excluded = sorted(
+        d for d in no_settlement_dates if d in set(weekdays)
+    )
+    expected_dates = [d for d in weekdays if d not in set(excluded)]
+
+    observed_dates = set(
+        options["reference_date"].dropna().astype(str)
+    )
     settlement_dates = set(
-        options.loc[options["stat_type"].eq(3), "reference_date"].dropna().astype(str)
+        options.loc[
+            options["stat_type"].eq(3), "reference_date"
+        ].dropna().astype(str)
     )
     futures_settlement_dates = set(
-        futures.loc[futures["stat_type"].eq(3), "reference_date"].dropna().astype(str)
+        futures.loc[
+            futures["stat_type"].eq(3), "reference_date"
+        ].dropna().astype(str)
+    )
+
+    option_expected_coverage = sum(
+        d in settlement_dates for d in expected_dates
+    )
+    futures_expected_coverage = sum(
+        d in futures_settlement_dates for d in expected_dates
     )
 
     summary: dict[str, Any] = {
-        "target_window": {"start": target_start, "end": target_end},
+        "target_window": {
+            "start": target_start,
+            "end": target_end,
+        },
         "selected_option_instruments": selected_count,
         "option_statistics_rows": int(len(options)),
         "futures_statistics_rows": int(len(futures)),
         "option_stat_types": stat_types_options,
         "option_stat_type_names": [
-            STAT_NAMES.get(x, f"stat_{x}") for x in stat_types_options
+            STAT_NAMES.get(x, f"stat_{x}")
+            for x in stat_types_options
         ],
         "futures_stat_types": stat_types_futures,
         "futures_stat_type_names": [
-            STAT_NAMES.get(x, f"stat_{x}") for x in stat_types_futures
+            STAT_NAMES.get(x, f"stat_{x}")
+            for x in stat_types_futures
         ],
         "option_reference_date_first": (
-            None if options["reference_date"].dropna().empty else str(options["reference_date"].min())
+            None
+            if options["reference_date"].dropna().empty
+            else str(options["reference_date"].min())
         ),
         "option_reference_date_last": (
-            None if options["reference_date"].dropna().empty else str(options["reference_date"].max())
+            None
+            if options["reference_date"].dropna().empty
+            else str(options["reference_date"].max())
         ),
-        "target_business_dates": len(business_dates),
-        "target_business_dates_with_any_option_stat": int(
-            sum(d in observed_dates for d in business_dates)
+        "target_weekdays": len(weekdays),
+        "excluded_cme_no_settlement_dates": excluded,
+        "target_expected_settlement_dates": len(expected_dates),
+        "target_expected_dates_with_any_option_stat": int(
+            sum(d in observed_dates for d in expected_dates)
         ),
-        "target_business_dates_with_option_settlement": int(
-            sum(d in settlement_dates for d in business_dates)
+        "target_expected_dates_with_option_settlement": int(
+            option_expected_coverage
         ),
-        "target_business_dates_with_futures_settlement": int(
-            sum(d in futures_settlement_dates for d in business_dates)
+        "target_expected_dates_with_futures_settlement": int(
+            futures_expected_coverage
+        ),
+        "option_settlement_date_coverage_pass": bool(
+            option_expected_coverage == len(expected_dates)
+        ),
+        "futures_settlement_date_coverage_pass": bool(
+            futures_expected_coverage == len(expected_dates)
         ),
         "option_instruments_with_settlement": settlement_instruments,
         "option_instruments_with_final_settlement": final_instruments,
@@ -305,18 +319,32 @@ def build_audit(
             final_instruments == selected_count
         ),
         "glbx_direct_settlement_iv_available": False,
+        "strict_forward_data_ready": bool(
+            option_expected_coverage == len(expected_dates)
+            and futures_expected_coverage == len(expected_dates)
+            and final_instruments == selected_count
+        ),
         "next_modeling_step": (
-            "Infer vanilla implied volatility from official LO option settlements and CL "
-            "futures settlements with an American futures-option model."
+            "Infer vanilla implied volatility from official LO option "
+            "settlements and CL futures settlements with an American "
+            "futures-option model."
         ),
         "notes": [
             "Coverage uses CME trading reference date ts_ref when available.",
             "CME can publish multiple updates for one trading reference date.",
-            "Settlement stat_flags bit 0 marks final vs preliminary; bit 1 marks actual vs theoretical.",
-            "GLBX.MDP3 does not publish statistics stat_type=14; direct settlement IV is unavailable in this dataset.",
+            "Settlement stat_flags bit 0 marks final vs preliminary; bit 1 "
+            "marks actual vs theoretical.",
+            "2026-09-07 is excluded because CME stated that no CME/CBOT/"
+            "NYMEX/COMEX settlement prices would be derived or disseminated.",
+            "GLBX.MDP3 does not publish statistics stat_type=14.",
         ],
     }
-    return stat_summary, instrument_coverage, daily_coverage, summary
+    return (
+        stat_summary,
+        instrument_coverage,
+        daily_coverage,
+        summary,
+    )
 
 
 def parse_args() -> argparse.Namespace:
@@ -324,46 +352,81 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--data-dir",
         type=Path,
-        default=ROOT / "data" / "databento" / "wti_external_q" / "raw",
+        default=(
+            ROOT
+            / "data"
+            / "databento"
+            / "wti_external_q"
+            / "raw"
+        ),
     )
-    parser.add_argument("--definition-date", default="2026-08-24")
-    parser.add_argument("--download-start", default="2026-08-24")
-    parser.add_argument("--download-end", default="2026-09-11")
-    parser.add_argument("--target-start", default="2026-08-24")
-    parser.add_argument("--target-end", default="2026-09-10")
+    parser.add_argument(
+        "--definition-date", default="2026-08-24"
+    )
+    parser.add_argument(
+        "--download-start", default="2026-08-24"
+    )
+    parser.add_argument(
+        "--download-end", default="2026-09-11"
+    )
+    parser.add_argument(
+        "--target-start", default="2026-08-24"
+    )
+    parser.add_argument(
+        "--target-end", default="2026-09-10"
+    )
     parser.add_argument(
         "--output-dir",
         type=Path,
-        default=ROOT / "results" / "analysis" / "wti_databento_external_q",
+        default=(
+            ROOT
+            / "results"
+            / "analysis"
+            / "wti_databento_external_q"
+        ),
     )
     return parser.parse_args()
 
 
 def main() -> None:
     args = parse_args()
-    selected_path = args.data_dir / f"lo_selected_{args.definition_date}.csv"
+    selected_path = (
+        args.data_dir
+        / f"lo_selected_{args.definition_date}.csv"
+    )
     option_path = (
-        args.data_dir / f"lo_statistics_{args.download_start}_{args.download_end}.csv"
+        args.data_dir
+        / f"lo_statistics_{args.download_start}_{args.download_end}.csv"
     )
     futures_path = (
-        args.data_dir / f"cl_statistics_{args.download_start}_{args.download_end}.csv"
+        args.data_dir
+        / f"cl_statistics_{args.download_start}_{args.download_end}.csv"
     )
 
-    stat_summary, instrument_coverage, daily_coverage, summary = build_audit(
-        selected=_load_csv(selected_path),
-        option_stats=_load_csv(option_path),
-        futures_stats=_load_csv(futures_path),
+    outputs = build_audit(
+        selected=load_databento_csv(selected_path),
+        option_stats=load_databento_csv(option_path),
+        futures_stats=load_databento_csv(futures_path),
         target_start=args.target_start,
         target_end=args.target_end,
     )
+    stat_summary, instrument_coverage, daily_coverage, summary = outputs
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
-    stat_summary.to_csv(args.output_dir / "stat_type_summary.csv", index=False)
-    instrument_coverage.to_csv(
-        args.output_dir / "option_instrument_coverage.csv", index=False
+    stat_summary.to_csv(
+        args.output_dir / "stat_type_summary.csv", index=False
     )
-    daily_coverage.to_csv(args.output_dir / "option_daily_coverage.csv", index=False)
-    (args.output_dir / "coverage_audit.json").write_text(
+    instrument_coverage.to_csv(
+        args.output_dir / "option_instrument_coverage.csv",
+        index=False,
+    )
+    daily_coverage.to_csv(
+        args.output_dir / "option_daily_coverage.csv",
+        index=False,
+    )
+    (
+        args.output_dir / "coverage_audit.json"
+    ).write_text(
         json.dumps(summary, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
     )
