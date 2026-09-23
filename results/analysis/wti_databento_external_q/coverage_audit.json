@@ -1,0 +1,79 @@
+{
+  "all_selected_options_have_some_final_settlement": true,
+  "all_selected_options_have_some_settlement": true,
+  "futures_stat_type_names": [
+    "opening_price",
+    "indicative_opening_price",
+    "settlement_price",
+    "session_low",
+    "session_high",
+    "cleared_volume",
+    "lowest_offer",
+    "highest_bid",
+    "open_interest",
+    "upper_price_limit",
+    "lower_price_limit"
+  ],
+  "futures_stat_types": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    17,
+    18
+  ],
+  "futures_statistics_rows": 13418,
+  "glbx_direct_settlement_iv_available": false,
+  "next_modeling_step": "Infer vanilla implied volatility from official LO option settlements and CL futures settlements with an American futures-option model.",
+  "notes": [
+    "Coverage uses CME trading reference date ts_ref when available.",
+    "CME can publish multiple updates for one trading reference date.",
+    "Settlement stat_flags bit 0 marks final vs preliminary; bit 1 marks actual vs theoretical.",
+    "GLBX.MDP3 does not publish statistics stat_type=14; direct settlement IV is unavailable in this dataset."
+  ],
+  "option_instruments_with_final_settlement": 80,
+  "option_instruments_with_settlement": 80,
+  "option_reference_date_first": "2026-08-21",
+  "option_reference_date_last": "2026-09-10",
+  "option_stat_type_names": [
+    "opening_price",
+    "indicative_opening_price",
+    "settlement_price",
+    "session_low",
+    "session_high",
+    "cleared_volume",
+    "lowest_offer",
+    "highest_bid",
+    "open_interest",
+    "upper_price_limit",
+    "lower_price_limit"
+  ],
+  "option_stat_types": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    17,
+    18
+  ],
+  "option_statistics_rows": 185481,
+  "selected_option_instruments": 80,
+  "target_business_dates": 14,
+  "target_business_dates_with_any_option_stat": 14,
+  "target_business_dates_with_futures_settlement": 13,
+  "target_business_dates_with_option_settlement": 13,
+  "target_window": {
+    "end": "2026-09-10",
+    "start": "2026-08-24"
+  }
+}
