@@ -11,6 +11,7 @@ The empirical application deliberately uses different sources for different obje
 - **realized first-nearby fixings and valuation-date CL term structure:** committed Barchart `Daily Prices` histories under `data/csv/CL`;
 - **CL last-trade dates:** the explicit versioned table `data/csv/CL/contract_expiries.csv`;
 - **USD discounting:** U.S. Treasury Daily Treasury Par Yield Curve Rates;
+- **independent risk-neutral validation:** local Databento CME/NYMEX `LO` option definitions and official `statistics`, acquired through a cost-capped workflow and not committed as raw vendor data;
 - **optional validation:** a small external reference table can be supplied locally.
 
 Barchart `Latest` is used as the futures end-of-day price / settlement proxy. It is not silently renamed an official CME settlement.
@@ -295,3 +296,37 @@ python -m scripts.run_university_wti_apo \
 ```
 
 The resulting report compares the external price with Barchart `Latest`. Keep licensing and redistribution restrictions in mind before publishing raw market-data files.
+
+
+## 14. Independent vanilla-WTI Q state via Databento
+
+Issue #36 tests whether an independently observed vanilla-WTI risk-neutral state predicts APO
+marks without calibrating on the APO family itself. The Barchart vanilla histories currently
+available begin after the strict October-2026 target window, so they are retained as parser/audit
+fixtures rather than used as forward evidence.
+
+The replacement source is Databento's CME Globex `GLBX.MDP3` dataset. Standard monthly WTI
+options are selected through parent symbol `LO.OPT`. A one-day definition snapshot provides
+the option `raw_symbol`, `underlying`, `strike_price`, `expiration`, and option class.
+The first pilot filters to options on `CLX6` and `CLZ6`, strikes 85.0--94.5, then requests
+only the low-volume `statistics` schema for 2026-08-24 through 2026-09-10.
+
+Acquisition is local and fail-closed on cost:
+
+```powershell
+$env:DATABENTO_API_KEY = "<your local key>"
+python -m experiments.wti_databento_external_q --mode quote
+python -m experiments.wti_databento_external_q --mode discover
+python -m experiments.wti_databento_external_q --mode download
+```
+
+The default hard cap is USD 5.00. Raw Databento records live under the gitignored
+`data/databento/wti_external_q/raw/`; the versioned acquisition manifest records only query
+metadata, quotes, selected instrument counts, hashes, and row counts. Repeated downloads are
+blocked by default because duplicate streaming requests can incur repeated charges.
+
+The primary market objects are official settlement statistics (`stat_type=3`) and, when CME
+publishes them, settlement-associated implied volatility (`stat_type=14`). If type 14 is not
+available densely enough, volatility will be inferred from official option/futures settlements
+with an American-style futures-option model; a Black-76 inversion remains only a labelled
+near-ATM robustness approximation.
