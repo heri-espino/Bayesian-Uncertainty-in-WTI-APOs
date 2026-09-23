@@ -79,6 +79,13 @@ This is the canonical inventory of reusable public functions/classes. It is gene
 :show-inheritance:
 ```
 
+## Databento WTI market-data utilities
+
+```{automodule} bayesian_asian_options.databento_wti
+:members:
+:show-inheritance:
+```
+
 ## American options on futures and implied volatility
 
 ```{automodule} bayesian_asian_options.american_futures_option
