@@ -56,3 +56,30 @@ Standard WTI monthly options are American-style. A plain Black-76 inversion is t
 approximation, especially away from the money. The production external-Q experiment should either
 use an American futures-option valuation routine or restrict a Black-style robustness calculation
 to sufficiently near-the-money observations and label that approximation explicitly.
+
+
+## Databento replacement route
+
+Barchart no longer exposes the pre-11-September history needed for this strict-forward test.
+Issue #36 therefore uses Databento CME Globex `GLBX.MDP3` as the replacement acquisition
+route. The parent option symbol is `LO.OPT`; instrument definitions are filtered to the
+November- and December-2026 WTI futures (`CLX6`, `CLZ6`) and strikes 85.0--94.5.
+
+The acquisition driver is deliberately cost-capped:
+
+```powershell
+$env:DATABENTO_API_KEY = "<your local key>"
+python -m experiments.wti_databento_external_q --mode quote
+python -m experiments.wti_databento_external_q --mode discover
+python -m experiments.wti_databento_external_q --mode download
+```
+
+The default hard cap is USD 5.00. `quote` performs no billable time-series request.
+`discover` buys only the one-day definition snapshot after checking its quote and then
+quotes the exact selected `statistics` request. `download` proceeds only if the estimated
+new cost remains below the cap. Existing local files are reused unless `--force` is given.
+
+For the downloaded `statistics` records, `stat_type=3` is the official settlement price
+and `stat_type=14` is settlement-associated implied volatility when the venue publishes it.
+The first analysis step after acquisition is therefore to audit availability of types 3 and 14
+before implementing any independent-IV inversion.
