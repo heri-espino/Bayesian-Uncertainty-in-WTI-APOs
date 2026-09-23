@@ -332,3 +332,26 @@ inferred from official LO option and CL futures settlements with an American-sty
 model; Black-76 remains only a labelled near-ATM robustness approximation. Before inversion, run
 `python -m experiments.wti_databento_external_q_audit` to verify date/instrument coverage and
 final-settlement flags.
+
+
+### Databento vanilla-IV inversion
+
+After the acquisition coverage audit reports `strict_forward_data_ready=true`, build the
+contract-level vanilla WTI implied-volatility panel with:
+
+```powershell
+python -m experiments.wti_databento_external_q_iv --download-treasury
+```
+
+The driver selects the latest final, non-intraday CME settlement for each option and
+underlying futures contract on each `ts_ref` date. It uses the later of the option/futures
+settlement publication timestamps as the information-availability timestamp, reads the
+option expiration from the Databento definition, interpolates the dated Treasury par-yield
+curve under the paper's existing zero-rate-proxy approximation, and inverts volatility with
+the American CRR futures-option model.
+
+The output `vanilla_iv_panel.csv` remains contract-level and records strike, underlying,
+settlement flags, moneyness, maturity, rate, inversion status, and implied volatility.
+`daily_vanilla_iv_summary.csv` is diagnostic only; it does not yet define the final
+strike/maturity aggregation used to predict APO settlements. Cleared volume and open
+interest are retained as ex-post diagnostics and do not enter the volatility inversion.
