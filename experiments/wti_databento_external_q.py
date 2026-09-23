@@ -270,7 +270,7 @@ def main() -> None:
         "notes": [
             "API key is read only from DATABENTO_API_KEY and is not recorded.",
             "Raw Databento files are local/proprietary inputs and are gitignored.",
-            "statistics stat_type=3 is settlement; stat_type=14 is settlement-associated IV when published.",
+            "For GLBX.MDP3, use official settlement (3), cleared volume (6), and open interest (9); direct settlement IV (14) is not published.",
         ],
     }
 
@@ -373,7 +373,7 @@ def main() -> None:
 
     manifest["completed"] = True
     manifest["next_action"] = (
-        "Inspect stat_type=3 settlements and stat_type=14 IV availability before pricing."
+        "Run experiments.wti_databento_external_q_audit to verify LO/CL settlement coverage before IV inversion."
     )
     manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n")
     print(json.dumps(manifest, indent=2, sort_keys=True))
