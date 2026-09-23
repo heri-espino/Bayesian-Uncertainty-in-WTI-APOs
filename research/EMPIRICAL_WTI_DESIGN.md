@@ -242,10 +242,10 @@ and `CLZ6` and strikes 85.0--94.5, and requests only the `statistics` schema ove
 2026-08-24 through 2026-09-10. The acquisition driver quotes every request before purchase and
 enforces a default USD 5 hard cap. Raw vendor data remain local and gitignored.
 
-The preferred observed fields are official settlement price (`stat_type=3`), cleared volume
-(`6`), open interest (`9`), and settlement-associated implied volatility (`14`) when
-published. Direct exchange-published type-14 volatility is the cleanest independent Q-state.
-If it is sparse or absent, the fallback derives IV from official vanilla and futures
+For `GLBX.MDP3`, the observed fields used by this study are official settlement price
+(`stat_type=3`), cleared volume (`6`), and open interest (`9`). Databento's current
+statistics-availability table does not list settlement-implied volatility (`14`) for CME
+Globex. The independent Q-state is therefore derived from official vanilla-option and futures
 settlements using an American futures-option model because standard WTI monthly options are
 American-style. Black-76 may be reported only as a near-ATM robustness approximation.
 
