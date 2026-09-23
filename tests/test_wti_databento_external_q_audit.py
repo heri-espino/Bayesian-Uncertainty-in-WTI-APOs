@@ -101,5 +101,6 @@ def test_build_audit_reports_settlement_coverage_without_direct_iv() -> None:
     assert daily_coverage.loc[0, "final_settlement_instruments"] == 2
     assert summary["option_instruments_with_settlement"] == 2
     assert summary["option_instruments_with_final_settlement"] == 2
-    assert summary["target_business_dates_with_futures_settlement"] == 1
+    assert summary["target_expected_dates_with_futures_settlement"] == 1
+    assert summary["strict_forward_data_ready"] is True
     assert summary["glbx_direct_settlement_iv_available"] is False
