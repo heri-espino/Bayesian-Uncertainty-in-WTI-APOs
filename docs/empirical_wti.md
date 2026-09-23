@@ -325,8 +325,10 @@ The default hard cap is USD 5.00. Raw Databento records live under the gitignore
 metadata, quotes, selected instrument counts, hashes, and row counts. Repeated downloads are
 blocked by default because duplicate streaming requests can incur repeated charges.
 
-The primary market objects are official settlement statistics (`stat_type=3`) and, when CME
-publishes them, settlement-associated implied volatility (`stat_type=14`). If type 14 is not
-available densely enough, volatility will be inferred from official option/futures settlements
-with an American-style futures-option model; a Black-76 inversion remains only a labelled
-near-ATM robustness approximation.
+For `GLBX.MDP3`, the primary market objects are official settlement (`stat_type=3`), cleared
+volume (`6`), and open interest (`9`). Databento's current statistics-availability table does not
+list settlement-implied volatility (`14`) for CME Globex. The independent Q state is therefore
+inferred from official LO option and CL futures settlements with an American-style futures-option
+model; Black-76 remains only a labelled near-ATM robustness approximation. Before inversion, run
+`python -m experiments.wti_databento_external_q_audit` to verify date/instrument coverage and
+final-settlement flags.
