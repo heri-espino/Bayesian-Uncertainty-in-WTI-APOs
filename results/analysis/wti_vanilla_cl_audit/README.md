@@ -79,7 +79,8 @@ The default hard cap is USD 5.00. `quote` performs no billable time-series reque
 quotes the exact selected `statistics` request. `download` proceeds only if the estimated
 new cost remains below the cap. Existing local files are reused unless `--force` is given.
 
-For the downloaded `statistics` records, `stat_type=3` is the official settlement price
-and `stat_type=14` is settlement-associated implied volatility when the venue publishes it.
-The first analysis step after acquisition is therefore to audit availability of types 3 and 14
-before implementing any independent-IV inversion.
+For `GLBX.MDP3`, the downloaded `statistics` records provide official settlement (`stat_type=3`),
+cleared volume (`6`), and open interest (`9`). Databento's current per-dataset table does not list
+settlement-implied volatility (`14`) for CME Globex, so the first analysis step is a coverage audit
+of LO and CL settlements; IV is then inverted from those official settlements with an American
+futures-option model.
