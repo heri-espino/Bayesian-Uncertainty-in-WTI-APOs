@@ -54,8 +54,30 @@ def _coerce_stat_type(series: pd.Series) -> pd.Series:
     numeric = pd.to_numeric(series, errors="coerce")
     if numeric.notna().all():
         return numeric.astype("Int64")
-    text = series.astype(str).str.extract(r"(\d+)", expand=False)
-    return pd.to_numeric(text, errors="coerce").astype("Int64")
+
+    names = {
+        "OPENING_PRICE": 1,
+        "INDICATIVE_OPENING_PRICE": 2,
+        "SETTLEMENT_PRICE": 3,
+        "TRADING_SESSION_LOW_PRICE": 4,
+        "TRADING_SESSION_HIGH_PRICE": 5,
+        "CLEARED_VOLUME": 6,
+        "LOWEST_OFFER": 7,
+        "HIGHEST_BID": 8,
+        "OPEN_INTEREST": 9,
+        "FIXING_PRICE": 10,
+        "UPPER_PRICE_LIMIT": 17,
+        "LOWER_PRICE_LIMIT": 18,
+    }
+    text = (
+        series.astype(str)
+        .str.strip()
+        .str.upper()
+        .str.replace("STATTYPE.", "", regex=False)
+        .str.replace(" ", "_", regex=False)
+    )
+    mapped = text.map(names)
+    return numeric.where(numeric.notna(), mapped).astype("Int64")
 
 
 def _reference_date(frame: pd.DataFrame) -> pd.Series:
@@ -85,7 +107,10 @@ def _normalize_statistics(frame: pd.DataFrame) -> pd.DataFrame:
     out["reference_date"] = _reference_date(out)
     out["stat_name"] = out["stat_type"].map(STAT_NAMES).fillna("other")
 
-    flags = pd.to_numeric(out.get("stat_flags", 0), errors="coerce").fillna(0).astype("int64")
+    if "stat_flags" in out.columns:
+        flags = pd.to_numeric(out["stat_flags"], errors="coerce").fillna(0).astype("int64")
+    else:
+        flags = pd.Series(0, index=out.index, dtype="int64")
     out["settlement_final"] = out["stat_type"].eq(3) & flags.map(lambda x: bool(x & 1))
     out["settlement_actual"] = out["stat_type"].eq(3) & flags.map(lambda x: bool(x & 2))
     out["settlement_intraday"] = out["stat_type"].eq(3) & flags.map(lambda x: bool(x & 8))
