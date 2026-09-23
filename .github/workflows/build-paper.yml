@@ -2,21 +2,6 @@ name: build-paper
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - "paper/**"
-      - "scripts/build_publication_figures.py"
-      - "scripts/vendor_utopia_fonts.py"
-      - "results/analysis/**"
-      - ".github/workflows/build-paper.yml"
-  pull_request:
-    paths:
-      - "paper/**"
-      - "scripts/build_publication_figures.py"
-      - "scripts/vendor_utopia_fonts.py"
-      - "results/analysis/**"
-      - ".github/workflows/build-paper.yml"
 
 permissions:
   contents: read
