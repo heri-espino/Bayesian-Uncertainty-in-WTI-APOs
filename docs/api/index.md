@@ -79,6 +79,13 @@ This is the canonical inventory of reusable public functions/classes. It is gene
 :show-inheritance:
 ```
 
+## American options on futures and implied volatility
+
+```{automodule} bayesian_asian_options.american_futures_option
+:members:
+:show-inheritance:
+```
+
 ## U.S. Treasury rate curves
 
 ```{automodule} bayesian_asian_options.rates
