@@ -41,8 +41,8 @@
     "2026-09-07 is excluded because CME stated that no CME/CBOT/NYMEX/COMEX settlement prices would be derived or disseminated.",
     "GLBX.MDP3 does not publish statistics stat_type=14."
   ],
-  "option_instruments_with_final_settlement": 80,
-  "option_instruments_with_settlement": 80,
+  "option_instruments_with_final_settlement": 404,
+  "option_instruments_with_settlement": 404,
   "option_reference_date_first": "2026-08-21",
   "option_reference_date_last": "2026-09-10",
   "option_settlement_date_coverage_pass": true,
@@ -72,8 +72,8 @@
     17,
     18
   ],
-  "option_statistics_rows": 185481,
-  "selected_option_instruments": 80,
+  "option_statistics_rows": 863567,
+  "selected_option_instruments": 404,
   "strict_forward_data_ready": true,
   "target_expected_dates_with_any_option_stat": 13,
   "target_expected_dates_with_futures_settlement": 13,
