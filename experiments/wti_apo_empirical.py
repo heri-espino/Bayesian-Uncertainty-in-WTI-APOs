@@ -350,6 +350,7 @@ def _load_first_nearby_inference(
             "returns spanning contract switches are excluded"
         ),
         "source_path": _portable_path(path),
+        "sha256": dataframe_sha256(history),
         "roll_return_policy": (
             "exclude first return after every mapped contract switch"
         ),
