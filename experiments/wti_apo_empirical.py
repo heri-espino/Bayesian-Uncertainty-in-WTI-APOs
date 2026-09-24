@@ -324,11 +324,10 @@ def _load_first_nearby_inference(
             "No reconstructed first-nearby observations fall inside the "
             "requested inference window"
         )
-    bad = selected["settlement"].le(0) | selected["settlement"].isna()
-    if bad.any():
+    bad_nonpositive = selected["settlement"].le(0)
+    if bad_nonpositive.fillna(False).any():
         raise RuntimeError(
-            "Reconstructed first-nearby inference contains missing or "
-            "non-positive settlements"
+            "Reconstructed first-nearby inference contains non-positive settlements"
         )
     returns = selected.loc[
         selected["usable_inference_return"], "log_return"
@@ -354,6 +353,10 @@ def _load_first_nearby_inference(
         "roll_return_policy": (
             "exclude first return after every mapped contract switch"
         ),
+        "missing_settlement_policy": (
+            "do not impute; use only pre-audited usable_inference_return rows"
+        ),
+        "missing_settlement_count": int(selected["settlement"].isna().sum()),
     }
     return history, returns, metadata
 
