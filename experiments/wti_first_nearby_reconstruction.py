@@ -355,11 +355,16 @@ def main() -> None:
         (first["trade_date"] >= pd.Timestamp(args.history_start))
         & (first["trade_date"] < inference_cutoff)
     ].reset_index(drop=True)
-    if first["missing_settlement"].any():
-        missing = first.loc[first["missing_settlement"], "trade_date"].dt.date.astype(str).tolist()
-        raise RuntimeError(
-            "Missing mapped first-nearby settlements on inference dates: "
-            + ", ".join(missing[:20])
+    missing_dates = (
+        first.loc[first["missing_settlement"], "trade_date"]
+        .dt.date.astype(str).tolist()
+    )
+    if missing_dates:
+        print(
+            "Warning: sparse mapped first-nearby settlement gaps will be "
+            "excluded from the likelihood: "
+            + ", ".join(missing_dates[:20]),
+            flush=True,
         )
 
     yahoo_history, yahoo_meta = _load_yahoo(
@@ -398,6 +403,12 @@ def main() -> None:
         "query_end_exclusive": args.query_end,
         "roll_rule": "earliest CL contract whose empirically observed final-settlement last-trade date has not passed",
         "roll_return_policy": "exclude the first return after every contract switch",
+        "missing_settlement_policy": (
+            "do not impute; exclude each missing settlement date and any immediately "
+            "following one-day return that depends on the missing price"
+        ),
+        "missing_settlement_dates": missing_dates,
+        "missing_settlement_count": int(len(missing_dates)),
         "settlement_source": "Databento GLBX.MDP3 official final non-intraday CL settlement statistics",
         "yahoo_comparator": "Yahoo CL=F continuous/front-month proxy",
         "comparison": comparison,
