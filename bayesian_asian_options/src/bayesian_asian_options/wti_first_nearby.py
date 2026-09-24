@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import numpy as np
 import pandas as pd
 
 
@@ -161,3 +162,78 @@ def build_realized_fixing_curve(
         *metadata_columns,
     ]
     return out[columns].sort_values("fixing_date").reset_index(drop=True)
+
+def reconstruct_first_nearby_settlement_history(
+    futures_history: pd.DataFrame,
+    contract_expiries: pd.DataFrame,
+    *,
+    trade_date_col: str = "trade_date",
+    contract_col: str = "contract",
+    settlement_col: str = "settlement",
+) -> pd.DataFrame:
+    """Reconstruct a daily first-nearby settlement series for P-measure inference.
+
+    Each observed trading date is mapped to the earliest CL contract whose
+    explicit last-trade date has not passed. The settlement is joined on the
+    exact contract/date pair. Log returns are computed only when consecutive
+    observations belong to the same futures contract; the first observation
+    after a roll is deliberately excluded so contango/backwardation is not
+    misclassified as a one-day diffusion shock.
+
+    Returns one row per mapped trading date with roll and inference flags.
+    """
+    required = {trade_date_col, contract_col, settlement_col}
+    missing = required.difference(futures_history.columns)
+    if missing:
+        raise ValueError(f"Futures history missing columns: {sorted(missing)}")
+
+    history = futures_history[
+        [trade_date_col, contract_col, settlement_col]
+    ].copy()
+    history[trade_date_col] = pd.to_datetime(
+        history[trade_date_col], errors="raise"
+    ).dt.normalize()
+    history[settlement_col] = pd.to_numeric(
+        history[settlement_col], errors="coerce"
+    )
+    history = history.sort_values(
+        [trade_date_col, contract_col]
+    ).drop_duplicates(
+        [trade_date_col, contract_col], keep="last"
+    )
+
+    dates = pd.DatetimeIndex(
+        sorted(history[trade_date_col].dropna().unique())
+    )
+    mapping = assign_first_nearby_contract(
+        dates, contract_expiries, contract_col=contract_col
+    )
+    out = mapping.merge(
+        history,
+        left_on=["fixing_date", contract_col],
+        right_on=[trade_date_col, contract_col],
+        how="left",
+        validate="one_to_one",
+    )
+    out = out.drop(columns=[trade_date_col]).rename(
+        columns={"fixing_date": "trade_date"}
+    )
+    out = out.sort_values("trade_date").reset_index(drop=True)
+
+    out["missing_settlement"] = out[settlement_col].isna()
+    out["roll_switch"] = out[contract_col].ne(out[contract_col].shift(1))
+    previous = out[settlement_col].shift(1)
+    same_contract = ~out["roll_switch"]
+    valid = (
+        same_contract
+        & out[settlement_col].gt(0)
+        & previous.gt(0)
+        & out[settlement_col].notna()
+        & previous.notna()
+    )
+    out["log_return"] = np.nan
+    out.loc[valid, "log_return"] = np.log(
+        out.loc[valid, settlement_col] / previous.loc[valid]
+    )
+    out["usable_inference_return"] = out["log_return"].notna()
+    return out
