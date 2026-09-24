@@ -568,6 +568,22 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         "--inference-cache-dir", type=Path, default=ROOT / "data" / "wti_yahoo"
     )
     parser.add_argument(
+        "--physical-inference-source",
+        choices=("yahoo", "first-nearby"),
+        default="yahoo",
+    )
+    parser.add_argument(
+        "--first-nearby-history",
+        type=Path,
+        default=(
+            ROOT
+            / "results"
+            / "analysis"
+            / "wti_first_nearby"
+            / "first_nearby_reconstruction_raw.csv"
+        ),
+    )
+    parser.add_argument(
         "--treasury-dir", type=Path, default=ROOT / "data" / "rates" / "treasury"
     )
     parser.add_argument(
@@ -623,6 +639,10 @@ def main(argv: list[str] | None = None) -> None:
                 str(args.cl_expiry_file),
                 "--inference-cache-dir",
                 str(args.inference_cache_dir),
+                "--physical-inference-source",
+                args.physical_inference_source,
+                "--first-nearby-history",
+                str(args.first_nearby_history),
                 "--treasury-dir",
                 str(args.treasury_dir),
                 "--output-dir",

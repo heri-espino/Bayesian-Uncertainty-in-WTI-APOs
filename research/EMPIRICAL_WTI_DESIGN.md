@@ -31,7 +31,7 @@ The current empirical design separates physical-measure inference from the contr
 curve used for valuation.
 
 - **APO market marks:** committed Barchart option histories under `data/csv`.
-- **Historical volatility inference:** Yahoo `CL=F`, explicitly labelled as a continuous/front-month proxy.
+- **Historical volatility inference:** original baseline Yahoo `CL=F`, explicitly labelled as a continuous/front-month proxy; Issue #38 implements a contract-reconstructed first-nearby robustness source from official Databento CL settlements.
 - **Valuation-date CL curve:** committed Barchart `Daily Prices` histories under `data/csv/CL`.
 - **CL last-trade dates:** explicit versioned study table `data/csv/CL/contract_expiries.csv`.
 - **Discounting:** U.S. Treasury Daily Treasury Par Yield Curve Rates.
@@ -41,20 +41,15 @@ A live workstation run showed that Yahoo may return 404 / `YFTzMissingError` for
 delisted monthly CL symbols. The canonical pilot therefore does not require Yahoo individual
 contract histories. Yahoo `CL=F` is not used as the APO fixing curve.
 
-Barchart `Latest` is retained as an end-of-day **settlement proxy**. It is not asserted to be
-an official CME settlement without separate validation.
+In the Barchart histories used by this project, `Latest` is the **CME settlement** field. The source-field name is retained for provenance and is not interpreted as an intraday last trade.
 
 ## Physical-measure return sample
 
-The current pilot estimates the GBM volatility posterior from Yahoo `CL=F` returns using only
-information available through the valuation date. This is an explicit measurement
-compromise: Yahoo does not document the historical `CL=F` roll convention precisely enough
-to call the series a self-reconstructed CME first-nearby history.
+The original baseline estimates the GBM volatility posterior from Yahoo `CL=F` returns using only information available through each valuation date. Yahoo does not document the historical `CL=F` roll convention precisely enough to call that series a contract-reconstructed first-nearby history.
 
-If a later source provides a complete monthly CL history, the preferred robustness
-specification is to reconstruct first-nearby returns contract by contract and exclude every
-return spanning a roll. The difference between two contracts at a roll can reflect contango
-or backwardation and must not be interpreted as a one-day diffusion shock.
+Issue #38 therefore implements a second, transparent physical-return construction using official final CL settlements from Databento. Each trading date is mapped to the earliest monthly CL contract whose empirically observed final-settlement last-trade date has not passed. Returns are calculated only between consecutive settlements of the **same** contract. The first return after every mapped contract switch is excluded, because the level difference between delivery months can reflect contango or backwardation rather than a one-day diffusion shock.
+
+The two return sources are fit with the same Gaussian-GBM likelihood, prior, MCMC implementation, and valuation-date information cutoff. The scientific comparison is therefore a source/roll-construction robustness test rather than a change in the statistical model. No conclusion from this robustness enters the manuscript until the derived reconstruction, posterior comparison, and identical-holdout pricing rerun have been inspected.
 
 ## Effective moneyness
 

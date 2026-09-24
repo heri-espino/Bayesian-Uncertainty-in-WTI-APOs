@@ -7,6 +7,7 @@ from bayesian_asian_options.wti_first_nearby import (
     assign_first_nearby_contract,
     build_forward_fixing_curve,
     build_realized_fixing_curve,
+    reconstruct_first_nearby_settlement_history,
 )
 
 
@@ -119,3 +120,53 @@ def test_realized_first_nearby_fixings_reject_missing_settlement():
             expiries,
             history,
         )
+
+
+def test_reconstructed_first_nearby_history_excludes_roll_return():
+    expiries = pd.DataFrame(
+        {
+            "contract": ["CLV26", "CLX26"],
+            "last_trade_date": ["2026-09-22", "2026-10-20"],
+        }
+    )
+    history = pd.DataFrame(
+        {
+            "trade_date": pd.to_datetime(
+                ["2026-09-21", "2026-09-22", "2026-09-23", "2026-09-24"]
+            ),
+            "contract": ["CLV26", "CLV26", "CLX26", "CLX26"],
+            "settlement": [100.0, 101.0, 95.0, 96.0],
+        }
+    )
+
+    out = reconstruct_first_nearby_settlement_history(history, expiries)
+
+    assert out["contract"].tolist() == ["CLV26", "CLV26", "CLX26", "CLX26"]
+    assert bool(out.loc[2, "roll_switch"])
+    assert np.isnan(out.loc[2, "log_return"])
+    assert not bool(out.loc[2, "usable_inference_return"])
+    assert np.isclose(out.loc[3, "log_return"], np.log(96.0 / 95.0))
+
+
+def test_reconstructed_first_nearby_history_flags_missing_front_settlement():
+    expiries = pd.DataFrame(
+        {
+            "contract": ["CLV26", "CLX26"],
+            "last_trade_date": ["2026-09-22", "2026-10-20"],
+        }
+    )
+    history = pd.DataFrame(
+        {
+            "trade_date": pd.to_datetime(
+                ["2026-09-21", "2026-09-22", "2026-09-22"]
+            ),
+            "contract": ["CLV26", "CLX26", "CLX26"],
+            "settlement": [100.0, 96.0, 96.0],
+        }
+    )
+
+    out = reconstruct_first_nearby_settlement_history(history, expiries)
+
+    missing = out.loc[out["trade_date"].eq(pd.Timestamp("2026-09-22"))].iloc[0]
+    assert bool(missing["missing_settlement"])
+    assert not bool(missing["usable_inference_return"])

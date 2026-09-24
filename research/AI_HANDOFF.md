@@ -12,13 +12,24 @@ That checkpoint supersedes older planning notes where they conflict.
 
 ## Immediate next task
 
-Issue #38:
+Issue #38 is now implemented in code but still awaits the production data run.
 
-> Reconstruct historical first-nearby CL returns instead of relying only on Yahoo `CL=F`.
+The next local command after PR #58 is merged is:
 
-The purpose is to test whether the paper's current central empirical hierarchy survives when the physical-measure volatility posterior is estimated from a transparently reconstructed first-nearby settlement series.
+```powershell
+python -m experiments.wti_databento_first_nearby --mode quote
+```
 
-Do not start a richer volatility model, buy more LO data, or reopen the completed external-Q experiment before resolving #38.
+If the quote is acceptable, download the historical CL statistics and run:
+
+```powershell
+python -m experiments.wti_databento_first_nearby --mode download
+python -m scripts.run_first_nearby_robustness
+```
+
+The purpose remains to test whether the paper's current central empirical hierarchy survives when the physical-measure volatility posterior is estimated from a transparently reconstructed first-nearby settlement series. Do not treat implementation as a scientific result until those outputs are inspected.
+
+Do not start a richer volatility model, buy more LO option data, or reopen the completed external-Q experiment before resolving #38.
 
 ## Important source correction
 
