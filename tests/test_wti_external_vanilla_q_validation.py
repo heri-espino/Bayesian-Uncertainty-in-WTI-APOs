@@ -80,3 +80,56 @@ def test_prior_sigma_expanding_uses_only_earlier_dates() -> None:
     assert 0.40 < sigma < 0.50
     assert training_end == "2026-08-25"
     assert n_dates == 2
+
+
+def test_comparison_summary_uses_exact_common_contract_dates(tmp_path) -> None:
+    from experiments.wti_external_vanilla_q_validation import _comparison_summary
+
+    keys_external = [
+        ("2026-09-01", "2026-10", "a"),
+        ("2026-09-01", "2026-10", "b"),
+        ("2026-09-02", "2026-10", "c"),
+    ]
+    external_rows = []
+    for method in ("vanilla_previous_day", "vanilla_expanding"):
+        for i, (date, expiry, contract) in enumerate(keys_external):
+            external_rows.append(
+                {
+                    "method": method,
+                    "valuation_date": date,
+                    "apo_expiry": expiry,
+                    "contract_id": contract,
+                    "forward_error": float(i + 1),
+                    "baseline_pi_error": float(i + 2),
+                }
+            )
+    external = pd.DataFrame(external_rows)
+
+    apo_rows = []
+    for method in ("previous_day_smile", "expanding_smile"):
+        for i, (date, expiry, contract) in enumerate(keys_external[:2]):
+            apo_rows.append(
+                {
+                    "method": method,
+                    "valuation_date": date,
+                    "apo_expiry": expiry,
+                    "contract_id": contract,
+                    "forward_error": float(i) + 0.5,
+                    "baseline_pi_error": float(i) + 2.0,
+                }
+            )
+    apo_path = tmp_path / "apo.csv"
+    pd.DataFrame(apo_rows).to_csv(apo_path, index=False)
+
+    available, matched = _comparison_summary(external, apo_path)
+
+    assert not available.empty
+    assert set(matched["n"]) == {2}
+    assert set(matched["n_dates"]) == {1}
+    assert set(matched["method"]) == {
+        "historical_pi",
+        "vanilla_previous_day",
+        "vanilla_expanding",
+        "apo_previous_day_smile",
+        "apo_expanding_smile",
+    }
