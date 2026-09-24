@@ -189,7 +189,33 @@ def _write_csv(frame: pd.DataFrame, path: Path) -> None:
 
 
 def _load_csv(path: Path) -> pd.DataFrame:
-    return pd.read_csv(path, index_col=0)
+    return pd.read_csv(path, index_col=0, low_memory=False)
+
+
+def _statistics_cache_covers_symbols(
+    path: Path,
+    symbols: list[str],
+) -> bool:
+    """Return True only when a local statistics cache covers every symbol.
+
+    Databento dataframes normally include the mapped raw symbol in a
+    symbol column. Some versions may expose raw_symbol instead. If neither
+    is available, fail closed and require a fresh request.
+    """
+    if not path.exists():
+        return False
+    frame = _load_csv(path)
+    symbol_col = None
+    for candidate in ("symbol", "raw_symbol"):
+        if candidate in frame.columns:
+            symbol_col = candidate
+            break
+    if symbol_col is None:
+        return False
+    available = set(
+        frame[symbol_col].dropna().astype(str).str.strip().tolist()
+    )
+    return set(map(str, symbols)).issubset(available)
 
 
 def _quote(client: Any, query: dict[str, Any]) -> float:
@@ -319,7 +345,12 @@ def main() -> None:
     manifest["selected_call_count"] = int(selected["option_type"].eq("call").sum())
     manifest["selected_put_count"] = int(selected["option_type"].eq("put").sum())
 
-    option_already_local = option_stats_path.exists() and not args.force
+    option_already_local = (
+        not args.force
+        and _statistics_cache_covers_symbols(
+            option_stats_path, option_symbols
+        )
+    )
     futures_already_local = futures_stats_path.exists() and not args.force
     additional_quote = (0.0 if option_already_local else option_quote) + (
         0.0 if futures_already_local else futures_quote
