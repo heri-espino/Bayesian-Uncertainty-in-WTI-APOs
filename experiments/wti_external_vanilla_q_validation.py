@@ -512,6 +512,108 @@ def _comparison_summary(
     return pd.DataFrame(rows), matched
 
 
+def _surface_common_support_comparison(
+    external: pd.DataFrame,
+    apo_forward_path: Path | None,
+) -> pd.DataFrame:
+    """Compare models on contract-dates where both vanilla surfaces interpolate.
+
+    A row is admitted only when both previous-day and expanding external
+    surface methods have zero moneyness-support clipping.  Historical PI and
+    prior-date APO smiles are then evaluated on those exact contract-dates.
+    """
+    if apo_forward_path is None or not apo_forward_path.exists():
+        return pd.DataFrame()
+
+    key_cols = ["valuation_date", "apo_expiry", "contract_id"]
+    surface_methods = [
+        "vanilla_surface_previous_day",
+        "vanilla_surface_expanding",
+    ]
+    support_sets: list[set[tuple[str, str, str]]] = []
+    for method in surface_methods:
+        group = external[
+            external["method"].eq(method)
+            & external["surface_components_clipped"].fillna(1).eq(0)
+        ].copy()
+        keys = set(map(tuple, group[key_cols].astype(str).to_numpy()))
+        if not keys:
+            return pd.DataFrame()
+        support_sets.append(keys)
+
+    common = set.intersection(*support_sets)
+    if not common:
+        return pd.DataFrame()
+
+    apo = pd.read_csv(apo_forward_path)
+    apo = apo[
+        apo["apo_expiry"].astype(str).eq("2026-10")
+    ].copy()
+
+    # Require both APO forward-smile methods on exactly the same keys.
+    apo_methods = {
+        "previous_day_smile": "apo_previous_day_smile",
+        "expanding_smile": "apo_expanding_smile",
+    }
+    for method in apo_methods:
+        group = apo[apo["method"].eq(method)]
+        keys = set(map(tuple, group[key_cols].astype(str).to_numpy()))
+        common &= keys
+    if not common:
+        return pd.DataFrame()
+
+    wanted = pd.MultiIndex.from_tuples(sorted(common), names=key_cols)
+
+    def on_common(frame: pd.DataFrame) -> pd.DataFrame:
+        key = pd.MultiIndex.from_frame(frame[key_cols].astype(str))
+        return frame.loc[key.isin(wanted)].copy()
+
+    rows: list[dict[str, Any]] = []
+    baseline = on_common(
+        external[
+            external["method"].eq("vanilla_surface_previous_day")
+        ].copy()
+    )
+    rows.append(
+        _metrics(
+            baseline,
+            method="historical_pi",
+            model="baseline_pi",
+            error_col="baseline_pi_error",
+            sample="surface_common_support",
+        )
+    )
+
+    for method in surface_methods:
+        group = on_common(external[external["method"].eq(method)].copy())
+        rows.append(
+            _metrics(
+                group,
+                method=method,
+                model="external_vanilla_q",
+                error_col="forward_error",
+                sample="surface_common_support",
+            )
+        )
+
+    for method, label in apo_methods.items():
+        group = on_common(apo[apo["method"].eq(method)].copy())
+        rows.append(
+            _metrics(
+                group,
+                method=label,
+                model="prior_date_apo_smile",
+                error_col="forward_error",
+                sample="surface_common_support",
+            )
+        )
+
+    result = pd.DataFrame(rows)
+    if not result.empty and not result["n"].eq(len(common)).all():
+        raise RuntimeError("surface common-support comparison lost matched rows")
+    return result
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -780,6 +882,13 @@ def main() -> None:
         args.output_root / "external_q_matched_comparison.csv",
         index=False,
     )
+    support_comparison = _surface_common_support_comparison(
+        result, args.apo_forward_path
+    )
+    support_comparison.to_csv(
+        args.output_root / "external_q_surface_common_support.csv",
+        index=False,
+    )
 
     state = (
         result[
@@ -831,6 +940,16 @@ def main() -> None:
             0
             if matched_comparison.empty
             else int(matched_comparison["n_dates"].iloc[0])
+        ),
+        "surface_common_support_contract_dates": (
+            0
+            if support_comparison.empty
+            else int(support_comparison["n"].iloc[0])
+        ),
+        "surface_common_support_target_dates": (
+            0
+            if support_comparison.empty
+            else int(support_comparison["n_dates"].iloc[0])
         ),
         "information_guardrail": (
             "Every external vanilla sigma_Q uses only Databento-derived "
