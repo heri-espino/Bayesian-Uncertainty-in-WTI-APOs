@@ -1,0 +1,22 @@
+{
+  "delta_mae_first_nearby_minus_yahoo": 0.028108510465454817,
+  "delta_rmse_first_nearby_minus_yahoo": 0.03609692906194706,
+  "expiries": [
+    "2026-09",
+    "2026-10",
+    "2026-11",
+    "2027-03",
+    "2027-09",
+    "2028-03",
+    "2028-09"
+  ],
+  "first_nearby_baseline_mae": 2.646807894748062,
+  "first_nearby_baseline_rmse": 3.445087533514508,
+  "holdouts_match_exactly": true,
+  "interpretation_guardrail": "This table measures sensitivity of the historical-P pricing baseline to return-source/roll construction. Option-informed Q results must be compared on the same holdouts before revising the manuscript hierarchy.",
+  "n_contract_dates": 2381,
+  "n_valuation_dates": 15,
+  "rmse_ratio_first_nearby_to_yahoo": 1.0105887440742136,
+  "yahoo_baseline_mae": 2.6186993842826074,
+  "yahoo_baseline_rmse": 3.408990604452561
+}

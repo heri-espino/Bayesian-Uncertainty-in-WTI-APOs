@@ -1,0 +1,19 @@
+valuation_date,n_raw_options,n_main_sample,n_positive_volume,total_volume,n_realized_fixings,n_remaining_fixings,fraction_fixed,realized_fixings_available,curve_available,eligible,availability_note
+2026-08-18,3,3,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-08-18 for: CLX26, CLZ26"
+2026-08-19,3,3,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-08-19 for: CLX26, CLZ26"
+2026-08-20,3,3,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-08-20 for: CLX26, CLZ26"
+2026-08-21,3,3,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-08-21 for: CLX26, CLZ26"
+2026-08-24,3,3,0,0.0,0,22,0.0,True,False,False,"No exact Barchart CL price on 2026-08-24 for: CLX26, CLZ26"
+2026-08-25,3,3,0,0.0,0,22,0.0,True,True,True,
+2026-08-26,27,27,0,0.0,0,22,0.0,True,True,True,
+2026-08-27,27,27,1,15.0,0,22,0.0,True,True,True,
+2026-08-28,27,27,1,15.0,0,22,0.0,True,True,True,
+2026-08-31,27,27,1,15.0,0,22,0.0,True,True,True,
+2026-09-01,27,27,2,35.0,0,22,0.0,True,True,True,
+2026-09-02,28,28,1,30.0,0,22,0.0,True,True,True,
+2026-09-03,28,28,0,0.0,0,22,0.0,True,True,True,
+2026-09-04,29,29,0,0.0,0,22,0.0,True,True,True,
+2026-09-08,29,29,0,0.0,0,22,0.0,True,True,True,
+2026-09-09,29,29,0,0.0,0,22,0.0,True,True,True,
+2026-09-10,29,29,0,0.0,0,22,0.0,True,True,True,
+2026-09-11,31,0,0,0.0,0,22,0.0,True,True,False,

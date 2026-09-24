@@ -1,0 +1,41 @@
+{
+  "comparison": {
+    "first_nearby_annualized_realized_vol": 0.4183389395381179,
+    "first_nearby_missing_settlements": 4,
+    "first_nearby_prices": 673,
+    "first_nearby_return_mean": 0.0010831269447899791,
+    "first_nearby_return_sd": 0.026352876136960617,
+    "first_nearby_roll_switch_rows": 33,
+    "first_nearby_usable_returns": 632,
+    "paired_return_correlation": null,
+    "paired_return_dates": 0,
+    "paired_return_mae": null,
+    "yahoo_annualized_realized_vol": 0.4166969600864936,
+    "yahoo_prices": 677,
+    "yahoo_return_mean": 0.0005558559134275734,
+    "yahoo_return_sd": 0.026249441153939755,
+    "yahoo_usable_returns": 676
+  },
+  "history_start_inclusive": "2024-01-01",
+  "inference_end_exclusive": "2026-09-11",
+  "missing_settlement_count": 4,
+  "missing_settlement_dates": [
+    "2024-11-26",
+    "2025-01-09",
+    "2025-01-13",
+    "2025-08-01"
+  ],
+  "missing_settlement_policy": "do not impute; exclude each missing settlement date and any immediately following one-day return that depends on the missing price",
+  "next_action": "Use first_nearby_reconstruction_raw.csv as the physical-inference source in the canonical WTI APO driver and rerun identical strict-forward holdouts.",
+  "posterior_sigma_mean_difference": 0.0017247797326644387,
+  "posterior_sigma_mean_first_nearby": 0.4182397039736509,
+  "posterior_sigma_mean_ratio": 1.004140979427826,
+  "posterior_sigma_mean_yahoo": 0.41651492424098646,
+  "query_end_exclusive": "2026-09-23",
+  "roll_return_policy": "exclude the first return after every contract switch",
+  "roll_rule": "earliest CL contract whose empirically observed final-settlement last-trade date has not passed",
+  "scientific_question": "Does replacing Yahoo CL=F by a transparent roll-clean first-nearby settlement history materially change the historical-P volatility baseline?",
+  "settlement_source": "Databento GLBX.MDP3 official final non-intraday CL settlement statistics",
+  "yahoo_comparator": "Yahoo CL=F continuous/front-month proxy",
+  "yahoo_snapshot_sha256": "84cd976e12f8c11a0b6975ec631a9c9ea979200b7c2e423e73c10c6c6e0e54e5"
+}

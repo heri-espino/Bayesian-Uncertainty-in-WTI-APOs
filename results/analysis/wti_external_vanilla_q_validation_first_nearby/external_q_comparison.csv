@@ -1,0 +1,11 @@
+sample,method,model,n,n_dates,mean_error,mae,rmse
+method_available,vanilla_expanding,external_vanilla_q,310,12,-0.2468156691164709,0.2851594633748828,0.37858051489552896
+method_available,vanilla_expanding,baseline_pi,310,12,-0.39650321957880075,0.39848152966809125,0.5087124089338787
+method_available,vanilla_previous_day,external_vanilla_q,310,12,-0.2183525933264285,0.2686957315238393,0.34759696435252163
+method_available,vanilla_previous_day,baseline_pi,310,12,-0.39650321957880075,0.39848152966809125,0.5087124089338787
+method_available,vanilla_surface_expanding,external_vanilla_q,310,12,-0.08723613260621656,0.13732405000855968,0.2590735111408946
+method_available,vanilla_surface_expanding,baseline_pi,310,12,-0.39650321957880075,0.39848152966809125,0.5087124089338787
+method_available,vanilla_surface_previous_day,external_vanilla_q,310,12,-0.06261111555664346,0.13519189310396834,0.23591347821812134
+method_available,vanilla_surface_previous_day,baseline_pi,310,12,-0.39650321957880075,0.39848152966809125,0.5087124089338787
+method_available,apo_previous_day_smile,prior_date_apo_smile,280,10,-0.0801118521867797,0.15429562325479362,0.25565371488277266
+method_available,apo_expanding_smile,prior_date_apo_smile,280,10,-0.09545108388127947,0.14861844449233266,0.2771925169745688

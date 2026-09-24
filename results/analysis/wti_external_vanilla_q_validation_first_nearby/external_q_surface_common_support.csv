@@ -1,0 +1,6 @@
+sample,method,model,n,n_dates,mean_error,mae,rmse
+surface_common_support,historical_pi,baseline_pi,253,10,-0.43381984471775337,0.4362438610326942,0.5466151720020296
+surface_common_support,vanilla_surface_previous_day,external_vanilla_q,253,10,-0.071445238086021,0.15588430834045136,0.2598941818608749
+surface_common_support,vanilla_surface_expanding,external_vanilla_q,253,10,-0.10358350211799491,0.16040090620058556,0.2857784434566882
+surface_common_support,apo_previous_day_smile,prior_date_apo_smile,253,10,-0.08740260124177855,0.16763204519091646,0.26860309052059544
+surface_common_support,apo_expanding_smile,prior_date_apo_smile,253,10,-0.10313658548307433,0.16122480027409353,0.2912387628781581
