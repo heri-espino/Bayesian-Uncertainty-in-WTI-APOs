@@ -1,6 +1,10 @@
 {
   "all_selected_options_have_some_final_settlement": true,
   "all_selected_options_have_some_settlement": true,
+  "excluded_cme_no_settlement_dates": [
+    "2026-09-07"
+  ],
+  "futures_settlement_date_coverage_pass": true,
   "futures_stat_type_names": [
     "opening_price",
     "indicative_opening_price",
@@ -34,12 +38,14 @@
     "Coverage uses CME trading reference date ts_ref when available.",
     "CME can publish multiple updates for one trading reference date.",
     "Settlement stat_flags bit 0 marks final vs preliminary; bit 1 marks actual vs theoretical.",
-    "GLBX.MDP3 does not publish statistics stat_type=14; direct settlement IV is unavailable in this dataset."
+    "2026-09-07 is excluded because CME stated that no CME/CBOT/NYMEX/COMEX settlement prices would be derived or disseminated.",
+    "GLBX.MDP3 does not publish statistics stat_type=14."
   ],
   "option_instruments_with_final_settlement": 80,
   "option_instruments_with_settlement": 80,
   "option_reference_date_first": "2026-08-21",
   "option_reference_date_last": "2026-09-10",
+  "option_settlement_date_coverage_pass": true,
   "option_stat_type_names": [
     "opening_price",
     "indicative_opening_price",
@@ -68,10 +74,12 @@
   ],
   "option_statistics_rows": 185481,
   "selected_option_instruments": 80,
-  "target_business_dates": 14,
-  "target_business_dates_with_any_option_stat": 14,
-  "target_business_dates_with_futures_settlement": 13,
-  "target_business_dates_with_option_settlement": 13,
+  "strict_forward_data_ready": true,
+  "target_expected_dates_with_any_option_stat": 13,
+  "target_expected_dates_with_futures_settlement": 13,
+  "target_expected_dates_with_option_settlement": 13,
+  "target_expected_settlement_dates": 13,
+  "target_weekdays": 14,
   "target_window": {
     "end": "2026-09-10",
     "start": "2026-08-24"

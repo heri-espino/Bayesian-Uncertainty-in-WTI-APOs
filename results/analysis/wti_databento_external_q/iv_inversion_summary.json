@@ -1,0 +1,24 @@
+{
+  "actual_option_settlement_rows": 1040,
+  "american_tree_steps": 160,
+  "iv_status_counts": {
+    "ok": 1040
+  },
+  "max_successful_iv": 0.5526019079208683,
+  "median_successful_iv": 0.4572093585228017,
+  "min_successful_iv": 0.4269971455862042,
+  "near_atm_abs_log_moneyness_threshold": 0.03,
+  "next_step": "Inspect smile/actual-vs-theoretical diagnostics, then define strict t-1 strike/maturity aggregation to the APO fixing horizon.",
+  "rate_model": "dated U.S. Treasury par yield interpolated in maturity and treated as a continuously compounded zero-rate proxy",
+  "raw_data_committed": false,
+  "reference_dates": 13,
+  "rows": 1040,
+  "sigma_upper": 3.0,
+  "successful_iv_fraction": 1.0,
+  "successful_iv_rows": 1040,
+  "theoretical_option_settlement_rows": 0,
+  "underlyings": [
+    "CLX6",
+    "CLZ6"
+  ]
+}
