@@ -6,7 +6,9 @@ import pytest
 
 from experiments.wti_external_vanilla_q_validation import (
     _effective_sigma,
+    _fit_surface_models,
     _prior_sigma,
+    _surface_sigma_targets,
 )
 
 
@@ -91,7 +93,12 @@ def test_comparison_summary_uses_exact_common_contract_dates(tmp_path) -> None:
         ("2026-09-02", "2026-10", "c"),
     ]
     external_rows = []
-    for method in ("vanilla_previous_day", "vanilla_expanding"):
+    for method in (
+        "vanilla_previous_day",
+        "vanilla_expanding",
+        "vanilla_surface_previous_day",
+        "vanilla_surface_expanding",
+    ):
         for i, (date, expiry, contract) in enumerate(keys_external):
             external_rows.append(
                 {
@@ -130,6 +137,107 @@ def test_comparison_summary_uses_exact_common_contract_dates(tmp_path) -> None:
         "historical_pi",
         "vanilla_previous_day",
         "vanilla_expanding",
+        "vanilla_surface_previous_day",
+        "vanilla_surface_expanding",
         "apo_previous_day_smile",
         "apo_expanding_smile",
     }
+
+
+
+def test_surface_model_uses_prior_smile_and_target_futures() -> None:
+    rows = []
+    for underlying, base in (("CLX6", 0.40), ("CLZ6", 0.50)):
+        for option_type in ("call", "put"):
+            for x in (-0.04, -0.02, 0.0, 0.02, 0.04):
+                rows.append(
+                    {
+                        "reference_date": "2026-08-24",
+                        "reference_ts": pd.Timestamp("2026-08-24"),
+                        "underlying": underlying,
+                        "option_type": option_type,
+                        "log_moneyness": x,
+                        "implied_volatility": (
+                            base
+                            + 0.10 * x
+                            + 0.50 * x**2
+                            + (0.01 if option_type == "call" else 0.0)
+                        ),
+                        "iv_status": "ok",
+                    }
+                )
+    # Same-day observations are deliberately extreme and must not enter.
+    for underlying in ("CLX6", "CLZ6"):
+        rows.append(
+            {
+                "reference_date": "2026-08-25",
+                "reference_ts": pd.Timestamp("2026-08-25"),
+                "underlying": underlying,
+                "option_type": "call",
+                "log_moneyness": 0.0,
+                "implied_volatility": 0.99,
+                "iv_status": "ok",
+            }
+        )
+    panel = pd.DataFrame(rows)
+
+    models, supports, training_end, n_dates = _fit_surface_models(
+        panel,
+        target_date=pd.Timestamp("2026-08-25"),
+        half_life_days=None,
+        ridge=1e-10,
+    )
+
+    targets = pd.DataFrame(
+        {
+            "strike": [90.0],
+            "option_type": ["call"],
+        }
+    )
+    sigma, clipped = _surface_sigma_targets(
+        targets,
+        models=models,
+        supports=supports,
+        target_futures={"CLX6": 90.0, "CLZ6": 90.0},
+        fixing_weights={"CLX6": 0.5, "CLZ6": 0.5},
+    )
+
+    expected = np.sqrt(0.5 * 0.41**2 + 0.5 * 0.51**2)
+    assert sigma[0] == pytest.approx(expected, abs=1e-4)
+    assert clipped[0] == 0
+    assert training_end == "2026-08-24"
+    assert n_dates == 1
+
+
+def test_surface_prediction_clips_to_prior_moneyness_support() -> None:
+    panel = pd.DataFrame(
+        {
+            "reference_date": ["2026-08-24"] * 12,
+            "reference_ts": [pd.Timestamp("2026-08-24")] * 12,
+            "underlying": ["CLX6"] * 6 + ["CLZ6"] * 6,
+            "option_type": ["call"] * 12,
+            "log_moneyness": [-0.02, -0.01, 0.0, 0.01, 0.015, 0.02] * 2,
+            "implied_volatility": [0.40, 0.40, 0.40, 0.40, 0.40, 0.40] * 2,
+            "iv_status": ["ok"] * 12,
+        }
+    )
+    models, supports, _, _ = _fit_surface_models(
+        panel,
+        target_date=pd.Timestamp("2026-08-25"),
+        half_life_days=None,
+        ridge=1e-6,
+    )
+    targets = pd.DataFrame(
+        {
+            "strike": [110.0],
+            "option_type": ["call"],
+        }
+    )
+    _, clipped = _surface_sigma_targets(
+        targets,
+        models=models,
+        supports=supports,
+        target_futures={"CLX6": 90.0, "CLZ6": 90.0},
+        fixing_weights={"CLX6": 0.5, "CLZ6": 0.5},
+    )
+    assert clipped[0] == 2
