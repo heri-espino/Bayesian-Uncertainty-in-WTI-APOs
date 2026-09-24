@@ -26,7 +26,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DATASET = "GLBX.MDP3"
 DEFAULT_HISTORY_START = "2024-01-01"
 DEFAULT_INFERENCE_END = "2026-09-11"
-DEFAULT_QUERY_END = "2026-10-01"
+DEFAULT_QUERY_END = "2026-09-23"  # end-exclusive; includes CLV26 final settlement/roll boundary
 DEFAULT_MAX_COST_USD = 5.0
 
 _MONTH_CODES = set("FGHJKMNQUVXZ")
@@ -199,7 +199,7 @@ def main() -> None:
     }
     manifest["completed"] = True
     manifest["next_action"] = (
-        "Run python -m experiments.wti_first_nearby_reconstruction --download-yahoo"
+        "Run python -m experiments.wti_first_nearby_reconstruction"
     )
     manifest_path.write_text(
         json.dumps(manifest, indent=2, sort_keys=True) + "\n",

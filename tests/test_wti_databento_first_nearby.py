@@ -3,6 +3,8 @@ from __future__ import annotations
 import pandas as pd
 
 from experiments.wti_databento_first_nearby import (
+    DEFAULT_INFERENCE_END,
+    DEFAULT_QUERY_END,
     _raw_cl_symbol,
     requested_contracts,
 )
@@ -91,3 +93,8 @@ def test_expiry_table_uses_last_observed_final_settlement() -> None:
         "2024-02-20",
         "2024-03-01",
     ]
+
+
+def test_default_query_end_is_available_as_of_study_date() -> None:
+    assert DEFAULT_QUERY_END == "2026-09-23"
+    assert pd.Timestamp(DEFAULT_QUERY_END) > pd.Timestamp(DEFAULT_INFERENCE_END)
