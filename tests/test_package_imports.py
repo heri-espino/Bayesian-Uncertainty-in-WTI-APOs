@@ -25,6 +25,7 @@ def test_canonical_package_namespace_is_importable() -> None:
     assert callable(barchart_apo.build_apo_panel)
     assert callable(barchart_cl.load_barchart_cl_strip)
     assert callable(wti_first_nearby.assign_first_nearby_contract)
+    assert callable(wti_first_nearby.reconstruct_first_nearby_settlement_history)
     assert callable(wti_apo_pricing.wti_average_price_option_mc)
     assert callable(wti_apo_pricing.wti_apo_cross_section_mc)
     assert callable(volatility_regimes.realized_volatility)

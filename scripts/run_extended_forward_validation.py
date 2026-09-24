@@ -106,6 +106,22 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--inference-cache-dir", type=Path, default=ROOT / "data" / "wti_yahoo"
     )
+    parser.add_argument(
+        "--physical-inference-source",
+        choices=("yahoo", "first-nearby"),
+        default="yahoo",
+    )
+    parser.add_argument(
+        "--first-nearby-history",
+        type=Path,
+        default=(
+            ROOT
+            / "results"
+            / "analysis"
+            / "wti_first_nearby"
+            / "first_nearby_reconstruction_raw.csv"
+        ),
+    )
     parser.add_argument("--runs-root", type=Path, default=None)
     parser.add_argument("--analysis-root", type=Path, default=None)
     return parser.parse_args()
@@ -120,21 +136,42 @@ def main() -> None:
             "never reaches the six contracts required by the smile specification."
         )
 
+    source_suffix = (
+        "_first_nearby"
+        if args.physical_inference_source == "first-nearby"
+        else ""
+    )
     if args.runs_root is None:
-        runs_root = (
-            ROOT / "results" / "wti_apo_empirical_extended_quick"
-            if args.quick
-            else ROOT / "results" / "wti_apo_empirical"
-        )
+        if args.quick:
+            runs_root = (
+                ROOT
+                / "results"
+                / f"wti_apo_empirical_extended_quick{source_suffix}"
+            )
+        else:
+            runs_root = (
+                ROOT
+                / "results"
+                / f"wti_apo_empirical{source_suffix}"
+            )
     else:
         runs_root = args.runs_root
 
     if args.analysis_root is None:
-        analysis_root = (
-            ROOT / "results" / "analysis" / "wti_extended_forward_quick"
-            if args.quick
-            else ROOT / "results" / "analysis" / "wti_extended_forward"
-        )
+        if args.quick:
+            analysis_root = (
+                ROOT
+                / "results"
+                / "analysis"
+                / f"wti_extended_forward_quick{source_suffix}"
+            )
+        else:
+            analysis_root = (
+                ROOT
+                / "results"
+                / "analysis"
+                / f"wti_extended_forward{source_suffix}"
+            )
     else:
         analysis_root = args.analysis_root
 
@@ -186,6 +223,10 @@ def main() -> None:
                     str(args.cl_expiry_file),
                     "--inference-cache-dir",
                     str(args.inference_cache_dir),
+                    "--physical-inference-source",
+                    args.physical_inference_source,
+                    "--first-nearby-history",
+                    str(args.first_nearby_history),
                     "--treasury-dir",
                     str(args.treasury_dir),
                     "--output-dir",

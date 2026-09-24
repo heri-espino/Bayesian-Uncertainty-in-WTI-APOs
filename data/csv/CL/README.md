@@ -19,7 +19,7 @@ The source schema is:
 Time, Open, High, Low, Latest, Change, %Change, Volume, Open Int
 ```
 
-`Latest` is retained as the Barchart source field. The empirical pilot uses it as an end-of-day futures price / settlement proxy; it is not claimed to be an official CME settlement without separate validation.
+`Latest` is retained as the Barchart source field. In the histories used by this project it is the CME settlement field; it is not interpreted as an intraday last trade.
 
 The Barchart UI was queried with a two-year history setting, but the downloaded CSVs contain only the observations Barchart actually returned for each listed contract. Several longer-dated contracts currently have only roughly August--September 2026 observations. The source manifest records each file's first/last date and row count. Therefore these files are sufficient for the 2026-09-04 pilot and nearby valuation dates, but they do not by themselves reconstruct the entire 2025--2026 historical futures curve panel.
 
@@ -36,6 +36,6 @@ panel, manifest = load_barchart_cl_strip(
 )
 ```
 
-The October-2026 pilot valued on 2026-09-04 uses `CLX26` and `CLZ26` for its future first-nearby fixings. Historical volatility inference remains a separate Yahoo `CL=F` proxy until a complete historical monthly CL strip is available.
+The October-2026 pilot valued on 2026-09-04 uses `CLX26` and `CLZ26` for its future first-nearby fixings. The original historical-volatility baseline uses Yahoo `CL=F`; Issue #38 provides a separate official-settlement first-nearby reconstruction for robustness rather than trying to extend these short committed Barchart files backward.
 
 Before making the repository or raw files public, verify Barchart redistribution/licensing terms. The scientific code, hashes, schemas, manifests and derived results should remain reproducible even if raw source files later need to be distributed separately.

@@ -272,7 +272,115 @@ def _load_or_download_continuous_inference(
     return sample.history, sample.log_returns, metadata
 
 
+def _load_first_nearby_inference(
+    *,
+    path: Path,
+    history_start: str,
+    valuation_date: pd.Timestamp,
+) -> tuple[pd.DataFrame, np.ndarray, dict[str, object]]:
+    """Load a pre-audited roll-clean first-nearby inference history."""
+    if not path.exists():
+        raise FileNotFoundError(
+            f"Missing first-nearby history {path}. Run "
+            "experiments.wti_databento_first_nearby and "
+            "experiments.wti_first_nearby_reconstruction first."
+        )
+    frame = pd.read_csv(path)
+    required = {
+        "trade_date",
+        "settlement",
+        "log_return",
+        "usable_inference_return",
+        "contract",
+        "roll_switch",
+    }
+    missing = required.difference(frame.columns)
+    if missing:
+        raise ValueError(
+            f"First-nearby history missing columns: {sorted(missing)}"
+        )
+    frame["trade_date"] = pd.to_datetime(
+        frame["trade_date"], errors="raise"
+    ).dt.normalize()
+    frame["settlement"] = pd.to_numeric(
+        frame["settlement"], errors="coerce"
+    )
+    frame["log_return"] = pd.to_numeric(
+        frame["log_return"], errors="coerce"
+    )
+    usable_text = frame["usable_inference_return"].astype(str).str.lower()
+    frame["usable_inference_return"] = usable_text.isin(
+        {"true", "1", "yes"}
+    )
+    roll_text = frame["roll_switch"].astype(str).str.lower()
+    frame["roll_switch"] = roll_text.isin({"true", "1", "yes"})
+
+    selected = frame[
+        (frame["trade_date"] >= pd.Timestamp(history_start))
+        & (frame["trade_date"] <= valuation_date)
+    ].copy()
+    if selected.empty:
+        raise RuntimeError(
+            "No reconstructed first-nearby observations fall inside the "
+            "requested inference window"
+        )
+    bad = selected["settlement"].le(0) | selected["settlement"].isna()
+    if bad.any():
+        raise RuntimeError(
+            "Reconstructed first-nearby inference contains missing or "
+            "non-positive settlements"
+        )
+    returns = selected.loc[
+        selected["usable_inference_return"], "log_return"
+    ].dropna().to_numpy(dtype=float)
+    if len(returns) < 100:
+        raise RuntimeError(
+            f"Only {len(returns)} usable reconstructed first-nearby returns "
+            "are available for the requested inference window"
+        )
+
+    history = selected.rename(
+        columns={"trade_date": "date", "settlement": "close"}
+    ).reset_index(drop=True)
+    metadata: dict[str, object] = {
+        "provider": "Databento GLBX.MDP3 official CL settlements",
+        "role": "physical-measure volatility inference",
+        "interpretation": (
+            "contract-reconstructed first-nearby CL settlement series; "
+            "returns spanning contract switches are excluded"
+        ),
+        "source_path": _portable_path(path),
+        "sha256": dataframe_sha256(history),
+        "roll_return_policy": (
+            "exclude first return after every mapped contract switch"
+        ),
+    }
+    return history, returns, metadata
+
+
 def _return_audit(history: pd.DataFrame) -> pd.DataFrame:
+    """Return an auditable inference series without reintroducing roll returns."""
+    if {
+        "date",
+        "close",
+        "log_return",
+        "usable_inference_return",
+    }.issubset(history.columns):
+        columns = [
+            column
+            for column in [
+                "date",
+                "contract",
+                "close",
+                "roll_switch",
+                "missing_settlement",
+                "log_return",
+                "usable_inference_return",
+            ]
+            if column in history.columns
+        ]
+        return history[columns].copy()
+
     out = history[["date", "close"]].copy()
     out["log_return"] = np.nan
     if len(out) > 1:
@@ -513,6 +621,23 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         "--inference-cache-dir", type=Path, default=Path("data/wti_yahoo")
     )
     parser.add_argument(
+        "--physical-inference-source",
+        choices=("yahoo", "first-nearby"),
+        default="yahoo",
+        help=(
+            "Physical-volatility return source. first-nearby requires the "
+            "pre-audited reconstructed history from Issue #38."
+        ),
+    )
+    parser.add_argument(
+        "--first-nearby-history",
+        type=Path,
+        default=Path(
+            "results/analysis/wti_first_nearby/"
+            "first_nearby_reconstruction_raw.csv"
+        ),
+    )
+    parser.add_argument(
         "--treasury-dir", type=Path, default=Path("data/rates/treasury")
     )
     parser.add_argument("--download-treasury", action="store_true")
@@ -565,14 +690,23 @@ def main(argv: list[str] | None = None) -> None:
         exclude_min_tick=not args.include_min_tick,
     )
 
-    inference_history, inference_returns, inference_meta = (
-        _load_or_download_continuous_inference(
-            cache_dir=args.inference_cache_dir,
-            history_start=args.history_start,
-            valuation_date=valuation_date,
-            refresh=args.refresh_inference,
+    if args.physical_inference_source == "first-nearby":
+        inference_history, inference_returns, inference_meta = (
+            _load_first_nearby_inference(
+                path=args.first_nearby_history,
+                history_start=args.history_start,
+                valuation_date=valuation_date,
+            )
         )
-    )
+    else:
+        inference_history, inference_returns, inference_meta = (
+            _load_or_download_continuous_inference(
+                cache_dir=args.inference_cache_dir,
+                history_start=args.history_start,
+                valuation_date=valuation_date,
+                refresh=args.refresh_inference,
+            )
+        )
     sigma_samples, chain_diagnostics, posterior = _run_mcmc(
         inference_returns,
         chains=args.chains,
@@ -711,18 +845,22 @@ def main(argv: list[str] | None = None) -> None:
         "apo_expiry": args.apo_expiry,
         "market_option_source": "committed Barchart APO histories",
         "physical_inference_source": (
-            "Yahoo CL=F continuous/front-month proxy via yfinance"
+            "Databento contract-reconstructed first-nearby CL settlements"
+            if args.physical_inference_source == "first-nearby"
+            else "Yahoo CL=F continuous/front-month proxy via yfinance"
         ),
         "physical_inference_sha256": inference_meta.get("sha256"),
         "physical_inference_limitation": (
-            "Yahoo does not document the historical CL=F roll convention precisely enough "
-            "to call this a contract-reconstructed first-nearby series"
+            "roll-switch returns explicitly excluded from the volatility likelihood"
+            if args.physical_inference_source == "first-nearby"
+            else (
+                "Yahoo does not document the historical CL=F roll convention precisely "
+                "enough to call this a contract-reconstructed first-nearby series"
+            )
         ),
         "curve_source": "committed Barchart CL Daily Prices histories",
         "curve_price_field": "Latest",
-        "curve_price_interpretation": (
-            "end-of-day settlement proxy; not asserted to be official CME settlement"
-        ),
+        "curve_price_interpretation": "CME settlement field in the Barchart histories",
         "curve_contracts_loaded": curve_contracts,
         "curve_contracts_used": required_curve_contracts,
         "valuation_curve": curve_snapshot,
@@ -779,7 +917,14 @@ def main(argv: list[str] | None = None) -> None:
     )
 
     print(f"Run directory: {run_dir}")
-    print("Inference source: Yahoo CL=F continuous/front-month proxy")
+    print(
+        "Inference source: "
+        + (
+            "Databento reconstructed first-nearby CL settlements"
+            if args.physical_inference_source == "first-nearby"
+            else "Yahoo CL=F continuous/front-month proxy"
+        )
+    )
     print(f"Usable inference returns: {len(inference_returns)}")
     print(f"Barchart CL histories loaded: {', '.join(curve_contracts)}")
     print(
