@@ -168,57 +168,176 @@ def _prior_sigma(
     return sigma, latest.strftime("%Y-%m-%d"), len(daily)
 
 
+def _metrics(
+    frame: pd.DataFrame,
+    *,
+    method: str,
+    model: str,
+    error_col: str,
+    sample: str,
+) -> dict[str, Any]:
+    e = frame[error_col].to_numpy(dtype=float)
+    return {
+        "sample": sample,
+        "method": method,
+        "model": model,
+        "n": int(len(frame)),
+        "n_dates": int(frame["valuation_date"].nunique()),
+        "mean_error": float(np.mean(e)),
+        "mae": float(np.mean(np.abs(e))),
+        "rmse": float(np.sqrt(np.mean(e**2))),
+    }
+
+
 def _comparison_summary(
     external: pd.DataFrame,
     apo_forward_path: Path | None,
-) -> pd.DataFrame:
+) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Return full-sample and exact common-contract comparison tables."""
     rows: list[dict[str, Any]] = []
     for method, group in external.groupby("method", sort=True):
-        for model, error_col in (
-            ("external_vanilla_q", "forward_error"),
-            ("baseline_pi", "baseline_pi_error"),
-        ):
-            e = group[error_col].to_numpy(dtype=float)
-            rows.append(
-                {
-                    "method": method,
-                    "model": model,
-                    "n": int(len(group)),
-                    "n_dates": int(group["valuation_date"].nunique()),
-                    "mean_error": float(np.mean(e)),
-                    "mae": float(np.mean(np.abs(e))),
-                    "rmse": float(np.sqrt(np.mean(e**2))),
-                }
+        rows.append(
+            _metrics(
+                group,
+                method=method,
+                model="external_vanilla_q",
+                error_col="forward_error",
+                sample="method_available",
             )
+        )
+        rows.append(
+            _metrics(
+                group,
+                method=method,
+                model="baseline_pi",
+                error_col="baseline_pi_error",
+                sample="method_available",
+            )
+        )
 
-    if apo_forward_path is not None and apo_forward_path.exists():
-        apo = pd.read_csv(apo_forward_path)
-        external_dates = set(external["valuation_date"].astype(str))
-        apo = apo[
-            apo["valuation_date"].astype(str).isin(external_dates)
-            & apo["apo_expiry"].astype(str).eq("2026-10")
-        ].copy()
-        mapping = {
-            "previous_day_smile": "apo_previous_day_smile",
-            "expanding_smile": "apo_expanding_smile",
-        }
-        for method, label in mapping.items():
-            group = apo[apo["method"].eq(method)]
-            if group.empty:
-                continue
-            e = group["forward_error"].to_numpy(dtype=float)
-            rows.append(
-                {
-                    "method": label,
-                    "model": "prior_date_apo_smile",
-                    "n": int(len(group)),
-                    "n_dates": int(group["valuation_date"].nunique()),
-                    "mean_error": float(np.mean(e)),
-                    "mae": float(np.mean(np.abs(e))),
-                    "rmse": float(np.sqrt(np.mean(e**2))),
-                }
+    if apo_forward_path is None or not apo_forward_path.exists():
+        return pd.DataFrame(rows), pd.DataFrame()
+
+    apo = pd.read_csv(apo_forward_path)
+    apo = apo[
+        apo["apo_expiry"].astype(str).eq("2026-10")
+    ].copy()
+    mapping = {
+        "previous_day_smile": "apo_previous_day_smile",
+        "expanding_smile": "apo_expanding_smile",
+    }
+    for method, label in mapping.items():
+        group = apo[apo["method"].eq(method)].copy()
+        if group.empty:
+            continue
+        rows.append(
+            _metrics(
+                group,
+                method=label,
+                model="prior_date_apo_smile",
+                error_col="forward_error",
+                sample="method_available",
             )
-    return pd.DataFrame(rows)
+        )
+
+    key_cols = ["valuation_date", "apo_expiry", "contract_id"]
+    required_external = ["vanilla_previous_day", "vanilla_expanding"]
+    required_apo = ["previous_day_smile", "expanding_smile"]
+
+    key_sets: list[set[tuple[str, str, str]]] = []
+    for method in required_external:
+        group = external[external["method"].eq(method)]
+        keys = set(
+            map(
+                tuple,
+                group[key_cols].astype(str).to_numpy(),
+            )
+        )
+        if keys:
+            key_sets.append(keys)
+    for method in required_apo:
+        group = apo[apo["method"].eq(method)]
+        keys = set(
+            map(
+                tuple,
+                group[key_cols].astype(str).to_numpy(),
+            )
+        )
+        if keys:
+            key_sets.append(keys)
+
+    if len(key_sets) != 4:
+        return pd.DataFrame(rows), pd.DataFrame()
+
+    common_keys = set.intersection(*key_sets)
+    if not common_keys:
+        return pd.DataFrame(rows), pd.DataFrame()
+
+    def on_common(frame: pd.DataFrame) -> pd.DataFrame:
+        key = pd.MultiIndex.from_frame(
+            frame[key_cols].astype(str)
+        )
+        wanted = pd.MultiIndex.from_tuples(
+            sorted(common_keys), names=key_cols
+        )
+        return frame.loc[key.isin(wanted)].copy()
+
+    matched_rows: list[dict[str, Any]] = []
+
+    # One baseline row is enough because baseline PI is contract-date specific,
+    # not method specific. Verify consistency across the two external methods.
+    baseline_source = on_common(
+        external[
+            external["method"].eq("vanilla_previous_day")
+        ].copy()
+    )
+    matched_rows.append(
+        _metrics(
+            baseline_source,
+            method="historical_pi",
+            model="baseline_pi",
+            error_col="baseline_pi_error",
+            sample="common_contract_dates",
+        )
+    )
+
+    for method in required_external:
+        group = on_common(
+            external[external["method"].eq(method)].copy()
+        )
+        matched_rows.append(
+            _metrics(
+                group,
+                method=method,
+                model="external_vanilla_q",
+                error_col="forward_error",
+                sample="common_contract_dates",
+            )
+        )
+
+    for method, label in mapping.items():
+        group = on_common(
+            apo[apo["method"].eq(method)].copy()
+        )
+        matched_rows.append(
+            _metrics(
+                group,
+                method=label,
+                model="prior_date_apo_smile",
+                error_col="forward_error",
+                sample="common_contract_dates",
+            )
+        )
+
+    matched = pd.DataFrame(matched_rows)
+    if not matched.empty:
+        expected_n = len(common_keys)
+        if not matched["n"].eq(expected_n).all():
+            raise RuntimeError(
+                "matched comparison did not preserve the exact common "
+                "contract-date sample"
+            )
+    return pd.DataFrame(rows), matched
 
 
 def parse_args() -> argparse.Namespace:
@@ -388,11 +507,15 @@ def main() -> None:
         args.output_root / "external_vanilla_q_error_summary.csv",
         index=False,
     )
-    comparison = _comparison_summary(
+    comparison, matched_comparison = _comparison_summary(
         result, args.apo_forward_path
     )
     comparison.to_csv(
         args.output_root / "external_q_comparison.csv",
+        index=False,
+    )
+    matched_comparison.to_csv(
+        args.output_root / "external_q_matched_comparison.csv",
         index=False,
     )
 
@@ -422,6 +545,17 @@ def main() -> None:
         "prediction_rows": int(len(result)),
         "target_dates": int(result["valuation_date"].nunique()),
         "methods": sorted(result["method"].unique().tolist()),
+        "matched_comparison_rows": int(len(matched_comparison)),
+        "matched_contract_dates": (
+            0
+            if matched_comparison.empty
+            else int(matched_comparison["n"].iloc[0])
+        ),
+        "matched_target_dates": (
+            0
+            if matched_comparison.empty
+            else int(matched_comparison["n_dates"].iloc[0])
+        ),
         "information_guardrail": (
             "Every external vanilla sigma_Q uses only Databento-derived "
             "LO implied-volatility dates strictly earlier than the target "
