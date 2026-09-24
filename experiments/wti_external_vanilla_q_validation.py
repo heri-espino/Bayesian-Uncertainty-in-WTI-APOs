@@ -408,7 +408,12 @@ def _comparison_summary(
         )
 
     key_cols = ["valuation_date", "apo_expiry", "contract_id"]
-    required_external = ["vanilla_previous_day", "vanilla_expanding"]
+    required_external = [
+        "vanilla_previous_day",
+        "vanilla_expanding",
+        "vanilla_surface_previous_day",
+        "vanilla_surface_expanding",
+    ]
     required_apo = ["previous_day_smile", "expanding_smile"]
 
     key_sets: list[set[tuple[str, str, str]]] = []
@@ -433,7 +438,7 @@ def _comparison_summary(
         if keys:
             key_sets.append(keys)
 
-    if len(key_sets) != 4:
+    if len(key_sets) != 6:
         return pd.DataFrame(rows), pd.DataFrame()
 
     common_keys = set.intersection(*key_sets)
@@ -452,7 +457,7 @@ def _comparison_summary(
     matched_rows: list[dict[str, Any]] = []
 
     # One baseline row is enough because baseline PI is contract-date specific,
-    # not method specific. Verify consistency across the two external methods.
+    # not method specific.
     baseline_source = on_common(
         external[
             external["method"].eq("vanilla_previous_day")
@@ -833,9 +838,13 @@ def main() -> None:
             "APO valuation date."
         ),
         "maturity_mapping": (
-            "Near-ATM CLX6 and CLZ6 volatilities are reduced to the "
-            "maintained scalar APO volatility state using target fixing-"
-            "count weights. Primary aggregation is weighted RMS variance."
+            "Scalar variants reduce near-ATM CLX6 and CLZ6 volatility "
+            "to the maintained APO state with target fixing-count RMS "
+            "variance weights. Surface variants fit prior-date quadratic "
+            "LO smiles by underlying and call/put, evaluate them at each "
+            "target APO strike using the target-date CL futures curve, "
+            "clip only to prior observed moneyness support, and combine "
+            "the resulting component variances with the same fixing weights."
         ),
         "same_day_apo_usage": (
             "Same-day APO implied volatility is retained only as an ex-post "
