@@ -139,3 +139,38 @@ across the observed maturity range.
 
 This hierarchy does not eliminate a role for Bayesian parameter uncertainty. The mechanism map shows exactly where it can become first-order. Rather, the market experiment identifies the dominant margin in the available WTI data: improving the volatility state used by the pricing model matters substantially more than integrating a relatively concentrated historical posterior through a smooth local pricing map.
 
+\subsection{Independent vanilla-WTI validation}\label{sec:external_lo_results}
+
+The strict APO-forward experiment leaves one important identification concern: its risk-neutral state is inferred from the same option family later used as the pricing target. The vanilla-WTI experiment addresses that concern by constructing the volatility surface only from prior-date LO and CL settlements. The final strike expansion to 70--120 places 253 of the 280 matched October contract-dates inside the observed prior LO moneyness support, compared with only 60 observations under the initial narrow strike pilot. Only 50 of 620 external-surface prediction rows require any support clipping.
+
+Table~\ref{tab:external_lo} reports the exact no-clipping comparison. Historical-volatility posterior integration has MAE 0.4464 and RMSE 0.5562. The external previous-day LO surface lowers these to 0.1559 and 0.2599, while the expanding LO surface gives 0.1604 and 0.2858. The corresponding prior-date APO smiles are 0.1676/0.2686 and 0.1612/0.2912. Thus an independently observed vanilla-WTI risk-neutral surface reproduces the large pricing improvement previously obtained from the APO market itself.
+
+\begin{table*}[t]
+\centering
+\caption{Independent vanilla-WTI validation on the exact common-support sample. All methods are evaluated on the same 253 October-2026 APO contract-dates over 10 valuation dates. External LO surfaces use only vanilla observations dated strictly before the APO target date.}\label{tab:external_lo}
+\begin{tabular}{lrrr}
+\toprule
+Method & $N$ & MAE & RMSE\\
+\midrule
+Historical-volatility posterior integration & 253 & 0.4464 & 0.5562\\
+External LO surface, previous day & 253 & 0.1559 & 0.2599\\
+External LO surface, expanding & 253 & 0.1604 & 0.2858\\
+Prior-date APO smile, previous day & 253 & 0.1676 & 0.2686\\
+Prior-date APO smile, expanding & 253 & 0.1612 & 0.2912\\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+The valuation-date cluster bootstrap confirms that the external improvement over historical volatility is not driven by treating same-day contracts as independent. For the previous-day LO surface, the MAE difference relative to historical PI is $-0.2905$, with a 95\% interval of $[-0.3439,-0.2333]$, and the RMSE difference is $-0.2963$, with interval $[-0.3503,-0.2580]$. The expanding LO surface produces corresponding differences of $-0.2860$ and $-0.2704$, again with intervals entirely below zero.
+
+The external and APO-implied surfaces are much closer to one another. Previous-day LO has an MAE difference of $-0.0117$ relative to the previous-day APO smile, with a 95\% interval of $[-0.0251,-0.0001]$; its RMSE difference is $-0.0087$, with interval $[-0.0149,0.0002]$. For the expanding specifications, both the MAE and RMSE intervals include zero. These results do not establish global superiority of vanilla LO over APO-implied volatility. Their more important implication is that the pricing gain associated with an option-informed risk-neutral state survives when the volatility source is moved outside the APO family.
+
+The empirical hierarchy can therefore be stated more cleanly as
+\begin{equation}
+ \text{posterior-integration refinement}
+ \ll
+ \text{historical-versus-option-informed volatility specification},
+ \label{eq:empirical_hierarchy}
+\end{equation}
+where the second margin is now supported by both within-family forward APO evidence and independent cross-instrument LO evidence. Bayesian integration propagates uncertainty conditional on the maintained pricing model; it does not compensate for a volatility state that is empirically misaligned with the option market.
+

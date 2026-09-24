@@ -1,0 +1,88 @@
+{
+  "figures": {
+    "1": {
+      "heatmap_state": {
+        "maturity_days": 126,
+        "n_obs": 21,
+        "sigma_true": 0.8
+      },
+      "mechanism_run": "results\\analysis\\massive_mechanism_map\\200169bc7780a11d",
+      "outputs": [
+        "figures\\publication\\fig01_mechanism_map.pdf",
+        "figures\\publication\\fig01_mechanism_map.png"
+      ],
+      "partial_fixing_state": {
+        "moneyness": 1.5,
+        "n_obs": 21,
+        "sigma_true": 0.8
+      },
+      "taylor_cell_correlation": 0.9995451248988865
+    },
+    "2": {
+      "outputs": [
+        "figures\\publication\\fig02_historical_vs_apo_implied_volatility.pdf",
+        "figures\\publication\\fig02_historical_vs_apo_implied_volatility.png"
+      ],
+      "smile_dates": {
+        "2026-08-26": {
+          "contracts": 27,
+          "sigma_p": 0.4156123363824248,
+          "sigma_q": 0.4547849592930665
+        },
+        "2026-09-10": {
+          "contracts": 29,
+          "sigma_p": 0.4166311397436242,
+          "sigma_q": 0.5489639282827785
+        }
+      }
+    },
+    "3": {
+      "bootstrap_iterations": 100000,
+      "experiments": [
+        "forward_q_expanding_smile",
+        "forward_q_previous_day_smile"
+      ],
+      "outputs": [
+        "figures\\publication\\fig03_forward_q_cluster_bootstrap.pdf",
+        "figures\\publication\\fig03_forward_q_cluster_bootstrap.png"
+      ]
+    },
+    "4": {
+      "matched_targets": 8,
+      "outputs": [
+        "figures\\publication\\fig04_numerical_identification.pdf",
+        "figures\\publication\\fig04_numerical_identification.png"
+      ],
+      "target_labels": [
+        "08-26\n$K=102.05$",
+        "08-26\n$K=102.4$",
+        "08-27\n$K=98$",
+        "08-27\n$K=102.4$",
+        "08-28\n$K=98$",
+        "08-31\n$K=100$",
+        "09-10\n$K=102.4$",
+        "09-10\n$K=103$"
+      ]
+    }
+  },
+  "font_mode": "wiley-utopia-vendored",
+  "formats": [
+    "pdf",
+    "png"
+  ],
+  "hybrid_pdf": true,
+  "output_dir": "figures\\publication",
+  "palette": {
+    "charcoal": "#3B3F46",
+    "gold": "#C28F2C",
+    "green": "#3A7D44",
+    "ink": "#17324D",
+    "light_gray": "#D9DDE3",
+    "midgray": "#7F8790",
+    "purple": "#6C5B9A",
+    "teal": "#2A6F97",
+    "very_light_gray": "#F4F6F8",
+    "wine": "#8E4B5B"
+  },
+  "raster_dpi": 600
+}

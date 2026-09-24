@@ -35,6 +35,7 @@ curve used for valuation.
 - **Valuation-date CL curve:** committed Barchart `Daily Prices` histories under `data/csv/CL`.
 - **CL last-trade dates:** explicit versioned study table `data/csv/CL/contract_expiries.csv`.
 - **Discounting:** U.S. Treasury Daily Treasury Par Yield Curve Rates.
+- **Independent Q-state validation:** Databento CME/NYMEX standard monthly WTI options (`LO`) and official statistics, stored only as local proprietary inputs.
 
 A live workstation run showed that Yahoo may return 404 / `YFTzMissingError` for older
 delisted monthly CL symbols. The canonical pilot therefore does not require Yahoo individual
@@ -218,3 +219,64 @@ because its filenames do not match the JAO option convention.
 The committed Barchart CL source files are separately parsed by
 `bayesian_asian_options.barchart_cl`. Run-level manifests record source file names, SHA-256
 hashes, observation ranges, and the exact valuation-date CL curve used for pricing.
+
+
+## Independent vanilla-option Q validation
+
+Issue #36 is designed to break the endogeneity of estimating the risk-neutral volatility state
+from the same APO family used as the target. The strict object is
+
+\[
+\mathcal I^{LO}_{t-1}
+\longrightarrow \widehat\sigma^{LO}_{Q,t-1}
+\longrightarrow \widehat C^{APO}_{t},
+\]
+
+where no APO mark dated \(t\) enters the vanilla-state estimate. The available Barchart
+vanilla histories begin after the current October-2026 target window and therefore cannot
+identify this experiment.
+
+The replacement acquisition route is Databento `GLBX.MDP3`. The pilot uses the standard
+WTI monthly-option parent `LO.OPT`, filters instrument definitions to underlyings `CLX6`
+and `CLZ6` and strikes 85.0--94.5, and requests only the `statistics` schema over
+2026-08-24 through 2026-09-10. The acquisition driver quotes every request before purchase and
+enforces a default USD 5 hard cap. Raw vendor data remain local and gitignored.
+
+For `GLBX.MDP3`, the observed fields used by this study are official settlement price
+(`stat_type=3`), cleared volume (`6`), and open interest (`9`). Databento's current
+statistics-availability table does not list settlement-implied volatility (`14`) for CME
+Globex. The independent Q-state is therefore derived from official vanilla-option and futures
+settlements using an American futures-option model because standard WTI monthly options are
+American-style. Black-76 may be reported only as a near-ATM robustness approximation.
+
+No empirical result from this route enters the manuscript until the acquisition manifest,
+coverage audit, time ordering, and licensing treatment are versioned.
+
+
+### Vanilla settlement inversion
+
+The first independent-Q implementation derives a contract-level surface before any
+aggregation to the APO horizon. For each final CME LO settlement on trading reference date
+(t), the matching CL futures settlement is joined through the Databento underlying
+instrument mapping. Let (F_t) be that futures settlement, (K) the option strike,
+(	au) time to the Databento-reported option expiration, and (r_t(	au)) the dated
+Treasury par-yield proxy already used elsewhere in the paper.
+
+The standard LO contract is American style, so the primary inversion uses a
+Cox--Ross--Rubinstein American futures-option tree. Under deterministic rates and the
+maintained lognormal one-factor futures model,
+
+[
+u=e^{sigmasqrt{Delta t}},qquad d=u^{-1},qquad
+p=rac{1-d}{u-d}.
+]
+
+At every node the option value is the maximum of immediate exercise and discounted
+continuation. Brent root finding then solves the settlement-pricing equation for
+(widehatsigma^{LO}_{Q,t,K}). Black--76 remains a European near-ATM robustness object,
+not the production inversion.
+
+The empirical surface is kept contract-level through this stage. Actual versus theoretical
+CME settlement flags, volume, open interest, inversion failures, smile shape, and tree-step
+convergence must be inspected before defining the scalar or maturity-interpolated Q state
+used for strict (t-1) APO prediction.

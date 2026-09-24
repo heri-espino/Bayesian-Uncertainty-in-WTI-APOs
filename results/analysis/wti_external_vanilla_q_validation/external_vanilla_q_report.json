@@ -1,0 +1,23 @@
+{
+  "aggregation": "weighted_rms",
+  "apo_expiry": "2026-10",
+  "information_guardrail": "Every external vanilla sigma_Q uses only Databento-derived LO implied-volatility dates strictly earlier than the target APO valuation date.",
+  "matched_comparison_rows": 7,
+  "matched_contract_dates": 280,
+  "matched_target_dates": 10,
+  "maturity_mapping": "Scalar variants reduce near-ATM CLX6 and CLZ6 volatility to the maintained APO state with target fixing-count RMS variance weights. Surface variants fit prior-date quadratic LO smiles by underlying and call/put, evaluate them at each target APO strike using the target-date CL futures curve, clip only to prior observed moneyness support, and combine the resulting component variances with the same fixing weights.",
+  "methods": [
+    "vanilla_expanding",
+    "vanilla_previous_day",
+    "vanilla_surface_expanding",
+    "vanilla_surface_previous_day"
+  ],
+  "prediction_rows": 1240,
+  "same_day_apo_usage": "Same-day APO implied volatility is retained only as an ex-post diagnostic and never enters external-Q fitting or pricing.",
+  "surface_common_support_contract_dates": 253,
+  "surface_common_support_target_dates": 10,
+  "surface_ridge": 1e-06,
+  "surface_rows": 620,
+  "surface_rows_with_any_support_clipping": 50,
+  "target_dates": 12
+}
