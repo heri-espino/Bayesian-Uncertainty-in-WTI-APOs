@@ -5,6 +5,7 @@ import pytest
 
 from experiments.wti_databento_external_q import (
     _raw_cl_symbol,
+    _statistics_cache_covers_symbols,
     select_option_definitions,
 )
 
@@ -71,3 +72,24 @@ def test_select_option_definitions_fails_closed_when_nothing_matches() -> None:
             strike_min=85.0,
             strike_max=94.5,
         )
+
+
+
+def test_statistics_cache_requires_all_symbols(tmp_path) -> None:
+    path = tmp_path / "stats.csv"
+    pd.DataFrame(
+        {
+            "symbol": ["A", "B", "B"],
+            "price": [1.0, 2.0, 2.1],
+        }
+    ).to_csv(path)
+
+    assert _statistics_cache_covers_symbols(path, ["A", "B"])
+    assert not _statistics_cache_covers_symbols(path, ["A", "B", "C"])
+
+
+def test_statistics_cache_fails_closed_without_symbol_column(tmp_path) -> None:
+    path = tmp_path / "stats.csv"
+    pd.DataFrame({"price": [1.0]}).to_csv(path)
+
+    assert not _statistics_cache_covers_symbols(path, ["A"])
