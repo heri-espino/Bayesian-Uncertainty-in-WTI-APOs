@@ -110,7 +110,7 @@ Do not change these silently:
 For the empirical WTI pipeline, additionally preserve these source/measurement rules:
 
 - the canonical valuation-date CL curve comes from the committed Barchart individual-contract `Daily Prices` histories under `data/csv/CL`; do not silently substitute Yahoo `CL=F` for that contractual term structure;
-- Barchart `Latest` is retained as the source field and may be used as an end-of-day settlement proxy, but it must not be called an official CME settlement without separate validation;
+- in the Barchart histories used by this project, `Latest` is the CME settlement field; preserve the raw source-field name and provenance, and do not reinterpret it as an intraday last trade;
 - the current physical-measure inference pilot uses Yahoo `CL=F` only as an explicitly labelled continuous/front-month proxy, with its undocumented historical roll convention recorded as a limitation;
 - if a later data source permits contract-reconstructed physical returns, every return spanning a contract switch must be excluded from the volatility likelihood rather than treating contango/backwardation as a one-day WTI return;
 - CL last-trade dates used by the fixing map come from the explicit versioned reference table `data/csv/CL/contract_expiries.csv`; do not replace it with a hidden approximate roll rule;
