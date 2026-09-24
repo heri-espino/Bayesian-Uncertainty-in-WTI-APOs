@@ -7,14 +7,14 @@ This page describes the implemented research pipeline for the CME WTI Average Pr
 The empirical application deliberately uses different sources for different objects:
 
 - **WTI APO market marks:** committed Barchart option histories under `data/csv`;
-- **physical-measure volatility inference:** Yahoo Finance `CL=F`, explicitly labelled as a continuous/front-month proxy;
+- **physical-measure volatility inference:** baseline Yahoo Finance `CL=F` continuous/front-month proxy, with an implemented robustness route using a contract-reconstructed first-nearby CL settlement series from official Databento statistics;
 - **realized first-nearby fixings and valuation-date CL term structure:** committed Barchart `Daily Prices` histories under `data/csv/CL`;
 - **CL last-trade dates:** the explicit versioned table `data/csv/CL/contract_expiries.csv`;
 - **USD discounting:** U.S. Treasury Daily Treasury Par Yield Curve Rates;
 - **independent risk-neutral validation:** local Databento CME/NYMEX `LO` option definitions and official `statistics`, acquired through a cost-capped workflow and not committed as raw vendor data;
 - **optional validation:** a small external reference table can be supplied locally.
 
-Barchart `Latest` is used as the futures end-of-day price / settlement proxy. It is not silently renamed an official CME settlement.
+In the Barchart histories used by this project, `Latest` is the CME settlement field. The parser preserves the source-field name and does not reinterpret it as an intraday last trade.
 
 A live workstation test showed that Yahoo can return 404 / `YFTzMissingError` for older delisted individual contracts such as `CLG24.NYM`. Individual Yahoo CL pages are therefore no longer required by the canonical pilot.
 
@@ -37,27 +37,43 @@ The APO discovery function ignores the separate `data/csv/CL` futures files beca
 
 ## 3. Build the physical-measure inference sample
 
-The current pilot uses Yahoo `CL=F` only for historical-return inference:
+The original empirical baseline uses Yahoo `CL=F` as an explicitly labelled continuous/front-month proxy. Issue #38 adds a contract-reconstructed alternative from official final CL settlements so the paper can test whether its historical-`P` baseline depends on Yahoo's undocumented roll construction.
 
-```python
-from bayesian_asian_options.wti_yahoo import download_yahoo_wti, prepare_wti_model_sample
+The reconstruction is deliberately cost-gated. Quote first:
 
-history, metadata = download_yahoo_wti(
-    ticker="CL=F",
-    start="2024-01-01",
-    end="2026-09-05",
-)
-sample = prepare_wti_model_sample(
-    history,
-    start="2024-01-01",
-    end="2026-09-05",
-)
-returns = sample.log_returns
+```powershell
+python -m experiments.wti_databento_first_nearby --mode quote
 ```
 
-This is an explicit measurement compromise, not a contractual claim. Yahoo does not document the historical `CL=F` roll convention precisely enough to call the series a self-reconstructed CME first-nearby series. The experiment manifest records that limitation.
+Only if the quote is acceptable:
 
-If a later source provides a complete historical monthly CL strip, the preferred robustness specification is to reconstruct the first-nearby series contract by contract and exclude every return that spans a roll.
+```powershell
+python -m experiments.wti_databento_first_nearby --mode download
+python -m experiments.wti_first_nearby_reconstruction
+```
+
+The reconstruction maps every trading date to the earliest CL contract whose observed final-settlement last-trade date has not passed. A return is admitted to the physical-volatility likelihood only when the current and previous settlements belong to the same contract. The first return after every contract switch is therefore excluded rather than treating contango or backwardation as a one-day diffusion shock.
+
+The reconstruction experiment compares the roll-clean return series against Yahoo `CL=F` over the same calendar information window and fits the paper's same Gaussian-GBM posterior to both. Raw vendor snapshots remain local; derived roll boundaries, posterior comparisons, diagnostics, and the report are versioned.
+
+The canonical pricing driver can then use the reconstructed source without creating a second valuation engine:
+
+```powershell
+python -m experiments.wti_apo_empirical \
+  --valuation-date 2026-09-04 \
+  --apo-expiry 2026-10 \
+  --physical-inference-source first-nearby \
+  --download-treasury
+```
+
+For the complete seven-expiry rerun, use:
+
+```powershell
+python -m scripts.run_extended_forward_validation \
+  --physical-inference-source first-nearby
+```
+
+These runs are automatically namespaced under `*_first_nearby` output roots and do not overwrite the original Yahoo-based production results.
 
 ## 4. Load the Barchart CL histories
 
