@@ -38,7 +38,7 @@ def _raw_cl_symbol(contract: str) -> str:
     if not value.startswith("CL") or len(value) < 4:
         raise ValueError(f"Unrecognized CL contract symbol: {contract}")
     month = value[2]
-    year = value[1:]
+    year = value[3:]
     if month not in _MONTH_CODES or not year.isdigit():
         raise ValueError(f"Unrecognized CL contract symbol: {contract}")
     return f"CL{month}{year[-1]}"
@@ -81,7 +81,7 @@ def _sha256(path: Path) -> str:
     return digest.hexdigest()
 
 def _load_csv(path: Path) -> pd.DataFrame:
-    return pd.read_csc(path, index_col=0, low_memory=False)
+    return pd.read_csv(path, index_col=0, low_memory=False)
 
 def _cache_covers(path: Path, symbols: list[str]) -> bool:
     if not path.exists():
@@ -93,7 +93,7 @@ def _cache_covers(path: Path, symbols: list[str]) -> bool:
     )
     if symbol_col is None:
         return False
-    available = set(frame[symbol_col].dropna().astype(str).trip())
+    available = set(frame[symbol_col].dropna().astype(str).str.strip())
     return set(symbols).issubset(available)
 
 def parse_args() -> argparse.Namespace:
