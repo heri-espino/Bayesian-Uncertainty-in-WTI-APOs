@@ -70,9 +70,9 @@ Utopia + PSNFSS + mathastext stack, rebuilds the four publication figures, requi
 `font_mode: wiley-utopia-vendored`, compiles the Wiley manuscript, and uploads the
 result as a GitHub Actions artifact.
 
-The workflow runs automatically when manuscript, figure-builder, or committed analysis
-outputs change, and it can also be launched manually from **Actions -> build-paper ->
-Run workflow**.
+The workflow is intentionally **manual-only** via `workflow_dispatch`; heavy figure/PDF builds
+must not run on ordinary pushes or pull requests. Launch it from **Actions -> build-paper ->
+Run workflow** when a compiled artifact is actually needed.
 
 The artifact contains:
 

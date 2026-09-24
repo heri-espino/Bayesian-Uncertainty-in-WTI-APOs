@@ -137,3 +137,34 @@ To separate posterior integration from volatility specification, the paper also 
 when the settlement lies within the monotone model price map. Cross-sectional common-volatility estimates minimize settlement squared error across contracts on a date, while smile specifications allow implied volatility to vary with moneyness and option type.
 
 These quantities are best interpreted as \emph{Curran-equivalent APO-implied effective volatilities under the maintained one-factor model}. They are inferred from the APO cross-section itself and are therefore not an independent external $Q$-volatility source. Their role is diagnostic and predictive: they measure how far the volatility parameter needed by the option market lies from the historical constant-volatility estimate, and whether that information transfers to later valuation dates.
+
+\subsection{Independent vanilla-WTI risk-neutral surface}\label{sec:external_lo_method}
+
+The APO-implied exercise above is deliberately informative about volatility specification but remains within the target option family. To obtain an external risk-neutral state, the paper also uses standard monthly American WTI options on futures (CME product LO). For vanilla contract $j$ observed on trading reference date $s$, let $F_{j,s}$ be the matching CL futures settlement, $K_j$ the strike, $\tau_{j,s}$ time to expiration, and $r_s(\tau_{j,s})$ the date-specific rate proxy. The contract-level implied volatility $\sigma^{LO}_{Q,j,s}$ solves
+\begin{equation}
+ V^{A}_{LO}\!\left(F_{j,s},K_j,\tau_{j,s},r_s,\sigma^{LO}_{Q,j,s}\right)
+ =P^{LO}_{j,s},
+ \label{eq:lo_iv}
+\end{equation}
+where $V^{A}_{LO}$ is evaluated with an American Cox--Ross--Rubinstein futures-option tree and $P^{LO}_{j,s}$ is the official LO settlement. The futures process is a martingale under $\mathbb Q$ in the maintained one-factor representation, and early exercise is evaluated at every tree node.
+
+The resulting contract-level IVs are fitted separately by underlying futures contract with the same quadratic log-moneyness design used for the APO forward smile, including call/put interactions. For an APO target on date $t$ and strike $K$, each required underlying $u$ therefore supplies a strictly prior implied volatility
+\begin{equation}
+ \widehat\sigma^{LO}_{Q,u,t-1}(K),
+ \qquad s<t,
+ \label{eq:lo_prior_guard}
+\end{equation}
+evaluated at moneyness computed from the target-date CL futures curve. The previous-day specification uses the latest completed LO date before $t$; the expanding specification uses all earlier dates with exponentially decaying recency weights.
+
+The APO pricing engine retains one effective volatility state. If $w_u$ is the fraction of APO fixing dates mapped to underlying futures contract $u$, the strike-specific external state is
+\begin{equation}
+ \widehat\sigma^{LO,eff}_{Q,t}(K)
+ =
+ \left[
+ \sum_u w_u
+ \left\{\widehat\sigma^{LO}_{Q,u,t-1}(K)\right\}^2
+ \right]^{1/2}.
+ \label{eq:lo_effective_sigma}
+\end{equation}
+The weights are derived from the target contract's actual fixing schedule rather than hard-coded. Predictions outside the prior observed LO moneyness support are clipped to the nearest support boundary and flagged; the main external comparison is repeated on the exact common-support subset with no clipping. No same-day APO implied volatility enters Equations~\eqref{eq:lo_iv}--\eqref{eq:lo_effective_sigma}.
+

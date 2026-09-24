@@ -1,0 +1,8 @@
+sample,method,model,n,n_dates,mean_error,mae,rmse
+common_contract_dates,historical_pi,baseline_pi,280,10,-0.41434451751479384,0.4158684504193828,0.5307871440191296
+common_contract_dates,vanilla_previous_day,external_vanilla_q,280,10,-0.21723665552616178,0.2708285256182317,0.3522149169427198
+common_contract_dates,vanilla_expanding,external_vanilla_q,280,10,-0.25031361340613023,0.2895063411790486,0.3867394699842162
+common_contract_dates,vanilla_surface_previous_day,external_vanilla_q,280,10,-0.06677367117736216,0.14485074450026275,0.24762293879976965
+common_contract_dates,vanilla_surface_expanding,external_vanilla_q,280,10,-0.09653004198508672,0.14917014487655944,0.2722611495158241
+common_contract_dates,apo_previous_day_smile,prior_date_apo_smile,280,10,-0.0801118521867797,0.15429562325479362,0.25565371488277266
+common_contract_dates,apo_expanding_smile,prior_date_apo_smile,280,10,-0.09545108388127947,0.14861844449233266,0.2771925169745688

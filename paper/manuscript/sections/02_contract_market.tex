@@ -62,6 +62,12 @@ Liquidity is consequently used as a diagnostic and robustness dimension rather t
 
 The data pipeline also produces a variable called \texttt{richest}, inherited from an earlier data-audit routine. It measures information completeness using the number of sessions, calendar span, and field completeness. It does \emph{not} measure liquidity, trading intensity, or economic importance. The variable is retained for data-quality diagnostics but is not used as the economic contract-selection rule.
 
+\subsection{Independent vanilla-WTI option data}
+
+The external risk-neutral validation uses standard monthly American WTI options on futures (CME product LO) obtained through Databento's CME Globex historical service. The required market objects are official LO option settlements, matching CL futures settlements, and the instrument definitions needed to recover strike, option type, underlying futures contract, and expiration. Raw vendor records are treated as proprietary inputs and are not redistributed.
+
+For the October-2026 validation, the final vanilla sample uses LO options written on CLX6 and CLZ6 with strikes from 70 to 120 over trading reference dates from August 24 through September 10, 2026. The acquisition window is chosen to precede the APO target dates used in the strict external test. The final inversion panel contains 5,220 successful contract-date implied volatilities over 13 reference dates; 5,214 underlying option settlements are flagged actual and six theoretical. These observations are used only to construct the external volatility state described in Section~\ref{sec:external_lo_method}; APO prices never enter that inversion.
+
 \subsection{Maturity coverage}
 
 The chosen expiries deliberately span the maturity dimension rather than concentrating exclusively on consecutive nearby months. The first three maturities provide short-horizon contracts, while March 2027 through June 2029 extend the cross section toward medium and long horizons. This structure is useful because Equation~\eqref{eq:intro_taylor} predicts that the importance of posterior uncertainty depends not only on posterior dispersion but also on the curvature of the pricing map, which can change materially with time to maturity.

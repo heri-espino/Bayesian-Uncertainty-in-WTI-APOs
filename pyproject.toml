@@ -16,7 +16,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-market = ["yfinance>=1.4"]
+market = ["yfinance>=1.4", "databento>=0.87,<0.88"]
 dev = [
   "pytest>=8.0",
   "psutil>=6.0",

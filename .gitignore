@@ -42,6 +42,10 @@ data/wti_yahoo_contracts/*.json
 # Local official Treasury source CSVs. Keep the parser/docs versioned.
 data/rates/treasury/*.csv
 
+# Proprietary Databento raw inputs remain local. Version query metadata, hashes,
+# diagnostics, and permitted derived summaries instead of raw vendor data.
+data/databento/**/raw/
+
 # Generated experiment checkpoints and large intermediates
 # Keep final manifests and summary CSVs; do not version thousands of restart files.
 results/**/*.npz
