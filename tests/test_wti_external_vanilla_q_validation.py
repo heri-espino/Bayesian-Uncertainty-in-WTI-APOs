@@ -241,3 +241,55 @@ def test_surface_prediction_clips_to_prior_moneyness_support() -> None:
         fixing_weights={"CLX6": 0.5, "CLZ6": 0.5},
     )
     assert clipped[0] == 2
+
+
+
+def test_surface_common_support_comparison_requires_zero_clipping(tmp_path) -> None:
+    from experiments.wti_external_vanilla_q_validation import (
+        _surface_common_support_comparison,
+    )
+
+    keys = [
+        ("2026-09-01", "2026-10", "a"),
+        ("2026-09-01", "2026-10", "b"),
+        ("2026-09-02", "2026-10", "c"),
+    ]
+    rows = []
+    for method in (
+        "vanilla_surface_previous_day",
+        "vanilla_surface_expanding",
+    ):
+        for i, (date, expiry, contract) in enumerate(keys):
+            rows.append(
+                {
+                    "method": method,
+                    "valuation_date": date,
+                    "apo_expiry": expiry,
+                    "contract_id": contract,
+                    "forward_error": 0.1 + i,
+                    "baseline_pi_error": 0.2 + i,
+                    "surface_components_clipped": 1 if contract == "c" else 0,
+                }
+            )
+    external = pd.DataFrame(rows)
+
+    apo_rows = []
+    for method in ("previous_day_smile", "expanding_smile"):
+        for i, (date, expiry, contract) in enumerate(keys):
+            apo_rows.append(
+                {
+                    "method": method,
+                    "valuation_date": date,
+                    "apo_expiry": expiry,
+                    "contract_id": contract,
+                    "forward_error": 0.05 + i,
+                }
+            )
+    apo_path = tmp_path / "apo.csv"
+    pd.DataFrame(apo_rows).to_csv(apo_path, index=False)
+
+    out = _surface_common_support_comparison(external, apo_path)
+
+    assert set(out["n"]) == {2}
+    assert set(out["n_dates"]) == {1}
+    assert set(out["sample"]) == {"surface_common_support"}
