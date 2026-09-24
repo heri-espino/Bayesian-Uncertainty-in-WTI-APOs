@@ -666,6 +666,44 @@ This claim is conditional on the maintained pricing map and must be revisited af
 
 ---
 
+## Issue #38 implementation status
+
+The code path for the historical first-nearby robustness is implemented in PR #58 on branch `data/reconstruct-first-nearby-returns`.
+
+Implemented:
+
+- cost-capped Databento acquisition of official monthly CL final-settlement statistics for the 2024-01-01 through 2026-09-10 physical-inference window;
+- exact first-nearby reconstruction from contract/date settlements;
+- empirical roll boundaries derived from each contract's last final-settlement reference date;
+- mandatory exclusion of the first return after every contract switch;
+- same-model posterior comparison against Yahoo `CL=F`;
+- `--physical-inference-source first-nearby` in the canonical WTI APO pricing driver;
+- source propagation through date-panel and seven-expiry forward-validation runners;
+- separate `*_first_nearby` namespaces so original production outputs are preserved;
+- rerun of the independent vanilla-WTI LO validation against the reconstructed historical baseline;
+- exact-holdout Yahoo-versus-first-nearby pricing comparison;
+- a one-command production runner: `python -m scripts.run_first_nearby_robustness`.
+
+**No production first-nearby result has yet been accepted into the manuscript.**
+
+The immediate local data gate after PR #58 is merged is:
+
+```powershell
+python -m experiments.wti_databento_first_nearby --mode quote
+```
+
+Only after inspecting and accepting that quote should the raw historical CL statistics be downloaded. The raw Databento file remains local/gitignored.
+
+After download:
+
+```powershell
+python -m scripts.run_first_nearby_robustness
+```
+
+Do not close #38 or update manuscript numbers until the reconstruction report, posterior comparison, identical-holdout baseline comparison, external-LO rerun, and date-cluster bootstrap have been inspected.
+
+---
+
 # Reproducibility / branch rules
 
 Before new work:
