@@ -96,5 +96,5 @@ def test_expiry_table_uses_last_observed_final_settlement() -> None:
 
 
 def test_default_query_end_is_available_as_of_study_date() -> None:
-    assert DEFAULT_QUERY_END == "2026-09-24"
+    assert DEFAULT_QUERY_END == "2026-09-23"
     assert pd.Timestamp(DEFAULT_QUERY_END) > pd.Timestamp(DEFAULT_INFERENCE_END)
