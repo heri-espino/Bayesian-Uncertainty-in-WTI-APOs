@@ -59,21 +59,16 @@ The reconstruction experiment compares the roll-clean return series against Yaho
 The canonical pricing driver can then use the reconstructed source without creating a second valuation engine:
 
 ```powershell
-python -m experiments.wti_apo_empirical \
-  --valuation-date 2026-09-04 \
-  --apo-expiry 2026-10 \
-  --physical-inference-source first-nearby \
-  --download-treasury
+python -m experiments.wti_apo_empirical --valuation-date 2026-09-04 --apo-expiry 2026-10 --physical-inference-source first-nearby --download-treasury
 ```
 
-For the complete seven-expiry rerun, use:
+For the complete publication robustness rerun, use the one-command production runner:
 
 ```powershell
-python -m scripts.run_extended_forward_validation \
-  --physical-inference-source first-nearby
+python -m scripts.run_first_nearby_robustness
 ```
 
-These runs are automatically namespaced under `*_first_nearby` output roots and do not overwrite the original Yahoo-based production results.
+It reconstructs the return panel, runs the same seven-expiry strict-forward suite under the first-nearby physical posterior, reruns the independent vanilla-WTI comparison and its date-cluster bootstrap, and finally checks Yahoo versus first-nearby historical-P errors on exact matching holdouts. These runs are automatically namespaced under `*_first_nearby` output roots and do not overwrite the original Yahoo-based production results.
 
 ## 4. Load the Barchart CL histories
 
