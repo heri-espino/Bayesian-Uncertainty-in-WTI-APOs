@@ -2,10 +2,8 @@ from __future__ import annotations
 
 import pandas as pd
 
-from experiments.wti_databento_external_q_audit import (
-    _normalize_statistics,
-    build_audit,
-)
+from bayesian_asian_options.databento_wti import normalize_statistics
+from experiments.wti_databento_external_q_audit import build_audit
 
 
 def _stats(rows: list[dict[str, object]]) -> pd.DataFrame:
@@ -30,7 +28,7 @@ def test_normalize_statistics_uses_ts_ref_and_cme_settlement_flags() -> None:
         ]
     )
 
-    out = _normalize_statistics(frame)
+    out = normalize_statistics(frame)
 
     assert out["reference_date"].tolist() == ["2026-08-24", "2026-08-24"]
     assert out["stat_type"].tolist() == [3, 6]
