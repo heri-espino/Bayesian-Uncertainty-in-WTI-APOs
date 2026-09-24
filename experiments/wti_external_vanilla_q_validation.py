@@ -36,12 +36,17 @@ import pandas as pd
 
 from experiments.wti_forward_q_validation import (
     _error_summary,
+    _fit_smile,
+    _predict,
     _price_targets,
     _run_lookup,
 )
 
 DEFAULT_VANILLA_PATH = Path(
     "results/analysis/wti_databento_external_q/daily_vanilla_iv_summary.csv"
+)
+DEFAULT_VANILLA_PANEL_PATH = Path(
+    "results/analysis/wti_databento_external_q/vanilla_iv_panel.csv"
 )
 DEFAULT_APO_IV_PATH = Path(
     "results/analysis/wti_apo_implied_volatility/apo_contract_implied_volatility.csv"
@@ -167,6 +172,168 @@ def _prior_sigma(
     sigma = float(np.sqrt(np.sum(recency * sigmas**2)))
     return sigma, latest.strftime("%Y-%m-%d"), len(daily)
 
+
+
+def _target_futures_curve(run_dir: Path) -> dict[str, float]:
+    path = run_dir / "valuation_cl_curve.csv"
+    if not path.exists():
+        raise FileNotFoundError(path)
+    curve = pd.read_csv(path)
+    required = {"contract", "settlement"}
+    missing = required.difference(curve.columns)
+    if missing:
+        raise ValueError(
+            f"{path} missing columns: {sorted(missing)}"
+        )
+    curve = curve.dropna(subset=["contract", "settlement"]).copy()
+    curve["raw_underlying"] = curve["contract"].astype(str).map(
+        _raw_cl_symbol
+    )
+    curve["settlement"] = pd.to_numeric(
+        curve["settlement"], errors="coerce"
+    )
+    curve = curve.dropna(subset=["settlement"])
+    return {
+        str(row.raw_underlying): float(row.settlement)
+        for row in curve.itertuples(index=False)
+    }
+
+
+def _fit_surface_models(
+    vanilla_panel: pd.DataFrame,
+    *,
+    target_date: pd.Timestamp,
+    half_life_days: float | None,
+    ridge: float,
+) -> tuple[
+    dict[str, np.ndarray],
+    dict[tuple[str, str], tuple[float, float]],
+    str,
+    int,
+]:
+    earlier = vanilla_panel[
+        vanilla_panel["reference_ts"] < target_date
+    ].copy()
+    earlier = earlier[
+        earlier["iv_status"].isin({"ok", "ok_lower_bound"})
+        & np.isfinite(earlier["implied_volatility"])
+        & np.isfinite(earlier["log_moneyness"])
+    ].copy()
+    if earlier.empty:
+        raise ValueError("no earlier contract-level vanilla IVs")
+
+    latest = pd.Timestamp(
+        earlier["reference_ts"].max()
+    ).normalize()
+    if half_life_days is None:
+        train = earlier[
+            earlier["reference_ts"].eq(latest)
+        ].copy()
+        fit_half_life = None
+        n_dates = 1
+    else:
+        train = earlier.copy()
+        fit_half_life = float(half_life_days)
+        n_dates = int(train["reference_ts"].nunique())
+
+    models: dict[str, np.ndarray] = {}
+    supports: dict[tuple[str, str], tuple[float, float]] = {}
+    for underlying, group in train.groupby("underlying", sort=True):
+        if len(group) < 6:
+            continue
+        fit_frame = group.rename(
+            columns={
+                "implied_volatility": "apo_implied_sigma_q",
+                "reference_date": "valuation_date",
+            }
+        ).copy()
+        beta = _fit_smile(
+            fit_frame,
+            target_date=target_date,
+            ridge=float(ridge),
+            half_life_days=fit_half_life,
+        )
+        models[str(underlying)] = beta
+        for option_type, side in group.groupby(
+            "option_type", sort=True
+        ):
+            x = side["log_moneyness"].to_numpy(dtype=float)
+            supports[(str(underlying), str(option_type))] = (
+                float(np.min(x)),
+                float(np.max(x)),
+            )
+
+    if not models:
+        raise ValueError("no vanilla smile model could be fitted")
+    return (
+        models,
+        supports,
+        latest.strftime("%Y-%m-%d"),
+        n_dates,
+    )
+
+
+def _surface_sigma_targets(
+    targets: pd.DataFrame,
+    *,
+    models: dict[str, np.ndarray],
+    supports: dict[tuple[str, str], tuple[float, float]],
+    target_futures: dict[str, float],
+    fixing_weights: dict[str, float],
+) -> tuple[np.ndarray, np.ndarray]:
+    required = set(fixing_weights)
+    missing_models = sorted(required.difference(models))
+    missing_futures = sorted(required.difference(target_futures))
+    if missing_models:
+        raise ValueError(
+            f"missing vanilla smile models: {missing_models}"
+        )
+    if missing_futures:
+        raise ValueError(
+            f"missing target futures settlements: {missing_futures}"
+        )
+
+    sigma_out = np.empty(len(targets), dtype=float)
+    clipped_out = np.zeros(len(targets), dtype=int)
+
+    for i, row in enumerate(targets.itertuples(index=False)):
+        component_sigmas: list[float] = []
+        component_weights: list[float] = []
+        clipped = 0
+
+        for underlying, weight in fixing_weights.items():
+            key = (str(underlying), str(row.option_type))
+            if key not in supports:
+                raise ValueError(
+                    f"missing smile support for {key}"
+                )
+            fwd = float(target_futures[underlying])
+            raw_x = float(np.log(float(row.strike) / fwd))
+            lo, hi = supports[key]
+            x = float(np.clip(raw_x, lo, hi))
+            clipped += int(x != raw_x)
+
+            target_design = pd.DataFrame(
+                {
+                    "log_moneyness": [x],
+                    "option_type": [str(row.option_type)],
+                }
+            )
+            sigma = float(
+                _predict(target_design, models[underlying])[0]
+            )
+            component_sigmas.append(sigma)
+            component_weights.append(float(weight))
+
+        weights = np.asarray(component_weights, dtype=float)
+        weights = weights / weights.sum()
+        sigmas = np.asarray(component_sigmas, dtype=float)
+        sigma_out[i] = float(
+            np.sqrt(np.sum(weights * sigmas**2))
+        )
+        clipped_out[i] = clipped
+
+    return sigma_out, clipped_out
 
 def _metrics(
     frame: pd.DataFrame,
@@ -346,6 +513,11 @@ def parse_args() -> argparse.Namespace:
         "--vanilla-path", type=Path, default=DEFAULT_VANILLA_PATH
     )
     parser.add_argument(
+        "--vanilla-panel-path",
+        type=Path,
+        default=DEFAULT_VANILLA_PANEL_PATH,
+    )
+    parser.add_argument(
         "--apo-iv-path", type=Path, default=DEFAULT_APO_IV_PATH
     )
     parser.add_argument(
@@ -364,6 +536,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--apo-expiry", default="2026-10")
     parser.add_argument("--half-life-days", type=float, default=5.0)
+    parser.add_argument("--surface-ridge", type=float, default=1e-6)
     parser.add_argument(
         "--aggregation",
         choices=("weighted_rms", "weighted_mean"),
@@ -384,6 +557,11 @@ def main() -> None:
     vanilla = pd.read_csv(args.vanilla_path)
     vanilla["reference_ts"] = pd.to_datetime(
         vanilla["reference_date"]
+    ).dt.normalize()
+
+    vanilla_panel = pd.read_csv(args.vanilla_panel_path)
+    vanilla_panel["reference_ts"] = pd.to_datetime(
+        vanilla_panel["reference_date"]
     ).dt.normalize()
     required = {
         "reference_date",
@@ -485,6 +663,85 @@ def main() -> None:
                         "baseline_pi_error": float(
                             baseline - market
                         ),
+                        "surface_components_clipped": np.nan,
+                    }
+                )
+
+        surface_methods = {
+            "vanilla_surface_previous_day": None,
+            "vanilla_surface_expanding": float(args.half_life_days),
+        }
+        target_futures = _target_futures_curve(run_dir)
+        for method, half_life in surface_methods.items():
+            try:
+                models, supports, training_end, n_dates = (
+                    _fit_surface_models(
+                        vanilla_panel,
+                        target_date=target_date,
+                        half_life_days=half_life,
+                        ridge=float(args.surface_ridge),
+                    )
+                )
+                sigma_vector, clipped = _surface_sigma_targets(
+                    target,
+                    models=models,
+                    supports=supports,
+                    target_futures=target_futures,
+                    fixing_weights=weights,
+                )
+            except ValueError:
+                continue
+
+            prices = _price_targets(
+                target, sigma_vector, run_dir=run_dir
+            )
+            for i, row in enumerate(target.itertuples(index=False)):
+                market = float(row.market_settlement)
+                baseline = float(row.baseline_pi_price)
+                volume = (
+                    float(row.volume)
+                    if pd.notna(row.volume)
+                    else np.nan
+                )
+                oi = (
+                    float(row.open_interest)
+                    if pd.notna(row.open_interest)
+                    else np.nan
+                )
+                rows.append(
+                    {
+                        "method": method,
+                        "valuation_date": target_date.strftime("%Y-%m-%d"),
+                        "apo_expiry": args.apo_expiry,
+                        "training_end_date": training_end,
+                        "n_training_dates": int(n_dates),
+                        "aggregation": "surface_weighted_rms",
+                        "fixing_weights_json": json.dumps(
+                            weights, sort_keys=True
+                        ),
+                        "contract_id": str(row.contract_id),
+                        "option_type": str(row.option_type),
+                        "strike": float(row.strike),
+                        "log_moneyness": float(row.log_moneyness),
+                        "market_settlement": market,
+                        "open_interest": oi,
+                        "volume": volume,
+                        "positive_volume": bool(
+                            np.isfinite(volume) and volume > 0
+                        ),
+                        "predicted_sigma_q": float(sigma_vector[i]),
+                        "observed_same_day_apo_implied_sigma_q": (
+                            float(row.apo_implied_sigma_q)
+                            if pd.notna(row.apo_implied_sigma_q)
+                            else np.nan
+                        ),
+                        "forward_q_price": float(prices[i]),
+                        "forward_error": float(prices[i] - market),
+                        "baseline_pi_price": baseline,
+                        "baseline_pi_error": float(
+                            baseline - market
+                        ),
+                        "surface_components_clipped": int(clipped[i]),
                     }
                 )
 
@@ -545,6 +802,20 @@ def main() -> None:
         "prediction_rows": int(len(result)),
         "target_dates": int(result["valuation_date"].nunique()),
         "methods": sorted(result["method"].unique().tolist()),
+        "surface_ridge": float(args.surface_ridge),
+        "surface_rows": int(
+            result["method"].astype(str).str.startswith(
+                "vanilla_surface_"
+            ).sum()
+        ),
+        "surface_rows_with_any_support_clipping": int(
+            (
+                result["surface_components_clipped"]
+                .fillna(0)
+                .astype(float)
+                > 0
+            ).sum()
+        ),
         "matched_comparison_rows": int(len(matched_comparison)),
         "matched_contract_dates": (
             0
