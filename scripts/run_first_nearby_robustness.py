@@ -17,7 +17,7 @@ from experiments.wti_apo_empirical import ROOT
 
 
 def _run(command: list[str]) -> None:
-    print("\\n$", " ".join(command), flush=True)
+    print("\n$", " ".join(command), flush=True)
     subprocess.run(command, cwd=ROOT, check=True)
 
 
@@ -144,13 +144,13 @@ def main() -> None:
         ]
     )
 
-    print("\\nFirst-nearby robustness suite complete.", flush=True)
+    print("\nFirst-nearby robustness suite complete.", flush=True)
     print(
-        "Inspect:\\n"
-        f"  {reconstruction_root / 'reconstruction_report.json'}\\n"
-        f"  {reconstruction_root / 'posterior_comparison.csv'}\\n"
-        f"  {reconstruction_root / 'pricing_comparison_report.json'}\\n"
-        f"  {reconstruction_root / 'pricing_baseline_summary.csv'}\\n"
+        "Inspect:\n"
+        f"  {reconstruction_root / 'reconstruction_report.json'}\n"
+        f"  {reconstruction_root / 'posterior_comparison.csv'}\n"
+        f"  {reconstruction_root / 'pricing_comparison_report.json'}\n"
+        f"  {reconstruction_root / 'pricing_baseline_summary.csv'}\n"
         f"  {external_root / 'surface_common_support_cluster_bootstrap.csv'}",
         flush=True,
     )
