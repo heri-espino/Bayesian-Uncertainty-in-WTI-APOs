@@ -32,34 +32,34 @@ docs/_build/
 paper/build/
 paper/espino_2026_bayess-on-wti.pdf
 
-# # Yahoo Finance market-data snapshots remain local. Version code, query metadata,
-# # hashes and derived scientific summaries rather than redistributing raw Yahoo data.
-# data/wti_yahoo/*.csv
-# data/wti_yahoo/*.json
-# data/wti_yahoo_contracts/*.csv
-# data/wti_yahoo_contracts/*.json
+# Yahoo Finance market-data snapshots remain local. Version code, query metadata,
+# hashes and derived scientific summaries rather than redistributing raw Yahoo data.
+data/wti_yahoo/*.csv
+data/wti_yahoo/*.json
+data/wti_yahoo_contracts/*.csv
+data/wti_yahoo_contracts/*.json
 
-# # Local official Treasury source CSVs. Keep the parser/docs versioned.
-# data/rates/treasury/*.csv
+# Local official Treasury source CSVs. Keep the parser/docs versioned.
+data/rates/treasury/*.csv
 
-# # Proprietary Databento raw inputs remain local. Version query metadata, hashes,
-# # diagnostics, and permitted derived summaries instead of raw vendor data.
-# data/databento/**/raw/
+# Proprietary Databento raw inputs remain local. Version query metadata, hashes,
+# diagnostics, and permitted derived summaries instead of raw vendor data.
+data/databento/**/raw/
 
-# # Generated experiment checkpoints and large intermediates
-# # Keep final manifests and summary CSVs; do not version thousands of restart files.
-# results/**/*.npz
-# results/**/checkpoints/
-# results/**/*_raw.csv
-# results/**/*_raw_*.csv
-# results/**/progress.json
-# results/**/pricing_progress.json
+# Generated experiment checkpoints and large intermediates
+# Keep final manifests and summary CSVs; do not version thousands of restart files.
+results/**/*.npz
+results/**/checkpoints/
+results/**/*_raw.csv
+results/**/*_raw_*.csv
+results/**/progress.json
+results/**/pricing_progress.json
 
-# # Keep only the rolling workstation report in Git; timestamped snapshots remain local.
-# results/system/hardware_report_*.json
-# results/system/hardware_report_*.txt
-# !results/system/hardware_report_latest.json
-# !results/system/hardware_report_latest.txt
+# Keep only the rolling workstation report in Git; timestamped snapshots remain local.
+results/system/hardware_report_*.json
+results/system/hardware_report_*.txt
+!results/system/hardware_report_latest.json
+!results/system/hardware_report_latest.txt
 
 # Python package build products
 build/
