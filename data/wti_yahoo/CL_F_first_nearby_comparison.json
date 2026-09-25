@@ -1,0 +1,15 @@
+{
+  "auto_adjust": false,
+  "first_observation": "2024-01-02",
+  "interval": "1d",
+  "last_observation": "2026-09-10",
+  "provider": "Yahoo Finance via yfinance",
+  "query_end": "2026-09-11",
+  "query_period": null,
+  "query_start": "2024-01-01",
+  "repair": false,
+  "rows": 677,
+  "sha256": "84cd976e12f8c11a0b6975ec631a9c9ea979200b7c2e423e73c10c6c6e0e54e5",
+  "ticker": "CL=F",
+  "yfinance_version": "1.7.0"
+}
