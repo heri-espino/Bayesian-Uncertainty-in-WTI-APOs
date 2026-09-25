@@ -1,0 +1,41 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{booktabs,longtable,hyperref}
+
+% Sustituye los cinco valores para documentar otra carpeta mensual.
+\newcommand{\Mes}{<MES Y AÑO>}
+\newcommand{\Prefijo}{<PREFIJO DE CONTRATO>}
+\newcommand{\Archivos}{<NÚMERO DE CSV>}
+\newcommand{\Filas}{<NÚMERO DE FILAS>}
+\newcommand{\Cobertura}{<FECHA INICIAL> a <FECHA FINAL>}
+
+\title{Historial de precios: opciones WTI Average Price -- \Mes}
+\author{Fuente: Barchart Price History}
+\date{Actualizado: 12 de septiembre de 2026}
+
+\begin{document}
+\maketitle
+
+\section*{Contenido}
+Esta carpeta contiene \Archivos\ archivos CSV de contratos con prefijo
+\texttt{\Prefijo}. En conjunto hay \Filas\ observaciones diarias y la cobertura
+disponible va de \Cobertura. La ausencia de fechas anteriores no debe
+interpretarse como datos faltantes: una opción puede empezar a cotizar después
+del inicio de la ventana de consulta.
+
+\section*{Formato}
+Cada archivo usa las columnas \texttt{Time}, \texttt{Open}, \texttt{High},
+\texttt{Low}, \texttt{Latest}, \texttt{Change}, \texttt{\%Change},
+\texttt{Volume} y \texttt{Open Int}. Las fechas están en formato ISO
+(\texttt{YYYY-MM-DD}) y los archivos se guardan en UTF-8 con BOM para abrirlos
+correctamente en Excel.
+
+\section*{Reproducibilidad}
+El nombre de cada CSV identifica el contrato, el strike y el derecho:
+\texttt{<root>\_<strike>c} para calls y \texttt{<root>\_<strike>p} para puts.
+Los valores proceden de las tablas ``Daily Prices'' de Barchart; conserva las
+páginas fuente o los archivos descargados si necesitas auditar la extracción.
+
+\end{document}
