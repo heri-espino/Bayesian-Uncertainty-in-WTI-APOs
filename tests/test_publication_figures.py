@@ -47,7 +47,7 @@ def test_publication_styles_are_colorful_and_grayscale_safe() -> None:
     )
     assert min(
         right - left
-        for left, right in zip(high_luminances, high_luminances[1:], strict=True)
+        for left, right in zip(high_luminances, high_luminances[1:])
     ) > 0.10
 
     # Continuous maps use a perceptually uniform, color-vision-friendly map.
