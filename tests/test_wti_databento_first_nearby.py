@@ -98,3 +98,34 @@ def test_expiry_table_uses_last_observed_final_settlement() -> None:
 def test_default_query_end_is_available_as_of_study_date() -> None:
     assert DEFAULT_QUERY_END == "2026-09-23"
     assert pd.Timestamp(DEFAULT_QUERY_END) > pd.Timestamp(DEFAULT_INFERENCE_END)
+
+
+def test_comparison_summary_normalizes_yahoo_intraday_timestamp() -> None:
+    from experiments.wti_first_nearby_reconstruction import _comparison_summary
+
+    first = pd.DataFrame(
+        {
+            "trade_date": pd.to_datetime(["2024-01-02", "2024-01-03"]),
+            "settlement": [70.0, 71.0],
+            "log_return": [float("nan"), 0.01],
+            "usable_inference_return": [False, True],
+            "roll_switch": [True, False],
+            "missing_settlement": [False, False],
+        }
+    )
+    yahoo = pd.DataFrame(
+        {
+            "date": pd.to_datetime(
+                ["2024-01-02 05:00:00", "2024-01-03 05:00:00"]
+            ),
+            "close": [70.0, 71.0],
+            "log_return": [float("nan"), 0.01],
+            "usable_inference_return": [False, True],
+        }
+    )
+
+    summary = _comparison_summary(first, yahoo)
+
+    assert summary["paired_return_dates"] == 1
+    assert summary["paired_return_correlation"] is None
+    assert summary["paired_return_mae"] == 0.0
