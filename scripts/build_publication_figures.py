@@ -91,31 +91,49 @@ MECHANISM_SIGMA = 0.80
 MECHANISM_MONEYNESS = 1.50
 MECHANISM_HEATMAP_MATURITY_DAYS = 126
 
-PALETTE = {
-    "black": "#111111",
-    "dark": "#3A3A3A",
-    "mid": "#6B6B6B",
-    "light": "#A0A0A0",
-    "very_light": "#D9D9D9",
-    "grid": "#D0D0D0",
+# Paul Tol palettes are used for categorical scientific comparisons.  The
+# high-contrast set has deliberately separated lightness levels, while the
+# medium-contrast set supplies enough hues for the five-series mechanism panel.
+# Markers, line patterns, and marker fill remain redundant encodings so the
+# plots are still interpretable after grayscale conversion.
+TOL_HIGH_CONTRAST = {
+    "blue": "#004488",
+    "ochre": "#DDAA33",
+    "red": "#BB5566",
 }
 
-# Every publication figure must remain interpretable when printed or
-# photocopied in grayscale. Series differ by marker, line pattern, and marker
-# fill; grayscale tone is only a redundant cue.
+TOL_MEDIUM_CONTRAST = {
+    "light_blue": "#6699CC",
+    "blue": "#004488",
+    "yellow": "#EECC66",
+    "wine": "#994455",
+    "olive": "#997700",
+    "pink": "#EE99AA",
+}
+
+NEUTRAL = {
+    "black": "#111111",
+    "dark": "#3A3A3A",
+    "mid": "#777777",
+    "light": "#B0B0B0",
+    "grid": "#D8D8D8",
+}
+
+HEATMAP_CMAP = "cividis"
+
 SIGMA_STYLES = {
-    0.10: {"color": PALETTE["black"], "linestyle": "-", "marker": "o", "filled": False},
-    0.20: {"color": PALETTE["dark"], "linestyle": (0, (5, 2)), "marker": "s", "filled": False},
-    0.35: {"color": PALETTE["mid"], "linestyle": (0, (1, 1)), "marker": "^", "filled": False},
-    0.50: {"color": PALETTE["dark"], "linestyle": (0, (3, 1, 1, 1)), "marker": "D", "filled": True},
-    0.80: {"color": PALETTE["black"], "linestyle": (0, (7, 2, 1, 2)), "marker": "v", "filled": True},
+    0.10: {"color": TOL_MEDIUM_CONTRAST["light_blue"], "linestyle": "-", "marker": "o", "filled": False},
+    0.20: {"color": TOL_MEDIUM_CONTRAST["blue"], "linestyle": (0, (5, 2)), "marker": "s", "filled": False},
+    0.35: {"color": TOL_MEDIUM_CONTRAST["yellow"], "linestyle": (0, (1, 1)), "marker": "^", "filled": True},
+    0.50: {"color": TOL_MEDIUM_CONTRAST["wine"], "linestyle": (0, (3, 1, 1, 1)), "marker": "D", "filled": False},
+    0.80: {"color": TOL_MEDIUM_CONTRAST["olive"], "linestyle": (0, (7, 2, 1, 2)), "marker": "v", "filled": True},
 }
 
 MATURITY_STYLES = {
-    21: {"color": PALETTE["black"], "linestyle": "-", "marker": "o", "filled": False},
-    63: {"color": PALETTE["dark"], "linestyle": (0, (5, 2)), "marker": "s", "filled": False},
-    126: {"color": PALETTE["mid"], "linestyle": (0, (1, 1)), "marker": "^", "filled": False},
-    252: {"color": PALETTE["black"], "linestyle": (0, (3, 1, 1, 1)), "marker": "D", "filled": True},
+    21: {"color": TOL_MEDIUM_CONTRAST["blue"], "linestyle": "-", "marker": "o", "filled": False},
+    63: {"color": TOL_MEDIUM_CONTRAST["yellow"], "linestyle": (0, (5, 2)), "marker": "s", "filled": True},
+    126: {"color": TOL_MEDIUM_CONTRAST["wine"], "linestyle": (0, (1, 1)), "marker": "^", "filled": False},
+    252: {"color": TOL_MEDIUM_CONTRAST["olive"], "linestyle": (0, (3, 1, 1, 1)), "marker": "D", "filled": True},
 }
 
 
@@ -182,11 +200,11 @@ def _configure_matplotlib(*, force_no_tex: bool = False) -> str:
         "axes.spines.top": False,
         "axes.spines.right": False,
         "axes.linewidth": 0.85,
-        "axes.edgecolor": PALETTE["dark"],
+        "axes.edgecolor": NEUTRAL["dark"],
         "axes.facecolor": "white",
         "axes.axisbelow": True,
         "axes.grid": True,
-        "grid.color": PALETTE["grid"],
+        "grid.color": NEUTRAL["grid"],
         "grid.linewidth": 0.50,
         "grid.alpha": 0.72,
         "xtick.direction": "out",
@@ -289,7 +307,7 @@ def _panel_label(ax: plt.Axes, label: str) -> None:
         fontweight="bold",
         va="bottom",
         ha="left",
-        color=PALETTE["dark"],
+        color=NEUTRAL["dark"],
     )
 
 
@@ -324,7 +342,7 @@ def build_figure_1(
         sigma_key = round(float(sigma_true), 2)
         style = SIGMA_STYLES.get(
             sigma_key,
-            {"color": PALETTE["dark"], "linestyle": "-", "marker": "o", "filled": False},
+            {"color": NEUTRAL["dark"], "linestyle": "-", "marker": "o", "filled": False},
         )
         marker_face = style["color"] if style["filled"] else "white"
         ax_a.plot(
@@ -362,7 +380,7 @@ def build_figure_1(
         origin="lower",
         aspect="auto",
         interpolation="nearest",
-        cmap="Greys",
+        cmap=HEATMAP_CMAP,
         rasterized=True,
     )
     ax_b.grid(False)
@@ -389,7 +407,7 @@ def build_figure_1(
         group = group.sort_values("fraction_fixed")
         style = MATURITY_STYLES.get(
             int(maturity),
-            {"color": PALETTE["dark"], "linestyle": "-", "marker": "o", "filled": False},
+            {"color": NEUTRAL["dark"], "linestyle": "-", "marker": "o", "filled": False},
         )
         marker_face = style["color"] if style["filled"] else "white"
         ax_c.plot(
@@ -422,7 +440,7 @@ def build_figure_1(
         y[finite],
         gridsize=42,
         mincnt=1,
-        cmap="Greys",
+        cmap=HEATMAP_CMAP,
         linewidths=0.0,
         rasterized=True,
     )
@@ -433,7 +451,7 @@ def build_figure_1(
         [lo, hi],
         linestyle="--",
         linewidth=1.15,
-        color=PALETTE["black"],
+        color=NEUTRAL["black"],
     )
     corr = float(np.corrcoef(x[finite], y[finite])[0, 1])
     ax_d.set_xlabel(
@@ -475,9 +493,9 @@ def _plot_sigma_timeseries(ax: plt.Axes, by_date: pd.DataFrame, expiry: str) -> 
         group["sigma_p_posterior_mean"],
         marker="o",
         linestyle="-",
-        color=PALETTE["black"],
+        color=TOL_HIGH_CONTRAST["blue"],
         markerfacecolor="white",
-        markeredgecolor=PALETTE["black"],
+        markeredgecolor=TOL_HIGH_CONTRAST["blue"],
         markeredgewidth=0.85,
         label=r"Historical posterior mean $\sigma_P$",
     )
@@ -486,9 +504,9 @@ def _plot_sigma_timeseries(ax: plt.Axes, by_date: pd.DataFrame, expiry: str) -> 
         group["full_sample_sigma_q"],
         marker="s",
         linestyle="--",
-        color=PALETTE["dark"],
-        markerfacecolor=PALETTE["dark"],
-        markeredgecolor=PALETTE["dark"],
+        color=TOL_HIGH_CONTRAST["ochre"],
+        markerfacecolor=TOL_HIGH_CONTRAST["ochre"],
+        markeredgecolor=TOL_HIGH_CONTRAST["ochre"],
         markeredgewidth=0.85,
         label=r"APO-implied common $\sigma_Q$",
     )
@@ -508,8 +526,13 @@ def _plot_smile(
     if day.empty:
         raise ValueError(f"No contract-level implied volatilities for {date.date()}")
     styles = {
-        "call": ("o", PALETTE["black"], "Calls", "white"),
-        "put": ("s", PALETTE["dark"], "Puts", PALETTE["dark"]),
+        "call": ("o", TOL_HIGH_CONTRAST["blue"], "Calls", "white"),
+        "put": (
+            "s",
+            TOL_HIGH_CONTRAST["red"],
+            "Puts",
+            TOL_HIGH_CONTRAST["red"],
+        ),
     }
     for option_type, (marker, color, label, facecolor) in styles.items():
         group = day.loc[day["option_type"].eq(option_type)].sort_values("log_moneyness")
@@ -537,14 +560,14 @@ def _plot_smile(
         sigma_p,
         linestyle=":",
         linewidth=1.15,
-        color=PALETTE["mid"],
+        color=TOL_HIGH_CONTRAST["blue"],
         label=r"Historical $\sigma_P$",
     )
     ax.axhline(
         sigma_q,
         linestyle="--",
         linewidth=1.15,
-        color=PALETTE["dark"],
+        color=TOL_HIGH_CONTRAST["ochre"],
         label=r"Common APO $\sigma_Q$",
     )
     ax.set_xlabel(r"Log moneyness $\log(K/\widehat A^Q)$")
@@ -604,8 +627,20 @@ def _forest_panel(
 ) -> None:
     """Plot forward-minus-historical error differences by APO expiry."""
     experiments = [
-        ("forward_q_expanding_smile", "Expanding smile", "o", PALETTE["black"], "white"),
-        ("forward_q_previous_day_smile", "Previous-day smile", "s", PALETTE["dark"], PALETTE["dark"]),
+        (
+            "forward_q_expanding_smile",
+            "Expanding smile",
+            "o",
+            TOL_HIGH_CONTRAST["blue"],
+            "white",
+        ),
+        (
+            "forward_q_previous_day_smile",
+            "Previous-day smile",
+            "s",
+            TOL_HIGH_CONTRAST["red"],
+            TOL_HIGH_CONTRAST["red"],
+        ),
     ]
     expiry_order = [
         "2026-09",
@@ -664,7 +699,7 @@ def _forest_panel(
         0.0,
         linestyle="--",
         linewidth=0.95,
-        color=PALETTE["mid"],
+        color=NEUTRAL["mid"],
     )
     ax.set_yticks(y_base)
     ax.set_yticklabels(labels)
@@ -740,9 +775,30 @@ def build_figure_4(
     ax_top, ax_bottom = axes
 
     values = [
-        ("Pseudo-MC", matched["mc_pi_minus_pm"].to_numpy(dtype=float), matched["mc_pi_minus_pm_mcse"].to_numpy(dtype=float), "o", PALETTE["black"], "white"),
-        ("Curran", matched["curran_pi_minus_pm_mc"].to_numpy(dtype=float), np.zeros(len(matched)), "D", PALETTE["dark"], PALETTE["dark"]),
-        ("Randomized Sobol", matched["qmc_pi_minus_pm"].to_numpy(dtype=float), matched["qmc_gap_mcse"].to_numpy(dtype=float), "s", PALETTE["mid"], "white"),
+        (
+            "Pseudo-MC",
+            matched["mc_pi_minus_pm"].to_numpy(dtype=float),
+            matched["mc_pi_minus_pm_mcse"].to_numpy(dtype=float),
+            "o",
+            TOL_HIGH_CONTRAST["blue"],
+            "white",
+        ),
+        (
+            "Curran",
+            matched["curran_pi_minus_pm_mc"].to_numpy(dtype=float),
+            np.zeros(len(matched)),
+            "D",
+            TOL_HIGH_CONTRAST["ochre"],
+            TOL_HIGH_CONTRAST["ochre"],
+        ),
+        (
+            "Randomized Sobol",
+            matched["qmc_pi_minus_pm"].to_numpy(dtype=float),
+            matched["qmc_gap_mcse"].to_numpy(dtype=float),
+            "s",
+            TOL_HIGH_CONTRAST["red"],
+            "white",
+        ),
     ]
 
     for offset, (label, value, se, marker, color, facecolor) in zip(
@@ -770,8 +826,22 @@ def build_figure_4(
 
     curran = matched["curran_pi_minus_pm_mc"].to_numpy(dtype=float)
     deviations = [
-        ("Pseudo-MC minus Curran", 1e6 * (matched["mc_pi_minus_pm"].to_numpy(dtype=float) - curran), 1e6 * matched["mc_pi_minus_pm_mcse"].to_numpy(dtype=float), "o", PALETTE["black"], "white"),
-        ("Sobol minus Curran", 1e6 * (matched["qmc_pi_minus_pm"].to_numpy(dtype=float) - curran), 1e6 * matched["qmc_gap_mcse"].to_numpy(dtype=float), "s", PALETTE["mid"], "white"),
+        (
+            "Pseudo-MC minus Curran",
+            1e6 * (matched["mc_pi_minus_pm"].to_numpy(dtype=float) - curran),
+            1e6 * matched["mc_pi_minus_pm_mcse"].to_numpy(dtype=float),
+            "o",
+            TOL_HIGH_CONTRAST["blue"],
+            "white",
+        ),
+        (
+            "Sobol minus Curran",
+            1e6 * (matched["qmc_pi_minus_pm"].to_numpy(dtype=float) - curran),
+            1e6 * matched["qmc_gap_mcse"].to_numpy(dtype=float),
+            "s",
+            TOL_HIGH_CONTRAST["red"],
+            "white",
+        ),
     ]
     for offset, (label, value, se, marker, color, facecolor) in zip(
         (-0.09, 0.09), deviations, strict=True
@@ -795,7 +865,7 @@ def build_figure_4(
         0.0,
         linestyle="--",
         linewidth=0.95,
-        color=PALETTE["mid"],
+        color=NEUTRAL["mid"],
     )
     ax_bottom.set_ylabel(r"Difference from Curran ($\times 10^6$)")
     ax_bottom.set_xlabel("Empirical target")
@@ -871,9 +941,14 @@ def main() -> None:
         "font_mode": font_mode,
         "hybrid_pdf": True,
         "raster_dpi": 600,
-        "palette": PALETTE,
-        "print_mode": "grayscale-safe",
-        "style_encoding": "marker + line pattern + marker fill + redundant grayscale tone",
+        "categorical_palettes": {
+            "paul_tol_high_contrast": TOL_HIGH_CONTRAST,
+            "paul_tol_medium_contrast": TOL_MEDIUM_CONTRAST,
+        },
+        "continuous_colormap": HEATMAP_CMAP,
+        "neutral_palette": NEUTRAL,
+        "print_mode": "color + grayscale-safe redundancy",
+        "style_encoding": "color + marker + line pattern + marker fill",
         "figures": {},
     }
 
