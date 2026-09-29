@@ -50,7 +50,7 @@ Do not add a richer pricing model by default.
 The current sequence is:
 
 1. finish manuscript integration of the first-nearby robustness;
-2. resolve proprietary-data tracking/licensing consistency before freeze;
+2. preserve the current raw/external-data backup through submission; do not delete or untrack it without explicit author approval;
 3. finish figures/tables and wording cleanup;
 4. reproducibility freeze;
 5. compile and inspect the Wiley submission PDF;
@@ -64,6 +64,14 @@ The current sequence is:
 - Option-implied volatility is an effective/model-equivalent state under the maintained pricing map, not a unique structural diffusion coefficient.
 - Do not claim universal LO superiority over APO information.
 
-## Repository hygiene warning
+## Temporary data-retention decision
 
-The project policy is that proprietary raw Databento inputs should not be redistributed without verified rights. The current tree contains LFS-tracked paths under `data/databento/**/raw/` after recent data commits. Resolve this before the reproducibility freeze and keep the manuscript data-availability statement consistent with the actual repository state.
+The current LFS-tracked raw/external data are being kept intentionally as a temporary continuity backup because the active experiments are running on an external machine whose local storage may be erased.
+
+Do **not** delete, untrack, purge, or "clean up" these data unless the author explicitly authorizes it.
+
+The intended workflow is:
+1. keep the backup through manuscript submission;
+2. once the paper has been sent and the scientific state is safely archived elsewhere, review licenses and remove/restructure raw vendor data as needed for the final public/reproducibility snapshot.
+
+Temporary retention does not by itself establish redistribution rights.
