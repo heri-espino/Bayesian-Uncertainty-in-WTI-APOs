@@ -43,6 +43,15 @@ The mechanism in Equation~\eqref{eq:taylor_gap} explains these states remarkably
 
 Partial fixing works in the opposite direction. As a larger fraction of the final arithmetic average becomes deterministic, the remaining volatility exposure shrinks and so does the opportunity for posterior integration to change the point price. This effect is visible even in high-volatility, extreme-moneyness cells and provides a contract-specific reason why parameter uncertainty can matter early in an averaging problem but fade rapidly as fixings accumulate.
 
+Figure~\ref{fig:mechanism_map} condenses these mechanism results. Panel A shows posterior dispersion shrinking with historical information; Panels B and C show how the integration gap grows in high-curvature, weakly fixed states and then contracts as fixings accumulate; Panel D compares the realized PI--PM gap with the second-order approximation across the complete synthetic state map.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/publication/fig01_mechanism_map.pdf}
+\caption{Mechanism map for posterior integration. Panel A reports the mean posterior standard deviation of $\sigma$ against historical sample size for the simulated volatility levels. Panel B shows mean $|PI-PM|$ across moneyness and partial-fixing states for $n=21$, $\sigma_0=0.80$, and 126 days to maturity. Panel C traces the same integration gap against the fraction already fixed at $K/F=1.50$ for the four maturity horizons. Panel D compares the actual cell-level mean PI--PM gap with the second-order Taylor term in Equation~\eqref{eq:taylor_gap}; the correlation across synthetic cells is 0.9995. The figure uses only independently simulated histories and prices under the maintained one-factor risk-neutral map.}
+\label{fig:mechanism_map}
+\end{figure*}
+
 \subsection{Contract-consistent October-2026 baseline}
 
 The first completed WTI baseline uses the October-2026 APO expiry. Across 12 eligible valuation dates, the main sample contains 310 option-date observations. Five dates contain at least one positive-volume contract, producing a 136-observation positive-volume-date sample, while only six individual contract-date observations themselves report positive daily volume.
@@ -81,19 +90,22 @@ Posterior integration and the posterior-mean plug-in are extremely close in ever
 
 The sign of the model-to-market errors is equally important. All four historical-volatility rules underprice the option settlements on average. This common bias cannot be explained by choosing PI rather than PM because the two rules produce almost the same prices. It points instead toward a larger specification discrepancy.
 
-\subsection{The small PI--PM gap is numerically resolved}
-
-Because the empirical PI--PM differences are sub-cent, they were repriced at budgets far beyond the production baseline. The pseudo-random benchmark selects 18 difficult empirical contracts and uses 121 volatility nodes, 5 million paths per node, and four independent randomizations, totaling 43.56 billion path--volatility evaluations. An independent Sobol experiment uses eight targets, 121 nodes, $2^{21}$ paths, and eight randomized scrambles, totaling 16.24 billion path--volatility evaluations.
-
-The three pricing engines agree on the quantity of interest. For representative difficult October calls, PI--PM gaps near 0.00135 are reproduced by pseudo-Monte Carlo, randomized Sobol, and Curran conditioning to within a few $10^{-6}$. The direct Monte Carlo standard error of the gap is also of order $10^{-6}$. For example, the August 27, 2026 $K=98$ call has a pseudo-Monte Carlo gap of 0.0013683, Curran gap 0.0013690, and randomized-Sobol gap 0.0013717. The August 28 $K=98$ call gives 0.0013394, 0.0013402, and 0.0013393, respectively.
-
-Thus the empirical near-equivalence of PI and PM is not caused by insufficient Monte Carlo precision. Numerical approximation error is materially smaller than the already-small statistical integration effect.
+Because the empirical PI--PM differences are sub-cent, Section~\ref{sec:numerical_robustness} subjects them to high-precision pseudo-random Monte Carlo, randomized Sobol, and Curran benchmarks. The three engines recover the same integration gap to a scale far smaller than the gap itself, so the near-equivalence is not a simulation-noise artifact.
 
 \subsection{Historical versus APO-implied effective volatility}
 
 The September--October APO cross-section provides 402 contract-date observations for implied-volatility inversion. All 402 settlements can be mapped to a finite implied volatility under the maintained Curran-equivalent one-factor model. The median historical posterior mean is 0.4155. By contrast, the median date-level common volatility calibrated to the complete APO cross-section is 0.4577, a median difference of 0.0425. Contract-level implied volatilities have a still higher median of 0.4835 because the cross section contains pronounced strike variation.
 
 These values should not be interpreted as proof that the diffusion coefficient must differ between $\mathbb P$ and $\mathbb Q$. They are effective parameters required by the maintained pricing map. Their economic importance is that they expose a specification margin much larger than the PI--PM correction.
+
+Figure~\ref{fig:historical_vs_apo_iv} shows this distinction at both the date and strike levels. The historical posterior mean remains comparatively stable, whereas the model-equivalent APO-implied state moves with valuation date and exhibits clear strike variation.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/publication/fig02_historical_vs_apo_implied_volatility.pdf}
+\caption{Historical and APO-implied effective volatility in the September--October 2026 cross-section. Panels A and B compare the historical posterior mean $\sigma_P$ with the date-level common APO-implied $\sigma_Q$ for the September and October expiries. Panels C and D show contract-level APO-implied volatilities against log moneyness on August 26 and September 10, with horizontal references for the historical posterior mean and the date-level common APO-implied value. These implied volatilities are effective parameters under the maintained Curran-equivalent pricing map; they are not interpreted as unique structural diffusion coefficients.}
+\label{fig:historical_vs_apo_iv}
+\end{figure*}
 
 Leave-one-contract-out calibration provides a first cross-sectional check. Across 399 targets, a common APO-calibrated volatility reduces MAE from 0.3450 for the historical-volatility PI baseline to 0.1557 and RMSE from 0.4625 to 0.1900. The improvement is not uniform, however. The nine positive-volume observations move in the opposite direction in aggregate, and cross-option-type transfer is weaker. These failures are consistent with the fact that one scalar volatility cannot reproduce the observed strike structure and that call/put samples occupy different moneyness regions.
 
@@ -102,6 +114,8 @@ Leave-one-contract-out calibration provides a first cross-sectional check. Acros
 The stronger test predicts each target date using only implied-volatility observations from earlier dates. The extended experiment spans seven APO expiries from September 2026 through September 2028 and contains 2,381 holdout option-date observations. No same-day option settlement enters the fitted smile.
 
 The extension reveals a pronounced term structure in the effective volatility required by the maintained pricing map. Median date-level common $\sigma_Q$ is 0.4478, 0.4572, and 0.4444 for the September, October, and November 2026 expiries, respectively; it then declines to 0.3609 for March 2027, 0.3001 for September 2027, 0.2647 for March 2028, and 0.2416 for September 2028. Over the same valuation dates, the historical posterior mean remains near 0.416. These $\sigma_Q$ values are model-equivalent parameters, not structural volatility estimates; the maturity pattern can absorb risk premia, smile effects, omitted futures-curve dynamics, and liquidity or marking effects.
+
+Table~\ref{tab:forward_q} reports the corresponding strict-forward pricing errors by expiry.
 
 \begin{table*}[t]
 \centering
@@ -125,6 +139,15 @@ Pooled & 2,381 & 2.6187 & 0.1088 & 0.1075 & 3.4090 & 0.1725 & 0.1594\\
 \end{tabular}
 \end{table*}
 
+Figure~\ref{fig:forward_q_bootstrap} complements the point estimates with valuation-date cluster uncertainty. Negative differences indicate lower error for the prior-date option-implied specification than for historical-volatility posterior integration.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/publication/fig03_forward_q_cluster_bootstrap.pdf}
+\caption{Strict forward-in-time pricing improvement across the seven admitted APO expiries. Points report the difference between each prior-date APO-smile error and the historical posterior-integrated baseline on the same holdouts; Panel A uses MAE and Panel B RMSE. Horizontal bars are 95\% percentile intervals from 100,000 valuation-date cluster bootstrap resamples, preserving dependence among contracts observed on the same market date. Negative values favor the prior-date smile. Both the expanding and previous-day specifications use only implied-volatility observations dated strictly before each target date.}
+\label{fig:forward_q_bootstrap}
+\end{figure*}
+
 The result is not driven by one expiry. Both prior-date specifications improve MAE and RMSE relative to the historical-volatility baseline in every admitted expiry. In the pooled panel, the expanding smile lowers MAE by 95.8\% and RMSE by 94.9\%, while the previous-day smile lowers MAE by 95.9\% and RMSE by 95.3\%. Mean pricing error moves from +2.4030 under the historical-volatility baseline to $-0.0697$ and $-0.0352$, respectively. The sign change relative to the short-dated October baseline reflects the maturity structure above: a long-window historical volatility near 0.416 is below the effective APO level for some 2026 expiries but substantially above the effective level embedded in the 2027--2028 marks.
 
 Section~\ref{sec:robustness} reconstructs the physical return history contract by contract from official first-nearby CL settlements. On these exact 2,381 holdouts, the reconstructed historical baseline has MAE 2.6468 and RMSE 3.4451 rather than 2.6187 and 3.4090. The option-informed errors are unchanged, so the central forward comparison is insensitive to the continuous-contract return proxy.
@@ -145,16 +168,17 @@ This hierarchy does not eliminate a role for Bayesian parameter uncertainty. The
 
 The strict APO-forward experiment leaves one important identification concern: its risk-neutral state is inferred from the same option family later used as the pricing target. The vanilla-WTI experiment addresses that concern by constructing the volatility surface only from prior-date LO and CL settlements. The final strike expansion to 70--120 places 253 of the 280 matched October contract-dates inside the observed prior LO moneyness support, compared with only 60 observations under the initial narrow strike pilot. Only 50 of 620 external-surface prediction rows require any support clipping.
 
-Table~\ref{tab:external_lo} reports the exact no-clipping comparison. Historical-volatility posterior integration has MAE 0.4464 and RMSE 0.5562. The external previous-day LO surface lowers these to 0.1559 and 0.2599, while the expanding LO surface gives 0.1604 and 0.2858. The corresponding prior-date APO smiles are 0.1676/0.2686 and 0.1612/0.2912. Thus an independently observed vanilla-WTI risk-neutral surface reproduces the large pricing improvement previously obtained from the APO market itself.
+Table~\ref{tab:external_lo} reports the exact no-clipping comparison. Historical-volatility posterior integration has MAE/RMSE 0.4464/0.5562 with Yahoo \texttt{CL=F} and 0.4362/0.5466 with the reconstructed first-nearby history. The external previous-day LO surface lowers these errors to 0.1559/0.2599, while the expanding LO surface gives 0.1604/0.2858. The corresponding prior-date APO smiles are 0.1676/0.2686 and 0.1612/0.2912. Thus an independently observed vanilla-WTI risk-neutral surface reproduces the large pricing improvement previously obtained from the APO market itself, and that comparison is insensitive to the historical return-source construction.
 
 \begin{table*}[t]
 \centering
-\caption{Independent vanilla-WTI validation on the exact common-support sample. All methods are evaluated on the same 253 October-2026 APO contract-dates over 10 valuation dates. External LO surfaces use only vanilla observations dated strictly before the APO target date.}\label{tab:external_lo}
+\caption{Independent vanilla-WTI validation on the exact common-support sample. All methods are evaluated on the same 253 October-2026 APO contract-dates over 10 valuation dates. The two historical rows differ only in the physical-return source: Yahoo \texttt{CL=F} versus the contract-reconstructed first-nearby CL settlement series. External LO surfaces use only vanilla observations dated strictly before the APO target date.}\label{tab:external_lo}
 \begin{tabular}{lrrr}
 \toprule
 Method & $N$ & MAE & RMSE\\
 \midrule
-Historical-volatility posterior integration & 253 & 0.4464 & 0.5562\\
+Historical PI, Yahoo \texttt{CL=F} & 253 & 0.4464 & 0.5562\\
+Historical PI, reconstructed first-nearby & 253 & 0.4362 & 0.5466\\
 External LO surface, previous day & 253 & 0.1559 & 0.2599\\
 External LO surface, expanding & 253 & 0.1604 & 0.2858\\
 Prior-date APO smile, previous day & 253 & 0.1676 & 0.2686\\

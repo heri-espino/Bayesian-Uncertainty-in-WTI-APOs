@@ -48,6 +48,11 @@ def validate_layout() -> None:
         VENDOR_DIR / "WileyNJDv5.cls",
         VENDOR_DIR / "wileyNJD-Harvard.bst",
         VENDOR_DIR / "Fonts",
+        PUBLICATION_FIGURES_DIR / "fig01_mechanism_map.pdf",
+        PUBLICATION_FIGURES_DIR / "fig02_historical_vs_apo_implied_volatility.pdf",
+        PUBLICATION_FIGURES_DIR / "fig03_forward_q_cluster_bootstrap.pdf",
+        PUBLICATION_FIGURES_DIR / "fig04_numerical_identification.pdf",
+        PUBLICATION_FIGURES_DIR / "figure_manifest.json",
     ]
     missing = [path.relative_to(ROOT) for path in required if not path.exists()]
     if missing:
