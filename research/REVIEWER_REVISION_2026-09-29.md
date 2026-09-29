@@ -17,7 +17,7 @@ Source: user-supplied substantive review of the 23-page JFM manuscript.
 - [x] Clarify that LO fixing-count RMS aggregation is an effective scalar transfer, not an exact arithmetic-average variance identity.
 - [x] Add full covariance expression for arithmetic-average variance.
 - [x] Document 160-step American CRR production inversion.
-- [x] Make weighted-mean aggregation apply to surface variants as well as scalar LO variants.
+- [x] Add a true moment-matched LO-to-APO surface transfer using target fixing times, futures levels, and the common-factor covariance structure; retain weighted mean as an optional simple diagnostic.
 - [x] Remove decorative hierarchy display equations and state the comparison in prose.
 - [x] Replace computational-effort counts with achieved numerical precision in the main text.
 - [x] Qualify cluster-bootstrap improvement frequencies as resampling results conditional on observed dates.
@@ -46,7 +46,7 @@ For each eligible target contract, carries its latest strictly-prior contract IV
 ### LO transfer sensitivity
 `experiments/wti_external_vanilla_q_validation.py`
 
-`--aggregation weighted_mean` now changes both scalar and surface maturity aggregation, not only the scalar variant.
+The primary referee-facing sensitivity now uses `--surface-aggregation moment_matched`. It chooses the single APO volatility that matches the variance of the unresolved arithmetic-average component under the maintained one-common-factor representation. `weighted_mean` remains available as a simpler non-variance-matching diagnostic.
 
 ### LO CRR convergence
 `experiments/wti_lo_tree_convergence.py`
@@ -68,7 +68,7 @@ python -m scripts.run_reviewer_robustness
 
 - [ ] Run the reviewer robustness suite on the external machine.
 - [ ] Commit/push the new derived result directories.
-- [ ] Inspect exact recent-history, RMS, persistence, weighted-mean LO, tree-convergence, and surface-shape results.
+- [ ] Inspect exact recent-history, RMS, persistence, moment-matched LO, tree-convergence, and surface-shape results.
 - [ ] Integrate only supported numerical conclusions into Results/Robustness.
 - [ ] Recompile Wiley PDF and visually inspect the revised manuscript.
 - [ ] Complete corresponding-author email.
