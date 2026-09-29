@@ -652,15 +652,15 @@ def _forest_panel(
             "forward_q_expanding_smile",
             "Expanding smile",
             "o",
-            TOL_HIGH_CONTRAST["blue"],
-            "white",
+            FIG3_COLORS["expanding"],
+            FIG3_COLORS["expanding"],
         ),
         (
             "forward_q_previous_day_smile",
             "Previous-day smile",
             "s",
-            TOL_HIGH_CONTRAST["red"],
-            TOL_HIGH_CONTRAST["red"],
+            FIG3_COLORS["previous_day"],
+            FIG3_COLORS["previous_day"],
         ),
     ]
     expiry_order = [
@@ -678,7 +678,7 @@ def _forest_panel(
         & boot["apo_expiry"].isin(expiry_order)
     ].copy()
     y_base = np.arange(len(expiry_order), dtype=float)
-    offsets = (-0.10, 0.10)
+    offsets = (-0.11, 0.11)
 
     for offset, (experiment, label, marker, color, facecolor) in zip(
         offsets, experiments, strict=True
@@ -692,19 +692,24 @@ def _forest_panel(
         lo = group[f"delta_{metric}_ci025"].to_numpy(dtype=float)
         hi = group[f"delta_{metric}_ci975"].to_numpy(dtype=float)
         xerr = np.vstack([value - lo, hi - value])
+        marker_edge = (
+            NEUTRAL["dark"]
+            if experiment == "forward_q_expanding_smile"
+            else color
+        )
         ax.errorbar(
             value,
             y_base + offset,
             xerr=xerr,
             fmt=marker,
-            markersize=4.6,
+            markersize=5.8,
             color=color,
             ecolor=color,
             markerfacecolor=facecolor,
-            markeredgecolor=color,
-            markeredgewidth=0.85,
-            capsize=2.4,
-            linewidth=1.05,
+            markeredgecolor=marker_edge,
+            markeredgewidth=1.05,
+            capsize=3.0,
+            linewidth=1.35,
             label=label,
         )
 
@@ -718,9 +723,10 @@ def _forest_panel(
 
     ax.axvline(
         0.0,
-        linestyle="--",
-        linewidth=0.95,
-        color=NEUTRAL["mid"],
+        linestyle=":",
+        linewidth=1.25,
+        color=FIG3_COLORS["zero_line"],
+        zorder=0,
     )
     ax.set_yticks(y_base)
     ax.set_yticklabels(labels)
