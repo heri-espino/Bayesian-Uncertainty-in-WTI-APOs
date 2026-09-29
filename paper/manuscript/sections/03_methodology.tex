@@ -198,7 +198,7 @@ Equation~\eqref{eq:lo_effective_sigma} is an effective scalar transfer rule, not
  \right),
  \label{eq:average_variance_covariance}
 \end{equation}
-so fixing times, futures levels, and cross-maturity dependence all matter. The weighted-RMS rule is used only to map maturity-specific vanilla IVs back into the paper's maintained one-factor scalar-volatility pricing engine. A weighted-mean aggregation is retained as a sensitivity specification.
+so fixing times, futures levels, and cross-maturity dependence all matter. The weighted-RMS rule is used only to map maturity-specific vanilla IVs back into the paper's maintained one-factor scalar-volatility pricing engine. As a direct sensitivity check, an alternative scalar is chosen to match the variance of the unresolved arithmetic-average component under the same one-common-factor representation, using the target-date fixing times and futures levels in Equation~\eqref{eq:average_variance_covariance}. A fixing-weighted arithmetic mean is also available as a simpler diagnostic, but is not treated as a variance identity.
 
 The weights are derived from the target contract's actual fixing schedule rather than hard-coded. Predictions outside the prior observed LO moneyness support are clipped to the nearest support boundary and flagged; the main external comparison is repeated on the exact common-support subset with no clipping. No same-day APO implied volatility enters Equations~\eqref{eq:lo_iv}--\eqref{eq:lo_effective_sigma}.
 
