@@ -8,34 +8,38 @@ Table~\ref{tab:synthetic_pilot} reports the original repeated-sampling benchmark
 
 \begin{table*}[t]
 \centering
-\caption{Repeated-sampling pricing performance. The target is the risk-neutral price evaluated at the true volatility, not a posterior-generated target. The sigma-mode comparator is the marginal posterior mode of volatility rather than a joint MAP estimate.}\label{tab:synthetic_pilot}
-\begin{tabular}{llrrrr}
+\caption{Repeated-sampling point-pricing performance. The target is the risk-neutral price evaluated at the true volatility, not a posterior-generated target. The sigma-mode comparator is the marginal posterior mode of volatility rather than a joint MAP estimate. Posterior interval coverage is reported separately in the text because the interval procedure is common across point estimators.}\label{tab:synthetic_pilot}
+\begin{tabular}{llrrr}
 \toprule
-$N$ & Method & Bias & MAE & RMSE & 95\% coverage\\
+$N$ & Method & Bias & MAE & RMSE\\
 \midrule
-63 & Posterior-integrated & -0.0011 & 0.3543 & 0.4686 & 0.9500\\
-63 & Posterior-mean plug-in & -0.0012 & 0.3543 & 0.4687 & 0.9500\\
-63 & Sigma posterior-mode plug-in & -0.0919 & 0.3783 & 0.4867 & 0.9500\\
-63 & MLE plug-in & -0.0407 & 0.3576 & 0.4701 & 0.9500\\
+63 & Posterior-integrated & -0.0011 & 0.3543 & 0.4686\\
+63 & Posterior-mean plug-in & -0.0012 & 0.3543 & 0.4687\\
+63 & Sigma posterior-mode plug-in & -0.0919 & 0.3783 & 0.4867\\
+63 & MLE plug-in & -0.0407 & 0.3576 & 0.4701\\
 \addlinespace
-252 & Posterior-integrated & 0.0139 & 0.1988 & 0.2454 & 0.9625\\
-252 & Posterior-mean plug-in & 0.0139 & 0.1988 & 0.2454 & 0.9625\\
-252 & Sigma posterior-mode plug-in & -0.0212 & 0.1974 & 0.2446 & 0.9625\\
-252 & MLE plug-in & 0.0035 & 0.1992 & 0.2444 & 0.9625\\
+252 & Posterior-integrated & 0.0139 & 0.1988 & 0.2454\\
+252 & Posterior-mean plug-in & 0.0139 & 0.1988 & 0.2454\\
+252 & Sigma posterior-mode plug-in & -0.0212 & 0.1974 & 0.2446\\
+252 & MLE plug-in & 0.0035 & 0.1992 & 0.2444\\
 \addlinespace
-1260 & Posterior-integrated & -0.0048 & 0.1010 & 0.1243 & 0.9250\\
-1260 & Posterior-mean plug-in & -0.0048 & 0.1010 & 0.1243 & 0.9250\\
-1260 & Sigma posterior-mode plug-in & -0.0128 & 0.1060 & 0.1302 & 0.9250\\
-1260 & MLE plug-in & -0.0067 & 0.1013 & 0.1243 & 0.9250\\
+1260 & Posterior-integrated & -0.0048 & 0.1010 & 0.1243\\
+1260 & Posterior-mean plug-in & -0.0048 & 0.1010 & 0.1243\\
+1260 & Sigma posterior-mode plug-in & -0.0128 & 0.1060 & 0.1302\\
+1260 & MLE plug-in & -0.0067 & 0.1013 & 0.1243\\
 \bottomrule
 \end{tabular}
 \end{table*}
+
+The central 95\% posterior model-price interval has empirical coverage 0.9500, 0.9625, and 0.9250 for $N=63,252,$ and $1260$, respectively. These are properties of the posterior interval procedure and are not separate coverage statistics for each point estimator.
 
 The near equality of $\widehat C_{PI}$ and $\widehat C_{PM}$ is not a generic Bayesian result. It is a property of the posterior dispersion and pricing curvature in these particular states. The massive mechanism experiment makes this distinction explicit.
 
 \subsection{Where posterior integration matters}
 
-The mechanism map covers 175,000 independently simulated historical datasets and 168 WTI-like contract states, using 716.975 million posterior-grid evaluations. Across the complete experiment, the largest observed absolute PI--PM gap is 0.1384. The largest cell-level 99th percentile is 0.1271. These values are orders of magnitude larger than the roughly $10^{-3}$ gaps observed in the WTI baseline, so the empirical near-equivalence of PI and PM is not an artifact of a pricing rule that can never separate.
+The mechanism map covers 175,000 independently simulated historical datasets and 168 WTI-like contract states. Across the complete experiment, the largest observed absolute PI--PM gap is 0.1384. The largest cell-level 99th percentile is 0.1271. These values are orders of magnitude larger than the roughly $10^{-3}$ gaps observed in the WTI baseline, so the empirical near-equivalence of PI and PM is not an artifact of a pricing rule that can never separate.
+
+The mechanism map normalizes the WTI-like forward level to $100 per barrel, so the maximum gap of 0.1384 is $0.1384 per barrel. Under the WTI APO contract multiplier of 1,000 barrels and ordinary minimum price fluctuation of $0.01 per barrel, that scale corresponds to approximately $138.40 per contract, or 13.84 ordinary ticks \cite{cme_wti_apo_rule}. This conversion gives the synthetic separation an explicit economic scale; it does not imply that every state attaining the statistical maximum would be equally tradable.
 
 The adverse states have a clear economic structure. The largest gaps occur with short historical samples, high true volatility, long remaining horizons, little realized fixing, and strikes far from the expected average. For example, with $n=21$, $\sigma_0=0.80$, 126 days to maturity, no realized fixing, and moneyness 1.50, the mean PI--PM gap is 0.1176 and the 99th percentile is 0.1271. With $n=21$, $\sigma_0=0.50$, 252 days, no realized fixing, and moneyness 1.50, the mean gap is 0.1103 and the maximum observed gap is 0.1384.
 
@@ -60,7 +64,9 @@ Table~\ref{tab:oct26_empirical} reports pooled model-to-market errors. All rules
 
 \begin{table*}[t]
 \centering
-\caption{Production-budget October-2026 WTI APO pricing errors. Mean error is model price minus the Barchart end-of-day settlement field.}\label{tab:oct26_empirical}
+\caption{October-2026 WTI APO point-pricing errors and posterior price uncertainty. Mean error is model price minus the Barchart end-of-day settlement field. Panel B compares the nonlinear PI--PM mean-price correction with the width of the central 95\% posterior distribution of theoretical prices.}\label{tab:oct26_empirical}
+
+\textit{Panel A: point-pricing errors}\\[2pt]
 \begin{tabular}{llrrrr}
 \toprule
 Sample & Method & $N$ & Mean error & MAE & RMSE\\
@@ -84,9 +90,21 @@ Positive-volume contracts
  & MLE & 6 & -0.1414 & 0.1560 & 0.1882\\
 \bottomrule
 \end{tabular}
+
+\vspace{5pt}
+\textit{Panel B: mean-price correction versus posterior price dispersion}\\[2pt]
+\begin{tabular}{lrrrr}
+\toprule
+Sample & $N$ & Mean $|PI-PM|$ & Mean 95\% width & Width / gap\\
+\midrule
+All eligible dates & 310 & 0.000745 & 0.2733 & 366.7\\
+Positive-volume dates & 136 & 0.000802 & 0.2695 & 336.1\\
+Positive-volume contracts & 6 & 0.000591 & 0.3660 & 619.7\\
+\bottomrule
+\end{tabular}
 \end{table*}
 
-Posterior integration and the posterior-mean plug-in are extremely close in every sample. In the six positive-volume observations, average absolute $|\Delta_{PI,PM}|$ is approximately 0.00059 and the largest absolute gap is approximately 0.00100, compared with a posterior-integrated MAE of 0.1543. The relevant empirical conclusion is therefore not that posterior uncertainty vanishes, but that its nonlinear effect on the point price is small under the observed posterior and contract states.
+Posterior integration and the posterior-mean plug-in are extremely close in every sample, but Panel B shows why that fact must not be read as absence of parameter uncertainty. Across all 310 observations, the mean central 95\% posterior price-interval width is 0.2733, roughly 367 times the mean absolute PI--PM correction. Among the six positive-volume contracts, the corresponding ratio is about 620. The empirical conclusion is therefore specific: the nonlinear shift in the posterior \emph{mean} price is small under the observed posterior and contract states, while the posterior distribution of theoretical model prices remains visibly dispersed.
 
 The sign of the model-to-market errors is equally important. All four historical-volatility rules underprice the option settlements on average. This common bias cannot be explained by choosing PI rather than PM because the two rules produce almost the same prices. It points instead toward a larger specification discrepancy.
 
