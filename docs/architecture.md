@@ -117,6 +117,6 @@ experiment belongs in the package and must be added to the API documentation and
 5. Historical market marks are external benchmarks; posterior-generated prices cannot define truth.
 6. Data completeness, liquidity, figure ranking, and estimation-sample inclusion are separate concepts.
 7. Long runs remain reproducible/restartable through explicit seeds, manifests, hashes, and checkpoints.
-8. Source fields retain their provenance: Barchart `Latest` is a settlement proxy unless separately validated as an official CME settlement.
+8. Source fields retain their provenance: in the Barchart histories used by this project, `Latest` is the CME settlement field and is not interpreted as an intraday last trade.
 
 See `AGENTS.md` for the mandatory maintenance policy and {doc}`development` for the branch/PR lifecycle.
