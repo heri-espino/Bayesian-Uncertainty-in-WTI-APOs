@@ -90,22 +90,7 @@ Posterior integration and the posterior-mean plug-in are extremely close in ever
 
 The sign of the model-to-market errors is equally important. All four historical-volatility rules underprice the option settlements on average. This common bias cannot be explained by choosing PI rather than PM because the two rules produce almost the same prices. It points instead toward a larger specification discrepancy.
 
-\subsection{The small PI--PM gap is numerically resolved}
-
-Because the empirical PI--PM differences are sub-cent, they were repriced at budgets far beyond the production baseline. The pseudo-random benchmark selects 18 difficult empirical contracts and uses 121 volatility nodes, 5 million paths per node, and four independent randomizations, totaling 43.56 billion path--volatility evaluations. An independent Sobol experiment uses eight targets, 121 nodes, $2^{21}$ paths, and eight randomized scrambles, totaling 16.24 billion path--volatility evaluations.
-
-The three pricing engines agree on the quantity of interest. For representative difficult October calls, PI--PM gaps near 0.00135 are reproduced by pseudo-Monte Carlo, randomized Sobol, and Curran conditioning to within a few $10^{-6}$. The direct Monte Carlo standard error of the gap is also of order $10^{-6}$. For example, the August 27, 2026 $K=98$ call has a pseudo-Monte Carlo gap of 0.0013683, Curran gap 0.0013690, and randomized-Sobol gap 0.0013717. The August 28 $K=98$ call gives 0.0013394, 0.0013402, and 0.0013393, respectively.
-
-Figure~\ref{fig:numerical_identification} makes the numerical comparison explicit on the eight difficult empirical targets common to all three high-precision engines. The agreement concerns the PI--PM difference itself rather than equality of the underlying point-price approximations.
-
-\begin{figure*}[t]
-\centering
-\includegraphics[width=\textwidth]{figures/publication/fig04_numerical_identification.pdf}
-\caption{Numerical identification of the posterior-integration effect on eight difficult WTI APO targets. Panel A compares the PI--PM price difference from high-precision pseudo-random Monte Carlo, Curran conditioning, and independently randomized Sobol pricing; error bars show 95\% Monte Carlo or scramble-based intervals where applicable. Panel B reports deviations of the stochastic estimates from the deterministic Curran gap in units of $10^{-6}$ price units. Agreement at this scale shows that the observed sub-cent PI--PM differences are resolved well above numerical noise, even though the three engines need not produce identical absolute option prices.}
-\label{fig:numerical_identification}
-\end{figure*}
-
-Thus the empirical near-equivalence of PI and PM is not caused by insufficient Monte Carlo precision. Numerical approximation error is materially smaller than the already-small statistical integration effect.
+Because the empirical PI--PM differences are sub-cent, Section~\ref{sec:numerical_robustness} subjects them to high-precision pseudo-random Monte Carlo, randomized Sobol, and Curran benchmarks. The three engines recover the same integration gap to a scale far smaller than the gap itself, so the near-equivalence is not a simulation-noise artifact.
 
 \subsection{Historical versus APO-implied effective volatility}
 
