@@ -23,7 +23,7 @@ from experiments.wti_forward_q_validation import _price_targets, _run_lookup
 
 
 DEFAULT_APO_IV = Path(
-    "results/analysis/wti_apo_implied_volatility/apo_contract_implied_volatility.csv"
+    "results/analysis/wti_extended_forward/apo_implied_volatility/apo_contract_implied_volatility.csv"
 )
 DEFAULT_FORWARD = Path(
     "results/analysis/wti_extended_forward/forward_q_validation/forward_q_predictions.csv"
