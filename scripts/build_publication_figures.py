@@ -92,31 +92,30 @@ MECHANISM_MONEYNESS = 1.50
 MECHANISM_HEATMAP_MATURITY_DAYS = 126
 
 PALETTE = {
-    "ink": "#17324D",
-    "teal": "#2A6F97",
-    "green": "#3A7D44",
-    "gold": "#C28F2C",
-    "wine": "#8E4B5B",
-    "purple": "#6C5B9A",
-    "charcoal": "#3B3F46",
-    "midgray": "#7F8790",
-    "light_gray": "#D9DDE3",
-    "very_light_gray": "#F4F6F8",
+    "black": "#111111",
+    "dark": "#3A3A3A",
+    "mid": "#6B6B6B",
+    "light": "#A0A0A0",
+    "very_light": "#D9D9D9",
+    "grid": "#D0D0D0",
 }
 
-SIGMA_COLORS = {
-    0.10: PALETTE["green"],
-    0.20: PALETTE["teal"],
-    0.35: PALETTE["ink"],
-    0.50: PALETTE["purple"],
-    0.80: PALETTE["wine"],
+# Every publication figure must remain interpretable when printed or
+# photocopied in grayscale. Series differ by marker, line pattern, and marker
+# fill; grayscale tone is only a redundant cue.
+SIGMA_STYLES = {
+    0.10: {"color": PALETTE["black"], "linestyle": "-", "marker": "o", "filled": False},
+    0.20: {"color": PALETTE["dark"], "linestyle": (0, (5, 2)), "marker": "s", "filled": False},
+    0.35: {"color": PALETTE["mid"], "linestyle": (0, (1, 1)), "marker": "^", "filled": False},
+    0.50: {"color": PALETTE["dark"], "linestyle": (0, (3, 1, 1, 1)), "marker": "D", "filled": True},
+    0.80: {"color": PALETTE["black"], "linestyle": (0, (7, 2, 1, 2)), "marker": "v", "filled": True},
 }
 
 MATURITY_STYLES = {
-    21: (PALETTE["green"], "o"),
-    63: (PALETTE["teal"], "s"),
-    126: (PALETTE["ink"], "^"),
-    252: (PALETTE["wine"], "D"),
+    21: {"color": PALETTE["black"], "linestyle": "-", "marker": "o", "filled": False},
+    63: {"color": PALETTE["dark"], "linestyle": (0, (5, 2)), "marker": "s", "filled": False},
+    126: {"color": PALETTE["mid"], "linestyle": (0, (1, 1)), "marker": "^", "filled": False},
+    252: {"color": PALETTE["black"], "linestyle": (0, (3, 1, 1, 1)), "marker": "D", "filled": True},
 }
 
 
@@ -182,13 +181,13 @@ def _configure_matplotlib(*, force_no_tex: bool = False) -> str:
         "ps.fonttype": 42,
         "axes.spines.top": False,
         "axes.spines.right": False,
-        "axes.linewidth": 0.75,
-        "axes.edgecolor": PALETTE["charcoal"],
+        "axes.linewidth": 0.85,
+        "axes.edgecolor": PALETTE["dark"],
         "axes.facecolor": "white",
         "axes.axisbelow": True,
         "axes.grid": True,
-        "grid.color": PALETTE["light_gray"],
-        "grid.linewidth": 0.55,
+        "grid.color": PALETTE["grid"],
+        "grid.linewidth": 0.50,
         "grid.alpha": 0.72,
         "xtick.direction": "out",
         "ytick.direction": "out",
@@ -196,8 +195,8 @@ def _configure_matplotlib(*, force_no_tex: bool = False) -> str:
         "ytick.major.size": 3.0,
         "xtick.major.width": 0.7,
         "ytick.major.width": 0.7,
-        "lines.linewidth": 1.45,
-        "lines.markersize": 4.0,
+        "lines.linewidth": 1.60,
+        "lines.markersize": 4.5,
         "legend.frameon": False,
         "legend.borderaxespad": 0.25,
         "legend.handlelength": 1.8,
@@ -290,7 +289,7 @@ def _panel_label(ax: plt.Axes, label: str) -> None:
         fontweight="bold",
         va="bottom",
         ha="left",
-        color=PALETTE["charcoal"],
+        color=PALETTE["dark"],
     )
 
 
@@ -323,11 +322,20 @@ def build_figure_1(
     for sigma_true, group in posterior.groupby("sigma_true", sort=True):
         group = group.sort_values("n_obs")
         sigma_key = round(float(sigma_true), 2)
+        style = SIGMA_STYLES.get(
+            sigma_key,
+            {"color": PALETTE["dark"], "linestyle": "-", "marker": "o", "filled": False},
+        )
+        marker_face = style["color"] if style["filled"] else "white"
         ax_a.plot(
             group["n_obs"],
             group["posterior_sigma_sd_mean"],
-            marker="o",
-            color=SIGMA_COLORS.get(sigma_key, PALETTE["charcoal"]),
+            marker=style["marker"],
+            linestyle=style["linestyle"],
+            color=style["color"],
+            markerfacecolor=marker_face,
+            markeredgecolor=style["color"],
+            markeredgewidth=0.85,
             label=fr"$\sigma_0={sigma_true:.2f}$",
         )
     ax_a.set_xscale("log")
@@ -354,7 +362,7 @@ def build_figure_1(
         origin="lower",
         aspect="auto",
         interpolation="nearest",
-        cmap="magma",
+        cmap="Greys",
         rasterized=True,
     )
     ax_b.grid(False)
@@ -379,14 +387,20 @@ def build_figure_1(
     ].copy()
     for maturity, group in curve.groupby("maturity_days", sort=True):
         group = group.sort_values("fraction_fixed")
-        color, marker = MATURITY_STYLES.get(
-            int(maturity), (PALETTE["charcoal"], "o")
+        style = MATURITY_STYLES.get(
+            int(maturity),
+            {"color": PALETTE["dark"], "linestyle": "-", "marker": "o", "filled": False},
         )
+        marker_face = style["color"] if style["filled"] else "white"
         ax_c.plot(
             group["fraction_fixed"],
             group["mean_abs_pi_minus_pm"],
-            marker=marker,
-            color=color,
+            marker=style["marker"],
+            linestyle=style["linestyle"],
+            color=style["color"],
+            markerfacecolor=marker_face,
+            markeredgecolor=style["color"],
+            markeredgewidth=0.85,
             label=f"{int(maturity)} days",
         )
     ax_c.set_xlabel("Fraction already fixed")
@@ -419,7 +433,7 @@ def build_figure_1(
         [lo, hi],
         linestyle="--",
         linewidth=1.15,
-        color=PALETTE["wine"],
+        color=PALETTE["black"],
     )
     corr = float(np.corrcoef(x[finite], y[finite])[0, 1])
     ax_d.set_xlabel(
@@ -460,14 +474,22 @@ def _plot_sigma_timeseries(ax: plt.Axes, by_date: pd.DataFrame, expiry: str) -> 
         group["valuation_date"],
         group["sigma_p_posterior_mean"],
         marker="o",
-        color=PALETTE["ink"],
+        linestyle="-",
+        color=PALETTE["black"],
+        markerfacecolor="white",
+        markeredgecolor=PALETTE["black"],
+        markeredgewidth=0.85,
         label=r"Historical posterior mean $\sigma_P$",
     )
     ax.plot(
         group["valuation_date"],
         group["full_sample_sigma_q"],
         marker="s",
-        color=PALETTE["gold"],
+        linestyle="--",
+        color=PALETTE["dark"],
+        markerfacecolor=PALETTE["dark"],
+        markeredgecolor=PALETTE["dark"],
+        markeredgewidth=0.85,
         label=r"APO-implied common $\sigma_Q$",
     )
     ax.set_ylabel("Annualized volatility")
@@ -486,10 +508,10 @@ def _plot_smile(
     if day.empty:
         raise ValueError(f"No contract-level implied volatilities for {date.date()}")
     styles = {
-        "call": ("o", PALETTE["ink"], "Calls"),
-        "put": ("s", PALETTE["wine"], "Puts"),
+        "call": ("o", PALETTE["black"], "Calls", "white"),
+        "put": ("s", PALETTE["dark"], "Puts", PALETTE["dark"]),
     }
-    for option_type, (marker, color, label) in styles.items():
+    for option_type, (marker, color, label, facecolor) in styles.items():
         group = day.loc[day["option_type"].eq(option_type)].sort_values("log_moneyness")
         if group.empty:
             continue
@@ -497,11 +519,11 @@ def _plot_smile(
             group["log_moneyness"],
             group["apo_implied_sigma_q"],
             marker=marker,
-            s=27,
-            alpha=0.92,
-            color=color,
-            edgecolor="white",
-            linewidth=0.4,
+            s=30,
+            alpha=1.0,
+            facecolors=facecolor,
+            edgecolors=color,
+            linewidth=0.85,
             label=label,
             rasterized=True,
         )
@@ -515,14 +537,14 @@ def _plot_smile(
         sigma_p,
         linestyle=":",
         linewidth=1.15,
-        color=PALETTE["midgray"],
+        color=PALETTE["mid"],
         label=r"Historical $\sigma_P$",
     )
     ax.axhline(
         sigma_q,
         linestyle="--",
         linewidth=1.15,
-        color=PALETTE["gold"],
+        color=PALETTE["dark"],
         label=r"Common APO $\sigma_Q$",
     )
     ax.set_xlabel(r"Log moneyness $\log(K/\widehat A^Q)$")
@@ -582,8 +604,8 @@ def _forest_panel(
 ) -> None:
     """Plot forward-minus-historical error differences by APO expiry."""
     experiments = [
-        ("forward_q_expanding_smile", "Expanding smile", "o", PALETTE["teal"]),
-        ("forward_q_previous_day_smile", "Previous-day smile", "s", PALETTE["purple"]),
+        ("forward_q_expanding_smile", "Expanding smile", "o", PALETTE["black"], "white"),
+        ("forward_q_previous_day_smile", "Previous-day smile", "s", PALETTE["dark"], PALETTE["dark"]),
     ]
     expiry_order = [
         "2026-09",
@@ -602,7 +624,7 @@ def _forest_panel(
     y_base = np.arange(len(expiry_order), dtype=float)
     offsets = (-0.10, 0.10)
 
-    for offset, (experiment, label, marker, color) in zip(
+    for offset, (experiment, label, marker, color, facecolor) in zip(
         offsets, experiments, strict=True
     ):
         group = (
@@ -622,6 +644,9 @@ def _forest_panel(
             markersize=4.6,
             color=color,
             ecolor=color,
+            markerfacecolor=facecolor,
+            markeredgecolor=color,
+            markeredgewidth=0.85,
             capsize=2.4,
             linewidth=1.05,
             label=label,
@@ -639,7 +664,7 @@ def _forest_panel(
         0.0,
         linestyle="--",
         linewidth=0.95,
-        color=PALETTE["midgray"],
+        color=PALETTE["mid"],
     )
     ax.set_yticks(y_base)
     ax.set_yticklabels(labels)
@@ -715,30 +740,12 @@ def build_figure_4(
     ax_top, ax_bottom = axes
 
     values = [
-        (
-            "Pseudo-MC",
-            matched["mc_pi_minus_pm"].to_numpy(dtype=float),
-            matched["mc_pi_minus_pm_mcse"].to_numpy(dtype=float),
-            "o",
-            PALETTE["ink"],
-        ),
-        (
-            "Curran",
-            matched["curran_pi_minus_pm_mc"].to_numpy(dtype=float),
-            np.zeros(len(matched)),
-            "D",
-            PALETTE["gold"],
-        ),
-        (
-            "Randomized Sobol",
-            matched["qmc_pi_minus_pm"].to_numpy(dtype=float),
-            matched["qmc_gap_mcse"].to_numpy(dtype=float),
-            "s",
-            PALETTE["wine"],
-        ),
+        ("Pseudo-MC", matched["mc_pi_minus_pm"].to_numpy(dtype=float), matched["mc_pi_minus_pm_mcse"].to_numpy(dtype=float), "o", PALETTE["black"], "white"),
+        ("Curran", matched["curran_pi_minus_pm_mc"].to_numpy(dtype=float), np.zeros(len(matched)), "D", PALETTE["dark"], PALETTE["dark"]),
+        ("Randomized Sobol", matched["qmc_pi_minus_pm"].to_numpy(dtype=float), matched["qmc_gap_mcse"].to_numpy(dtype=float), "s", PALETTE["mid"], "white"),
     ]
 
-    for offset, (label, value, se, marker, color) in zip(
+    for offset, (label, value, se, marker, color, facecolor) in zip(
         offsets, values, strict=True
     ):
         ax_top.errorbar(
@@ -750,6 +757,9 @@ def build_figure_4(
             linewidth=1.0,
             color=color,
             ecolor=color,
+            markerfacecolor=facecolor,
+            markeredgecolor=color,
+            markeredgewidth=0.85,
             capsize=2,
             label=label,
         )
@@ -760,22 +770,10 @@ def build_figure_4(
 
     curran = matched["curran_pi_minus_pm_mc"].to_numpy(dtype=float)
     deviations = [
-        (
-            "Pseudo-MC minus Curran",
-            1e6 * (matched["mc_pi_minus_pm"].to_numpy(dtype=float) - curran),
-            1e6 * matched["mc_pi_minus_pm_mcse"].to_numpy(dtype=float),
-            "o",
-            PALETTE["ink"],
-        ),
-        (
-            "Sobol minus Curran",
-            1e6 * (matched["qmc_pi_minus_pm"].to_numpy(dtype=float) - curran),
-            1e6 * matched["qmc_gap_mcse"].to_numpy(dtype=float),
-            "s",
-            PALETTE["wine"],
-        ),
+        ("Pseudo-MC minus Curran", 1e6 * (matched["mc_pi_minus_pm"].to_numpy(dtype=float) - curran), 1e6 * matched["mc_pi_minus_pm_mcse"].to_numpy(dtype=float), "o", PALETTE["black"], "white"),
+        ("Sobol minus Curran", 1e6 * (matched["qmc_pi_minus_pm"].to_numpy(dtype=float) - curran), 1e6 * matched["qmc_gap_mcse"].to_numpy(dtype=float), "s", PALETTE["mid"], "white"),
     ]
-    for offset, (label, value, se, marker, color) in zip(
+    for offset, (label, value, se, marker, color, facecolor) in zip(
         (-0.09, 0.09), deviations, strict=True
     ):
         ax_bottom.errorbar(
@@ -787,6 +785,9 @@ def build_figure_4(
             linewidth=1.0,
             color=color,
             ecolor=color,
+            markerfacecolor=facecolor,
+            markeredgecolor=color,
+            markeredgewidth=0.85,
             capsize=2,
             label=label,
         )
@@ -794,7 +795,7 @@ def build_figure_4(
         0.0,
         linestyle="--",
         linewidth=0.95,
-        color=PALETTE["midgray"],
+        color=PALETTE["mid"],
     )
     ax_bottom.set_ylabel(r"Difference from Curran ($\times 10^6$)")
     ax_bottom.set_xlabel("Empirical target")
@@ -871,6 +872,8 @@ def main() -> None:
         "hybrid_pdf": True,
         "raster_dpi": 600,
         "palette": PALETTE,
+        "print_mode": "grayscale-safe",
+        "style_encoding": "marker + line pattern + marker fill + redundant grayscale tone",
         "figures": {},
     }
 
