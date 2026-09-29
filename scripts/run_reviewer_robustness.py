@@ -57,6 +57,8 @@ def main() -> None:
             "weighted_mean",
             "--output-root",
             "results/analysis/wti_external_vanilla_q_validation_weighted_mean",
+            "--apo-forward-path",
+            "results/analysis/wti_extended_forward/forward_q_validation/forward_q_predictions.csv",
             "--force",
         ]
     )
