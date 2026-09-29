@@ -7,6 +7,7 @@ import pytest
 from experiments.wti_external_vanilla_q_validation import (
     _effective_sigma,
     _fit_surface_models,
+    _moment_matched_sigma,
     _prior_sigma,
     _surface_sigma_targets,
 )
@@ -341,3 +342,58 @@ def test_surface_prediction_supports_weighted_mean_aggregation() -> None:
     )
     assert mean[0] == pytest.approx(0.25 * 0.40 + 0.75 * 0.50, abs=1e-4)
     assert rms[0] > mean[0]
+
+
+
+def test_moment_matched_sigma_recovers_common_sigma() -> None:
+    state = pd.DataFrame(
+        {
+            "underlying": ["CLX6", "CLX6", "CLZ6", "CLZ6"],
+            "settlement": [80.0, 80.0, 79.0, 79.0],
+            "time": [0.05, 0.10, 0.15, 0.20],
+        }
+    )
+    sigma = _moment_matched_sigma(
+        state,
+        {"CLX6": 0.45, "CLZ6": 0.45},
+    )
+    assert sigma == pytest.approx(0.45, rel=1e-10, abs=1e-10)
+
+
+def test_surface_prediction_supports_moment_matched_aggregation() -> None:
+    panel = pd.DataFrame(
+        {
+            "reference_date": ["2026-08-24"] * 20,
+            "reference_ts": [pd.Timestamp("2026-08-24")] * 20,
+            "underlying": ["CLX6"] * 10 + ["CLZ6"] * 10,
+            "option_type": ["call"] * 20,
+            "log_moneyness": [-0.04, -0.03, -0.02, -0.01, 0.0, 0.01, 0.02, 0.03, 0.035, 0.04] * 2,
+            "implied_volatility": [0.40] * 10 + [0.50] * 10,
+            "iv_status": ["ok"] * 20,
+        }
+    )
+    models, supports, _, _ = _fit_surface_models(
+        panel,
+        target_date=pd.Timestamp("2026-08-25"),
+        half_life_days=None,
+        ridge=1e-8,
+    )
+    target = pd.DataFrame({"strike": [90.0], "option_type": ["call"]})
+    state = pd.DataFrame(
+        {
+            "underlying": ["CLX6", "CLX6", "CLZ6", "CLZ6"],
+            "settlement": [90.0, 90.0, 89.0, 89.0],
+            "time": [0.05, 0.10, 0.15, 0.20],
+        }
+    )
+    sigma, clipped = _surface_sigma_targets(
+        target,
+        models=models,
+        supports=supports,
+        target_futures={"CLX6": 90.0, "CLZ6": 90.0},
+        fixing_weights={"CLX6": 0.5, "CLZ6": 0.5},
+        aggregation="moment_matched",
+        fixing_state=state,
+    )
+    assert 0.40 < sigma[0] < 0.50
+    assert clipped[0] == 0
