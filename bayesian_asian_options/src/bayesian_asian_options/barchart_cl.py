@@ -5,10 +5,10 @@ contract under ``data/csv/CL``.  Files contain the Barchart fields ``Time``,
 ``Open``, ``High``, ``Low``, ``Latest``, ``Change``, ``%Change``, ``Volume``
 and ``Open Int``.
 
-``Latest`` is retained as the source field and is used as an end-of-day futures
-price / settlement proxy for the empirical pilot.  It is not silently relabeled
-as an official CME settlement.  Exact contract last-trade dates are supplied
-through a separate versioned reference table.
+``Latest`` is retained as the source field.  In the Barchart histories used by
+this project it is the CME settlement field and is not interpreted as an
+intraday last trade.  Exact contract last-trade dates are supplied through a
+separate versioned reference table.
 """
 
 from __future__ import annotations
