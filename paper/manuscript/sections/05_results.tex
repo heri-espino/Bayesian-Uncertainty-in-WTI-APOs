@@ -156,9 +156,11 @@ Liquidity restrictions preserve the central result. The 62 positive-volume holdo
 
 The forward result changes the interpretation of the empirical exercise. The observed pricing errors are not primarily a consequence of failing to integrate the historical volatility posterior. Information contained in the option-implied volatility surface, even when restricted to earlier dates, explains a much larger share of the subsequent pricing discrepancy. The empirical hierarchy is therefore
 \begin{equation}
- \text{posterior-integration refinement}
- \ll
- \text{historical-versus-APO-implied volatility specification}
+\begin{aligned}
+\text{posterior-integration refinement}
+&\ll \text{historical-versus-APO-implied}\\
+&\quad \text{volatility specification}
+\end{aligned}
 \end{equation}
 across the observed maturity range.
 
@@ -193,10 +195,12 @@ The external and APO-implied surfaces are much closer to one another. Previous-d
 
 The empirical hierarchy can therefore be stated more cleanly as
 \begin{equation}
- \text{posterior-integration refinement}
- \ll
- \text{historical-versus-option-informed volatility specification},
- \label{eq:empirical_hierarchy}
+\begin{aligned}
+\text{posterior-integration refinement}
+&\ll \text{historical-versus-option-informed}\\
+&\quad \text{volatility specification},
+\end{aligned}
+\label{eq:empirical_hierarchy}
 \end{equation}
 where the second margin is now supported by both within-family forward APO evidence and independent cross-instrument LO evidence. Bayesian integration propagates uncertainty conditional on the maintained pricing model; it does not compensate for a volatility state that is empirically misaligned with the option market.
 
