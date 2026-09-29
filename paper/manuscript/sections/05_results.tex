@@ -172,15 +172,7 @@ Section~\ref{sec:robustness} reconstructs the physical return history contract b
 
 Liquidity restrictions preserve the central result. The 62 positive-volume holdouts span 13 valuation-date clusters: historical PI has MAE 1.6340 and RMSE 2.3391, compared with 0.1003 and 0.1358 for the expanding smile and 0.1084 and 0.1333 for the previous-day smile. At open interest of at least 100, the corresponding forward MAEs are approximately 0.106--0.107 versus 1.990 for the historical baseline. The long-dated positive-volume counts remain sparse within individual expiries, however, so the strongest statement concerns the pooled transaction-active sample and the much denser open-interest-filtered cross sections.
 
-The forward result changes the interpretation of the empirical exercise. The observed pricing errors are not primarily a consequence of failing to integrate the historical volatility posterior. Information contained in the option-implied volatility surface, even when restricted to earlier dates, explains a much larger share of the subsequent pricing discrepancy. The empirical hierarchy is therefore
-\begin{equation}
-\begin{aligned}
-\text{posterior-integration refinement}
-&\ll \text{historical-versus-APO-implied}\\
-&\quad \text{volatility specification}
-\end{aligned}
-\end{equation}
-across the observed maturity range.
+The forward result changes the interpretation of the empirical exercise. The observed pricing errors are not primarily a consequence of failing to integrate the historical volatility posterior. Information contained in the prior-date APO volatility surface explains a much larger share of the subsequent pricing discrepancy than the PI--PM correction across the observed maturity range.
 
 This hierarchy does not eliminate a role for Bayesian parameter uncertainty. The mechanism map shows exactly where it can become first-order. Rather, the market experiment identifies the dominant margin in the available WTI data: improving the volatility state used by the pricing model matters substantially more than integrating a relatively concentrated historical posterior through a smooth local pricing map.
 
@@ -211,14 +203,5 @@ The valuation-date cluster bootstrap confirms that the external improvement over
 
 The external and APO-implied surfaces are much closer to one another. Previous-day LO has an MAE difference of $-0.0117$ relative to the previous-day APO smile, with a 95\% interval of $[-0.0251,-0.0001]$; its RMSE difference is $-0.0087$, with interval $[-0.0149,0.0002]$. For the expanding specifications, both the MAE and RMSE intervals include zero. These results do not establish global superiority of vanilla LO over APO-implied volatility. Their more important implication is that the pricing gain associated with an option-informed risk-neutral state survives when the volatility source is moved outside the APO family.
 
-The empirical hierarchy can therefore be stated more cleanly as
-\begin{equation}
-\begin{aligned}
-\text{posterior-integration refinement}
-&\ll \text{historical-versus-option-informed}\\
-&\quad \text{volatility specification},
-\end{aligned}
-\label{eq:empirical_hierarchy}
-\end{equation}
-where the second margin is now supported by both within-family forward APO evidence and independent cross-instrument LO evidence. Bayesian integration propagates uncertainty conditional on the maintained pricing model; it does not compensate for a volatility state that is empirically misaligned with the option market.
+The independent LO evidence leads to the same narrower comparison: the point-price effect of integrating the maintained historical-volatility posterior is much smaller than the pricing difference obtained from recent option-informed volatility inputs. This statement is supported by both within-family forward APO evidence and cross-instrument LO evidence. Bayesian integration propagates uncertainty conditional on the maintained model; it does not by itself resolve a volatility input that is empirically misaligned with option settlements.
 
