@@ -514,10 +514,10 @@ def _plot_sigma_timeseries(ax: plt.Axes, by_date: pd.DataFrame, expiry: str) -> 
         group["sigma_p_posterior_mean"],
         marker="o",
         linestyle="-",
-        color=TOL_HIGH_CONTRAST["blue"],
+        color=FIG2_COLORS["historical"],
         markerfacecolor="white",
-        markeredgecolor=TOL_HIGH_CONTRAST["blue"],
-        markeredgewidth=0.85,
+        markeredgecolor=FIG2_COLORS["historical"],
+        markeredgewidth=0.9,
         label=r"Historical posterior mean $\sigma_P$",
     )
     ax.plot(
@@ -525,10 +525,10 @@ def _plot_sigma_timeseries(ax: plt.Axes, by_date: pd.DataFrame, expiry: str) -> 
         group["full_sample_sigma_q"],
         marker="s",
         linestyle="--",
-        color=TOL_HIGH_CONTRAST["ochre"],
-        markerfacecolor=TOL_HIGH_CONTRAST["ochre"],
-        markeredgecolor=TOL_HIGH_CONTRAST["ochre"],
-        markeredgewidth=0.85,
+        color=FIG2_COLORS["apo_common"],
+        markerfacecolor=FIG2_COLORS["apo_common"],
+        markeredgecolor=FIG2_COLORS["apo_common"],
+        markeredgewidth=0.9,
         label=r"APO-implied common $\sigma_Q$",
     )
     ax.set_ylabel("Annualized volatility")
@@ -547,12 +547,12 @@ def _plot_smile(
     if day.empty:
         raise ValueError(f"No contract-level implied volatilities for {date.date()}")
     styles = {
-        "call": ("o", TOL_HIGH_CONTRAST["blue"], "Calls", "white"),
+        "call": ("o", FIG2_COLORS["calls"], "Calls", "white"),
         "put": (
             "s",
-            TOL_HIGH_CONTRAST["red"],
+            FIG2_COLORS["puts"],
             "Puts",
-            TOL_HIGH_CONTRAST["red"],
+            FIG2_COLORS["puts"],
         ),
     }
     for option_type, (marker, color, label, facecolor) in styles.items():
@@ -563,11 +563,11 @@ def _plot_smile(
             group["log_moneyness"],
             group["apo_implied_sigma_q"],
             marker=marker,
-            s=30,
+            s=32,
             alpha=1.0,
             facecolors=facecolor,
             edgecolors=color,
-            linewidth=0.85,
+            linewidth=0.9,
             label=label,
             rasterized=True,
         )
@@ -579,16 +579,16 @@ def _plot_smile(
     sigma_q = float(date_summary.iloc[0]["full_sample_sigma_q"])
     ax.axhline(
         sigma_p,
-        linestyle=":",
-        linewidth=1.15,
-        color=TOL_HIGH_CONTRAST["blue"],
+        linestyle="-",
+        linewidth=1.25,
+        color=FIG2_COLORS["historical"],
         label=r"Historical $\sigma_P$",
     )
     ax.axhline(
         sigma_q,
         linestyle="--",
-        linewidth=1.15,
-        color=TOL_HIGH_CONTRAST["ochre"],
+        linewidth=1.25,
+        color=FIG2_COLORS["apo_common"],
         label=r"Common APO $\sigma_Q$",
     )
     ax.set_xlabel(r"Log moneyness $\log(K/\widehat A^Q)$")
