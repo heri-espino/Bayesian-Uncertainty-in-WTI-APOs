@@ -69,7 +69,7 @@ def main() -> None:
 
     print("\nReviewer robustness checks complete.", flush=True)
     print(
-        "Commit the four result directories only after inspecting the summaries.",
+        "Commit the five result groups only after inspecting the summaries.",
         flush=True,
     )
 
