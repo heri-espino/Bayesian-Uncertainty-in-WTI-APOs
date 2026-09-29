@@ -29,7 +29,7 @@ The large mechanism experiment is designed around Equation~\eqref{eq:taylor_gap}
 \end{align}
 with 5,000 independently generated histories in each $(n,\sigma_0)$ cell, for 175,000 synthetic datasets. The contract layer crosses four maturities (21, 63, 126, and 252 days), seven moneyness values from 0.60 to 1.50, and six partial-fixing states from zero to nearly the full averaging window.
 
-Because the Gaussian prior on $\mu$ is conjugate to the likelihood conditional on $\sigma$, $\mu$ is integrated analytically. The remaining posterior in $\sigma$ is evaluated on a 4,097-node grid, producing 716.975 million posterior-grid evaluations. This removes random-walk Metropolis error from the mechanism map while retaining exactly the baseline Gaussian statistical model. For each history and contract state the experiment computes $\Delta_{PI,PM}$, posterior variance of $\sigma$, local price curvature, and the Taylor approximation in Equation~\eqref{eq:taylor_gap}. The purpose is not merely to show that a gap can be made large, but to characterize the state variables that make posterior integration economically relevant.
+Because the Gaussian prior on $\mu$ is conjugate to the likelihood conditional on $\sigma$, $\mu$ is integrated analytically. The remaining posterior in $\sigma$ is evaluated on a dense deterministic grid. This removes random-walk Metropolis error from the mechanism map while retaining exactly the baseline Gaussian statistical model. For each history and contract state the experiment computes $\Delta_{PI,PM}$, posterior variance of $\sigma$, local price curvature, and the Taylor approximation in Equation~\eqref{eq:taylor_gap}. The purpose is not merely to show that a gap can be made large, but to characterize the state variables that make posterior integration economically relevant.
 
 \subsection{Empirical option panel}
 
@@ -93,9 +93,9 @@ with degrees of freedom inferred jointly with $\mu$ and $\sigma$. The $Q$ pricin
 
 \subsection{Numerical accuracy and posterior calibration}
 
-Small values of $\Delta_{PI,PM}$ are scientifically useful only if they are larger than pricing noise. Eighteen empirically difficult contracts are therefore repriced over 121 volatility nodes using 5 million pseudo-random paths per node and four independent randomizations, for 43.56 billion path--volatility evaluations. An independent randomized Sobol benchmark uses eight contracts, 121 nodes, $2^{21}$ paths, and eight scrambles, for 16.24 billion path--volatility evaluations. Curran conditioning is evaluated on the same volatility grids.
+Small values of $\Delta_{PI,PM}$ are scientifically useful only if they are larger than pricing noise. Eighteen empirically difficult contracts are therefore repriced over a dense volatility grid with independent high-precision pseudo-random Monte Carlo runs. Eight common difficult targets are also evaluated with independently scrambled Sobol sequences, and Curran conditioning is evaluated on the same volatility grids. The budgets are chosen so that direct Monte Carlo uncertainty in the PI--PM gap is typically of order $10^{-6}$, well below the observed empirical gaps near $10^{-3}$.
 
-Posterior implementation is checked separately by simulation-based calibration. Two hundred thousand datasets are drawn from the prior predictive distribution, with 50,000 replications at each of $n=21,63,252,1260$. The one-dimensional posterior uses a 4,097-node grid, for 819.4 million posterior-grid evaluations. Calibration is assessed through posterior-CDF ranks and 50\%, 80\%, and 95\% credible-interval coverage.
+Posterior implementation is checked separately by simulation-based calibration. Two hundred thousand datasets are drawn from the prior predictive distribution, with 50,000 replications at each of $n=21,63,252,1260$. Calibration is assessed through posterior-CDF ranks and 50\%, 80\%, and 95\% credible-interval coverage.
 
 \subsection{Liquidity dependence and clustered uncertainty}
 
