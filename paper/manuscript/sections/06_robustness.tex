@@ -26,11 +26,20 @@ The pricing result is equally stable. On exactly the same 2,381 strict-forward h
 
 This check addresses the specific concern that the paper's $\mathbb P$-versus-option-informed-$\mathbb Q$ hierarchy is an artifact of Yahoo's continuous-contract construction. It is not: the physical posterior barely moves, and the option-informed pricing advantage remains first-order.
 
-\subsection{Numerical robustness: Monte Carlo, Sobol, and Curran}
+\subsection{Numerical robustness: Monte Carlo, Sobol, and Curran}\label{sec:numerical_robustness}
 
 The empirical PI--PM gaps are sufficiently small that numerical error is a first-order methodological concern. The high-precision benchmark therefore recomputes difficult contracts using three distinct engines. Pseudo-random Monte Carlo uses antithetic paths and an arithmetic-average control variate with known $Q$ expectation. Randomized Sobol uses independently scrambled low-discrepancy sequences without that control variate. Curran conditioning supplies a deterministic approximation under the same one-factor futures dynamics.
 
 Across the difficult targets, the three engines agree on PI--PM to within a few micro-dollars. The pseudo-random experiment uses 43.56 billion path--volatility evaluations, while the Sobol experiment uses 16.24 billion. Direct seed-to-seed Monte Carlo uncertainty for the PI--PM gap is generally of order $10^{-6}$, compared with empirical gaps near $10^{-3}$. The conclusion that posterior integration adds little to the October point price is therefore numerically identified rather than an artifact of insufficient simulation.
+
+For representative October calls, the August 27, 2026 $K=98$ contract has a pseudo-Monte Carlo PI--PM gap of 0.0013683, a Curran gap of 0.0013690, and a randomized-Sobol gap of 0.0013717. The August 28 $K=98$ call gives 0.0013394, 0.0013402, and 0.0013393, respectively. Figure~\ref{fig:numerical_identification} shows all eight difficult empirical targets common to the three engines.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/publication/fig04_numerical_identification.pdf}
+\caption{Numerical identification of the posterior-integration effect on eight difficult WTI APO targets. Panel A compares the PI--PM price difference from high-precision pseudo-random Monte Carlo, Curran conditioning, and independently randomized Sobol pricing; error bars show 95\% Monte Carlo or scramble-based intervals where applicable. Panel B reports deviations of the stochastic estimates from the deterministic Curran gap in units of $10^{-6}$ price units. Agreement at this scale shows that the observed sub-cent PI--PM differences are resolved well above numerical noise, even though the three engines need not produce identical absolute option prices.}
+\label{fig:numerical_identification}
+\end{figure*}
 
 Curran prices can differ from Monte Carlo point prices by small amounts that are larger than the PI--PM correction itself. This is another useful distinction: pricing-engine approximation is a separate model/numerical margin from posterior integration. Importantly, Curran, Monte Carlo, and Sobol still produce almost the same \emph{difference} between PI and PM, so the integration conclusion does not depend on the chosen engine.
 
