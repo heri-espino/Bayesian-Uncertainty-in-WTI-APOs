@@ -264,10 +264,17 @@ def _comparison_summary(
 ) -> dict[str, Any]:
     first_returns = first.loc[first["usable_inference_return"], "log_return"].to_numpy(float)
     yahoo_returns = yahoo.loc[yahoo["usable_inference_return"], "log_return"].to_numpy(float)
-    merged = first[["trade_date", "settlement", "log_return"]].merge(
-        yahoo[["date", "close", "log_return"]],
-        left_on="trade_date",
-        right_on="date",
+    first_cmp = first[["trade_date", "settlement", "log_return"]].copy()
+    yahoo_cmp = yahoo[["date", "close", "log_return"]].copy()
+    first_cmp["comparison_date"] = pd.to_datetime(
+        first_cmp["trade_date"], errors="raise"
+    ).dt.normalize()
+    yahoo_cmp["comparison_date"] = pd.to_datetime(
+        yahoo_cmp["date"], errors="raise"
+    ).dt.normalize()
+    merged = first_cmp.merge(
+        yahoo_cmp,
+        on="comparison_date",
         how="inner",
         suffixes=("_first_nearby", "_yahoo"),
     )
