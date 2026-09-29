@@ -206,7 +206,11 @@ results/analysis/wti_rms_plugin_comparison/
 ├── rms_plugin_predictions.csv
 └── rms_plugin_error_summary.csv
 
-results/analysis/wti_external_vanilla_q_validation_weighted_mean/
+results/analysis/wti_prior_contract_iv_carry/
+├── prior_contract_iv_carry_predictions.csv
+└── prior_contract_iv_carry_summary.csv
+
+results/analysis/wti_external_vanilla_q_validation_moment_matched/
 ├── external_vanilla_q_predictions.csv
 ├── external_vanilla_q_error_summary.csv
 ├── external_q_comparison.csv
@@ -224,6 +228,6 @@ results/analysis/wti_databento_external_q/surface_shape_audit/
 └── surface_shape_summary.csv
 ```
 
-The recent-history choices are fixed in advance: 63, 126, and 252 most-recent usable returns plus an EWMA with a 63-business-day half-life. Do not tune those windows after inspecting pricing errors. The LO transfer sensitivity reruns both scalar and surface variants under fixing-weighted arithmetic-mean aggregation, rather than changing only the near-ATM scalar state.
+The recent-history choices are fixed in advance: 63, 126, and 252 most-recent usable returns plus an EWMA with a 63-business-day half-life. Do not tune those windows after inspecting pricing errors. The LO transfer sensitivity keeps the scalar near-ATM reduction at its baseline fixing-weighted RMS rule but replaces the fitted-surface reduction with a variance moment match of the unresolved arithmetic-average component under the maintained one-common-factor representation.
 
 After running the suite, inspect and version the summaries before adding numerical claims to the manuscript. In particular, do not state that the option-informed advantage survives recent-history benchmarks until the exact-holdout results have been checked.
