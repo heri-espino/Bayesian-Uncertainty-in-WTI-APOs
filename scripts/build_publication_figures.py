@@ -270,7 +270,7 @@ def _save(fig: plt.Figure, stem: Path, formats: Iterable[str]) -> list[str]:
     metadata = {
         "Title": stem.stem,
         "Author": "Heriberto Espino Montelongo",
-        "Subject": "Bayesian parameter uncertainty in WTI average price options",
+        "Subject": "Posterior integration in WTI average price options",
     }
     for fmt in formats:
         path = stem.with_suffix(f".{fmt}")
