@@ -45,3 +45,36 @@ def test_sigma_rms_matches_second_posterior_moment() -> None:
         abs_tol=1e-12,
     )
     assert sigma_rms(mean, sd) > mean
+
+
+
+def test_surface_direction_change_counter() -> None:
+    from experiments.wti_lo_surface_shape_audit import _direction_changes
+
+    assert _direction_changes(np.array([0.4, 0.41, 0.42])) == 0
+    assert _direction_changes(np.array([0.4, 0.39, 0.40])) == 1
+
+
+def test_tree_convergence_selection_covers_extremes_and_atm() -> None:
+    import pandas as pd
+
+    from experiments.wti_lo_tree_convergence import select_stratified
+
+    frame = pd.DataFrame(
+        {
+            "reference_date": ["2026-08-24"] * 5,
+            "underlying": ["CLX6"] * 5,
+            "option_type": ["call"] * 5,
+            "log_moneyness": [-0.10, -0.02, 0.001, 0.03, 0.12],
+            "option_settlement": [1.0] * 5,
+            "futures_settlement": [80.0] * 5,
+            "strike_price": [72.0, 78.0, 80.1, 82.0, 90.0],
+            "maturity_years": [0.1] * 5,
+            "rate_proxy": [0.04] * 5,
+            "symbol": [f"x{i}" for i in range(5)],
+            "iv_status": ["ok"] * 5,
+        }
+    )
+    selected = select_stratified(frame)
+    assert len(selected) == 3
+    assert set(selected["symbol"]) == {"x0", "x2", "x4"}
