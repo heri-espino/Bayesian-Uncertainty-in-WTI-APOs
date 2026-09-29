@@ -280,6 +280,7 @@ def _surface_sigma_targets(
     supports: dict[tuple[str, str], tuple[float, float]],
     target_futures: dict[str, float],
     fixing_weights: dict[str, float],
+    aggregation: str = "weighted_rms",
 ) -> tuple[np.ndarray, np.ndarray]:
     required = set(fixing_weights)
     missing_models = sorted(required.difference(models))
@@ -328,9 +329,14 @@ def _surface_sigma_targets(
         weights = np.asarray(component_weights, dtype=float)
         weights = weights / weights.sum()
         sigmas = np.asarray(component_sigmas, dtype=float)
-        sigma_out[i] = float(
-            np.sqrt(np.sum(weights * sigmas**2))
-        )
+        if aggregation == "weighted_rms":
+            sigma_out[i] = float(
+                np.sqrt(np.sum(weights * sigmas**2))
+            )
+        elif aggregation == "weighted_mean":
+            sigma_out[i] = float(np.sum(weights * sigmas))
+        else:
+            raise ValueError(f"unknown aggregation: {aggregation}")
         clipped_out[i] = clipped
 
     return sigma_out, clipped_out
@@ -795,6 +801,7 @@ def main() -> None:
                     supports=supports,
                     target_futures=target_futures,
                     fixing_weights=weights,
+                    aggregation=args.aggregation,
                 )
             except ValueError:
                 continue
@@ -822,7 +829,7 @@ def main() -> None:
                         "apo_expiry": args.apo_expiry,
                         "training_end_date": training_end,
                         "n_training_dates": int(n_dates),
-                        "aggregation": "surface_weighted_rms",
+                        "aggregation": f"surface_{args.aggregation}",
                         "fixing_weights_json": json.dumps(
                             weights, sort_keys=True
                         ),
@@ -957,13 +964,13 @@ def main() -> None:
             "APO valuation date."
         ),
         "maturity_mapping": (
-            "Scalar variants reduce near-ATM CLX6 and CLZ6 volatility "
-            "to the maintained APO state with target fixing-count RMS "
-            "variance weights. Surface variants fit prior-date quadratic "
-            "LO smiles by underlying and call/put, evaluate them at each "
-            "target APO strike using the target-date CL futures curve, "
-            "clip only to prior observed moneyness support, and combine "
-            "the resulting component variances with the same fixing weights."
+            "Scalar and surface variants reduce maturity-specific CLX6 "
+            "and CLZ6 volatilities to the maintained one-factor APO state "
+            f"using target fixing-count {args.aggregation} weights. "
+            "Surface variants fit prior-date quadratic LO smiles by "
+            "underlying and call/put, evaluate them at each target APO "
+            "strike using the target-date CL futures curve, and clip only "
+            "to prior observed moneyness support."
         ),
         "same_day_apo_usage": (
             "Same-day APO implied volatility is retained only as an ex-post "
