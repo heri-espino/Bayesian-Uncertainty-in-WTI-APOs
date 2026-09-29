@@ -45,6 +45,7 @@ from typing import Iterable
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+from matplotlib.colors import LinearSegmentedColormap
 import numpy as np
 import pandas as pd
 
@@ -91,25 +92,29 @@ MECHANISM_SIGMA = 0.80
 MECHANISM_MONEYNESS = 1.50
 MECHANISM_HEATMAP_MATURITY_DAYS = 126
 
-# Paul Tol palettes are used for categorical scientific comparisons.  The
-# high-contrast set has deliberately separated lightness levels, while the
-# medium-contrast set supplies enough hues for the five-series mechanism panel.
-# Markers, line patterns, and marker fill remain redundant encodings so the
-# plots are still interpretable after grayscale conversion.
-TOL_HIGH_CONTRAST = {
-    "blue": "#004488",
-    "ochre": "#DDAA33",
-    "red": "#BB5566",
-}
+# Final publication palette. Color is always redundant with marker shape,
+# line pattern, or marker fill so the figures remain interpretable in grayscale.
+FIG1_DISCRETE = [
+    "#97001c",
+    "#0083f9",
+    "#00b49c",
+    "#ffc600",
+    "#f198ff",
+]
 
-TOL_MEDIUM_CONTRAST = {
-    "light_blue": "#6699CC",
-    "blue": "#004488",
-    "yellow": "#EECC66",
-    "wine": "#994455",
-    "olive": "#997700",
-    "pink": "#EE99AA",
-}
+IRIDESCENT_HEX = [
+    "#FEFBE9", "#FCF7D5", "#F5F3C1", "#EAF0B5", "#DDECBF", "#D0E7CA",
+    "#C2E3D2", "#B5DDD8", "#A8D8DC", "#9BD2E1", "#8DCBE4", "#81C4E7",
+    "#7BBCE7", "#7EB2E4", "#88A5DD", "#9398D2", "#9B8AC4", "#9D7DB2",
+    "#9A709E", "#906388", "#805770", "#684957", "#46353A",
+]
+BAD_DATA_COLOR = "#999999"
+HEATMAP_CMAP = LinearSegmentedColormap.from_list(
+    "tol_iridescent",
+    IRIDESCENT_HEX,
+    N=256,
+)
+HEATMAP_CMAP.set_bad(BAD_DATA_COLOR)
 
 NEUTRAL = {
     "black": "#111111",
@@ -119,23 +124,39 @@ NEUTRAL = {
     "grid": "#D8D8D8",
 }
 
-HEATMAP_CMAP = "cividis"
+FIG2_COLORS = {
+    "calls": "#0083f9",
+    "puts": "#97001c",
+    "historical": "#00b49c",
+    "apo_common": "#f198ff",
+}
+
+FIG3_COLORS = {
+    "expanding": "#a5d3ff",
+    "previous_day": "#97001c",
+    "zero_line": "#555555",
+}
+
+FIG4_COLORS = {
+    "pseudo_mc": "#ffc600",
+    "curran": "#0083f9",
+    "sobol": "#97001c",
+}
 
 SIGMA_STYLES = {
-    0.10: {"color": TOL_MEDIUM_CONTRAST["light_blue"], "linestyle": "-", "marker": "o", "filled": False},
-    0.20: {"color": TOL_MEDIUM_CONTRAST["blue"], "linestyle": (0, (5, 2)), "marker": "s", "filled": False},
-    0.35: {"color": TOL_MEDIUM_CONTRAST["yellow"], "linestyle": (0, (1, 1)), "marker": "^", "filled": True},
-    0.50: {"color": TOL_MEDIUM_CONTRAST["wine"], "linestyle": (0, (3, 1, 1, 1)), "marker": "D", "filled": False},
-    0.80: {"color": TOL_MEDIUM_CONTRAST["olive"], "linestyle": (0, (7, 2, 1, 2)), "marker": "v", "filled": True},
+    0.10: {"color": FIG1_DISCRETE[0], "linestyle": "-", "marker": "o", "filled": False},
+    0.20: {"color": FIG1_DISCRETE[1], "linestyle": (0, (5, 2)), "marker": "s", "filled": False},
+    0.35: {"color": FIG1_DISCRETE[2], "linestyle": (0, (1, 1)), "marker": "^", "filled": True},
+    0.50: {"color": FIG1_DISCRETE[3], "linestyle": (0, (3, 1, 1, 1)), "marker": "D", "filled": False},
+    0.80: {"color": FIG1_DISCRETE[4], "linestyle": (0, (7, 2, 1, 2)), "marker": "v", "filled": True},
 }
 
 MATURITY_STYLES = {
-    21: {"color": TOL_MEDIUM_CONTRAST["blue"], "linestyle": "-", "marker": "o", "filled": False},
-    63: {"color": TOL_MEDIUM_CONTRAST["yellow"], "linestyle": (0, (5, 2)), "marker": "s", "filled": True},
-    126: {"color": TOL_MEDIUM_CONTRAST["wine"], "linestyle": (0, (1, 1)), "marker": "^", "filled": False},
-    252: {"color": TOL_MEDIUM_CONTRAST["olive"], "linestyle": (0, (3, 1, 1, 1)), "marker": "D", "filled": True},
+    21: {"color": FIG1_DISCRETE[1], "linestyle": "-", "marker": "o", "filled": False},
+    63: {"color": FIG1_DISCRETE[2], "linestyle": (0, (5, 2)), "marker": "s", "filled": True},
+    126: {"color": FIG1_DISCRETE[3], "linestyle": (0, (1, 1)), "marker": "^", "filled": False},
+    252: {"color": FIG1_DISCRETE[0], "linestyle": (0, (3, 1, 1, 1)), "marker": "D", "filled": True},
 }
-
 
 def _kpsewhich(filename: str) -> bool:
     ensure_tex_toolchain_on_path()
