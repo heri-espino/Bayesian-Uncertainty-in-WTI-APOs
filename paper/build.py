@@ -129,9 +129,24 @@ def compiler(name: str) -> str | None:
     return shutil.which(name)
 
 
+def build_publication_figures() -> None:
+    """Regenerate committed-result publication figures before staging LaTeX."""
+    run_from_root = [
+        sys.executable,
+        "-m",
+        "scripts.build_publication_figures",
+        "--formats",
+        "pdf",
+        "png",
+    ]
+    print("+", " ".join(run_from_root), flush=True)
+    subprocess.run(run_from_root, cwd=ROOT, check=True)
+
+
 def build() -> Path:
     """Compile the manuscript with XeLaTeX and return the final PDF path."""
     validate_layout()
+    build_publication_figures()
     prepare_stage()
 
     latexmk = compiler("latexmk")
