@@ -7,6 +7,7 @@ map, or any heavy Monte Carlo experiment.
 Outputs:
 - recent historical volatility benchmarks on exact strict-forward holdouts;
 - posterior-RMS plug-in comparison;
+- prior-contract APO IV carry benchmark versus the previous-day smile on exact common rows;
 - weighted-mean LO-to-APO aggregation sensitivity;
 - American CRR tree-step convergence audit;
 - prior-date LO fitted-surface shape and call/put consistency audit.
@@ -38,6 +39,13 @@ def main() -> None:
             python,
             "-m",
             "experiments.wti_rms_plugin_comparison",
+        ]
+    )
+    _run(
+        [
+            python,
+            "-m",
+            "experiments.wti_prior_contract_iv_carry",
         ]
     )
     _run(
