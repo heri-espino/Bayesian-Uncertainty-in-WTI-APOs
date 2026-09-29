@@ -43,7 +43,10 @@ DEFAULT_EXPIRIES = (
 
 def _targets(forward_path: Path, expiries: tuple[str, ...]) -> pd.DataFrame:
     frame = pd.read_csv(forward_path)
-    frame = frame[frame["apo_expiry"].astype(str).isin(expiries)].copy()
+    frame = frame[
+        frame["apo_expiry"].astype(str).isin(expiries)
+        & frame["method"].astype(str).eq("previous_day_smile")
+    ].copy()
     keep = [
         "valuation_date",
         "apo_expiry",
@@ -56,6 +59,8 @@ def _targets(forward_path: Path, expiries: tuple[str, ...]) -> pd.DataFrame:
         "positive_volume",
         "baseline_pi_price",
         "baseline_pi_error",
+        "forward_q_price",
+        "forward_error",
     ]
     frame = frame[keep].drop_duplicates(
         ["valuation_date", "apo_expiry", "contract_id"],
@@ -86,6 +91,7 @@ def _latest_prior_iv(
 
 
 def summarize(predictions: pd.DataFrame) -> pd.DataFrame:
+    """Compare carry, previous-day smile, and historical PI on exact rows."""
     rows: list[dict[str, Any]] = []
     scopes: list[tuple[str, str, pd.DataFrame]] = [
         ("pooled", "all", predictions)
@@ -93,20 +99,26 @@ def summarize(predictions: pd.DataFrame) -> pd.DataFrame:
     for expiry, group in predictions.groupby("apo_expiry", sort=True):
         scopes.append(("expiry", str(expiry), group))
 
+    methods = (
+        ("prior_contract_iv_carry", "carry_error"),
+        ("previous_day_smile", "previous_day_smile_error"),
+        ("historical_pi", "baseline_pi_error"),
+    )
     for scope, expiry, scoped in scopes:
-        error = scoped["carry_error"].to_numpy(dtype=float)
-        rows.append(
-            {
-                "scope": scope,
-                "apo_expiry": expiry,
-                "method": "prior_contract_iv_carry",
-                "n": int(len(scoped)),
-                "n_dates": int(scoped["valuation_date"].nunique()),
-                "mean_error": float(np.mean(error)),
-                "mae": float(np.mean(np.abs(error))),
-                "rmse": float(np.sqrt(np.mean(error**2))),
-            }
-        )
+        for method, column in methods:
+            error = scoped[column].to_numpy(dtype=float)
+            rows.append(
+                {
+                    "scope": scope,
+                    "apo_expiry": expiry,
+                    "method": method,
+                    "n": int(len(scoped)),
+                    "n_dates": int(scoped["valuation_date"].nunique()),
+                    "mean_error": float(np.mean(error)),
+                    "mae": float(np.mean(np.abs(error))),
+                    "rmse": float(np.sqrt(np.mean(error**2))),
+                }
+            )
     return pd.DataFrame(rows)
 
 
@@ -185,6 +197,8 @@ def run(
                     "carried_sigma_q": float(sigma),
                     "carry_price": float(price),
                     "carry_error": float(price - market),
+                    "previous_day_smile_price": float(row.forward_q_price),
+                    "previous_day_smile_error": float(row.forward_error),
                     "baseline_pi_price": float(row.baseline_pi_price),
                     "baseline_pi_error": float(row.baseline_pi_error),
                 }
