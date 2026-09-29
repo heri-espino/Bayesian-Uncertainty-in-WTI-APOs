@@ -78,3 +78,29 @@ def test_tree_convergence_selection_covers_extremes_and_atm() -> None:
     selected = select_stratified(frame)
     assert len(selected) == 3
     assert set(selected["symbol"]) == {"x0", "x2", "x4"}
+
+
+
+def test_prior_contract_iv_carry_uses_strictly_prior_observation() -> None:
+    import pandas as pd
+
+    from experiments.wti_prior_contract_iv_carry import _latest_prior_iv
+
+    history = pd.DataFrame(
+        {
+            "contract_id": ["x", "x", "x"],
+            "valuation_ts": pd.to_datetime(
+                ["2026-08-24", "2026-08-25", "2026-08-26"]
+            ),
+            "apo_implied_sigma_q": [0.40, 0.45, 0.99],
+        }
+    )
+    result = _latest_prior_iv(
+        history,
+        contract_id="x",
+        target_date=pd.Timestamp("2026-08-26"),
+    )
+    assert result is not None
+    sigma, date = result
+    assert sigma == 0.45
+    assert date == pd.Timestamp("2026-08-25")
