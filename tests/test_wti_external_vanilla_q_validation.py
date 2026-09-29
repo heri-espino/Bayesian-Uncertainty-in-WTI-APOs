@@ -293,3 +293,51 @@ def test_surface_common_support_comparison_requires_zero_clipping(tmp_path) -> N
     assert set(out["n"]) == {2}
     assert set(out["n_dates"]) == {1}
     assert set(out["sample"]) == {"surface_common_support"}
+
+
+
+def test_surface_prediction_supports_weighted_mean_aggregation() -> None:
+    panel = pd.DataFrame(
+        {
+            "reference_date": ["2026-08-24"] * 20,
+            "reference_ts": [pd.Timestamp("2026-08-24")] * 20,
+            "underlying": ["CLX6"] * 10 + ["CLZ6"] * 10,
+            "option_type": ["call"] * 20,
+            "log_moneyness": [-0.04, -0.03, -0.02, -0.01, 0.0, 0.01, 0.02, 0.03, 0.035, 0.04] * 2,
+            "implied_volatility": [0.40] * 10 + [0.50] * 10,
+            "iv_status": ["ok"] * 20,
+        }
+    )
+    models, supports, _, _ = _fit_surface_models(
+        panel,
+        target_date=pd.Timestamp("2026-08-25"),
+        half_life_days=None,
+        ridge=1e-8,
+    )
+    target = pd.DataFrame({"strike": [90.0], "option_type": ["call"]})
+    weights = {"CLX6": 0.25, "CLZ6": 0.75}
+    futures = {"CLX6": 90.0, "CLZ6": 90.0}
+
+    rms, _ = _surface_sigma_targets(
+        target,
+        models=models,
+        supports=supports,
+        target_futures=futures,
+        fixing_weights=weights,
+        aggregation="weighted_rms",
+    )
+    mean, _ = _surface_sigma_targets(
+        target,
+        models=models,
+        supports=supports,
+        target_futures=futures,
+        fixing_weights=weights,
+        aggregation="weighted_mean",
+    )
+
+    assert rms[0] == pytest.approx(
+        np.sqrt(0.25 * 0.40**2 + 0.75 * 0.50**2),
+        abs=1e-4,
+    )
+    assert mean[0] == pytest.approx(0.25 * 0.40 + 0.75 * 0.50, abs=1e-4)
+    assert rms[0] > mean[0]
