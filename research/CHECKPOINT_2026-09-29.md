@@ -8,7 +8,7 @@ Issue #38, the contract-reconstructed historical first-nearby robustness, is com
 
 Current manuscript:
 
-> **When Does Bayesian Parameter Uncertainty Matter? Evidence from WTI Average Price Options**
+> **When Does Posterior Integration Change Option Values? Evidence from WTI Average Price Options**
 
 Target journal:
 
