@@ -125,7 +125,19 @@ A second-order expansion gives
  \bar\sigma=\mathbb E[\sigma\mid\mathcal D].
  \label{eq:taylor_gap}
 \end{equation}
-Equation~\eqref{eq:taylor_gap} is the central mechanism: posterior integration matters only to the extent that posterior dispersion interacts with nonlinear exposure to volatility. The second derivative $C^{Q\prime\prime}(\sigma)$ is the option's volatility curvature, commonly termed \emph{volga} or \emph{vomma}; it need not have the same sign in every contract state.
+Equation~\eqref{eq:taylor_gap} is the central mechanism: posterior integration matters only to the extent that posterior dispersion interacts with nonlinear exposure to volatility. The second derivative $C^{Q\prime\prime}(\sigma)$ is the option's volatility curvature, commonly termed \emph{volga} or \emph{vomma}; it need not have the same sign in every contract state. More formally, if $C^Q$ is three times differentiable over the relevant posterior support and $|C^{Q\prime\prime\prime}(\sigma)|\leq M_3$, the Taylor remainder satisfies
+\begin{equation}
+ \left|
+ \mathbb E[R_3\mid\mathcal D]
+ \right|
+ \leq
+ \frac{M_3}{6}
+ \mathbb E\!\left[
+ |\sigma-\bar\sigma|^3\mid\mathcal D
+ \right].
+ \label{eq:taylor_remainder_bound}
+\end{equation}
+The second-order approximation is therefore most reliable when the posterior is concentrated and higher-order curvature is controlled.
 
 This mean-price correction is distinct from the dispersion of the posterior distribution of model prices. A first-order delta-method approximation gives
 \begin{equation}
@@ -146,7 +158,18 @@ As a plug-in sensitivity check, the paper also considers the posterior root-mean
  \sqrt{\bar\sigma^2+\operatorname{Var}(\sigma\mid\mathcal D)},
  \label{eq:sigma_rms}
 \end{equation}
-with price $C^Q(\sigma_{RMS})$. This comparator is not a replacement for posterior integration; it tests how much the near-equivalence depends on using $\mathbb E[\sigma\mid\mathcal D]$ rather than a variance-matching scalar plug-in.
+with price $C^Q(\sigma_{RMS})$. The volatility displacement can be written
+\begin{equation}
+ \sigma_{RMS}-\bar\sigma
+ =
+ \frac{\operatorname{Var}(\sigma\mid\mathcal D)}
+ {\sigma_{RMS}+\bar\sigma}
+ \approx
+ \frac{\operatorname{Var}(\sigma\mid\mathcal D)}
+ {2\bar\sigma},
+ \label{eq:sigma_rms_shift}
+\end{equation}
+so the associated plug-in price change is also locally of order $\operatorname{Var}(\sigma\mid\mathcal D)$. This comparator is not a replacement for posterior integration; it tests how much the near-equivalence depends on using $\mathbb E[\sigma\mid\mathcal D]$ rather than a variance-matching scalar plug-in.
 
 \subsection{APO-implied effective risk-neutral volatility}
 
