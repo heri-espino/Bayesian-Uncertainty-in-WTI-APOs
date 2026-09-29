@@ -241,7 +241,11 @@ Preserve the raw field name for provenance.
 
 The scientific workflow was designed under the rule that proprietary raw Databento inputs remain local and that the repository versions query metadata, hashes, diagnostics, and derived results.
 
-**Repository-hygiene warning as of 2026-09-29:** recent commits changed `.gitignore` / Git LFS rules and the current tree contains LFS-tracked paths under `data/databento/**/raw/`. This conflicts with the prior project policy and with the manuscript's current data-availability wording unless redistribution rights have been verified. Resolve this licensing/repository-state issue before the reproducibility freeze. Do not assume that storing a file with Git LFS grants redistribution rights.
+**Temporary retention decision as of 2026-09-29:** the current tree intentionally keeps LFS-tracked raw/external data, including `data/databento/**/raw/`, as a short-term continuity backup because the active experiment is being run on an external machine whose local storage may be wiped without notice.
+
+Do **not** delete or untrack these data during normal research work, cleanup, branch maintenance, or manuscript integration unless the author explicitly authorizes the cleanup.
+
+This is a temporary operational retention decision, not a claim that Git LFS grants redistribution rights. The final public/reproducibility artifact must still reconcile the repository contents with the applicable data licenses. The intended sequence is to preserve the backup through submission, then perform the raw-data/licensing cleanup after the paper has been sent and the scientific state is safely archived elsewhere.
 
 ---
 
@@ -287,7 +291,8 @@ Next after manuscript integration.
 
 Required:
 
-- resolve proprietary-data tracking/licensing consistency;
+- preserve the temporary external-machine backup through submission unless the author explicitly changes this decision;
+- after submission, resolve raw-data tracking/licensing consistency before the final archival/public snapshot;
 - run structure checks and tests;
 - compile and visually inspect the Wiley PDF;
 - verify all manuscript numbers against versioned outputs;
@@ -316,7 +321,7 @@ There is no remaining large scientific experiment required by the evidence prese
 Remaining blockers are operational/editorial:
 
 1. integrate #38 into the manuscript and final tables;
-2. resolve raw proprietary-data tracking/licensing consistency;
+2. preserve the temporary raw/external-data backup through submission; schedule licensing/tracking cleanup for the post-submission archival step;
 3. final paper compile and referee-style reading pass;
 4. reproducibility freeze;
 5. submission package.
