@@ -59,6 +59,10 @@ The principal pricing errors are
 \end{equation}
 where $P^{mkt}_{i,t}$ is the Barchart end-of-day settlement field and $M$ indexes the pricing rule. Mean error, MAE, and RMSE are reported overall and within liquidity-restricted samples.
 
+To separate information source from information recency, a pre-specified recent-history benchmark reuses the exact strict-forward holdouts and target-date information cutoffs. It evaluates annualized realized volatility from the most recent 63, 126, and 252 usable daily returns, plus an exponentially weighted estimate with a 63-business-day half-life. These choices are fixed before inspecting their pricing errors. Each scalar estimate is mapped through the same Curran APO pricing engine used for the prior-date smile predictions. The purpose is not to optimize a historical window ex post, but to ask whether a reasonable recent historical benchmark materially narrows the option-informed advantage.
+
+A second scalar sensitivity uses Equation~\eqref{eq:sigma_rms}. Because every empirical run already stores the posterior mean and standard deviation of $\sigma$, the posterior-RMS comparator can be evaluated on the same holdouts without rerunning MCMC.
+
 \subsection{APO-implied volatility and cross-sectional validation}
 
 The initial September and October panels provide 402 contract-date observations for implied-volatility analysis. Contract-level implied volatilities are obtained by inverting Equation~\eqref{eq:apo_iv}. A date-level common $\sigma_Q$ is then calibrated by minimizing cross-sectional settlement squared error. Two deliberately harder checks avoid evaluating a contract on information extracted from that same contract: leave-one-contract-out calibration excludes the target option, and cross-option-type transfer estimates from calls and evaluates puts or vice versa.
