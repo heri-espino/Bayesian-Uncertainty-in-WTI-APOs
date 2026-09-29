@@ -113,7 +113,7 @@ The CME WTI Average Price Option application separates the data object used for 
 - `data/csv/CL/contract_expiries.csv` as the explicit CL last-trade-date reference;
 - date-specific U.S. Treasury par-yield data for discounting.
 
-A live test showed that Yahoo may remove older delisted individual CL symbols, so the canonical pilot does **not** require individual Yahoo contract downloads. Barchart `Latest` is retained as the source field and used as an end-of-day settlement proxy; it is not presented as an official CME settlement without separate validation.
+A live test showed that Yahoo may remove older delisted individual CL symbols, so the canonical pilot does **not** require individual Yahoo contract downloads. In the Barchart histories used by this project, `Latest` is the CME settlement field. The raw field name is retained for provenance and is not interpreted as an intraday last trade.
 
 There is one canonical real-market driver:
 
