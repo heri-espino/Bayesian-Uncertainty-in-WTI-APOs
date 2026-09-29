@@ -23,3 +23,33 @@ def test_publication_figures_build_from_committed_results(tmp_path: Path) -> Non
         path = figures.ROOT / output
         assert path.exists()
         assert path.stat().st_size > 0
+
+
+
+def test_publication_styles_are_grayscale_safe() -> None:
+    def is_gray(hex_color: str) -> bool:
+        value = hex_color.lstrip("#")
+        assert len(value) == 6
+        return value[0:2] == value[2:4] == value[4:6]
+
+    assert all(is_gray(color) for color in figures.PALETTE.values())
+
+    sigma_encodings = {
+        (
+            style["marker"],
+            repr(style["linestyle"]),
+            bool(style["filled"]),
+        )
+        for style in figures.SIGMA_STYLES.values()
+    }
+    maturity_encodings = {
+        (
+            style["marker"],
+            repr(style["linestyle"]),
+            bool(style["filled"]),
+        )
+        for style in figures.MATURITY_STYLES.values()
+    }
+
+    assert len(sigma_encodings) == len(figures.SIGMA_STYLES)
+    assert len(maturity_encodings) == len(figures.MATURITY_STYLES)
