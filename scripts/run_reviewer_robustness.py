@@ -8,7 +8,8 @@ Outputs:
 - recent historical volatility benchmarks on exact strict-forward holdouts;
 - posterior-RMS plug-in comparison;
 - weighted-mean LO-to-APO aggregation sensitivity;
-- American CRR tree-step convergence audit.
+- American CRR tree-step convergence audit;
+- prior-date LO fitted-surface shape and call/put consistency audit.
 """
 
 from __future__ import annotations
@@ -56,6 +57,13 @@ def main() -> None:
             python,
             "-m",
             "experiments.wti_lo_tree_convergence",
+        ]
+    )
+    _run(
+        [
+            python,
+            "-m",
+            "experiments.wti_lo_surface_shape_audit",
         ]
     )
 
