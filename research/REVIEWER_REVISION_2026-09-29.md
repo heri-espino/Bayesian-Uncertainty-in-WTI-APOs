@@ -107,6 +107,17 @@ python -m scripts.run_reviewer_robustness
   - maximum one direction change;
   - mean/max call--put fitted-IV gap 0.000988/0.006337.
 
+## Final precision pass after compiled-manuscript review — 2026-09-30
+
+- [x] Qualify the abstract so the historical-volatility conclusion is limited to the evaluated rolling-window, EWMA, and horizon-matched GARCH comparators.
+- [x] Keep prior-contract IV carry versus fitted smile as a descriptive pooled ranking; do not claim general or statistically significant superiority.
+- [x] Make pricing-engine provenance explicit: canonical historical PI uses posterior integration under the Monte Carlo engine, while scalar historical/GARCH/option-implied sensitivity rows use deterministic Curran repricing where stated.
+- [x] Compress repeated numerical comparisons outside the results tables, especially in the Introduction, Robustness, and Conclusion.
+- [x] Preserve the external-validity boundary: 15 forward target dates and 10 external common-support dates do not constitute independent long market histories.
+- [ ] Fill the corresponding-author email.
+- [ ] Complete acknowledgments.
+- [ ] Build the final PDF from current `main`, inspect it visually, and create the versioned submission snapshot/tag.
+
 ## Pending before merging PR #67
 
 - [x] Run the new horizon-matched GARCH benchmark and inspect/commit its derived outputs.
