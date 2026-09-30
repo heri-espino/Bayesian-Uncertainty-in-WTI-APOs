@@ -176,3 +176,58 @@ Once the outputs above have been inspected and versioned:
 8. consider renaming `Full Bayes` to `posterior-integrated` pricing throughout.
 
 The manuscript should continue to distinguish the size of the PI-PM gap from absolute model-to-settlement error.
+
+
+## 9. Referee-requested robustness checks
+
+The current referee pass raises four distinct identification and implementation questions that can be answered without rerunning the heavy synthetic or Monte Carlo suites:
+
+1. does a recent historical-volatility benchmark materially narrow the option-informed advantage on the exact 2,381 strict-forward holdouts?
+2. does the PI--PM near-equivalence depend on using the posterior mean rather than the variance-matching scalar `sigma_RMS = sqrt(E[sigma^2 | D])`?
+3. is the external LO result sensitive to the fixing-count RMS transfer rule?
+4. are the 160-step American CRR inversion and the fitted prior-date LO surfaces numerically and shape-wise well behaved?
+
+Run all checks with:
+
+```bash
+python -m scripts.run_reviewer_robustness
+```
+
+This runner is intentionally lightweight. It reuses committed target-date empirical runs, posterior summaries, and the existing LO IV panel. It does **not** rerun MCMC, APO smile fitting, the massive mechanism map, or the high-precision Monte Carlo experiments.
+
+Outputs:
+
+```text
+results/analysis/wti_recent_historical_benchmarks/
+├── recent_historical_predictions.csv
+└── recent_historical_error_summary.csv
+
+results/analysis/wti_rms_plugin_comparison/
+├── rms_plugin_predictions.csv
+└── rms_plugin_error_summary.csv
+
+results/analysis/wti_prior_contract_iv_carry/
+├── prior_contract_iv_carry_predictions.csv
+└── prior_contract_iv_carry_summary.csv
+
+results/analysis/wti_external_vanilla_q_validation_moment_matched/
+├── external_vanilla_q_predictions.csv
+├── external_vanilla_q_error_summary.csv
+├── external_q_comparison.csv
+├── external_q_matched_comparison.csv
+├── external_q_surface_common_support.csv
+├── external_vanilla_q_state.csv
+└── external_vanilla_q_report.json
+
+results/analysis/wti_databento_external_q/tree_convergence/
+├── tree_convergence_detail.csv
+└── tree_convergence_summary.csv
+
+results/analysis/wti_databento_external_q/surface_shape_audit/
+├── surface_shape_detail.csv
+└── surface_shape_summary.csv
+```
+
+The recent-history choices are fixed in advance: 63, 126, and 252 most-recent usable returns plus an EWMA with a 63-business-day half-life. Do not tune those windows after inspecting pricing errors. The LO transfer sensitivity keeps the scalar near-ATM reduction at its baseline fixing-weighted RMS rule but replaces the fitted-surface reduction with a variance moment match of the unresolved arithmetic-average component under the maintained one-common-factor representation.
+
+After running the suite, inspect and version the summaries before adding numerical claims to the manuscript. In particular, do not state that the option-informed advantage survives recent-history benchmarks until the exact-holdout results have been checked.

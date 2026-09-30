@@ -8,7 +8,7 @@ Issue #38, the contract-reconstructed historical first-nearby robustness, is com
 
 Current manuscript:
 
-> **When Does Bayesian Parameter Uncertainty Matter? Evidence from WTI Average Price Options**
+> **When Does Posterior Integration Change Option Values? Evidence from WTI Average Price Options**
 
 Target journal:
 
@@ -29,21 +29,15 @@ operatorname{Var}(sigmamid D).
 
 The 175,000-history synthetic mechanism map reaches a maximum observed absolute PI--PM gap of **0.1384** and identifies the adverse states: short histories, high volatility, long remaining horizons, extreme moneyness, and little realized fixing.
 
-Second, in the observed WTI APO sample, the empirically dominant margin is the volatility state supplied to the pricing map:
+Second, in the observed WTI APO sample, the largest established pricing difference is between the maintained long-window historical-volatility input and recent option-informed volatility inputs. That comparison is much larger than the PI--PM mean-price correction.
 
-[
-oxed{
-	ext{posterior-integration refinement}
-ll
-	ext{historical-}P	ext{ versus option-informed }Q
-}
-]
+This should **not** be summarized as a pure physical-versus-risk-neutral volatility decomposition. The option-informed inputs also differ in recency, maturity dependence, strike dependence, and flexibility. The current evidence establishes that the option-informed advantage over the long-window historical benchmark:
 
-This ordering survives three attacks:
+1. appears in strict forward-in-time APO validation across seven expiries;
+2. survives construction from independent prior-date standard WTI vanilla-option (LO) information;
+3. is not an artifact of the Yahoo continuous/front-month return construction, because the contract-reconstructed first-nearby historical baseline is nearly unchanged.
 
-1. strict forward-in-time APO-implied volatility across seven expiries;
-2. independent prior-date standard WTI vanilla-option (LO) information;
-3. replacement of the Yahoo continuous/front-month physical-return proxy with a contract-reconstructed first-nearby CL settlement history.
+A pre-specified recent-history historical-volatility suite is now the main referee-facing test of how much of the remaining advantage is attributable specifically to recency.
 
 ---
 
@@ -191,13 +185,8 @@ Changes from Yahoo to first-nearby:
 
 The reconstructed baseline is, if anything, slightly worse overall. Near-dated 2026 expiries improve modestly, while longer maturities worsen modestly. The option-informed (Q) predictions are unchanged.
 
-Therefore:
+Therefore the contract-reconstruction exercise supports a narrower conclusion: the option-informed advantage over the **long-window historical baseline** is not a continuous-contract roll artifact.
 
-[
-oxed{
-	ext{the }P	ext{-versus-option-informed-}Q	ext{ hierarchy survives completely}
-}
-]
 
 ## External LO comparison under reconstructed P
 
@@ -316,23 +305,24 @@ After M4:
 
 # Current blocker hierarchy
 
-There is no remaining large scientific experiment required by the evidence presently in the paper.
+There is no remaining **large** scientific experiment required by the evidence presently in the paper. One lightweight referee-requested robustness suite remains before the scientific freeze.
 
-Remaining blockers are operational/editorial:
+Immediate blockers:
 
-1. integrate #38 into the manuscript and final tables;
-2. preserve the temporary raw/external-data backup through submission; schedule licensing/tracking cleanup for the post-submission archival step;
-3. final paper compile and referee-style reading pass;
-4. reproducibility freeze;
-5. submission package.
+1. run `python -m scripts.run_reviewer_robustness` on the external machine;
+2. inspect and version the recent-history, posterior-RMS, prior-contract-IV carry, moment-matched LO transfer, CRR convergence, and LO-surface-shape summaries;
+3. integrate only supported numerical conclusions into Results/Robustness;
+4. recompile and visually inspect the Wiley PDF;
+5. preserve the temporary raw/external-data backup through submission and defer licensing/tracking cleanup to the archival step;
+6. reproducibility freeze and submission package.
 
-The next default action is **not another experiment**.
+The next default action is this targeted lightweight suite, **not** a richer stochastic-volatility model or another broad experiment grid.
 
 ---
 
 # Current paper claim
 
-> Bayesian posterior integration has a predictable, state-dependent effect governed by posterior dispersion and pricing curvature. It can become economically material in weak-information, high-curvature regimes. In the observed WTI APO sample, however, posterior integration of historical volatility is a second-order point-price refinement. Option-informed risk-neutral volatility states provide a much larger strict-forward pricing improvement. That hierarchy survives both an independent standard-vanilla WTI construction of the risk-neutral state and a contract-by-contract reconstruction of the historical first-nearby physical-return series.
+> Bayesian posterior integration has a predictable, state-dependent mean-price effect governed by posterior dispersion and pricing curvature, while posterior model-price dispersion is a distinct quantity. In the observed WTI APO sample, the PI--PM mean-price correction is small. Recent option-informed volatility inputs provide a much larger strict-forward pricing improvement than the maintained long-window historical-volatility benchmark; that result survives both an independent standard-vanilla WTI construction and a contract-by-contract reconstruction of the historical first-nearby return series. The remaining referee-facing question is how much of that advantage survives pre-specified recent-history historical-volatility comparators.
 
 Interpret option-implied volatilities as effective/model-equivalent states under the maintained pricing map, not unique structural diffusion coefficients.
 

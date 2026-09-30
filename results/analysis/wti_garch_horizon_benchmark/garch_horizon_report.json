@@ -1,0 +1,9 @@
+{
+  "model": "Gaussian GARCH(1,1)",
+  "parameter_estimation_cutoff": "strictly before target valuation date; target-date return is used only to update the conditional variance state after parameter fitting",
+  "forecast_mapping": "daily conditional variance forecast mapped to the unresolved APO fixing schedule and collapsed to one annualized sigma by matching the arithmetic-average variance under the maintained common-factor model",
+  "n_contract_dates": 2381,
+  "n_target_dates": 15,
+  "n_expiries": 7,
+  "all_optimizers_successful": true
+}

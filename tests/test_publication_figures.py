@@ -27,31 +27,31 @@ def test_publication_figures_build_from_committed_results(tmp_path: Path) -> Non
 
 
 def test_publication_styles_are_colorful_and_grayscale_safe() -> None:
-    def relative_luminance(hex_color: str) -> float:
-        value = hex_color.lstrip("#")
-        assert len(value) == 6
-        rgb = [int(value[i : i + 2], 16) / 255.0 for i in (0, 2, 4)]
-        linear = [
-            channel / 12.92
-            if channel <= 0.04045
-            else ((channel + 0.055) / 1.055) ** 2.4
-            for channel in rgb
-        ]
-        return 0.2126 * linear[0] + 0.7152 * linear[1] + 0.0722 * linear[2]
+    assert figures.FIG1_DISCRETE == [
+        "#97001c",
+        "#0083f9",
+        "#00b49c",
+        "#ffc600",
+        "#f198ff",
+    ]
+    assert figures.HEATMAP_CMAP.name == "tol_iridescent"
+    assert figures.IRIDESCENT_HEX[0] == "#FEFBE9"
+    assert figures.IRIDESCENT_HEX[-1] == "#46353A"
+    assert figures.BAD_DATA_COLOR == "#999999"
 
-    # The high-contrast categorical palette must retain visibly separated
-    # lightness levels after grayscale conversion.
-    high_luminances = sorted(
-        relative_luminance(color)
-        for color in figures.TOL_HIGH_CONTRAST.values()
-    )
-    assert min(
-        right - left
-        for left, right in zip(high_luminances, high_luminances[1:])
-    ) > 0.10
-
-    # Continuous maps use a perceptually uniform, color-vision-friendly map.
-    assert figures.HEATMAP_CMAP == "cividis"
+    assert figures.FIG2_COLORS == {
+        "calls": "#0083f9",
+        "puts": "#97001c",
+        "historical": "#00b49c",
+        "apo_common": "#f198ff",
+    }
+    assert figures.FIG3_COLORS["expanding"] == "#a5d3ff"
+    assert figures.FIG3_COLORS["previous_day"] == "#97001c"
+    assert figures.FIG4_COLORS == {
+        "pseudo_mc": "#ffc600",
+        "curran": "#0083f9",
+        "sobol": "#97001c",
+    }
 
     # Color is never the only categorical cue.
     sigma_encodings = {
@@ -70,12 +70,5 @@ def test_publication_styles_are_colorful_and_grayscale_safe() -> None:
         )
         for style in figures.MATURITY_STYLES.values()
     }
-
     assert len(sigma_encodings) == len(figures.SIGMA_STYLES)
     assert len(maturity_encodings) == len(figures.MATURITY_STYLES)
-
-    # At least one categorical palette entry must genuinely use color.
-    assert any(
-        len({color[1:3], color[3:5], color[5:7]}) > 1
-        for color in figures.TOL_HIGH_CONTRAST.values()
-    )

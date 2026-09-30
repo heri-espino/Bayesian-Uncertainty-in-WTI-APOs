@@ -45,6 +45,7 @@ from typing import Iterable
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+from matplotlib.colors import LinearSegmentedColormap
 import numpy as np
 import pandas as pd
 
@@ -91,25 +92,29 @@ MECHANISM_SIGMA = 0.80
 MECHANISM_MONEYNESS = 1.50
 MECHANISM_HEATMAP_MATURITY_DAYS = 126
 
-# Paul Tol palettes are used for categorical scientific comparisons.  The
-# high-contrast set has deliberately separated lightness levels, while the
-# medium-contrast set supplies enough hues for the five-series mechanism panel.
-# Markers, line patterns, and marker fill remain redundant encodings so the
-# plots are still interpretable after grayscale conversion.
-TOL_HIGH_CONTRAST = {
-    "blue": "#004488",
-    "ochre": "#DDAA33",
-    "red": "#BB5566",
-}
+# Final publication palette. Color is always redundant with marker shape,
+# line pattern, or marker fill so the figures remain interpretable in grayscale.
+FIG1_DISCRETE = [
+    "#97001c",
+    "#0083f9",
+    "#00b49c",
+    "#ffc600",
+    "#f198ff",
+]
 
-TOL_MEDIUM_CONTRAST = {
-    "light_blue": "#6699CC",
-    "blue": "#004488",
-    "yellow": "#EECC66",
-    "wine": "#994455",
-    "olive": "#997700",
-    "pink": "#EE99AA",
-}
+IRIDESCENT_HEX = [
+    "#FEFBE9", "#FCF7D5", "#F5F3C1", "#EAF0B5", "#DDECBF", "#D0E7CA",
+    "#C2E3D2", "#B5DDD8", "#A8D8DC", "#9BD2E1", "#8DCBE4", "#81C4E7",
+    "#7BBCE7", "#7EB2E4", "#88A5DD", "#9398D2", "#9B8AC4", "#9D7DB2",
+    "#9A709E", "#906388", "#805770", "#684957", "#46353A",
+]
+BAD_DATA_COLOR = "#999999"
+HEATMAP_CMAP = LinearSegmentedColormap.from_list(
+    "tol_iridescent",
+    IRIDESCENT_HEX,
+    N=256,
+)
+HEATMAP_CMAP.set_bad(BAD_DATA_COLOR)
 
 NEUTRAL = {
     "black": "#111111",
@@ -119,23 +124,39 @@ NEUTRAL = {
     "grid": "#D8D8D8",
 }
 
-HEATMAP_CMAP = "cividis"
+FIG2_COLORS = {
+    "calls": "#0083f9",
+    "puts": "#97001c",
+    "historical": "#00b49c",
+    "apo_common": "#f198ff",
+}
+
+FIG3_COLORS = {
+    "expanding": "#a5d3ff",
+    "previous_day": "#97001c",
+    "zero_line": "#555555",
+}
+
+FIG4_COLORS = {
+    "pseudo_mc": "#ffc600",
+    "curran": "#0083f9",
+    "sobol": "#97001c",
+}
 
 SIGMA_STYLES = {
-    0.10: {"color": TOL_MEDIUM_CONTRAST["light_blue"], "linestyle": "-", "marker": "o", "filled": False},
-    0.20: {"color": TOL_MEDIUM_CONTRAST["blue"], "linestyle": (0, (5, 2)), "marker": "s", "filled": False},
-    0.35: {"color": TOL_MEDIUM_CONTRAST["yellow"], "linestyle": (0, (1, 1)), "marker": "^", "filled": True},
-    0.50: {"color": TOL_MEDIUM_CONTRAST["wine"], "linestyle": (0, (3, 1, 1, 1)), "marker": "D", "filled": False},
-    0.80: {"color": TOL_MEDIUM_CONTRAST["olive"], "linestyle": (0, (7, 2, 1, 2)), "marker": "v", "filled": True},
+    0.10: {"color": FIG1_DISCRETE[0], "linestyle": "-", "marker": "o", "filled": False},
+    0.20: {"color": FIG1_DISCRETE[1], "linestyle": (0, (5, 2)), "marker": "s", "filled": False},
+    0.35: {"color": FIG1_DISCRETE[2], "linestyle": (0, (1, 1)), "marker": "^", "filled": True},
+    0.50: {"color": FIG1_DISCRETE[3], "linestyle": (0, (3, 1, 1, 1)), "marker": "D", "filled": False},
+    0.80: {"color": FIG1_DISCRETE[4], "linestyle": (0, (7, 2, 1, 2)), "marker": "v", "filled": True},
 }
 
 MATURITY_STYLES = {
-    21: {"color": TOL_MEDIUM_CONTRAST["blue"], "linestyle": "-", "marker": "o", "filled": False},
-    63: {"color": TOL_MEDIUM_CONTRAST["yellow"], "linestyle": (0, (5, 2)), "marker": "s", "filled": True},
-    126: {"color": TOL_MEDIUM_CONTRAST["wine"], "linestyle": (0, (1, 1)), "marker": "^", "filled": False},
-    252: {"color": TOL_MEDIUM_CONTRAST["olive"], "linestyle": (0, (3, 1, 1, 1)), "marker": "D", "filled": True},
+    21: {"color": FIG1_DISCRETE[1], "linestyle": "-", "marker": "o", "filled": False},
+    63: {"color": FIG1_DISCRETE[2], "linestyle": (0, (5, 2)), "marker": "s", "filled": True},
+    126: {"color": FIG1_DISCRETE[3], "linestyle": (0, (1, 1)), "marker": "^", "filled": False},
+    252: {"color": FIG1_DISCRETE[0], "linestyle": (0, (3, 1, 1, 1)), "marker": "D", "filled": True},
 }
-
 
 def _kpsewhich(filename: str) -> bool:
     ensure_tex_toolchain_on_path()
@@ -249,7 +270,7 @@ def _save(fig: plt.Figure, stem: Path, formats: Iterable[str]) -> list[str]:
     metadata = {
         "Title": stem.stem,
         "Author": "Heriberto Espino Montelongo",
-        "Subject": "Bayesian parameter uncertainty in WTI average price options",
+        "Subject": "Posterior integration in WTI average price options",
     }
     for fmt in formats:
         path = stem.with_suffix(f".{fmt}")
@@ -493,10 +514,10 @@ def _plot_sigma_timeseries(ax: plt.Axes, by_date: pd.DataFrame, expiry: str) -> 
         group["sigma_p_posterior_mean"],
         marker="o",
         linestyle="-",
-        color=TOL_HIGH_CONTRAST["blue"],
+        color=FIG2_COLORS["historical"],
         markerfacecolor="white",
-        markeredgecolor=TOL_HIGH_CONTRAST["blue"],
-        markeredgewidth=0.85,
+        markeredgecolor=FIG2_COLORS["historical"],
+        markeredgewidth=0.9,
         label=r"Historical posterior mean $\sigma_P$",
     )
     ax.plot(
@@ -504,10 +525,10 @@ def _plot_sigma_timeseries(ax: plt.Axes, by_date: pd.DataFrame, expiry: str) -> 
         group["full_sample_sigma_q"],
         marker="s",
         linestyle="--",
-        color=TOL_HIGH_CONTRAST["ochre"],
-        markerfacecolor=TOL_HIGH_CONTRAST["ochre"],
-        markeredgecolor=TOL_HIGH_CONTRAST["ochre"],
-        markeredgewidth=0.85,
+        color=FIG2_COLORS["apo_common"],
+        markerfacecolor=FIG2_COLORS["apo_common"],
+        markeredgecolor=FIG2_COLORS["apo_common"],
+        markeredgewidth=0.9,
         label=r"APO-implied common $\sigma_Q$",
     )
     ax.set_ylabel("Annualized volatility")
@@ -526,12 +547,12 @@ def _plot_smile(
     if day.empty:
         raise ValueError(f"No contract-level implied volatilities for {date.date()}")
     styles = {
-        "call": ("o", TOL_HIGH_CONTRAST["blue"], "Calls", "white"),
+        "call": ("o", FIG2_COLORS["calls"], "Calls", "white"),
         "put": (
             "s",
-            TOL_HIGH_CONTRAST["red"],
+            FIG2_COLORS["puts"],
             "Puts",
-            TOL_HIGH_CONTRAST["red"],
+            FIG2_COLORS["puts"],
         ),
     }
     for option_type, (marker, color, label, facecolor) in styles.items():
@@ -542,11 +563,11 @@ def _plot_smile(
             group["log_moneyness"],
             group["apo_implied_sigma_q"],
             marker=marker,
-            s=30,
+            s=32,
             alpha=1.0,
             facecolors=facecolor,
             edgecolors=color,
-            linewidth=0.85,
+            linewidth=0.9,
             label=label,
             rasterized=True,
         )
@@ -558,16 +579,16 @@ def _plot_smile(
     sigma_q = float(date_summary.iloc[0]["full_sample_sigma_q"])
     ax.axhline(
         sigma_p,
-        linestyle=":",
-        linewidth=1.15,
-        color=TOL_HIGH_CONTRAST["blue"],
+        linestyle="-",
+        linewidth=1.25,
+        color=FIG2_COLORS["historical"],
         label=r"Historical $\sigma_P$",
     )
     ax.axhline(
         sigma_q,
         linestyle="--",
-        linewidth=1.15,
-        color=TOL_HIGH_CONTRAST["ochre"],
+        linewidth=1.25,
+        color=FIG2_COLORS["apo_common"],
         label=r"Common APO $\sigma_Q$",
     )
     ax.set_xlabel(r"Log moneyness $\log(K/\widehat A^Q)$")
@@ -631,15 +652,15 @@ def _forest_panel(
             "forward_q_expanding_smile",
             "Expanding smile",
             "o",
-            TOL_HIGH_CONTRAST["blue"],
-            "white",
+            FIG3_COLORS["expanding"],
+            FIG3_COLORS["expanding"],
         ),
         (
             "forward_q_previous_day_smile",
             "Previous-day smile",
             "s",
-            TOL_HIGH_CONTRAST["red"],
-            TOL_HIGH_CONTRAST["red"],
+            FIG3_COLORS["previous_day"],
+            FIG3_COLORS["previous_day"],
         ),
     ]
     expiry_order = [
@@ -657,7 +678,7 @@ def _forest_panel(
         & boot["apo_expiry"].isin(expiry_order)
     ].copy()
     y_base = np.arange(len(expiry_order), dtype=float)
-    offsets = (-0.10, 0.10)
+    offsets = (-0.11, 0.11)
 
     for offset, (experiment, label, marker, color, facecolor) in zip(
         offsets, experiments, strict=True
@@ -671,19 +692,24 @@ def _forest_panel(
         lo = group[f"delta_{metric}_ci025"].to_numpy(dtype=float)
         hi = group[f"delta_{metric}_ci975"].to_numpy(dtype=float)
         xerr = np.vstack([value - lo, hi - value])
+        marker_edge = (
+            NEUTRAL["dark"]
+            if experiment == "forward_q_expanding_smile"
+            else color
+        )
         ax.errorbar(
             value,
             y_base + offset,
             xerr=xerr,
             fmt=marker,
-            markersize=4.6,
+            markersize=5.8,
             color=color,
             ecolor=color,
             markerfacecolor=facecolor,
-            markeredgecolor=color,
-            markeredgewidth=0.85,
-            capsize=2.4,
-            linewidth=1.05,
+            markeredgecolor=marker_edge,
+            markeredgewidth=1.05,
+            capsize=3.0,
+            linewidth=1.35,
             label=label,
         )
 
@@ -697,9 +723,10 @@ def _forest_panel(
 
     ax.axvline(
         0.0,
-        linestyle="--",
-        linewidth=0.95,
-        color=NEUTRAL["mid"],
+        linestyle=":",
+        linewidth=1.25,
+        color=FIG3_COLORS["zero_line"],
+        zorder=0,
     )
     ax.set_yticks(y_base)
     ax.set_yticklabels(labels)
@@ -780,23 +807,23 @@ def build_figure_4(
             matched["mc_pi_minus_pm"].to_numpy(dtype=float),
             matched["mc_pi_minus_pm_mcse"].to_numpy(dtype=float),
             "o",
-            TOL_HIGH_CONTRAST["blue"],
-            "white",
+            FIG4_COLORS["pseudo_mc"],
+            FIG4_COLORS["pseudo_mc"],
         ),
         (
             "Curran",
             matched["curran_pi_minus_pm_mc"].to_numpy(dtype=float),
             np.zeros(len(matched)),
             "D",
-            TOL_HIGH_CONTRAST["ochre"],
-            TOL_HIGH_CONTRAST["ochre"],
+            FIG4_COLORS["curran"],
+            FIG4_COLORS["curran"],
         ),
         (
             "Randomized Sobol",
             matched["qmc_pi_minus_pm"].to_numpy(dtype=float),
             matched["qmc_gap_mcse"].to_numpy(dtype=float),
             "s",
-            TOL_HIGH_CONTRAST["red"],
+            FIG4_COLORS["sobol"],
             "white",
         ),
     ]
@@ -814,8 +841,8 @@ def build_figure_4(
             color=color,
             ecolor=color,
             markerfacecolor=facecolor,
-            markeredgecolor=color,
-            markeredgewidth=0.85,
+            markeredgecolor=NEUTRAL["dark"] if label.startswith("Pseudo-MC") else color,
+            markeredgewidth=0.95,
             capsize=2,
             label=label,
         )
@@ -831,15 +858,15 @@ def build_figure_4(
             1e6 * (matched["mc_pi_minus_pm"].to_numpy(dtype=float) - curran),
             1e6 * matched["mc_pi_minus_pm_mcse"].to_numpy(dtype=float),
             "o",
-            TOL_HIGH_CONTRAST["blue"],
-            "white",
+            FIG4_COLORS["pseudo_mc"],
+            FIG4_COLORS["pseudo_mc"],
         ),
         (
             "Sobol minus Curran",
             1e6 * (matched["qmc_pi_minus_pm"].to_numpy(dtype=float) - curran),
             1e6 * matched["qmc_gap_mcse"].to_numpy(dtype=float),
             "s",
-            TOL_HIGH_CONTRAST["red"],
+            FIG4_COLORS["sobol"],
             "white",
         ),
     ]
@@ -942,10 +969,14 @@ def main() -> None:
         "hybrid_pdf": True,
         "raster_dpi": 600,
         "categorical_palettes": {
-            "paul_tol_high_contrast": TOL_HIGH_CONTRAST,
-            "paul_tol_medium_contrast": TOL_MEDIUM_CONTRAST,
+            "figure1_discrete": FIG1_DISCRETE,
+            "figure2": FIG2_COLORS,
+            "figure3": FIG3_COLORS,
+            "figure4": FIG4_COLORS,
         },
-        "continuous_colormap": HEATMAP_CMAP,
+        "continuous_colormap": "Paul Tol Iridescent",
+        "continuous_colormap_hex": IRIDESCENT_HEX,
+        "bad_data_color": BAD_DATA_COLOR,
         "neutral_palette": NEUTRAL,
         "print_mode": "color + grayscale-safe redundancy",
         "style_encoding": "color + marker + line pattern + marker fill",

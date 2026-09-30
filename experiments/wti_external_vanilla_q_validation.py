@@ -33,6 +33,7 @@ from typing import Any
 
 import numpy as np
 import pandas as pd
+from scipy.optimize import brentq
 
 from experiments.wti_forward_q_validation import (
     _error_summary,
@@ -273,6 +274,114 @@ def _fit_surface_models(
     )
 
 
+def _remaining_fixing_state(run_dir: Path) -> pd.DataFrame:
+    """Return unresolved fixing levels, times, and mapped raw underlyings."""
+    manifest = json.loads(
+        (run_dir / "manifest.json").read_text(encoding="utf-8")
+    )
+    valuation_date = pd.Timestamp(
+        manifest["valuation_date"]
+    ).normalize()
+    state = pd.read_csv(run_dir / "apo_fixing_state.csv")
+    required = {"fixing_date", "contract", "settlement"}
+    missing = required.difference(state.columns)
+    if missing:
+        raise ValueError(
+            f"{run_dir} fixing state missing columns: {sorted(missing)}"
+        )
+    state["fixing_date"] = pd.to_datetime(
+        state["fixing_date"]
+    ).dt.normalize()
+    state["settlement"] = pd.to_numeric(
+        state["settlement"], errors="coerce"
+    )
+    state = state[
+        (state["fixing_date"] > valuation_date)
+        & state["settlement"].notna()
+    ].copy()
+    if state.empty:
+        raise ValueError("no unresolved APO fixings available")
+    state["underlying"] = (
+        state["contract"].astype(str).map(_raw_cl_symbol)
+    )
+    state["time"] = (
+        (state["fixing_date"] - valuation_date)
+        .dt.days.to_numpy(dtype=float)
+        / 365.25
+    )
+    if (state["time"] <= 0).any():
+        raise ValueError("moment-matching state contains nonpositive times")
+    return state[["underlying", "settlement", "time"]].reset_index(
+        drop=True
+    )
+
+
+def _average_variance_common_factor(
+    fixing_state: pd.DataFrame,
+    sigma_by_underlying: dict[str, float],
+) -> float:
+    """Unnormalized arithmetic-average variance under one common Brownian factor."""
+    underlying = fixing_state["underlying"].astype(str).to_numpy()
+    levels = fixing_state["settlement"].to_numpy(dtype=float)
+    times = fixing_state["time"].to_numpy(dtype=float)
+    sigmas = np.array(
+        [float(sigma_by_underlying[u]) for u in underlying],
+        dtype=float,
+    )
+    if not np.all(np.isfinite(sigmas)) or np.any(sigmas <= 0):
+        raise ValueError("moment-matching volatilities must be positive")
+    min_time = np.minimum.outer(times, times)
+    exponent = np.outer(sigmas, sigmas) * min_time
+    covariance = np.outer(levels, levels) * np.expm1(exponent)
+    return float(np.sum(covariance))
+
+
+def _moment_matched_sigma(
+    fixing_state: pd.DataFrame,
+    sigma_by_underlying: dict[str, float],
+) -> float:
+    """Match the variance of the unresolved arithmetic-average component."""
+    target = _average_variance_common_factor(
+        fixing_state,
+        sigma_by_underlying,
+    )
+    if target <= 0:
+        raise ValueError("target average variance must be positive")
+
+    underlyings = set(
+        fixing_state["underlying"].astype(str).unique()
+    )
+    missing = sorted(underlyings.difference(sigma_by_underlying))
+    if missing:
+        raise ValueError(
+            f"missing component volatilities for {missing}"
+        )
+
+    def objective(sigma: float) -> float:
+        scalar = {u: float(sigma) for u in underlyings}
+        return (
+            _average_variance_common_factor(fixing_state, scalar)
+            - target
+        )
+
+    lower = 1e-8
+    upper = 3.0
+    if objective(upper) < 0:
+        raise ValueError(
+            "moment-matched volatility exceeds the supported bracket"
+        )
+    return float(
+        brentq(
+            objective,
+            lower,
+            upper,
+            xtol=1e-12,
+            rtol=1e-12,
+            maxiter=200,
+        )
+    )
+
+
 def _surface_sigma_targets(
     targets: pd.DataFrame,
     *,
@@ -280,6 +389,8 @@ def _surface_sigma_targets(
     supports: dict[tuple[str, str], tuple[float, float]],
     target_futures: dict[str, float],
     fixing_weights: dict[str, float],
+    aggregation: str = "weighted_rms",
+    fixing_state: pd.DataFrame | None = None,
 ) -> tuple[np.ndarray, np.ndarray]:
     required = set(fixing_weights)
     missing_models = sorted(required.difference(models))
@@ -328,9 +439,31 @@ def _surface_sigma_targets(
         weights = np.asarray(component_weights, dtype=float)
         weights = weights / weights.sum()
         sigmas = np.asarray(component_sigmas, dtype=float)
-        sigma_out[i] = float(
-            np.sqrt(np.sum(weights * sigmas**2))
-        )
+        if aggregation == "weighted_rms":
+            sigma_out[i] = float(
+                np.sqrt(np.sum(weights * sigmas**2))
+            )
+        elif aggregation == "weighted_mean":
+            sigma_out[i] = float(np.sum(weights * sigmas))
+        elif aggregation == "moment_matched":
+            if fixing_state is None:
+                raise ValueError(
+                    "fixing_state is required for moment_matched aggregation"
+                )
+            component_map = {
+                str(underlying): float(sigma)
+                for underlying, sigma in zip(
+                    fixing_weights,
+                    sigmas,
+                    strict=True,
+                )
+            }
+            sigma_out[i] = _moment_matched_sigma(
+                fixing_state,
+                component_map,
+            )
+        else:
+            raise ValueError(f"unknown aggregation: {aggregation}")
         clipped_out[i] = clipped
 
     return sigma_out, clipped_out
@@ -649,6 +782,16 @@ def parse_args() -> argparse.Namespace:
         choices=("weighted_rms", "weighted_mean"),
         default="weighted_rms",
     )
+    parser.add_argument(
+        "--surface-aggregation",
+        choices=("weighted_rms", "weighted_mean", "moment_matched"),
+        default=None,
+        help=(
+            "LO-smile maturity aggregation. Defaults to --aggregation. "
+            "moment_matched matches the unresolved arithmetic-average variance "
+            "under the maintained one-common-factor representation."
+        ),
+    )
     parser.add_argument("--force", action="store_true")
     return parser.parse_args()
 
@@ -656,6 +799,11 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     args = parse_args()
     args.output_root.mkdir(parents=True, exist_ok=True)
+    surface_aggregation = (
+        args.surface_aggregation
+        if args.surface_aggregation is not None
+        else args.aggregation
+    )
     output = args.output_root / "external_vanilla_q_predictions.csv"
     if output.exists() and not args.force:
         print(f"Reusing completed output: {output}", flush=True)
@@ -745,6 +893,7 @@ def main() -> None:
                         "training_end_date": training_end,
                         "n_training_dates": int(n_dates),
                         "aggregation": args.aggregation,
+        "surface_aggregation": surface_aggregation,
                         "fixing_weights_json": json.dumps(
                             weights, sort_keys=True
                         ),
@@ -779,6 +928,11 @@ def main() -> None:
             "vanilla_surface_expanding": float(args.half_life_days),
         }
         target_futures = _target_futures_curve(run_dir)
+        fixing_state = (
+            _remaining_fixing_state(run_dir)
+            if surface_aggregation == "moment_matched"
+            else None
+        )
         for method, half_life in surface_methods.items():
             try:
                 models, supports, training_end, n_dates = (
@@ -795,6 +949,8 @@ def main() -> None:
                     supports=supports,
                     target_futures=target_futures,
                     fixing_weights=weights,
+                    aggregation=surface_aggregation,
+                    fixing_state=fixing_state,
                 )
             except ValueError:
                 continue
@@ -822,7 +978,7 @@ def main() -> None:
                         "apo_expiry": args.apo_expiry,
                         "training_end_date": training_end,
                         "n_training_dates": int(n_dates),
-                        "aggregation": "surface_weighted_rms",
+                        "aggregation": f"surface_{surface_aggregation}",
                         "fixing_weights_json": json.dumps(
                             weights, sort_keys=True
                         ),
@@ -957,13 +1113,14 @@ def main() -> None:
             "APO valuation date."
         ),
         "maturity_mapping": (
-            "Scalar variants reduce near-ATM CLX6 and CLZ6 volatility "
-            "to the maintained APO state with target fixing-count RMS "
-            "variance weights. Surface variants fit prior-date quadratic "
-            "LO smiles by underlying and call/put, evaluate them at each "
-            "target APO strike using the target-date CL futures curve, "
-            "clip only to prior observed moneyness support, and combine "
-            "the resulting component variances with the same fixing weights."
+            "Scalar and surface variants reduce maturity-specific CLX6 "
+            "and CLZ6 volatilities to the maintained one-factor APO state "
+            f"using scalar {args.aggregation} aggregation and "
+            f"surface {surface_aggregation} aggregation. "
+            "Surface variants fit prior-date quadratic LO smiles by "
+            "underlying and call/put, evaluate them at each target APO "
+            "strike using the target-date CL futures curve, and clip only "
+            "to prior observed moneyness support."
         ),
         "same_day_apo_usage": (
             "Same-day APO implied volatility is retained only as an ex-post "
