@@ -1,4 +1,56 @@
 {
+  "bad_data_color": "#999999",
+  "categorical_palettes": {
+    "figure1_discrete": [
+      "#97001c",
+      "#0083f9",
+      "#00b49c",
+      "#ffc600",
+      "#f198ff"
+    ],
+    "figure2": {
+      "apo_common": "#f198ff",
+      "calls": "#0083f9",
+      "historical": "#00b49c",
+      "puts": "#97001c"
+    },
+    "figure3": {
+      "expanding": "#a5d3ff",
+      "previous_day": "#97001c",
+      "zero_line": "#555555"
+    },
+    "figure4": {
+      "curran": "#0083f9",
+      "pseudo_mc": "#ffc600",
+      "sobol": "#97001c"
+    }
+  },
+  "continuous_colormap": "Paul Tol Iridescent",
+  "continuous_colormap_hex": [
+    "#FEFBE9",
+    "#FCF7D5",
+    "#F5F3C1",
+    "#EAF0B5",
+    "#DDECBF",
+    "#D0E7CA",
+    "#C2E3D2",
+    "#B5DDD8",
+    "#A8D8DC",
+    "#9BD2E1",
+    "#8DCBE4",
+    "#81C4E7",
+    "#7BBCE7",
+    "#7EB2E4",
+    "#88A5DD",
+    "#9398D2",
+    "#9B8AC4",
+    "#9D7DB2",
+    "#9A709E",
+    "#906388",
+    "#805770",
+    "#684957",
+    "#46353A"
+  ],
   "figures": {
     "1": {
       "heatmap_state": {
@@ -42,6 +94,15 @@
         "forward_q_expanding_smile",
         "forward_q_previous_day_smile"
       ],
+      "expiries": [
+        "2026-09",
+        "2026-10",
+        "2026-11",
+        "2027-03",
+        "2027-09",
+        "2028-03",
+        "2028-09"
+      ],
       "outputs": [
         "figures\\publication\\fig03_forward_q_cluster_bootstrap.pdf",
         "figures\\publication\\fig03_forward_q_cluster_bootstrap.png"
@@ -71,18 +132,15 @@
     "png"
   ],
   "hybrid_pdf": true,
-  "output_dir": "figures\\publication",
-  "palette": {
-    "charcoal": "#3B3F46",
-    "gold": "#C28F2C",
-    "green": "#3A7D44",
-    "ink": "#17324D",
-    "light_gray": "#D9DDE3",
-    "midgray": "#7F8790",
-    "purple": "#6C5B9A",
-    "teal": "#2A6F97",
-    "very_light_gray": "#F4F6F8",
-    "wine": "#8E4B5B"
+  "neutral_palette": {
+    "black": "#111111",
+    "dark": "#3A3A3A",
+    "grid": "#D8D8D8",
+    "light": "#B0B0B0",
+    "mid": "#777777"
   },
-  "raster_dpi": 600
+  "output_dir": "figures\\publication",
+  "print_mode": "color + grayscale-safe redundancy",
+  "raster_dpi": 600,
+  "style_encoding": "color + marker + line pattern + marker fill"
 }
