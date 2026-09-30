@@ -8,7 +8,15 @@ The inverse-gamma prior in Equation~\eqref{eq:priors} is not treated as uniquely
 
 The main distinction is between prior sensitivity and window sensitivity. With 673 returns, posterior mean volatility is 0.4151 under the baseline prior, 0.4153 under a broad WTI-centered prior, and 0.4153 under a more concentrated WTI-centered prior. The corresponding Curran posterior-integrated prices are 0.6419, 0.6430, and 0.6428. Thus reasonable prior changes are negligible once the likelihood is informative. With only 63 observations, prior effects become visible at the cent level, while the PI--PM gap itself reaches approximately 0.0146. Changes in the historical window are materially larger because the windows span different realized volatility regimes.
 
-This experiment prices one representative difficult contract and therefore diagnoses sensitivity of the posterior-integration mechanism; it is not the same as a comprehensive forward comparison on all 2,381 holdouts. The exact-holdout recent-history benchmark in Section~\ref{sec:design} is designed to address that distinct question without selecting the historical window after seeing pricing errors.
+This experiment prices one representative difficult contract and therefore diagnoses sensitivity of the posterior-integration mechanism; it is not the same as a comprehensive forward comparison on all 2,381 holdouts. The exact-holdout historical benchmarks in Section~\ref{sec:design} address that distinct question without selecting the historical window after seeing pricing errors.
+
+\subsection{Dynamic historical-volatility forecasting}
+
+A horizon-matched Gaussian GARCH(1,1) provides a stronger historical benchmark than rolling or exponentially weighted realized volatility because it explicitly forecasts conditional variance over the remaining APO fixing horizon. Parameters are fitted strictly before each target date; the target-date return updates only the conditional variance state. The forecast variance path is then collapsed to the constant-volatility pricing representation by matching the unresolved arithmetic-average variance.
+
+All target-date fits converge. Estimated persistence $\alpha+\beta$ ranges from 0.9787 to 0.9820, while the implied long-run annualized volatility ranges from 0.4050 to 0.4167. The target-date updated one-day annualized state varies more substantially, from 0.3619 to 0.4908, and the resulting horizon-matched effective APO volatility ranges from 0.3617 to 0.4818 across date-expiry states. The benchmark therefore does react to recent conditions and remaining maturity rather than reproducing a fixed long-window scalar.
+
+That additional dynamics do not materially improve pooled pricing. Across the exact 2,381 holdouts, GARCH has MAE 2.6730 and RMSE 3.4441, compared with 2.6187 and 3.4090 for historical PI. It improves RMSE modestly for October 2026 and September 2028, but is worse than the long-window historical baseline in the other five expiries and remains far above the previous-day APO-smile RMSE in every expiry. The historical-versus-option-informed comparison therefore does not hinge on treating historical volatility as static.
 
 \subsection{Heavy-tailed physical-measure returns}
 
