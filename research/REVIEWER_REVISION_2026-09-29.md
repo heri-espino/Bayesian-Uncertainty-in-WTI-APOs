@@ -58,6 +58,12 @@ Deterministic low/ATM/high-strike sample by date/underlying/side. Re-inverts at 
 
 Checks strictly-prior fitted surfaces for finite/positive IV inside prior support, more than one direction change, and call/put fitted-IV gaps on overlapping support. Because LO is American-style, the audit deliberately does not impose European put-call parity.
 
+### Horizon-matched GARCH historical benchmark
+`experiments/wti_garch_horizon_benchmark.py`
+
+Final stronger historical comparator. Gaussian GARCH(1,1) parameters are estimated using only returns strictly before each target valuation date. The target-date return is then used only to update the end-of-day conditional variance state. Multi-step daily variance forecasts are mapped to each unresolved APO fixing schedule and collapsed to one annualized constant volatility by matching the variance of the unresolved arithmetic-average component under the maintained common-factor model. The experiment prices the exact same 2,381 strict-forward holdouts and reports historical PI and prior-date APO comparators on identical rows.
+
+
 ## One-command production run
 
 ```powershell
@@ -96,6 +102,7 @@ python -m scripts.run_reviewer_robustness
 
 ## Pending before merging PR #67
 
+- [ ] Run the new horizon-matched GARCH benchmark and inspect/commit its derived outputs.
 - [x] Run the reviewer robustness suite on the external machine.
 - [x] Commit/push the new derived result directories.
 - [x] Inspect exact recent-history, RMS, persistence, moment-matched LO, tree-convergence, and surface-shape results.
