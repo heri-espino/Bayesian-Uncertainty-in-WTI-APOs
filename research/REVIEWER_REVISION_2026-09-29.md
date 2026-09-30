@@ -64,12 +64,42 @@ Checks strictly-prior fitted surfaces for finite/positive IV inside prior suppor
 python -m scripts.run_reviewer_robustness
 ```
 
+## Completed reviewer-run results
+
+- Recent-history benchmarks, exact 2,381 holdouts:
+  - rolling 63: MAE/RMSE 4.5201/5.6465;
+  - rolling 126: 8.3419/9.7846;
+  - rolling 252: 5.2183/6.3933;
+  - EWMA half-life 63: 5.6616/6.8824;
+  - long-window historical PI remains 2.6187/3.4090.
+  - Conclusion: recency alone does not explain the option-informed advantage.
+- Prior-contract IV carry, exact 2,366 common rows:
+  - carry: MAE/RMSE 0.0992/0.1403;
+  - previous-day fitted smile: 0.1074/0.1594;
+  - historical PI: 2.6279/3.4173.
+  - Conclusion: flexible smile fitting is not required; contract-level option-IV persistence contains substantial predictive information.
+- Posterior-RMS plug-in:
+  - mean sigma displacement from posterior mean: 0.000153;
+  - mean absolute price displacement: 0.003254;
+  - PM MAE/RMSE 2.6185/3.3955 versus RMS 2.6211/3.3989.
+- Moment-matched LO transfer, 253 common-support rows:
+  - previous-day MAE/RMSE 0.1562/0.2612 versus primary weighted-RMS 0.1559/0.2599;
+  - expanding 0.1611/0.2869 versus 0.1604/0.2858.
+- LO CRR convergence, 156 stratified observations:
+  - 80--160 mean absolute IV change 0.000820;
+  - 160--320 mean/median/p95/max changes 0.000402/0.000284/0.001089/0.001810.
+- LO surface audit:
+  - 144 diagnostics over 12 dates;
+  - no nonpositive/nonfinite fitted IVs;
+  - maximum one direction change;
+  - mean/max call--put fitted-IV gap 0.000988/0.006337.
+
 ## Pending before merging PR #67
 
-- [ ] Run the reviewer robustness suite on the external machine.
-- [ ] Commit/push the new derived result directories.
-- [ ] Inspect exact recent-history, RMS, persistence, moment-matched LO, tree-convergence, and surface-shape results.
-- [ ] Integrate only supported numerical conclusions into Results/Robustness.
+- [x] Run the reviewer robustness suite on the external machine.
+- [x] Commit/push the new derived result directories.
+- [x] Inspect exact recent-history, RMS, persistence, moment-matched LO, tree-convergence, and surface-shape results.
+- [x] Integrate only supported numerical conclusions into Introduction/Abstract/Results/Robustness/Conclusion.
 - [ ] Recompile Wiley PDF and visually inspect the revised manuscript.
 - [ ] Complete corresponding-author email.
 - [ ] Complete acknowledgments.
