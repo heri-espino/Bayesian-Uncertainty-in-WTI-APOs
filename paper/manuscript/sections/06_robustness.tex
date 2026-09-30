@@ -16,7 +16,7 @@ A horizon-matched Gaussian GARCH(1,1) provides a stronger historical benchmark t
 
 All target-date fits converge. Estimated persistence $\alpha+\beta$ ranges from 0.9787 to 0.9820, while the implied long-run annualized volatility ranges from 0.4050 to 0.4167. The target-date updated one-day annualized state varies more substantially, from 0.3619 to 0.4908, and the resulting horizon-matched effective APO volatility ranges from 0.3617 to 0.4818 across date-expiry states. The benchmark therefore does react to recent conditions and remaining maturity rather than reproducing a fixed long-window scalar.
 
-That additional dynamics do not materially improve pooled pricing. Across the exact 2,381 holdouts, GARCH has MAE 2.6730 and RMSE 3.4441, compared with 2.6187 and 3.4090 for historical PI. It improves RMSE modestly for October 2026 and September 2028, but is worse than the long-window historical baseline in the other five expiries and remains far above the previous-day APO-smile RMSE in every expiry. The historical-versus-option-informed comparison therefore does not hinge on treating historical volatility as static.
+Those additional dynamics do not materially improve pooled pricing relative to the long-window historical baseline reported in Table~\ref{tab:recent_history_persistence}. GARCH improves RMSE modestly for October 2026 and September 2028, but is worse than the long-window historical baseline in the other five expiries and remains far above the previous-day APO-smile RMSE in every expiry. The historical-versus-option-informed comparison therefore does not hinge on treating historical volatility as static.
 
 \subsection{Heavy-tailed physical-measure returns}
 
