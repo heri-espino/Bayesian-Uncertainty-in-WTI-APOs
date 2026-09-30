@@ -14,6 +14,8 @@ paper/
 │   ├── main.tex
 │   ├── references.bib
 │   └── sections/
+├── supplement/
+│   └── online_supplement.md        # detailed design/robustness evidence moved from main text
 ├── vendor/
 │   └── wiley_njd_v5/
 └── build/                 # generated intermediate files; gitignored
@@ -49,6 +51,8 @@ paper/espino_2026_bayess-on-wti.pdf
 ```
 
 Generated LaTeX products and the exported PDF must not be committed.
+
+The main manuscript is intentionally concise. Detailed experimental settings and supporting robustness diagnostics that are not needed for the central argument are preserved in `paper/supplement/online_supplement.md` for later conversion to the journal's supplementary-material format.
 
 Useful maintenance commands:
 
