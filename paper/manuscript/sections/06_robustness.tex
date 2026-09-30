@@ -28,6 +28,20 @@ The pricing result is equally stable. On exactly the same 2,381 strict-forward h
 
 This check addresses the specific concern that the comparison between the long-window historical benchmark and option-informed inputs is an artifact of Yahoo's continuous-contract construction. It is not: the physical posterior barely moves and the pricing comparison is essentially unchanged.
 
+\subsection{Scalar-volatility and external-LO sensitivities}
+
+The posterior-RMS plug-in provides a direct scalar sensitivity to the posterior-mean choice. Across the 2,381 strict-forward holdouts,
+\[
+\sigma_{RMS}=\sqrt{\mathbb E[\sigma^2\mid\mathcal D]}
+\]
+exceeds the posterior mean by only 0.000153 on average. Repricing at \(\sigma_{RMS}\) changes the model value by 0.00325 on average in absolute terms, with a maximum absolute change of 0.00558. Under the common Curran engine, pooled MAE/RMSE are 2.6185/3.3955 for the posterior-mean plug-in and 2.6211/3.3989 for the posterior-RMS plug-in. The choice between these two scalar posterior summaries is therefore negligible relative to the volatility-input differences documented in Section~\ref{sec:results}.
+
+The LO-to-APO transfer is similarly insensitive to replacing the fixing-count RMS rule with a variance-matched scalar based on the unresolved arithmetic-average component. On the exact 253-observation common-support sample, the moment-matched previous-day LO surface has MAE 0.1562 and RMSE 0.2612, compared with 0.1559 and 0.2599 under the primary weighted-RMS transfer. The expanding surface changes from 0.1604/0.2858 to 0.1611/0.2869. Thus the external-option conclusion is not driven by treating fixing-count-weighted RMS volatility as an exact variance identity.
+
+The American-option inversion is also stable to tree refinement at the precision relevant here. A deterministic stratified audit of 156 LO contract-dates spanning reference date, underlying, option type, and low/ATM/high moneyness re-inverts volatility with 80, 160, and 320 CRR steps. The mean absolute IV difference falls from 0.000820 between 80 and 160 steps to 0.000402 between 160 and 320; for the latter comparison the median, 95th percentile, and maximum absolute differences are 0.000284, 0.001089, and 0.001810. This refinement pattern does not establish an exact infinite-tree limit, but it shows that the production 160-step inversion is numerically stable relative to the scale of the fitted LO surface.
+
+Finally, a strictly-prior LO surface-shape audit produces 144 diagnostics over 12 target dates. No fitted volatility inside observed prior support is nonpositive or nonfinite, the fitted curves have at most one direction change, and the mean fitted call--put IV gap on overlapping support is 0.00099, with maximum 0.00634. These diagnostics are sanity checks on the quadratic surface representation rather than a claim of a fully arbitrage-free volatility surface.
+
 \subsection{Numerical robustness: Monte Carlo, Sobol, and Curran}\label{sec:numerical_robustness}
 
 The empirical PI--PM gaps are sufficiently small that numerical error is a first-order methodological concern. The high-precision benchmark therefore recomputes difficult contracts using three distinct engines. Pseudo-random Monte Carlo uses antithetic paths and an arithmetic-average control variate with known $Q$ expectation. Randomized Sobol uses independently scrambled low-discrepancy sequences without that control variate. Curran conditioning supplies a deterministic approximation under the same one-factor futures dynamics.
