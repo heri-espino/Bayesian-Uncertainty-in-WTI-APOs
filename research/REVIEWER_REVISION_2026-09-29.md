@@ -1,3 +1,17 @@
+## Editorial compression pass — 2026-09-30
+
+- [x] Reduce the abstract to the question, mechanism, empirical contrast, and qualification.
+- [x] Cut the Introduction to motivation, literature position, three findings, and scope.
+- [x] Merge Methodology and Research Design into one main-text section; remove the separate design section from the active manuscript.
+- [x] Preserve detailed design settings and robustness evidence in `paper/supplement/online_supplement.md`.
+- [x] Reduce the main robustness section from ten subsections to four interpretive subsections.
+- [x] Reduce the Conclusion to four short paragraphs.
+- [x] Keep the mechanism map, PI--PM versus posterior uncertainty result, forward historical/option benchmark, IV persistence result, and external LO validation in the main paper.
+- [x] Main-paper source reduced from approximately 14,121 to 8,099 words before bibliography (about 42.6%).
+- [x] Static source check: balanced 5 tables, 3 figures, and 12 equation environments; no duplicate labels or unresolved refs.
+- [ ] Recompile the shortened PDF and inspect pagination/float placement.
+- [ ] Convert the preserved online-supplement source to the journal's final supplementary-material format before submission.
+
 # Referee-style revision tracker — 2026-09-29
 
 Source: user-supplied substantive review of the 23-page JFM manuscript.
