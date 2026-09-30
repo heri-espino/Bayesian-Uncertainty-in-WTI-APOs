@@ -79,6 +79,13 @@ python -m scripts.run_reviewer_robustness
   - EWMA half-life 63: 5.6616/6.8824;
   - long-window historical PI remains 2.6187/3.4090.
   - Conclusion: recency alone does not explain the option-informed advantage.
+- Horizon-matched Gaussian GARCH(1,1), exact 2,381 holdouts:
+  - MAE/RMSE 2.6730/3.4441 versus historical PI 2.6187/3.4090;
+  - all target-date optimizations converged;
+  - persistence range 0.9787--0.9820;
+  - effective APO volatility range 0.3617--0.4818 across date-expiry states;
+  - GARCH improves RMSE only for October 2026 and September 2028 and remains far from the prior-date APO specifications at every expiry.
+  - Conclusion: conditional heteroskedasticity and horizon-matched historical variance forecasting do not materially close the option-informed gap.
 - Prior-contract IV carry, exact 2,366 common rows:
   - carry: MAE/RMSE 0.0992/0.1403;
   - previous-day fitted smile: 0.1074/0.1594;
@@ -102,11 +109,11 @@ python -m scripts.run_reviewer_robustness
 
 ## Pending before merging PR #67
 
-- [ ] Run the new horizon-matched GARCH benchmark and inspect/commit its derived outputs.
+- [x] Run the new horizon-matched GARCH benchmark and inspect/commit its derived outputs.
 - [x] Run the reviewer robustness suite on the external machine.
 - [x] Commit/push the new derived result directories.
 - [x] Inspect exact recent-history, RMS, persistence, moment-matched LO, tree-convergence, and surface-shape results.
-- [x] Integrate only supported numerical conclusions into Introduction/Abstract/Results/Robustness/Conclusion.
+- [x] Integrate only supported numerical conclusions, including the horizon-matched GARCH result, into Introduction/Abstract/Research Design/Results/Robustness/Conclusion.
 - [ ] Recompile Wiley PDF and visually inspect the revised manuscript.
 - [ ] Complete corresponding-author email.
 - [ ] Complete acknowledgments.
