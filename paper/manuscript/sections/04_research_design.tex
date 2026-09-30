@@ -61,6 +61,14 @@ where $P^{mkt}_{i,t}$ is the Barchart end-of-day settlement field and $M$ indexe
 
 To separate information source from information recency, a pre-specified recent-history benchmark reuses the exact strict-forward holdouts and target-date information cutoffs. It evaluates annualized realized volatility from the most recent 63, 126, and 252 usable daily returns, plus an exponentially weighted estimate with a 63-business-day half-life. These choices are fixed before inspecting their pricing errors. Each scalar estimate is mapped through the same Curran APO pricing engine used for the prior-date smile predictions. The purpose is not to optimize a historical window ex post, but to ask whether a reasonable recent historical benchmark materially narrows the option-informed advantage.
 
+A stronger historical forecast benchmark uses a Gaussian GARCH(1,1), a standard class in crude-oil volatility forecasting \cite{gildertsiaras2020}. For each target date, parameters are estimated only from usable returns dated strictly before that date,
+\begin{equation}
+ h_{t+1}=\omega+\alpha\varepsilon_t^2+\beta h_t,
+ \qquad \alpha+\beta<1.
+ \label{eq:garch11}
+\end{equation}
+The observed target-date return is then used only to update the end-of-day conditional variance state, not to re-estimate parameters. Expected daily variances are forecast over the remaining business-day horizon and accumulated to each unresolved fixing date. Those cumulative variances define the common-factor covariance of the remaining futures fixings. Finally, a single annualized $\sigma_{GARCH}$ is chosen so that the constant-volatility pricing representation matches the arithmetic-average variance implied by the GARCH forecast path. The resulting horizon-matched scalar is evaluated on the same 2,381 strict-forward holdouts.
+
 A second scalar sensitivity uses Equation~\eqref{eq:sigma_rms}. Because every empirical run already stores the posterior mean and standard deviation of $\sigma$, the posterior-RMS comparator can be evaluated on the same holdouts without rerunning MCMC.
 
 \subsection{APO-implied volatility and cross-sectional validation}
