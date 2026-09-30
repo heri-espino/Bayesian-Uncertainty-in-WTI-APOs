@@ -10,7 +10,7 @@ Other changes to the physical-measure specification have similarly modest effect
 
 A posterior-RMS plug-in provides a separate scalar check. Repricing the posterior mean and posterior RMS with the same deterministic Curran engine changes pooled pricing error only slightly. This comparison is intentionally common-engine: it isolates the scalar posterior summary and should not be confused with the main Monte Carlo posterior-integrated historical benchmark.
 
-\subsection{Numerical and statistical validation}
+\subsection{Numerical and statistical validation}\label{sec:numerical_robustness}
 
 The empirical PI--PM correction is small enough that numerical error must be ruled out directly. High-precision pseudo-random Monte Carlo, independently scrambled Sobol calculations, and Curran conditioning agree on the PI--PM difference to a scale well below the observed empirical gaps. The conclusion that posterior integration adds little to the October point-price mean is therefore not an artifact of simulation noise or one particular pricing engine.
 
