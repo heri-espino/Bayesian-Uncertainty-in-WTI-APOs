@@ -6,6 +6,7 @@ map, or any heavy Monte Carlo experiment.
 
 Outputs:
 - recent historical volatility benchmarks on exact strict-forward holdouts;
+- horizon-matched Gaussian GARCH(1,1) forecast benchmark on the same holdouts;
 - posterior-RMS plug-in comparison;
 - prior-contract APO IV carry benchmark versus the previous-day smile on exact common rows;
 - moment-matched LO-to-APO surface aggregation sensitivity;
@@ -32,6 +33,13 @@ def main() -> None:
             python,
             "-m",
             "experiments.wti_recent_historical_benchmarks",
+        ]
+    )
+    _run(
+        [
+            python,
+            "-m",
+            "experiments.wti_garch_horizon_benchmark",
         ]
     )
     _run(
@@ -81,7 +89,7 @@ def main() -> None:
 
     print("\nReviewer robustness checks complete.", flush=True)
     print(
-        "Commit the six result groups only after inspecting the summaries.",
+        "Commit the reviewer result groups only after inspecting the summaries.",
         flush=True,
     )
 
