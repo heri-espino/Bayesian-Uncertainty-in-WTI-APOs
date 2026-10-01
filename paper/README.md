@@ -96,3 +96,9 @@ The current manuscript is an internal working draft. It may contain explicitly i
 pending empirical analyses. Do not replace those placeholders with inferred or fabricated
 results. Empirical claims are added only after the corresponding versioned experiment has
 run and its outputs can be traced to data, configuration, seed, and code commit.
+
+## Concise manuscript rewrite
+
+The repository now keeps a from-scratch concise manuscript in `manuscript/main_short.tex`, with its six sections under `manuscript/sections_short/`. It uses the same final empirical results, bibliography, Wiley class, and publication figures as the full manuscript, but organizes the paper around three findings: the curvature--posterior-variance mechanism, the distinction between the PI--PM point-price effect and posterior price uncertainty, and the out-of-sample historical-versus-option-implied volatility comparison including the external vanilla-WTI validation.
+
+The existing `manuscript/main.tex` is retained unchanged as the fuller version for comparison until the concise rewrite is accepted as the primary manuscript.
