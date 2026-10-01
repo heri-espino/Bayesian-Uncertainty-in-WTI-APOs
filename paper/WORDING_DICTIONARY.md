@@ -344,3 +344,32 @@ The dictionary follows recurring language in the bundle:
 This file is an editorial constraint for future manuscript edits. When a wording choice is not
 covered here, prefer the terminology in the most directly relevant paper in
 `literature/extracted/` rather than inventing a new label.
+
+
+---
+
+## 13. Current-manuscript terminology audit
+
+As of commit `021c9ec3`, the shortened manuscript still contains several project-specific or
+software-like expressions. These are the highest-priority normalization targets for the next
+prose pass:
+
+| Current term | Approx. occurrences | Priority | Recommended action |
+|---|---:|---|---|
+| `option-informed` | 17 | High | Replace with **option-implied** when the input comes from option inversion/calibration; use **option-based** only for an umbrella comparison. |
+| `holdout` | 12 | High | Replace with **out-of-sample observation**, **contract-date observation**, or **out-of-sample sample**, depending on grammar. |
+| `pricing map` | 14 | Medium | Use **option-pricing function** for (C^Q(\sigma)); use **pricing model** when referring to the structural specification. |
+| `forward-in-time` | 6 | Medium | Prefer **out-of-sample** plus an explicit “using only earlier-date information” statement. |
+| `model-price` / `posterior model-price` | 5 / 4 | High | Replace with **model price** and **posterior distribution of model prices**. |
+| `risk-neutral state` | 3 | High | Replace with **implied-volatility input**, **implied-volatility smile**, or **implied-volatility surface**. |
+| `parameter-induced` | 3 | Medium | Prefer **parameter uncertainty in option values**. |
+| `common-support` | 3 | Low | Keep only if explicitly defined as moneyness support; otherwise use **exact common sample within observed prior support**. |
+| `IV carry` | 4 | Medium | Keep only as a compact table label; use **same-contract lagged-IV benchmark** in prose. |
+| `recent-history rule` | 2 | Medium | Replace with **historical-volatility benchmark**. |
+| `pricing engine` | 1 | High | Replace with **pricing method** or **valuation method**. |
+| `model enrichment` | 1 | Medium | Replace with **richer model specification**. |
+
+Do not perform these as blind global substitutions. Some occurrences are mathematically useful
+(for example, “pricing map” when explicitly discussing curvature of the function
+(\sigma\mapsto C^Q(\sigma))). The rule is to prefer literature-standard wording whenever the
+more specialized project label adds no precision.
