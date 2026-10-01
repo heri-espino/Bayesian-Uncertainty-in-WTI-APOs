@@ -102,3 +102,31 @@ run and its outputs can be traced to data, configuration, seed, and code commit.
 The repository now keeps a from-scratch concise manuscript in `manuscript/main_short.tex`, with its six sections under `manuscript/sections_short/`. It uses the same final empirical results, bibliography, Wiley class, and publication figures as the full manuscript, but organizes the paper around three findings: the curvature--posterior-variance mechanism, the distinction between the PI--PM point-price effect and posterior price uncertainty, and the out-of-sample historical-versus-option-implied volatility comparison including the external vanilla-WTI validation.
 
 The existing `manuscript/main.tex` is retained unchanged as the fuller version for comparison until the concise rewrite is accepted as the primary manuscript.
+
+
+### Build the concise rewrite
+
+The concise manuscript has an independent build so it never overwrites the full-paper PDF:
+
+\`\`\`bash
+python paper/build_short.py --check
+python paper/build_short.py
+\`\`\`
+
+If the publication figures have already been generated, skip rebuilding them:
+
+\`\`\`bash
+python paper/build_short.py --skip-figures
+\`\`\`
+
+The exported PDF is:
+
+\`\`\`text
+paper/espino_2026_bayess-on-wti_short.pdf
+\`\`\`
+
+Cleaning the concise build removes only \`paper/build_short/\` and the concise exported PDF:
+
+\`\`\`bash
+python paper/build_short.py --clean
+\`\`\`
