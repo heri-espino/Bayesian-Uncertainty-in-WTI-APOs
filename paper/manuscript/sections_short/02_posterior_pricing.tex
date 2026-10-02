@@ -21,25 +21,36 @@ with baseline priors
 \end{equation}
 The empirical posterior is sampled in \((\mu,\log\sigma)\) with a random-walk Metropolis algorithm. For the large synthetic experiment, \(\mu\) is integrated analytically conditional on \(\sigma\), leaving a one-dimensional posterior calculation. This removes MCMC error from the mechanism experiment without changing the statistical model.
 
-Pricing is carried out separately under the risk-neutral measure. For each remaining futures fixing, the maintained benchmark is
+Pricing is carried out separately under the risk-neutral measure. For futures maturity \(u\), the maintained benchmark is
 \begin{equation}
- dF_u=\sigma F_u\,dW_u^Q.
+ dF_t^u=\sigma F_t^u\,dW_t^Q,
  \label{eq:short_q}
 \end{equation}
-The historical drift does not enter the option value. The constant-volatility, one-factor specification is intentionally parsimonious: it provides a common pricing model within which the effect of posterior integration and the effect of changing the volatility input can be compared directly.
+where \(u\) indexes futures maturity and the same Brownian motion \(W^Q\) drives all maturities. This common-factor assumption fixes the cross-maturity dependence relevant for the variance of the arithmetic average. The historical drift does not enter the option value. The constant-volatility, one-factor specification is intentionally parsimonious: it provides a common pricing model within which the effect of posterior integration and the effect of changing the volatility input can be compared directly.
 
 For an arithmetic-average option with fixing dates \(t_1,\ldots,t_M\),
 \begin{equation}
  A_T=\frac{1}{M}\sum_{j=1}^M F^{(1)}_{t_j},
  \label{eq:short_average}
 \end{equation}
+and the conditional call value is
+\begin{equation}
+ C_t^Q(\sigma)
+ =
+ B(t,T)\,
+ \mathbb E^Q\!\left[
+ (A_T-K)^+\mid\mathcal F_t;\sigma
+ \right],
+ \label{eq:short_call_value}
+\end{equation}
+where \(B(t,T)\) is the discount factor, \(K\) the strike, and \(\mathcal F_t\) the valuation-date information set. Put values are defined analogously.
 where \(F^{(1)}_{t_j}\) is the first-nearby WTI futures settlement applicable to fixing date \(t_j\). At a valuation date inside the averaging period, already realized fixings enter \(A_T\) deterministically and only the remaining fixings are stochastic. Each remaining fixing is initialized from the corresponding point of the observed CL futures curve.
 
-The baseline historical-volatility prices are evaluated by Monte Carlo. Curran's conditioning approximation \cite{curran1994} is used as a deterministic pricing approximation for the large out-of-sample comparisons and scalar-volatility sensitivity calculations. High-precision pseudo-random Monte Carlo and scrambled Sobol calculations are used only as numerical checks.
+The baseline historical-volatility prices are evaluated by Monte Carlo. Curran's conditioning approximation \citep{curran1994} is used as a deterministic pricing approximation for the large out-of-sample comparisons and scalar-volatility sensitivity calculations. High-precision pseudo-random Monte Carlo and scrambled Sobol calculations are used only as numerical checks.
 
 \subsection{Posterior integration and price uncertainty}
 
-Equation~\eqref{eq:short_pi_pm} compares two summaries of the same posterior and the same pricing model. A Taylor expansion of \(C^Q(\sigma)\) around \(\bar\sigma\) yields Equation~\eqref{eq:short_taylor}. The leading PI--PM difference depends on two quantities: posterior variance and the curvature of the option-pricing function with respect to volatility.
+Equation~\eqref{eq:short_pi_pm} compares two summaries of the same posterior and the same pricing model. A Taylor expansion of \(C^Q(\sigma)\) around \(\bar\sigma\) yields Equation~\eqref{eq:short_taylor}. The leading PI--PM difference depends on two quantities: posterior variance and the curvature of the option-pricing function with respect to volatility. The correction can have either sign because the local curvature can be positive or negative. The second-order approximation is most accurate when the posterior is sufficiently concentrated and higher-order curvature is controlled over the relevant posterior support.
 
 The posterior distribution also induces a distribution of theoretical option values,
 \begin{equation}
@@ -56,7 +67,7 @@ Its dispersion is approximately
 \end{equation}
 The contrast between Equations~\eqref{eq:short_taylor} and \eqref{eq:short_delta} is central. The change in the posterior mean price is locally second order in posterior dispersion, whereas uncertainty in the theoretical option value is locally first order. It is therefore possible for \(C_{PI}\) and \(C_{PM}\) to be almost identical while the posterior distribution of model prices remains economically nontrivial.
 
-The paper uses the terms \emph{posterior-integrated price} and \emph{posterior-mean price} only for this comparison. The former is the posterior average of the conditional option value; the latter evaluates the same pricing model at posterior mean volatility. Neither is interpreted as a market-consistent price outside the maintained model.
+The paper uses the terms \emph{posterior-integrated price} and \emph{posterior-mean plug-in price} only for this comparison. The former is the posterior average of the conditional option value; the latter evaluates the same pricing model at posterior mean volatility. Neither is interpreted as a market-consistent price outside the maintained model.
 
 \subsection{Synthetic mechanism experiment}
 
