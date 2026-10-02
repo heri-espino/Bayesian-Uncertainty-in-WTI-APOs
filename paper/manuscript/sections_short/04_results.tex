@@ -6,30 +6,30 @@ Figure~\ref{fig:short_mechanism} summarizes the synthetic mechanism experiment. 
 
 The second-order approximation in Equation~\eqref{eq:short_taylor} closely tracks the simulated PI--PM difference. Across synthetic cells, the correlation between the cell-level mean gap and the curvature--variance approximation is 0.9995. In the most adverse cells, through-origin slopes are close to one. The synthetic evidence therefore supports a simple mechanism: posterior integration changes the point price when posterior variance and volatility curvature are simultaneously large.
 
-Partial fixing materially reduces the effect. Once a larger fraction of the monthly average is known, less of the payoff remains exposed to future volatility. This contract feature gives the mechanism an Asian-option interpretation that is absent from a terminal-payoff option: even if posterior uncertainty about volatility is unchanged, the economic relevance of that uncertainty falls as the average becomes fixed.
+Partial fixing generally reduces the integration correction because less of the payoff remains exposed to future volatility as the monthly average becomes known. The relationship need not be monotone at every intermediate state, however. In Panel C, the 252-day case initially rises before declining because partial fixing changes both remaining volatility exposure and the local curvature of the option-pricing function. The overall tendency is downward as the average approaches full fixation.
 
 \begin{figure*}[t]
 \centering
 \includegraphics[width=\textwidth]{figures/publication/fig01_mechanism_map.pdf}
-\caption{Posterior integration across synthetic WTI-like states. Panel A shows posterior dispersion against historical sample size. Panels B and C show how the absolute PI--PM difference varies with moneyness and the fraction of the averaging period already fixed. Panel D compares the cell-level PI--PM difference with the second-order approximation in Equation~\eqref{eq:short_taylor}; the correlation is 0.9995.}
+\caption{Posterior integration across synthetic WTI-like states. Panel A shows posterior dispersion against historical sample size. Panels B and C show how the absolute PI--PM difference varies with moneyness and the fraction of the averaging period already fixed. Panel D compares cell-level mean PI--PM differences with the corresponding second-order approximation in Equation~\eqref{eq:short_taylor}; the correlation is 0.9995. The color bar labeled \textit{Cell count} records how many synthetic scenario cells fall in each hexagonal bin of Panel D.}
 \label{fig:short_mechanism}
 \end{figure*}
 
 \subsection{WTI point-price correction versus parameter uncertainty}
 
-The October-2026 baseline contains 310 contract-date observations over 12 eligible valuation dates. Table~\ref{tab:short_october} reports the main Bayesian comparison. Posterior-integrated and posterior-mean prices have nearly identical market-pricing errors: RMSE is 0.5177 for PI and 0.5183 for PM. The mean absolute difference between the two prices is only 0.000745.
+The October-2026 baseline contains 310 contract-date observations over 12 eligible valuation dates. Table~\ref{tab:short_october} reports the main Bayesian comparison. Posterior-integrated and posterior-mean plug-in prices have nearly identical market-pricing errors: RMSE is 0.5177 for PI and 0.5183 for PM. The mean absolute difference between the two prices is only 0.000745.
 
 That near equality does not imply that uncertainty in the theoretical option value is negligible. The mean width of the central 95\% posterior interval for the model price is 0.2733, approximately 367 times the mean absolute PI--PM difference. The two quantities answer different questions. PI--PM measures how nonlinear averaging changes the posterior mean price; the interval width measures the dispersion of theoretical prices induced by uncertainty about volatility.
 
 \begin{table}[t]
 \centering
-\caption{October-2026 WTI APO pricing and posterior price uncertainty. Pricing error is model price minus settlement price.}\label{tab:short_october}
+\caption{October-2026 WTI APO pricing and posterior price uncertainty. Pricing error is model price minus settlement price. All price quantities and errors are in U.S. dollars per barrel.}\label{tab:short_october}
 \begin{tabular}{lrrr}
 \toprule
 Quantity & $N$ & Value \\
 \midrule
 PI RMSE & 310 & 0.5177 \\
-PM RMSE & 310 & 0.5183 \\
+PM plug-in RMSE & 310 & 0.5183 \\
 Mean $|PI-PM|$ & 310 & 0.000745 \\
 Mean 95\% posterior price-interval width & 310 & 0.2733 \\
 \bottomrule
@@ -46,7 +46,7 @@ By contrast, the previous-day APO implied-volatility smile has MAE 0.1075 and RM
 
 \begin{table*}[t]
 \centering
-\caption{Historical-volatility and prior option-implied volatility benchmarks. Panel A uses the same 2,381 out-of-sample contract-date observations over 15 target dates. Panel B restricts the comparison to observations for which the same contract has a strictly prior implied volatility. Historical PI is the canonical Monte Carlo posterior-integrated price; scalar historical, GARCH, and implied-volatility inputs are repriced under the same Curran approximation.}\label{tab:short_forward}
+\caption{Historical-volatility and prior option-implied volatility benchmarks. Panel A uses the same 2,381 out-of-sample contract-date observations over 15 target dates. Panel B restricts the comparison to observations for which the same contract has a strictly prior implied volatility. Historical PI is the canonical Monte Carlo posterior-integrated price; scalar historical, GARCH, and implied-volatility inputs are repriced under the same Curran approximation. MAE and RMSE are in U.S. dollars per barrel.}\label{tab:short_forward}
 
 \textit{Panel A: main out-of-sample comparison}\\[2pt]
 \begin{tabular}{lrrrr}
@@ -73,7 +73,7 @@ Previous-day fitted APO smile & 2,366 & 15 & 0.1074 & 0.1594\\
 \end{tabular}
 \end{table*}
 
-The historical comparisons address two natural alternatives. First, the difference is not reproduced by simply shortening the return window or by using an exponentially weighted historical estimate; the complete set of recent-history results is reported in the online supplement. Second, allowing conditional heteroskedasticity and forecasting variance over the remaining fixing horizon does not materially close the pooled gap: GARCH remains near the long-window historical benchmark.
+The historical comparisons address two natural alternatives. First, the difference is not reproduced by simply shortening the return window or by using an exponentially weighted historical estimate; the complete set of rolling-window and EWMA results is reported in Online Supplement Section S1 and Table S1. Second, allowing conditional heteroskedasticity and forecasting variance over the remaining fixing horizon does not materially close the pooled gap: GARCH remains near the long-window historical benchmark.
 
 Panel B addresses a different alternative. On the exact common sample, carrying the same contract's latest prior implied volatility forward has lower pooled MAE and RMSE than fitting the previous-day smile. This is a descriptive ranking rather than evidence that lagged IV is generally superior to a fitted smile. Its role is to show that the large historical-versus-option-implied difference does not require a flexible cross-sectional implied-volatility function.
 
@@ -92,7 +92,7 @@ The independent vanilla-WTI experiment moves the implied-volatility source outsi
 
 \begin{table}[t]
 \centering
-\caption{Cross-instrument validation on 253 October-2026 APO contract-dates within observed prior LO moneyness support. All implied-volatility inputs use only earlier-date option information.}\label{tab:short_lo}
+\caption{Cross-instrument validation on 253 October-2026 APO contract-dates within observed prior LO moneyness support. Historical PI is the canonical Monte Carlo posterior-integrated price; the vanilla-WTI and APO implied-volatility inputs are repriced with the deterministic Curran approximation. All implied-volatility inputs use only earlier-date option information. MAE and RMSE are in U.S. dollars per barrel.}\label{tab:short_lo}
 \begin{tabular}{lrr}
 \toprule
 Volatility input & MAE & RMSE\\
