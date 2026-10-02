@@ -75,3 +75,33 @@ The intended workflow is:
 2. once the paper has been sent and the scientific state is safely archived elsewhere, review licenses and remove/restructure raw vendor data as needed for the final public/reproducibility snapshot.
 
 Temporary retention does not by itself establish redistribution rights.
+
+## Concise-paper editorial checkpoint — 2026-10-02
+
+The rewritten concise paper is integrated into the existing
+`paper/manuscript/main_short.tex` and six `sections_short/` files.
+It preserves the computed results from `8d95e5313e7b764c0cb0e7f9ef06e54bcf5d75d7`,
+shared bibliography, original publication figures, and Wiley Harvard/Utopia2COL
+format. No scientific computations changed.
+
+The revised contribution is a diagnostic comparison of three margins: the
+PI--PM correction, posterior dispersion of model prices, and changing volatility
+information. The introduction explicitly distinguishes this comparison from
+Rombouts--Stentoft's existing Bayesian results and Shiraya--Takahashi's existing
+vanilla-to-average-option calibration principle.
+
+The long manuscript and online supplement audit archives remain available.
+Do not promote the concise draft by copying it over `main.tex` until the author
+chooses it as the primary manuscript. The existing concise builder remains
+`python paper/build_short.py`; its `--check` option validates the layout.
+The tracked concise PDF is from the preceding source version and needs a fresh
+Wiley build. The separately supplied reading preview does not verify Wiley layout.
+The next editorial step is to compile and visually inspect that build, then supply
+the corresponding-author email and acknowledgments. Keep heavy scientific/PDF
+workflows manual and do not rerun completed experiments for these prose changes.
+
+Validation: `python -m scripts.check_repo_structure`,
+`python paper/build.py --check`, and `python paper/build_short.py --check` pass.
+The canonical concise build was attempted with `--skip-figures` and stopped
+before manuscript typesetting because this environment lacks `ulem.sty`.
+No replacement Wiley PDF or generated build products were committed.
