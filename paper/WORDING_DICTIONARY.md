@@ -67,7 +67,7 @@ software-like or newly coined labels when an established term is available.
 | Bayesian object | **posterior distribution** | Standard term. | “Bayesian distribution” |
 | Summaries | **posterior mean**, **posterior mode**, **posterior moments** | Literature-standard Bayesian terminology. | “Bayesian mean” |
 | Price integrating parameters | **posterior-integrated price** only after definition as “the posterior average of the conditional option value” | Keep because it is central to this paper and transparent once defined. | “full-Bayes price”; the corpus does not use this label |
-| Comparison price | **price evaluated at posterior mean volatility** on first use; **posterior-mean price (PM)** thereafter | More explicit than repeatedly saying “plug-in.” | Heavy use of “plug-in price” in narrative prose |
+| Comparison price | **posterior-mean plug-in price (PM)** | Use this consistently so PM cannot be mistaken for the posterior expectation of the option price, which is PI. | “posterior-mean price” by itself |
 | Central contrast | **PI--PM difference** / **effect of posterior integration on the point price** | Descriptive and tied to the estimands. | “Bayesian correction” as if it were universally required |
 | Uncertainty in theoretical prices | **posterior distribution of model prices induced by parameter uncertainty** | Most precise description of the push-forward distribution used here. | “predictive price density” for this object: in Rombouts/Stentoft that term includes predictive return uncertainty, not only our parameter push-forward |
 | Interval | **central 95% posterior interval for the model price** | Clear without implying a future-market predictive interval. | “95% predictive interval” |
@@ -228,7 +228,7 @@ Use **option-informed** sparingly, preferably not at all in formal results.
 
 Preferred:
 
-> The difference between posterior-integrated and posterior-mean prices is governed locally by
+> The difference between posterior-integrated and posterior-mean plug-in prices is governed locally by
 > posterior variance and the curvature of the option-pricing function with respect to
 > volatility.
 
@@ -242,7 +242,7 @@ The latter sounds normative and suggests that PM is an error that must be correc
 
 Preferred:
 
-> In the observed WTI sample, posterior-integrated and posterior-mean prices are close, even
+> In the observed WTI sample, posterior-integrated and posterior-mean plug-in prices are close, even
 > though the posterior distribution of model prices remains materially dispersed.
 
 or
@@ -312,7 +312,7 @@ Use only abbreviations that materially reduce repetition:
 - **APO** — Average Price Option
 - **IV** — implied volatility
 - **PI** — posterior-integrated price
-- **PM** — posterior-mean price
+- **PM** — posterior-mean plug-in price
 - **LO** — define as the CME/NYMEX vanilla WTI option product before using
 - **GARCH**
 - **EWMA**
