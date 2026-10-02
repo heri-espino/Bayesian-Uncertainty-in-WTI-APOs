@@ -1,0 +1,9 @@
+\section{Conclusion}\label{sec:short_conclusion}
+
+This paper separates two questions in Bayesian option pricing: whether parameter uncertainty materially changes the posterior mean option value, and whether the source of the volatility input materially changes out-of-sample pricing performance. The first question is governed locally by posterior variance and curvature of the option-pricing function. The synthetic experiment confirms this mechanism and shows that posterior integration can become economically relevant in weak-information, high-curvature states.
+
+The observed WTI sample lies in a different region. Posterior-integrated and posterior-mean plug-in prices are almost identical, while the posterior distribution of model prices remains materially dispersed. A small PI--PM difference therefore does not imply little parameter uncertainty in the option value; it means that nonlinear averaging changes the posterior mean price very little in the observed states.
+
+The larger empirical margin is the volatility information supplied to the pricing model. Prior option-implied volatility produces substantially lower out-of-sample pricing errors than the historical-volatility benchmarks evaluated here. The result is robust to recent-window, EWMA, and horizon-matched GARCH comparisons, does not require a flexible implied-volatility smile, and persists when the volatility input is obtained from a separate vanilla-WTI option market.
+
+These findings are conditional on a small number of market dates and on the maintained one-factor pricing model. They do not identify a structural physical-versus-risk-neutral volatility wedge. Their narrower implication is that, for these WTI APOs, improving the volatility information is much more consequential for point pricing than integrating a relatively concentrated historical-volatility posterior more exactly.

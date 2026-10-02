@@ -1,0 +1,52 @@
+\documentclass[HARVARD,Utopia2COL]{WileyNJDv5}
+
+\usepackage{amsmath,amssymb,booktabs}
+\usepackage{graphicx}
+\hypersetup{hidelinks}
+
+\articletype{Research Article}
+\journal{Journal of Futures Markets}
+\raggedbottom
+
+\begin{document}
+
+\title{When Does Posterior Integration Change Option Values? Evidence from WTI Average Price Options}
+
+\author[1]{Heriberto Espino Montelongo}
+\authormark{ESPINO MONTELONGO}
+\titlemark{POSTERIOR INTEGRATION IN WTI AVERAGE PRICE OPTIONS}
+
+\address[1]{\orgname{Universidad de las Am\'ericas Puebla}, \orgaddress{\state{Puebla}, \country{Mexico}}}
+\corres{Corresponding author: Heriberto Espino Montelongo. \email{[corresponding email]}}
+
+\abstract[Abstract]{
+This paper asks when integrating posterior uncertainty in historically estimated volatility materially changes a WTI Average Price Option value, and how that effect compares with changing the volatility input itself. Under the maintained one-factor pricing map, the posterior-integrated minus posterior-mean correction is governed locally by posterior variance and price curvature. A 175,000-history synthetic experiment confirms this mechanism and identifies weak-information, high-curvature states in which the correction can become economically relevant. In the observed October-2026 WTI panel, however, the mean absolute correction is 0.000745 while the mean width of the 95\% posterior model-price interval is 0.2733: a small change in the posterior mean price does not imply negligible parameter-induced price uncertainty. In 2,381 strict forward-in-time holdouts, prior option-implied volatility inputs sharply outperform the tested historical-volatility inputs. Rolling-window, exponentially weighted, and horizon-matched GARCH benchmarks do not reproduce that performance, and same-contract prior-IV carry shows that the improvement is not contingent on flexible smile fitting. An independent vanilla-WTI option surface provides a cross-instrument confirmation. The evidence therefore supports a diagnostic distinction: posterior integration can matter through curvature, but in this sample volatility-input choice is the larger empirical pricing margin.
+}
+
+\keywords{Bayesian option pricing; Asian options; WTI crude oil; parameter uncertainty; commodity derivatives}
+
+\maketitle
+
+
+\input{sections/01_introduction}
+\input{sections/02_contract_market}
+\input{sections/03_methodology}
+\input{sections/05_results}
+\input{sections/06_robustness}
+\input{sections/07_conclusion}
+
+\bmsection*{Data availability}
+The APO and CL histories used in the empirical application were obtained through a commercial Barchart subscription. The independent vanilla-WTI validation uses CME/NYMEX LO option and CL futures statistics accessed through Databento. Redistribution of raw proprietary market-data files is not assumed to be permitted. The public repository therefore prioritizes code, query metadata, schemas, provenance records, diagnostics, hashes, and derived results consistent with the applicable data licenses.
+
+\bmsection*{Code availability}
+The research code is organized as an installable Python package, \texttt{bayesian\_asian\_options}, with documented APIs, tests, deterministic seeds, reproducible experiment entry points, and committed derived results. The public repository is \url{https://github.com/heri-espino/Bayesian-Uncertainty-in-WTI-APOs}. The submitted manuscript and figures will be tied to the exact Git commit used for the submission build; that commit will be preserved as the versioned submission snapshot.
+
+\bmsection*{Conflict of interest}
+The author declares no conflict of interest.
+
+\bmsection*{Acknowledgments}
+To be completed before submission.
+
+\bibliography{references}
+
+\end{document}

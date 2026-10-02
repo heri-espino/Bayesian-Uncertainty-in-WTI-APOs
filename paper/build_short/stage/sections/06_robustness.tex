@@ -1,0 +1,31 @@
+\section{Robustness and limitations}\label{sec:robustness}
+
+The main text keeps only the robustness evidence needed to interpret the three central findings. Full sampler settings, alternative-window results, posterior calibration, numerical audits, tree-refinement diagnostics, and extended liquidity tables are preserved in the online supplement.
+
+\subsection{Historical-model and data robustness}
+
+The historical-versus-option-informed comparison is not driven by one particular historical estimator. Table~\ref{tab:recent_history_persistence} shows that the evaluated rolling-window and EWMA rules do not reproduce the prior option-implied performance, while the horizon-matched GARCH benchmark remains close to the long-window historical baseline. The GARCH result is useful because it allows conditional heteroskedasticity and maturity-specific variance forecasting rather than treating historical volatility as a single static estimate. Its failure to close the pooled gap narrows the interpretation to the tested historical models without implying that every possible historical forecast has been ruled out.
+
+Other changes to the physical-measure specification have similarly modest effects on the main hierarchy. Replacing Gaussian innovations with standardized Student-\(t\) returns modestly improves historical-volatility pricing but leaves the PI--PM correction small relative to the remaining pricing error. Reconstructing the physical return history contract by contract from first-nearby CL settlements yields a volatility posterior very close to the Yahoo \texttt{CL=F} baseline and leaves the forward comparison essentially unchanged. Prior and estimation-window sensitivity show that, once the long historical likelihood is informative, reasonable prior changes have little effect; shorter windows matter more because they sample different volatility regimes.
+
+A posterior-RMS plug-in provides a separate scalar check. Repricing the posterior mean and posterior RMS with the same deterministic Curran engine changes pooled pricing error only slightly. This comparison is intentionally common-engine: it isolates the scalar posterior summary and should not be confused with the main Monte Carlo posterior-integrated historical benchmark.
+
+\subsection{Numerical and statistical validation}\label{sec:numerical_robustness}
+
+The empirical PI--PM correction is small enough that numerical error must be ruled out directly. High-precision pseudo-random Monte Carlo, independently scrambled Sobol calculations, and Curran conditioning agree on the PI--PM difference to a scale well below the observed empirical gaps. The conclusion that posterior integration adds little to the October point-price mean is therefore not an artifact of simulation noise or one particular pricing engine.
+
+The posterior implementation is checked separately through simulation-based calibration. Prior-predictive rank distributions and interval coverage are close to their nominal targets across the tested sample sizes. For the external LO inversion, an 80/160/320-step CRR refinement audit shows practical stability at the production 160-step choice, while a separate surface-shape audit finds finite positive fitted volatilities and smooth behavior inside observed prior support. These diagnostics support numerical implementation; they are not presented as proofs of an exact infinite-tree limit or of a globally arbitrage-free fitted surface.
+
+\subsection{Liquidity, persistence, and external transfer}
+
+Dependence across contracts is handled by resampling valuation dates rather than individual option rows. Cluster-bootstrap comparisons preserve the large separation between prior option-informed specifications and the historical baseline. The same direction also appears in the positive-volume pool and across open-interest restrictions, although transaction-active observations remain sparse in the longest-dated expiries. The empirical claims therefore concern available end-of-day market marks rather than a dense transaction-price panel.
+
+The same-contract persistence experiment provides a distinct interpretation check. On the exact common sample, carrying each contract's latest strictly prior implied volatility gives lower pooled error than the fitted previous-day smile. This is a descriptive ranking, not evidence that IV carry is generally superior. Its role is narrower: the historical-versus-option-informed improvement does not require flexible cross-sectional smile fitting.
+
+The external LO result is also robust to the scalar transfer rule. Replacing the primary fixing-count RMS mapping with a scalar chosen to match the unresolved arithmetic-average variance changes the external pricing errors only slightly. Thus the cross-instrument conclusion does not depend on treating the primary RMS mapping as an exact variance identity.
+
+\subsection{Limits of interpretation}
+
+The forward APO experiment spans seven expiries but only 15 distinct target dates, and the external common-support experiment spans 10 target dates. Multiple contracts on one date expand the cross-section but do not create additional independent market histories. Date-cluster resampling preserves contemporaneous dependence but does not remove serial dependence across adjacent dates.
+
+The pricing model is also deliberately parsimonious. A multi-factor futures curve, stochastic volatility, jumps, stochastic convenience yield, or richer interest-rate treatment could improve absolute pricing fit and would introduce additional uncertain parameters. The present evidence does not identify a pure structural \(\mathbb P\)--\(\mathbb Q\) volatility wedge: option-implied states can absorb risk premia, omitted dynamics, liquidity, and settlement-marking effects. The paper's narrower conclusion is conditional on the maintained pricing map and the historical benchmarks actually evaluated.

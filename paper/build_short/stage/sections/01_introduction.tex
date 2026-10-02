@@ -1,0 +1,34 @@
+\section{Introduction}\label{sec:introduction}
+
+Option values depend on parameters and state variables that are estimated rather than observed. A Bayesian treatment can propagate that uncertainty through the pricing map instead of collapsing it to a single estimate. This idea is established in option pricing: Bayesian learning has been used in implied-volatility forecasting \cite{guidolin2003}, risk-neutral predictive densities \cite{romboutsstentoft2014}, and calibration of exotic-derivative models \cite{guptareisinger2014}. The narrower question studied here is when posterior integration itself materially changes a point price relative to plugging in the posterior mean of volatility.
+
+Average-price commodity options are a useful setting because the pricing map depends on moneyness, maturity, and the fraction of the averaging window already fixed. The numerical literature exploits geometric-average structure to price arithmetic-average claims efficiently \cite{kemnavorst1990,curran1994}, while commodity-specific models allow richer futures dynamics \cite{schwartz1997,ewaldwu2023}. For WTI specifically, \cite{shirayatakahashi2011} calibrate richer risk-neutral models to liquid vanilla options before valuing average-price options, and \cite{ganwangyang2020} study WTI Average Price Options with a model-free machine-learning approach. The contribution here is therefore not a new APO pricing model. It is a diagnostic comparison between posterior integration and volatility-input choice under a deliberately transparent benchmark.
+
+The statistical and pricing measures are kept separate. Historical returns inform volatility under the physical measure, while option valuation is performed under the risk-neutral measure. Let \(C^Q(\sigma)\) denote the risk-neutral APO value conditional on volatility \(\sigma\). The posterior-integrated and posterior-mean rules are
+\begin{equation}
+ C_{PI}=\mathbb E[C^Q(\sigma)\mid\mathcal D],
+ \qquad
+ C_{PM}=C^Q(\mathbb E[\sigma\mid\mathcal D]).
+ \label{eq:intro_rules}
+\end{equation}
+Because \(C^Q(\sigma)\) is nonlinear, these quantities need not coincide. A second-order expansion gives
+\begin{equation}
+ C_{PI}-C_{PM}
+ \approx
+ \frac12 C^{Q\prime\prime}(\bar\sigma)
+ \operatorname{Var}(\sigma\mid\mathcal D),
+ \qquad
+ \bar\sigma=\mathbb E[\sigma\mid\mathcal D].
+ \label{eq:intro_taylor}
+\end{equation}
+The mechanism is therefore simple: posterior integration matters when posterior dispersion meets pricing curvature. By contrast, the width of the posterior distribution of model prices is first-order in posterior standard deviation, so a small \(C_{PI}-C_{PM}\) need not imply little parameter-induced price uncertainty.
+
+The empirical application uses CME WTI Average Price Options. The payoff depends on the arithmetic average of daily first-nearby WTI futures settlements, so valuation reconstructs realized fixings, the remaining first-nearby futures sequence, and the contemporaneous futures curve. The observed option panel is then used in three complementary exercises. First, a synthetic mechanism map isolates the conditions under which posterior integration becomes economically relevant. Second, strict forward-in-time APO experiments compare historical-volatility inputs with volatility states inferred only from earlier option observations. Third, an independent validation constructs the volatility state from standard monthly WTI futures options rather than from the APO family itself.
+
+The empirical distinction between integration and specification is important because option-implied information can outperform historical return models even when the pricing model remains imperfect. Forward-looking crude-oil option information has been shown to contain predictive volatility content beyond historical models \cite{gildertsiaras2020}, and flexible implied-volatility specifications can fit the contemporaneous cross-section while still deteriorating out of sample \cite{dumasflemingwhaley1998}. More generally, richer option models can improve some performance criteria without dominating on all dimensions \cite{bakshicaochen1997,cumminsesposito2025}. The paper therefore treats an implied volatility as an effective state under the maintained pricing map, not as a structural estimate of a unique risk-neutral diffusion coefficient.
+
+Three findings organize the paper. First, the synthetic experiments confirm Equation~\eqref{eq:intro_taylor}: the PI--PM correction grows with posterior dispersion and volatility curvature and can become material in weak-information, high-volatility, long-horizon states. Second, the observed WTI panel lies in a region where the mean-price correction is very small even though the posterior distribution of theoretical prices remains meaningfully dispersed. Third, changing the volatility information supplied to the model has a much larger empirical effect. Prior option-implied states sharply reduce settlement pricing error relative to the historical-volatility benchmarks evaluated here; this result survives recent-window, EWMA, and horizon-matched GARCH comparisons, does not require flexible smile fitting, and persists when the volatility source is moved to an independent vanilla-WTI option market.
+
+These findings do not identify a pure structural wedge between physical and risk-neutral volatility. Option-implied states can absorb risk premia, stochastic volatility, jumps, omitted futures-curve dynamics, liquidity, and settlement-marking effects. The supported conclusion is narrower: in this sample, prior option-implied volatility states are substantially more informative for subsequent APO settlements than the tested historical-volatility inputs, while more exact integration of the historical-volatility posterior changes the point-price mean much less.
+
+The rest of the paper gives each finding one principal home. Section~\ref{sec:contract} describes the contract and data. Section~\ref{sec:methodology} combines the statistical, pricing, and validation design. Section~\ref{sec:results} reports the mechanism and market evidence. Section~\ref{sec:robustness} summarizes robustness checks, with detailed implementation and diagnostics moved to the online supplement. Section~\ref{sec:conclusion} concludes.

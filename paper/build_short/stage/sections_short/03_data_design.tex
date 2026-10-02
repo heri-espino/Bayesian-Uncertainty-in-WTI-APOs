@@ -1,0 +1,29 @@
+\section{Data and empirical design}\label{sec:short_design}
+
+\subsection{WTI Average Price Options}
+
+The empirical sample is built from individual Barchart histories for WTI Average Price Options. The raw archive contains 213 unique contracts and 11,179 option-date observations across expiries from September 2026 through June 2029. The market target is the Barchart end-of-day settlement field. Calls and puts are retained as available, and moneyness is recomputed by valuation date rather than assigned once at the contract level.
+
+For each option-date observation, the pricing data reconstruct three objects: realized first-nearby CL settlements for fixing dates that have already occurred, the CL futures contracts applicable to the remaining fixing dates, and the contemporaneous futures term structure used to initialize those remaining fixings. This preserves the contract feature that the first-nearby futures contract can change during the averaging month.
+
+Historical volatility is estimated from WTI futures returns available by the valuation date. The baseline uses the labelled continuous/front-month \texttt{CL=F} return series as the physical-measure proxy. A robustness check reconstructs a first-nearby return history contract by contract from CL settlements and excludes returns spanning contract switches.
+
+\subsection{Out-of-sample volatility comparisons}
+
+The main empirical experiment asks how different volatility inputs affect subsequent APO pricing. The timing convention separates volatility estimation from repricing information. Option-implied volatility inputs use only option observations dated strictly before the target date; target-date repricing uses the contemporaneous futures curve, realized fixings, and discount factor. Historical-volatility estimators use returns available under their stated valuation-date cutoff. Seven expiries pass the committed-data coverage requirement, producing 2,381 out-of-sample contract-date observations over 15 target dates.
+
+The historical-volatility benchmark is the posterior-integrated price based on the expanding historical return sample. Four pre-specified recent historical alternatives use the most recent 63, 126, or 252 returns and an EWMA estimate with a 63-business-day half-life; complete results are reported in Online Supplement Section S1 and Table S1. A Gaussian GARCH(1,1) provides a stronger dynamic benchmark. For each target date, GARCH parameters are estimated only from earlier returns; the target-date return updates only the end-of-day conditional variance state, after which conditional variances are forecast across the remaining fixing horizon and collapsed to a constant annualized volatility that matches the implied variance of the unresolved arithmetic-average component under the maintained one-factor pricing model.
+
+The option-implied specifications are also restricted to earlier dates. Contract-level APO implied volatilities are obtained by inverting the Curran pricing approximation. A previous-day smile uses the latest completed earlier APO date for the relevant expiry, while an expanding specification uses all earlier dates with recency weights. The fitted relation is a function of moneyness and option type. Same-day APO settlements never enter the target-date volatility estimate.
+
+A separate persistence benchmark tests whether the improvement requires a fitted smile. For each contract with an earlier implied volatility observation, the latest strictly prior IV for that same contract is carried forward and the contract is repriced using the current futures curve, discount factor, realized fixings, and remaining fixing schedule. This comparison is available for 2,366 of the 2,381 observations.
+
+Pricing performance is summarized by mean error, mean absolute error (MAE), and root mean squared error (RMSE). Dependence across contracts observed on the same valuation date is preserved with valuation-date cluster bootstrap resampling.
+
+\subsection{Cross-instrument validation}
+
+The APO experiment still obtains implied volatility from the same option family later used as the pricing target. An independent validation therefore uses standard monthly American WTI options on futures (CME product LO) obtained through Databento. Official LO option settlements are matched to CL futures settlements, and contract-level implied volatilities are recovered with a Cox--Ross--Rubinstein futures-option tree.
+
+For each APO target date, only LO observations from earlier dates are used. Implied-volatility smiles are fitted separately for the underlying CL futures contracts needed by the October-2026 APO fixing schedule. The resulting maturity-specific volatilities are mapped into the maintained scalar-volatility APO pricing model. The main comparison is restricted to 253 APO contract-date observations, spanning 10 target dates, that lie within the observed prior LO moneyness support for both external specifications. Alternative scalar transfers and CRR tree-refinement diagnostics are reported in Online Supplement Section S4 and Table S4.
+
+The cross-instrument experiment is not intended to estimate a structural variance risk premium. Its role is narrower: it asks whether the out-of-sample improvement associated with prior option-implied volatility remains when the volatility information comes from a separate WTI option market rather than from earlier APO settlements.
