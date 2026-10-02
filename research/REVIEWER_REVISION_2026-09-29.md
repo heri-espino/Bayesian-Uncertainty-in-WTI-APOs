@@ -1,3 +1,21 @@
+## Compact-manuscript precision pass — 2026-10-02
+
+- [x] Keep the 9-page compact manuscript as the primary editorial direction; no new experiments added.
+- [x] Standardize **posterior-mean plug-in price (PM)** to avoid ambiguity with the posterior expectation of price.
+- [x] Restore the common-factor futures assumption explicitly: maturity index (u), common Brownian factor (W^Q).
+- [x] Restore a self-contained conditional risk-neutral call-value definition.
+- [x] Clarify information timing: prior-date option observations for IV estimation, target-date market state for repricing, stated valuation-date cutoff for historical estimators.
+- [x] Qualify partial fixing as generally reducing the integration correction, with possible nonmonotonic intermediate behavior from changing curvature.
+- [x] State that the Taylor correction can have either sign and that second-order accuracy depends on posterior concentration and controlled higher-order curvature.
+- [x] Replace generic supplement references with stable Sections S1--S4 and Tables S1--S4.
+- [x] Add units to the abstract and Tables 1--3; document Monte Carlo versus Curran provenance in Table 3.
+- [x] Clarify Figure 1 cell count and cell-level means.
+- [x] Correct parenthetical citation commands in the compact Introduction.
+- [x] Record computational snapshot commit `8d95e5313e7b764c0cb0e7f9ef06e54bcf5d75d7`.
+- [ ] Fill corresponding-author email.
+- [ ] Complete acknowledgments.
+- [ ] Rebuild `main_short.tex` and visually inspect the final PDF after these local edits.
+
 ## Editorial compression pass — 2026-09-30
 
 - [x] Reduce the abstract to the question, mechanism, empirical contrast, and qualification.
