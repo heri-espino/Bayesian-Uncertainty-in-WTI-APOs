@@ -108,25 +108,43 @@ The existing `manuscript/main.tex` is retained unchanged as the fuller version f
 
 The concise manuscript has an independent build so it never overwrites the full-paper PDF:
 
-\`\`\`bash
+```bash
 python paper/build_short.py --check
 python paper/build_short.py
-\`\`\`
+```
 
 If the publication figures have already been generated, skip rebuilding them:
 
-\`\`\`bash
+```bash
 python paper/build_short.py --skip-figures
-\`\`\`
+```
 
 The exported PDF is:
 
-\`\`\`text
+```text
 paper/espino_2026_bayess-on-wti_short.pdf
-\`\`\`
+```
 
-Cleaning the concise build removes only \`paper/build_short/\` and the concise exported PDF:
+Cleaning the concise build removes only `paper/build_short/` and the concise exported PDF:
 
-\`\`\`bash
+```bash
 python paper/build_short.py --clean
-\`\`\`
+```
+
+## Editorial integration — 2026-10-02
+
+The concise rewrite is maintained in the existing `manuscript/main_short.tex` and
+`manuscript/sections_short/` files. The six sections now distinguish the integration
+correction, posterior price dispersion, and volatility information, with explicit
+positioning against the closest literature. The results retain three tables and
+two figures, using the shared `references.bib` and original publication figures.
+
+The full manuscript, supplement (including its audit archives), frozen Wiley
+bundle, and build commands retain their existing roles. No experiments or
+publication figures were regenerated for this editorial revision.
+
+The committed concise PDF predates this source revision; regenerate it with
+`python paper/build_short.py --skip-figures` before reviewing the final Wiley layout.
+The reading preview supplied separately is not a Wiley submission PDF.
+Corresponding-author email and acknowledgments still need the author's input
+before submission.

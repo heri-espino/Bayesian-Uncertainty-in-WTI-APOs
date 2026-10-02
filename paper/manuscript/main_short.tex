@@ -1,32 +1,23 @@
 \documentclass[HARVARD,Utopia2COL]{WileyNJDv5}
-
-\usepackage{amsmath,amssymb,booktabs}
-\usepackage{graphicx}
+\usepackage{amsmath,amssymb,booktabs,graphicx}
 \hypersetup{hidelinks}
-
 \articletype{Research Article}
 \journal{Journal of Futures Markets}
 \raggedbottom
 
 \begin{document}
-
-\title{When Does Posterior Integration Change Option Values? Evidence from WTI Average Price Options}
-
+\title{When Does Posterior Integration Change Option Prices? Evidence from WTI Average Price Options}
 \author[1]{Heriberto Espino Montelongo}
 \authormark{ESPINO MONTELONGO}
-\titlemark{POSTERIOR INTEGRATION IN WTI AVERAGE PRICE OPTIONS}
-
+\titlemark{POSTERIOR INTEGRATION AND WTI OPTION PRICES}
 \address[1]{\orgname{Universidad de las Am\'ericas Puebla}, \orgaddress{\state{Puebla}, \country{Mexico}}}
-\corres{Corresponding author: Heriberto Espino Montelongo. \email{[corresponding email]}}
+\corres{Corresponding author: Heriberto Espino Montelongo.}
 
 \abstract[Abstract]{
-This paper studies when parameter uncertainty materially changes an arithmetic-average option value and compares that effect with changing the volatility input itself. The posterior-integrated price (PI) averages the conditional risk-neutral option value over the volatility posterior, whereas the posterior-mean plug-in price (PM) evaluates that value at posterior mean volatility. Their difference is locally governed by posterior variance and the curvature of the option-pricing function. A 175,000-history synthetic experiment confirms this mechanism and identifies weak-information, high-curvature states in which the difference is economically meaningful. In the observed WTI Average Price Option sample, however, the mean absolute PI--PM difference is \$0.000745 per barrel while the mean width of the 95\% posterior interval for the model price is \$0.2733 per barrel. Thus a small effect on the posterior mean price does not imply little parameter uncertainty in option values. In 2,381 out-of-sample contract-date observations, prior option-implied volatility inputs produce much lower pricing errors than the historical-volatility benchmarks evaluated here. The result is robust to rolling-window, EWMA, and horizon-matched GARCH comparisons, does not require a flexible implied-volatility smile, and persists in a cross-instrument validation using vanilla-WTI options.
+Integrating uncertainty in estimated volatility can change an option's point value without measuring the full uncertainty around that value. We quantify this distinction for WTI Average Price Options and compare it with the effect of changing the volatility information supplied to the pricing model. Holding the posterior and pricing model fixed, the integration correction is locally proportional to posterior variance times volatility curvature, whereas posterior price dispersion is first order in posterior standard deviation. A synthetic experiment maps the correction across information levels, contract horizons, moneyness, and partial fixing. In the October-2026 WTI sample, the mean absolute integration correction is \$0.000745 per barrel, compared with a mean 95\% posterior model-price interval width of \$0.2733. On 2,381 later-date valuations, prior option-implied volatility inputs yield substantially lower errors than the evaluated historical estimators, including a horizon-matched GARCH benchmark. Same-contract lagged implied volatility reproduces the improvement without cross-sectional smoothing, and prior vanilla-WTI option information preserves it across instruments. The evidence identifies when integration changes a point price and shows that, in this sample, volatility information is the larger pricing margin even when posterior price uncertainty remains appreciable.
 }
-
-\keywords{Bayesian option pricing; Asian options; WTI crude oil; parameter uncertainty; implied volatility}
-
+\keywords{Bayesian option pricing; parameter uncertainty; Asian options; WTI crude oil; implied volatility}
 \maketitle
-
 \input{sections_short/01_introduction}
 \input{sections_short/02_posterior_pricing}
 \input{sections_short/03_data_design}
@@ -35,17 +26,12 @@ This paper studies when parameter uncertainty materially changes an arithmetic-a
 \input{sections_short/06_conclusion}
 
 \bmsection*{Data availability}
-The WTI APO and CL histories used in the empirical application were obtained through a commercial Barchart subscription. The independent vanilla-WTI validation uses CME/NYMEX LO option and CL futures statistics accessed through Databento. Raw proprietary market-data files are not redistributed. The public repository provides code, query metadata, schemas, provenance records, diagnostics, hashes, and derived results consistent with the applicable data licenses.
+The WTI APO and CL histories were obtained through a commercial Barchart subscription. The vanilla-WTI validation uses CME/NYMEX LO option and CL futures statistics accessed through Databento. Raw proprietary market-data files are not redistributed. The public repository provides code, query metadata, schemas, provenance records, diagnostics, hashes, and derived results consistent with the applicable data licenses.
 
 \bmsection*{Code availability}
-The research code is organized as the Python package \texttt{bayesian\_asian\_options}, with tests, deterministic experiment entry points, and committed derived results. The public repository is \url{https://github.com/heri-espino/Bayesian-Uncertainty-in-WTI-APOs}. The computational snapshot underlying this revision is Git commit \texttt{8d95e5313e7b764c0cb0e7f9ef06e54bcf5d75d7}.
+The Python package \texttt{bayesian\_asian\_options} contains tests, deterministic experiment entry points, and committed derived results. The public repository is \url{https://github.com/heri-espino/Bayesian-Uncertainty-in-WTI-APOs}. The reported computations correspond to Git commit \texttt{8d95e5313e7b764c0cb0e7f9ef06e54bcf5d75d7}.
 
 \bmsection*{Conflict of interest}
 The author declares no conflict of interest.
-
-\bmsection*{Acknowledgments}
-To be completed before submission.
-
 \bibliography{references}
-
 \end{document}
