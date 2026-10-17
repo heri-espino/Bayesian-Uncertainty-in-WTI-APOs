@@ -24,11 +24,11 @@ The first, third, fourth, fifth, sixth and seventh rows are particularly useful 
 
 | Quantity or comparison | Preferred expression | Do not replace it with |
 |---|---|---|
-| `E[C^Q(sigma) \\| D]` | posterior-integrated price (PI) | predictive market price density |
-| `C^Q(E[sigma \\| D])` | posterior-mean plug-in price (PM) | posterior mean price |
+| `E[C^Q(sigma) ∣ D]` | posterior-integrated price (PI) | predictive market price density |
+| `C^Q(E[sigma ∣ D])` | posterior-mean plug-in price (PM) | posterior mean price |
 | `PI-PM` | PI--PM difference, *not* a necessary bias correction | integration correction without a stated convention |
-| `{C^Q(sigma): sigma ~ p(sigma \\| D)}` | posterior distribution of conditional model prices | future distribution of traded option prices |
-| `Var(sigma \\| D)` | posterior variance of volatility | volatility of volatility, realized variance |
+| `{C^Q(sigma): sigma ~ p(sigma ∣ D)}` | posterior distribution of conditional model prices | future distribution of traded option prices |
+| `Var(sigma ∣ D)` | posterior variance of volatility | volatility of volatility, realized variance |
 | `C^{Q\prime\prime}(sigma)` | curvature of the option price with respect to volatility | volatility curvature without definition |
 | IV inverted from APO market settlements | APO-implied volatility | observed physical volatility |
 | IV inverted from monthly vanilla LO option prices | vanilla-WTI implied volatility | independent structural risk-neutral volatility |
