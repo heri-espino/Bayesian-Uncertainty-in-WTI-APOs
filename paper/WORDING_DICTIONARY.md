@@ -348,11 +348,11 @@ covered here, prefer the terminology in the most directly relevant paper in
 
 ---
 
-## 13. Current-manuscript terminology audit
+## 13. Historical manuscript terminology audit (before the October 2026 language pass)
 
-As of commit `021c9ec3`, the shortened manuscript still contains several project-specific or
-software-like expressions. These are the highest-priority normalization targets for the next
-prose pass:
+At commit `021c9ec3`, before the present language pass, the shortened manuscript contained several project-specific or
+software-like expressions. These were the highest-priority normalization targets for the subsequent
+prose pass. The counts below describe that historical snapshot, not the revised paper:
 
 | Current term | Approx. occurrences | Priority | Recommended action |
 |---|---:|---|---|
@@ -380,7 +380,7 @@ more specialized project label adds no precision.
 ## 14. Literature evidence and final plain-language standard (2026-10-17)
 
 For a source-by-source map of the vocabulary and the limits of each term, see
-[\`literature/TERMINOLOGY_EVIDENCE.md\`](../literature/TERMINOLOGY_EVIDENCE.md).
+[literature terminology evidence](../literature/TERMINOLOGY_EVIDENCE.md).
 The source map is based on actual extracted literature text; it is not an automated
 frequency count, and the literature contains some awkward English that should not
 be copied just because it appears in a published paper.
