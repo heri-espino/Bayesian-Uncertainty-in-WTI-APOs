@@ -6,9 +6,9 @@ First, changing the model for historical returns does not materially alter the c
 
 Second, the near equality of PI and the posterior-mean plug-in price is not a numerical artifact. Difficult contracts are repriced with high-precision pseudo-random Monte Carlo, independently scrambled Sobol sequences, and Curran conditioning. These methods recover the PI--PM difference at a numerical scale well below the observed empirical gaps. Simulation-based calibration provides a separate check on posterior implementation. We also examine the posterior root mean square (RMS) volatility,
 \[
- \sigma_{\mathrm{RMS}}=\sqrt{\mathbb E[\sigma^2\mid\mathcal D]}.
+ \sigma_{\mathrm{RMS}}=\sqrt{\mathbb E[\sigma^2\mid\mathcal D]},
 \]
-Pricing at this volatility produces only slightly different pooled errors from pricing at posterior mean volatility under the same Curran approximation. The choice between these two summaries of the historical posterior has little effect on pricing errors. Detailed numerical and calibration results appear in Online Supplement Section S2 and Table S2.
+which we compare with posterior mean volatility using the same Curran approximation. Their pooled pricing errors differ only slightly. The choice between these two summaries of the historical posterior has little effect on pricing errors. Detailed numerical and calibration results appear in Online Supplement Section S2 and Table S2.
 
 Third, the cross-instrument result changes little when we alter how the LO implied volatilities are converted into one constant volatility for the APO pricing model. Replacing the primary fixing-count RMS mapping with a scalar chosen to match the variance of the unresolved arithmetic-average component changes pricing errors only slightly. Comparing Cox--Ross--Rubinstein trees with 80, 160, and 320 steps also shows that the LO implied-volatility estimates change little around the 160-step tree used in the main analysis. These are numerical stability checks, not claims of exact convergence or of a globally arbitrage-free fitted volatility surface; the alternative transfer and refinement results are reported in Online Supplement Section S4 and Table S4.
 
