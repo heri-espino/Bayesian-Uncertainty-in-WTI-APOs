@@ -1,5 +1,12 @@
 # Journal of Futures Markets submission checklist
 
+> REMEF is the currently prepared alternative route. Its separate Word-format
+> requirements, bilingual metadata and open audit items are documented in
+> [`paper/remef/README.md`](../paper/remef/README.md) and
+> [`paper/remef/PRESUBMISSION_AUDIT.md`](../paper/remef/PRESUBMISSION_AUDIT.md).
+> Do not submit one paper to both journals simultaneously.
+
+
 This page mirrors issue [#42](https://github.com/heri-espino/Metropolis-Hastings-for-Asian-Options-Using-Bayesian-Inference-and-Black-Scholes--Article-/issues/42)
 and should be used only after the scientific milestones are substantially closed.
 
