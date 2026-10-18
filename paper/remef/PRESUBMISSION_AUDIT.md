@@ -70,3 +70,32 @@ It is not a certificate that all original experiments were independently rerun.
       submission (REMEF **or** JFM, not both).
 
 **Status:** REMEF editorial adaptation initiated; **not submission-ready**.
+
+## 2026-10-18 REMEF layout remediation
+
+- [x] Corrected the scientific section sequence to REMEF's introduction,
+      literature review, methodology, results/discussion and conclusions/
+      recommendations pattern, with progressively numbered subsections.
+- [x] Bundled the current official APA 7 CSL and configured Pandoc to apply
+      it to all in-text citations and references.
+- [x] Added a Word-level deterministic typography and caption/table cleanup;
+      Word math objects and native Word tables are retained.
+- [x] Added Python software/reproducibility text without inventing methods or
+      numerical findings.
+- [x] Added a clear comparison between the two REMEF studies, the crude-oil
+      volatility-forecasting precedent and our APO pricing question.
+- [x] Removed the unfinished optional acknowledgment/funding placeholder
+      from the blinded reviewer document (author confirmation still required).
+- [x] A locally revised copy of the existing 12-page Word draft was rendered:
+      equations appeared in the PDF; tables and references were visually
+      inspected; the document remained 12 pages.
+- [ ] Run the updated GitHub manual `build-remef` workflow on the merged
+      commit and verify its **new** Word/PDF output, not the older artifact.
+- [ ] Have the author check the edited Word file in Microsoft Word and supply
+      complete private author/correspondence metadata to the editorial office.
+- [ ] Confirm data-vendor redistribution rights, signed authorship/copyright
+      declarations, funding/conflict disclosures and scientific evidence audit.
+
+The supplied `jace,+F26+PLANTILLA.pdf` is a published REMEF article used as a
+layout example; it is not a Word submission template and its publisher masthead,
+DOI, issue data and acceptance dates must not be reproduced.
