@@ -34,6 +34,8 @@ def remove(p):
 
 def adapt_sections(doc):
     """Five REMEF-style scientific sections; preserve scientific paragraphs and formulas."""
+    intro = find(doc, "1 Introduction")
+    intro.text = "1. Introduction"
     original = find(doc, "2 Posterior uncertainty")
     insert_before(original, "2. Literature review", "Heading 1")
     for prefix in (
