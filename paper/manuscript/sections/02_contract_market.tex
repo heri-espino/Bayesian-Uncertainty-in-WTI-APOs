@@ -2,7 +2,7 @@
 
 \subsection{Contract mechanics}
 
-CME WTI Average Price Options are cash settled. Their payoff depends on the arithmetic average of daily first-nearby WTI futures settlements during the contract's calendar month. For an averaging month with fixing dates $t_1,\ldots,t_M$, define
+CME WTI APOs are cash-settled contracts on the arithmetic average of daily first-nearby WTI futures settlements within the relevant calendar month. For an averaging month with fixing dates $t_1,\ldots,t_M$, define
 \begin{equation}
  A_T=\frac{1}{M}\sum_{j=1}^{M}F^{(1)}_{t_j},
  \label{eq:apo_average}
@@ -12,7 +12,7 @@ where $F^{(1)}_{t_j}$ denotes the settlement of the first-nearby CL futures cont
  H_C&=(A_T-K)^+,\\
  H_P&=(K-A_T)^+.
 \end{align}
-The first-nearby futures contract may change during the averaging month. The option therefore does not generally average prices of a single futures contract. This contract feature is also explicit in the WTI average-option treatment of \cite{shirayatakahashi2011}, where two consecutive WTI futures maturities enter the monthly averaging window because the nearby futures contract expires before month-end.
+The first-nearby contract may roll during the averaging month; the payoff is therefore not generally based on successive prices of a fixed futures maturity. This contract feature is also explicit in the WTI average-option treatment of \cite{shirayatakahashi2011}, where two consecutive WTI futures maturities enter the monthly averaging window because the nearby futures contract expires before month-end.
 
 At an option valuation date $t$ inside the averaging month, let $\mathcal R_t$ denote fixing dates already realized and $\mathcal U_t$ the remaining fixing dates. The final average can be decomposed as
 \begin{equation}
@@ -24,7 +24,7 @@ At an option valuation date $t$ inside the averaging month, let $\mathcal R_t$ d
  \right).
  \label{eq:partial_fixing}
 \end{equation}
-Known fixings are fixed numbers. We simulate only the remaining fixings under the risk-neutral measure. As more prices become known, less of the final average remains exposed to future volatility.
+At valuation, realized fixings enter as constants and only remaining fixings are simulated under the risk-neutral measure. The fraction already fixed reduces the average's exposure to future volatility.
 
 For comparing strikes across contracts, we use the risk-neutral expected final average,
 \begin{equation}
@@ -42,34 +42,32 @@ We define log moneyness observation by observation as
  m_{t,K,T}=\log\!\left(\frac{K}{\widehat A^{Q}_{t,T}}\right).
  \label{eq:moneyness}
 \end{equation}
-For calls, negative values correspond to strikes below the expected average; for puts the economic interpretation is reversed in terms of intrinsic direction. We recalculate moneyness on each valuation date rather than assigning a permanent category to each contract.
+For calls, negative values correspond to strikes below the expected average; for puts the economic interpretation is reversed in terms of intrinsic direction. Moneyness is recalculated for every contract-date observation rather than fixed at the contract level.
 
 \subsection{Why WTI is informative for parameter uncertainty}
 
-WTI prices and the shape of the futures curve can change substantially over time. As a result, a contract's moneyness can change during its observed history, and volatility estimated from a short return window can be less precise than an estimate based on a long history. This makes WTI a useful case for studying how volatility estimates affect option values.
-
-We do not claim that specific geopolitical events caused individual price changes. That would require a separate study. Our analysis uses observed returns, volatility uncertainty, contract characteristics, and implied volatility available before each pricing date.
+Changes in the WTI futures curve affect moneyness and the sensitivity of APO values to volatility. Short return histories also generate more dispersed volatility posteriors. These features allow us to study posterior integration across different contract states without attributing particular price movements to external events.
 
 \subsection{Barchart option histories}
 
-We assemble the data from individual Barchart histories for WTI Average Price Options. The use of Barchart WTI APO observations has an empirical precedent in \cite{ganwangyang2020}, who apply a model-free deep-learning approach to WTI average-option pricing; the present study instead uses the data to evaluate a structural physical/risk-neutral decomposition and posterior-integration mechanism. The downloaded maturities are September 2026, October 2026, November 2026, March 2027, September 2027, March 2028, September 2028, and June 2029. Calls and puts were retained as available. We retain all downloaded contracts rather than selecting only those near the money on a single date. Moneyness varies with the date according to Equation~\eqref{eq:moneyness}.
+We assemble the data from individual Barchart histories for WTI Average Price Options. Barchart APO observations are also used in \cite{ganwangyang2020}; unlike their machine-learning pricing study, we focus on posterior integration and volatility-input comparisons under a fixed pricing model. The downloaded maturities are September 2026, October 2026, November 2026, March 2027, September 2027, March 2028, September 2028, and June 2029. Calls and puts were retained as available. We retain all downloaded contracts rather than selecting only those near the money on a single date. Moneyness varies with the date according to Equation~\eqref{eq:moneyness}.
 
-Before building the panel, we check the raw files, extract strikes and option types from contract symbols, verify expiries, and remove duplicate contracts. The current audit identifies 214 input files, 213 unique contracts, and 11,179 option-date observations. One file is stored under a folder inconsistent with its symbol-implied expiry; the parser records the mismatch and uses the contract symbol rather than silently trusting the directory name.
+The data audit parses contract symbols, verifies expiries, and removes duplicate contracts before forming the panel. The current audit identifies 214 input files, 213 unique contracts, and 11,179 option-date observations. One file is stored under a folder inconsistent with its symbol-implied expiry; the parser records the mismatch and uses the contract symbol rather than silently trusting the directory name.
 
-The histories contain end-of-day fields including open, high, low, latest, volume, and open interest. In the source histories used for this study, Barchart \texttt{Latest} is the end-of-day settlement field. At least one contract/date comparison also reproduces the corresponding CME daily settlement exactly. We use that field as the market settlement benchmark. We have not independently checked every observation against official CME settlement bulletins. This distinction matters because many histories contain zero reported volume while open interest remains positive.
+The histories contain end-of-day fields including open, high, low, latest, volume, and open interest. In the source histories used for this study, Barchart \texttt{Latest} is the end-of-day settlement field. At least one contract/date comparison also reproduces the corresponding CME daily settlement exactly. We use this field as the settlement-price benchmark, without claiming a complete observation-level reconciliation against CME bulletins. Many settlements also have zero reported trading volume despite positive open interest.
 
-We examine liquidity through robustness checks instead of requiring positive reported trading volume for every observation. Results are reported for the full eligible panel, positive-volume subsets, and multiple open-interest thresholds. Contracts with sparse trading can still contain an exchange settlement, but conclusions that depend exclusively on such observations are treated cautiously.
+We retain settlement observations without requiring positive trading volume and examine liquidity restrictions separately. Results are reported for the full eligible panel, positive-volume subsets, and multiple open-interest thresholds. Contracts with sparse trading can still contain an exchange settlement, but conclusions that depend exclusively on such observations are treated cautiously.
 
-An audit variable called \texttt{richest} records data completeness, not trading activity or economic importance. We use it only for data-quality checks, not to choose contracts for the economic analysis.
+The \texttt{richest} audit variable measures data completeness, not liquidity or economic importance, and is excluded from economic contract selection.
 
 \subsection{Independent vanilla-WTI option data}
 
-For a separate check, we use standard monthly American WTI futures options (CME product LO) from Databento's CME Globex historical service. We use LO option settlements, matching CL futures settlements, and contract definitions to identify strikes, option types, underlying futures, and expiry dates. Raw vendor records are treated as proprietary inputs and are not redistributed.
+The cross-instrument validation uses standard monthly American WTI futures options (CME product LO) from Databento's CME Globex historical service. We use LO option settlements, matching CL futures settlements, and contract definitions to identify strikes, option types, underlying futures, and expiry dates. Raw vendor records are treated as proprietary inputs and are not redistributed.
 
-For the October-2026 validation, the final vanilla sample uses LO options written on CLX6 and CLZ6 with strikes from 70 to 120 over trading reference dates from August 24 through September 10, 2026. These LO observations precede the APO dates in the external pricing test. The final inversion panel contains 5,220 successful contract-date implied volatilities over 13 reference dates; 5,214 underlying option settlements are flagged actual and six theoretical. These observations are used only to estimate vanilla-WTI implied volatility, as described in Section~\ref{sec:external_lo_method}; APO prices do not enter the inversion.
+For the October-2026 validation, the final vanilla sample uses LO options written on CLX6 and CLZ6 with strikes from 70 to 120 over trading reference dates from August 24 through September 10, 2026. The LO reference dates strictly precede the APO target dates. The final inversion panel contains 5,220 successful contract-date implied volatilities over 13 reference dates; 5,214 underlying option settlements are flagged actual and six theoretical. These observations are used only to estimate vanilla-WTI implied volatility, as described in Section~\ref{sec:external_lo_method}; APO prices do not enter the inversion.
 
 \subsection{Maturity coverage}
 
-The sample covers short, medium, and longer maturities rather than only nearby months. The first three maturities provide short-horizon contracts, while March 2027 through June 2029 extend the cross section toward medium and long horizons. Equation~\eqref{eq:intro_taylor} shows why different maturities matter: the PI--PM difference depends on both posterior variance and the curvature of the option price with respect to volatility, which can change with maturity.
+The first three expiries capture short maturities, while March 2027 through June 2029 extend the panel to medium and longer horizons. Equation~\eqref{eq:intro_taylor} shows why different maturities matter: the PI--PM difference depends on both posterior variance and the curvature of the option price with respect to volatility, which can change with maturity.
 
-The number of available strikes and the depth of trading are not constant across maturities. In particular, the far end of the curve contains fewer contracts. We do not require the same contracts to appear on every date. We retain the observed panel and report the limits imposed by contract availability, liquidity, and matching futures histories.
+The number of available strikes and the depth of trading are not constant across maturities. In particular, the far end of the curve contains fewer contracts. The panel is unbalanced. Contract availability, liquidity, and matching CL histories determine the usable observations.
