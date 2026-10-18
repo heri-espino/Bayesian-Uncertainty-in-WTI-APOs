@@ -2,11 +2,11 @@
 
 \subsection{When does posterior integration matter?}
 
-Figure~\ref{fig:short_mechanism} summarizes the synthetic mechanism experiment. The PI--PM difference tends to be larger when the historical sample is short, volatility is high, maturity is long, few fixings have occurred, and the option price is strongly curved as a function of volatility. Across the full synthetic experiment, the maximum absolute PI--PM difference is 0.1384 on a normalized \$100 forward, and the largest cell-level 99th percentile is 0.1271. These values are economically nontrivial relative to the much smaller differences observed in the empirical WTI baseline.
+Figure~\ref{fig:short_mechanism} summarizes the synthetic mechanism experiment. PI and PM tend to differ more when the return history is short, volatility is high, maturity is long, or few fixings are known. Strong price curvature also increases the difference. Across the full synthetic experiment, the maximum absolute PI--PM difference is 0.1384 on a normalized \$100 forward, and the largest cell-level 99th percentile is 0.1271. These differences are much larger than those in the October-2026 WTI sample.
 
-The second-order approximation in Equation~\eqref{eq:short_taylor} closely tracks the simulated PI--PM difference. Across synthetic cells, the correlation between the cell-level mean gap and the curvature--variance approximation is 0.9995. In the most adverse cells, through-origin slopes are close to one. The synthetic results show that the PI--PM difference is large when both posterior variance and the curvature of the option price with respect to volatility are large.
+The second-order approximation in Equation~\eqref{eq:short_taylor} closely tracks the simulated PI--PM difference. Across synthetic cells, the correlation between the cell-level mean gap and the curvature--variance approximation is 0.9995. In the most adverse cells, through-origin slopes are close to one. Large differences occur when uncertainty about volatility and price curvature are both high.
 
-As more fixings become known, the PI--PM difference generally shrinks because less of the average remains exposed to future volatility. The relationship need not be monotone at every intermediate state, however. In Panel C, the 252-day case initially rises before declining because partial fixing changes both remaining volatility exposure and the local curvature of the option-pricing function. The overall tendency is downward as the average approaches full fixation.
+As more fixings become known, the PI--PM difference generally shrinks because less of the average remains exposed to future volatility. It does not fall at every step. In Panel C, the 252-day case first rises and then falls. As fixings become known, both the exposure to future volatility and price curvature change. Overall, the difference tends to shrink near the end of the averaging period.
 
 \begin{figure*}[t]
 \centering
@@ -19,7 +19,7 @@ As more fixings become known, the PI--PM difference generally shrinks because le
 
 The October-2026 baseline contains 310 contract-date observations over 12 eligible valuation dates. Table~\ref{tab:short_october} reports the main Bayesian comparison. Posterior-integrated and posterior-mean plug-in prices have nearly identical market-pricing errors: RMSE is 0.5177 for PI and 0.5183 for PM. The mean absolute difference between the two prices is only 0.000745.
 
-That near equality does not imply that uncertainty in the theoretical option value is negligible. The mean width of the central 95\% posterior interval for the model price is 0.2733, approximately 367 times the mean absolute PI--PM difference. The two quantities answer different questions. PI--PM measures how nonlinear averaging changes the posterior expectation of the option value; the interval width measures the dispersion of theoretical prices induced by uncertainty about volatility.
+Yet volatility uncertainty still produces a range of model prices. The mean width of the central 95\% posterior price interval is 0.2733, about 367 times the mean absolute PI--PM difference. PI--PM measures the change in the point price from posterior averaging. The interval measures how much the model price varies across the volatility posterior.
 
 \begin{table}[t]
 \centering
@@ -36,13 +36,13 @@ Mean 95\% posterior price-interval width & 310 & 0.2733 \\
 \end{tabular}
 \end{table}
 
-Both historical-volatility methods underprice settlements on average in the October sample, but PI and PM differ by less than one tenth of a cent per barrel on average. Changing the volatility input consequently has a much larger effect on these pricing errors than switching between PI and PM.
+Both PI and PM underprice settlements on average in the October sample. Their prices differ by less than one tenth of a cent per barrel on average. The pricing errors are therefore not mainly due to the choice between PI and PM.
 
 \subsection{Historical versus option-implied volatility}
 
 Table~\ref{tab:short_forward} reports the central out-of-sample comparison. On the same 2,381 contract-date observations, the long-window historical posterior-integrated benchmark has MAE 2.6187 and RMSE 3.4090. The best of the pre-specified rolling-window comparisons, based on the most recent 63 returns, has still larger errors, with MAE 4.5201 and RMSE 5.6465. The horizon-matched GARCH(1,1) benchmark produces MAE 2.6730 and RMSE 3.4441, close to the long-window historical benchmark.
 
-By contrast, the previous-day APO implied-volatility smile has MAE 0.1075 and RMSE 0.1594. The expanding earlier-date smile produces similarly small errors, 0.1088 and 0.1725. The implied-volatility method has lower pricing errors for all seven included expiries. The valuation-date cluster bootstrap intervals for the error differences are also below zero for each expiry (Figure~\ref{fig:short_forward_bootstrap}).
+By contrast, the previous-day APO implied-volatility smile has MAE 0.1075 and RMSE 0.1594. The expanding earlier-date smile produces similarly small errors, 0.1088 and 0.1725. Earlier-date implied volatility gives lower errors for all seven expiries. Bootstrap intervals based on valuation-date clusters also lie below zero for each expiry (Figure~\ref{fig:short_forward_bootstrap}).
 
 \begin{table*}[t]
 \centering
@@ -73,9 +73,9 @@ Previous-day fitted APO smile & 2,366 & 15 & 0.1074 & 0.1594\\
 \end{tabular}
 \end{table*}
 
-The results are not explained by using more recent historical returns: neither shorter return windows nor an exponentially weighted estimate achieves similar pricing errors (Online Supplement Section S1 and Table S1). Allowing volatility to vary over time also does not close the gap in the tested GARCH(1,1) model, whose pooled errors remain close to those of the long-window historical benchmark.
+Using more recent historical returns does not produce similar errors. Shorter return windows and an exponentially weighted estimate also perform worse (Online Supplement Section S1 and Table S1). Allowing volatility to vary over time also does not close the gap in the tested GARCH(1,1) model, whose pooled errors remain close to those of the long-window historical benchmark.
 
-Panel B asks whether a fitted smile is necessary. On the same 2,366 observations, reusing each contract's most recent earlier implied volatility gives lower pooled MAE and RMSE than fitting the previous-day smile. This result does not establish that carrying implied volatility forward is generally better. It shows that the large improvement over historical volatility does not depend on fitting a cross-sectional smile.
+Panel B tests whether fitting a smile is needed. For 2,366 observations, carrying forward each contract's latest implied volatility gives lower pooled MAE and RMSE than using the fitted previous-day smile. This does not show that carrying volatility forward will always work better. It shows that smile fitting is not required to outperform the historical benchmarks in this sample.
 
 \begin{figure*}[t]
 \centering
@@ -84,7 +84,7 @@ Panel B asks whether a fitted smile is necessary. On the same 2,366 observations
 \label{fig:short_forward_bootstrap}
 \end{figure*}
 
-The economic interpretation should remain conditional on the model. Historical volatility and option-implied volatility are not two estimators of an identical observable object. The latter can incorporate risk premia and can also compensate for omitted stochastic volatility, jumps, futures-curve dynamics, and market-marking effects. The out-of-sample result therefore establishes a difference in pricing information under the maintained model, not a structural decomposition of the physical and risk-neutral volatility processes.
+These are pricing comparisons within the chosen model. Historical and implied volatility use different information. Implied volatility may reflect risk premia, omitted price dynamics, or how market settlements are determined. Lower pricing errors do not establish how much physical and risk-neutral volatility differ.
 
 \subsection{Cross-instrument validation using vanilla-WTI options}
 
@@ -104,6 +104,6 @@ Previous-day APO IV & 0.1676 & 0.2686\\
 \end{tabular}
 \end{table}
 
-Valuation-date cluster bootstrap intervals preserve the improvement of the external LO specification relative to historical volatility. The external and APO-implied results are much closer to one another, and their difference is not uniformly distinguishable across MAE and RMSE. The relevant conclusion is therefore not that LO is superior to APO-implied volatility. It is that the pricing improvement associated with prior option-implied volatility persists when the information is obtained from another WTI option family.
+The cluster bootstrap also supports the lower errors from LO-implied volatility relative to historical volatility. LO and APO implied-volatility results are close, with no consistent advantage across MAE and RMSE. The important result is that earlier option-implied volatility still helps when it comes from a different WTI option market.
 
-The two comparisons therefore lead to different conclusions. In the synthetic experiment, the PI--PM difference can be large when posterior variance and price curvature are large. In the observed WTI sample, PI and PM are close. Changing from historical to prior option-implied volatility produces a much larger reduction in pricing errors.
+Overall, the synthetic experiment shows when posterior averaging can matter. In the observed WTI sample, PI and PM are close, while using earlier option-implied volatility reduces pricing errors much more.
