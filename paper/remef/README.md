@@ -56,9 +56,7 @@ The default is a **blinded review draft** at
 `paper/remef/build/remef_blinded_draft.docx`. Use
 `python paper/remef/build.py --author-version` for a separate author draft
 with the verified author identity, academic email, ORCID, optional
-professional links and a corresponding-author footnote. **The postal mailing
-address and telephone are still required**; these are explicitly marked pending
-rather than invented. Generated drafts stay ignored by Git.
+professional links and a corresponding-author footnote. **The institutional postal address and telephone are now supplied by the author**. Generated drafts stay ignored by Git.
 
 The build reads the existing six-section concise research text (substituting
 `paper/remef/introduction.tex` for its introduction), uses the REMEF front
@@ -125,9 +123,8 @@ conversation. The updated workflow must still be run and its **new** PDF inspect
 
 ### Items that cannot be made compliant without the author
 
-- **Pending:** institutional postal mailing address and telephone for REMEF's
-  required first-page corresponding-author footnote; all supplied identity
-  details are already in the author version, never the blinded version
+- **Confirmed:** campus correspondence address and telephone are in the
+  author-identifying first-page footnote, never in the blinded version
 - **Confirmed:** no external research funding and no conflicts of interest;
   both versions include these author-confirmed declarations
 - Signed authorship, originality and rights-transfer documentation
@@ -151,5 +148,19 @@ that all REMEF submission checks have been satisfied**.
 The personal website and LinkedIn are optional editorial contact information,
 not scientific references. Neither they nor the name, email, or ORCID appear
 in the blinded Word manuscript. They are included only in the author-identifying
-version. Postal address and telephone are absent and must still be supplied
-before claiming complete compliance with REMEF's author-identification rules.
+version. Campus postal address and phone are now supplied for the first-page
+correspondence footnote; the generated author version still requires review.
+
+## REMEF correspondence and build regression — 2026-10-18
+
+- Postal address supplied by the author: **Ex Hacienda Santa Catarina Mártir s/n,
+  San Andrés Cholula, Puebla, C.P. 72810, México**.
+- Institutional telephone: **+52 222 810 1202**.
+- Corresponding email remains **heriberto.espinomo@udlap.mx**.
+- Only the unblinded author version contains those identifying contact details.
+- GitHub Actions run [39158592891](https://github.com/heri-espino/Bayesian-Uncertainty-in-WTI-APOs/actions/runs/39158592891)
+  failed because Pandoc's Word headings were **unnumbered** while the REMEF
+  postprocessor assumed numbered headings. The converter now maps the actual
+  Pandoc headings explicitly, with a lightweight regression test that runs
+  postprocessing on a Word fixture before merge. The manual Word workflow
+  must be rerun on the repaired revision and both resulting files inspected.
