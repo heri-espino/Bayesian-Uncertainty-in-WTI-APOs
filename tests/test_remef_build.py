@@ -21,7 +21,7 @@ def test_rem_e_f_inputs_and_blinding():
     b = _build_module()
     b.validate()
     tex = b.make_latex(with_author=False)
-    assert "Heriberto Espino Montelongo" not in tex
+    assert "Heriberto Espino-Montelongo" not in tex
     assert "github.com/heri-espino" not in tex
     assert r"\citet{matiasgonzalez2019}" in tex
     assert r"\citet{ortizjimenez2026}" in tex
@@ -40,7 +40,7 @@ def test_rem_e_f_inputs_and_blinding():
 def test_rem_e_f_author_and_bilingual_abstract_limits():
     b = _build_module()
     author = b.make_latex(with_author=True)
-    assert "Heriberto Espino Montelongo" in author
+    assert "Heriberto Espino-Montelongo" in author
     fm = (ROOT / "paper" / "remef" / "frontmatter.tex").read_text(encoding="utf-8")
     for start, end in (
         (r"\section*{Abstract}", r"\textbf{Keywords:}"),
@@ -76,3 +76,23 @@ def test_remef_apa_and_required_section_postprocessor_exist():
         assert heading in content
     assert '"--csl=" + str(HERE / "apa.csl")' in builder
     assert "prepare_docx(path)" in builder
+
+def test_confirmed_funding_and_coi_in_both_versions():
+    b = _build_module()
+    private = b.make_latex(with_author=True)
+    reviewer = b.make_latex(with_author=False)
+    for content in (private, reviewer):
+        assert "This research received no external funding." in content
+        assert "The author declares no conflicts of interest." in content
+        assert "To be completed and verified" not in content
+    for sensitive in (
+        "Heriberto Espino-Montelongo",
+        "heriberto.espinomo@udlap.mx",
+        "0009-0009-1230-2931",
+        "heri-espino.github.io",
+        "linkedin.com/in/heri-espino",
+    ):
+        assert sensitive in private
+        assert sensitive not in reviewer
+    assert r"\footnote{" in private
+    assert "Postal correspondence address and telephone: [author to supply before submission]" in private
