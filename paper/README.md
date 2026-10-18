@@ -6,10 +6,9 @@ Use [the manuscript wording dictionary](WORDING_DICTIONARY.md) and its
 [source-by-source literature evidence map](../literature/TERMINOLOGY_EVIDENCE.md)
 when editing the prose. Prefer established option-pricing terminology, direct
 sentences, and explicit information cutoffs. Distinguish the PI--PM difference
-from the posterior distribution of model prices. The fuller manuscript
-(`manuscript/main.tex`) and concise alternative (`manuscript/main_short.tex`)
-remain separate drafts. Both received the October 2026 plain-language edit;
-neither replaces the other until the author chooses the submission version.
+from the posterior distribution of model prices. The concise manuscript (`manuscript/main_short.tex`) is the preferred editorial candidate
+for submission. The fuller manuscript (`manuscript/main.tex`) remains available for
+comparison; this preference does not replace the source selected for the full-paper build.
 
 
 
@@ -65,7 +64,9 @@ paper/espino_2026_bayess-on-wti.pdf
 
 Generated LaTeX products and the exported PDF must not be committed.
 
-The main manuscript is intentionally concise. Detailed experimental settings and supporting robustness diagnostics that are not needed for the central argument are preserved in `paper/supplement/online_supplement.md` for later conversion to the journal's supplementary-material format.
+The submission-oriented concise manuscript keeps the main argument and essential evidence.
+Detailed experimental settings and supporting diagnostics are preserved in
+`paper/supplement/online_supplement.md` for later conversion to journal supplementary material.
 
 Useful maintenance commands:
 
@@ -110,11 +111,28 @@ pending empirical analyses. Do not replace those placeholders with inferred or f
 results. Empirical claims are added only after the corresponding versioned experiment has
 run and its outputs can be traced to data, configuration, seed, and code commit.
 
+## Argument map for the concise submission candidate
+
+Each main-text section has one primary purpose:
+
+1. **Introduction:** identify the research question and the distinction between posterior integration and volatility-input choice; no derivation
+2. **Posterior pricing:** define PI and PM, derive the curvature--variance approximation, and specify the synthetic experiment
+3. **Data and design:** define the contract, information cutoffs, volatility benchmarks, and external LO comparison
+4. **Results:** present synthetic mechanism, October PI--PM comparison, out-of-sample volatility benchmarks, and cross-instrument evidence, with no separate mini-conclusion
+5. **Robustness:** report only checks that alter the strength or interpretation of the findings; retain technical details in the supplement
+6. **Conclusion:** state what the comparisons establish and their limits without repeating tables or the introduction
+
+The introductory PI--PM equations now appear only in the pricing section. The posterior-RMS
+plug-in sensitivity is preserved in Supplement S2. Main-text tables and publication figures
+are retained as core evidence, not removed merely to reduce length.
+
 ## Concise manuscript rewrite
 
 The repository now keeps a from-scratch concise manuscript in `manuscript/main_short.tex`, with its six sections under `manuscript/sections_short/`. It uses the same final empirical results, bibliography, Wiley class, and publication figures as the full manuscript, but organizes the paper around three findings: the curvature--posterior-variance mechanism, the distinction between the PI--PM point-price effect and posterior price uncertainty, and the out-of-sample historical-versus-option-implied volatility comparison including the external vanilla-WTI validation.
 
-The existing `manuscript/main.tex` is retained unchanged as the fuller version for comparison until the concise rewrite is accepted as the primary manuscript.
+The fuller manuscript in `manuscript/main.tex` is retained as a separate comparison draft.
+Neither manuscript is yet claimed to be submission-ready; LaTeX compilation and author
+metadata still require checking.
 
 
 ### Build the concise rewrite
