@@ -1,9 +1,5 @@
 \section{Conclusion}\label{sec:short_conclusion}
 
-We examine posterior integration and the choice of volatility input in WTI APO valuation. A second-order approximation links the PI--PM difference to posterior volatility variance and price curvature. The synthetic experiment shows that posterior integration can materially affect option values with short historical samples and pronounced curvature.
+Posterior integration and the choice of volatility input affect WTI APO pricing in different ways. The synthetic experiment shows that PI and PM can diverge when the volatility posterior is dispersed and the pricing function has substantial curvature. In the October-2026 WTI sample, however, the PI--PM difference is small even though the posterior distribution of model prices remains much wider. Parameter-induced price dispersion should therefore not be inferred from the difference between two point estimates.
 
-In the observed October-2026 sample, PI and PM are nearly identical, although the posterior distribution of model prices remains substantially wider. The effect of integration on the point price should therefore be distinguished from parameter-induced price uncertainty.
-
-For the out-of-sample observations, earlier-date option-implied volatility yields considerably lower pricing errors than the historical-volatility benchmarks, including rolling windows, EWMA, and horizon-matched GARCH. The advantage persists with same-contract lagged implied volatility and in the cross-instrument LO comparison.
-
-These results are conditional on a limited number of valuation dates and the maintained one-factor pricing model. They do not identify a structural physical-versus-risk-neutral volatility difference. Within that scope, the choice of volatility input matters far more for pricing accuracy than the PI--PM distinction.
+For out-of-sample APO pricing, earlier-date option-implied volatility produces substantially lower errors than the tested historical-volatility benchmarks. The result persists without cross-sectional smile fitting and when implied volatility is obtained from standard monthly WTI futures options. Within the maintained one-factor model and the limited set of valuation dates, the source of volatility information matters much more for observed pricing accuracy than posterior integration alone.
