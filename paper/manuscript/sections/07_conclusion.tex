@@ -1,9 +1,9 @@
 \section{Conclusion}\label{sec:conclusion}
 
-We examine whether averaging over the volatility posterior changes WTI Average Price Option values. A second-order approximation relates the PI--PM difference to posterior variance and price curvature. In synthetic data, the difference can be large when the return history is short and curvature is strong.
+We study posterior integration and volatility-input choice in WTI APO valuation. A second-order approximation relates the PI--PM difference to posterior volatility variance and price curvature. The synthetic experiment shows that this difference can be substantial in short-sample, high-curvature settings.
 
-In the October-2026 WTI sample, PI and PM are nearly identical. Yet parameter uncertainty produces a much wider range of model prices. A small \(C_{PI}-C_{PM}\) is therefore not evidence that volatility is known precisely.
+In the October-2026 sample, PI and PM are nearly identical although the posterior distribution of conditional model prices remains considerably wider. The effect of posterior integration on a point price must therefore be distinguished from parameter-induced price dispersion.
 
-The source of the volatility estimate matters much more for observed pricing errors. Volatility estimated from earlier option prices outperforms the tested historical methods, including rolling windows, EWMA, and GARCH. This does not require fitting an implied-volatility smile and also holds when volatility comes from standard monthly WTI futures options. It does not identify a structural difference between physical and risk-neutral volatility.
+Earlier-date option-implied volatility delivers substantially lower out-of-sample pricing errors than the tested historical-volatility benchmarks, including rolling windows, EWMA, and horizon-matched GARCH. The advantage persists with same-contract lagged implied volatility and in the cross-instrument LO comparison. This empirical result does not identify a structural difference between physical and risk-neutral volatility.
 
-We do not propose a new pricing model. Within the chosen model, using earlier option-implied volatility reduces pricing errors much more than replacing PM with PI. The evidence is limited by few market dates, uneven liquidity, and the one-factor pricing assumption.
+Within the maintained model, volatility-input choice matters far more for pricing accuracy than the PI--PM distinction. The evidence is nevertheless limited by relatively few valuation dates, uneven liquidity, and the one-factor specification.
