@@ -227,10 +227,9 @@ def format_layout(doc):
                 run.font.name = "Times New Roman"
                 run.font.size = Pt(12)
 
-    # The author's funding and acknowledgments are not yet confirmed.
-    # Omit the optional unfinished placeholder rather than print it as final text.
-    remove(find(doc, "Acknowledgments and funding"))
-    remove(find(doc, "To be completed and verified by the author"))
+    # The author has explicitly confirmed no external funding and no conflicts
+    # of interest. Keep those statements in BOTH reviewer and editorial copies.
+    # No unconfirmed acknowledgment text should be introduced here.
     doc.core_properties.author = ""
     doc.core_properties.last_modified_by = ""
     doc.core_properties.comments = ""

@@ -43,8 +43,10 @@ jobs:
           python paper/build_short.py --check
           python paper/remef/build.py --check
 
-      - name: Build blinded REMEF Word draft
-        run: python paper/remef/build.py
+      - name: Build blinded REMEF Word draft and author-identifying version
+        run: |
+          python paper/remef/build.py
+          python paper/remef/build.py --author-version
 
       - name: Inspect Word document structure
         run: |
@@ -78,7 +80,38 @@ jobs:
               raise SystemExit("Unfinished placeholder leaked into blinded review draft")
           if len(doc.tables) != 4 or doc.tables[0].cell(0, 1).text != "N":
               raise SystemExit("Table conversion / header missing")
-          print("REMEF section, APA, table and manuscript source checks passed.")
+          for phrase in ("This research received no external funding.",
+                         "The author declares no conflicts of interest."):
+              if phrase not in text:
+                  raise SystemExit("Author-verified declaration missing: " + phrase)
+          from zipfile import ZipFile
+          author = Path("paper/remef/build/remef_author_draft.docx")
+          if not author.is_file():
+              raise SystemExit("Missing REMEF author-identifying version")
+          with ZipFile(author) as z:
+              doc_xml = z.read("word/document.xml").decode("utf-8")
+              footnotes = z.read("word/footnotes.xml").decode("utf-8")
+              joined = doc_xml + footnotes
+              for phrase in ("Heriberto Espino-Montelongo",
+                             "heriberto.espinomo@udlap.mx",
+                             "0009-0009-1230-2931"):
+                  if phrase not in joined:
+                      raise SystemExit("Missing verified author metadata: " + phrase)
+              if "footnoteReference" not in doc_xml:
+                  raise SystemExit("REMEF author version lacks correspondence footnote")
+          with ZipFile(path) as z:
+              for member in z.namelist():
+                  if member.endswith(".xml") or member.endswith(".rels"):
+                      xml=z.read(member).decode("utf-8")
+                      if any(identifier in xml for identifier in (
+                          "Heriberto Espino-Montelongo",
+                          "heriberto.espinomo@udlap.mx",
+                          "0009-0009-1230-2931",
+                          "heri-espino.github.io",
+                          "linkedin.com/in/heri-espino",
+                      )):
+                          raise SystemExit("Identifying metadata leaked into blinded draft: " + member)
+          print("REMEF structure, APA, editable math, author metadata, declarations and blinding passed.")
           PY
 
       - name: Make visual QA preview and check page cap
@@ -108,6 +141,7 @@ jobs:
           name: remef-wti-apo-draft-${{ github.sha }}
           path: |
             paper/remef/build/remef_blinded_draft.docx
+            paper/remef/build/remef_author_draft.docx
             paper/remef/build/remef_blinded_draft.pdf
           if-no-files-found: warn
           retention-days: 30
