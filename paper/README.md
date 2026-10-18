@@ -1,5 +1,13 @@
 # Journal of Futures Markets manuscript
 
+> **Submission strategy update (October 2026):** The REMEF adaptation is now
+> maintained separately under [`paper/remef/`](remef/README.md), with its own
+> introduction, bilingual metadata, Word builder, source bibliography supplement,
+> scientific-audit checklist, and manual-only GitHub Actions workflow.
+> The JFM full and concise Wiley manuscripts remain intact for a later
+> alternative submission, **never simultaneous** with REMEF.
+
+
 ## Language and literature terminology
 
 Use [the manuscript wording dictionary](WORDING_DICTIONARY.md) and its
