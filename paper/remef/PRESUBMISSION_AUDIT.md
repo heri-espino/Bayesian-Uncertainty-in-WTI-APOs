@@ -63,8 +63,11 @@ It is not a certificate that all original experiments were independently rerun.
 - [ ] Verify bilingual titles/abstracts, final JEL codes, APA citation details.
 - [ ] Prepare a clean, independently readable online supplement; current
       `online_supplement.md` retains legacy source archives.
-- [ ] Supply ORCID, correspondence metadata, confirmed funding,
-      acknowledgments and truthful AI-use disclosure.
+- [x] Record author-confirmed spelling, academic email, ORCID, external-funding
+      status (none) and conflicts of interest (none); include these declarations
+      in the appropriate REMEF Word versions.
+- [ ] Supply the REMEF-required institutional postal correspondence address
+      and telephone; verify optional website/LinkedIn and final AI-use wording.
 - [ ] Resolve dual-anonymity versus first-page author metadata with the editor.
 - [ ] Sign the authorship/rights/originality form and make one exclusive
       submission (REMEF **or** JFM, not both).
@@ -84,8 +87,8 @@ It is not a certificate that all original experiments were independently rerun.
       numerical findings.
 - [x] Added a clear comparison between the two REMEF studies, the crude-oil
       volatility-forecasting precedent and our APO pricing question.
-- [x] Removed the unfinished optional acknowledgment/funding placeholder
-      from the blinded reviewer document (author confirmation still required).
+- [x] Replaced the unfinished funding and COI placeholders with the author's
+      explicit declarations: no external research funding; no conflicts.
 - [x] A locally revised copy of the existing 12-page Word draft was rendered:
       equations appeared in the PDF; tables and references were visually
       inspected; the document remained 12 pages.
@@ -94,8 +97,23 @@ It is not a certificate that all original experiments were independently rerun.
 - [ ] Have the author check the edited Word file in Microsoft Word and supply
       complete private author/correspondence metadata to the editorial office.
 - [ ] Confirm data-vendor redistribution rights, signed authorship/copyright
-      declarations, funding/conflict disclosures and scientific evidence audit.
+      declarations and scientific evidence audit; the author has now resolved
+      the funding and conflict-of-interest declarations.
 
 The supplied `jace,+F26+PLANTILLA.pdf` is a published REMEF article used as a
 layout example; it is not a Word submission template and its publisher masthead,
 DOI, issue data and acceptance dates must not be reproduced.
+
+## 2026-10-18 author-identification update
+
+- [x] Author spelling confirmed as **Heriberto Espino-Montelongo**.
+- [x] Academic contact email confirmed: `heriberto.espinomo@udlap.mx`.
+- [x] ORCID confirmed by the author: `0009-0009-1230-2931`.
+- [x] Author supplied an academic website and LinkedIn handle; kept out
+      of the blinded version and reserved for the author-identifying draft.
+- [x] Author explicitly confirmed **no research funding** and **no conflicts
+      of interest**; both declarations are included in both Word outputs.
+- [ ] REMEF first-page correspondence footnote still needs a **postal
+      mailing address and telephone** (not supplied, not invented).
+- [ ] Build both outputs in the manual GitHub workflow, inspect the new author
+      first page, footnote, blinded metadata and PDF math rendering.
