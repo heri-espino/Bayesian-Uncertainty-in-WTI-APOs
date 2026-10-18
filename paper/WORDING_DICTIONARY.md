@@ -13,6 +13,34 @@ The objective is not to force identical prose across papers. It is to use the vo
 already exists in the option-pricing and volatility-forecasting literature, and to avoid
 software-like or newly coined labels when an established term is available.
 
+## Intended readership and readability standard
+
+The manuscript is written for readers familiar with derivatives, option pricing, and
+empirical financial econometrics (including the readership of the *Journal of Futures
+Markets*). **Readable does not mean introductory.** Preserve established technical terms
+such as moneyness, posterior distribution, risk-neutral measure, implied-volatility smile,
+GARCH(1,1), out-of-sample pricing errors, and cluster bootstrap without replacing them
+with conversational descriptions. Define only project-specific objects and distinctions,
+not standard textbook concepts.
+
+- Lead each paragraph with the question, method, or finding; place qualifications where
+  they affect interpretation rather than repeatedly restating them.
+- Prefer normal journal prose ("posterior integration", "model price", "prior-date
+  implied volatility") over conversational language ("where the estimate comes from",
+  "one simple model", "why it helps", "we next ask").
+- Explain the two comparisons distinctly: **PI versus PM holds the posterior and pricing
+  function fixed**; **historical versus implied volatility changes the information
+  source used by the maintained pricing model**.
+- State the information cutoff once in the design and where essential in a result:
+  implied volatility uses only earlier option observations, but each target option is
+  repriced with the valuation-date futures curve, realized fixings, and discount factor.
+- Keep economically relevant details and adverse results. Do not trade accuracy for
+  shorter sentences, and do not turn model-equivalent implied volatility into a
+  structural risk-neutral volatility estimate.
+- Avoid explaining standard concepts from scratch (for example, the generic payoff of
+  an Asian option) unless the specific CME fixing convention makes that explanation
+  necessary.
+
 ## Core editorial rules
 
 1. Use **Asian option** as the generic product class and **arithmetic-average Asian option**
