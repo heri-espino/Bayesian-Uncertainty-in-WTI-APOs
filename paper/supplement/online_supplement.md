@@ -35,6 +35,9 @@ pseudo-random Monte Carlo, independently scrambled Sobol pricing, and Curran con
 Across the difficult targets, differences among the three PI--PM estimates are on the order of
 micro-dollars, well below the empirical gaps near (10^{-3}) dollars per barrel.
 
+As an additional scalar-volatility sensitivity, we compare pricing at posterior mean volatility with pricing at posterior root mean square (RMS) volatility,
+$\sigma_{\mathrm{RMS}}=\sqrt{\mathbb E[\sigma^2\mid\mathcal D]}$, using the same Curran approximation for both. Their pooled pricing errors differ only slightly. This plug-in comparison does not substitute for averaging conditional prices over the posterior (PI).
+
 **Table S2. Numerical identification and simulation-based calibration.**
 
 **Panel A. Representative PI--PM differences (U.S. dollars per barrel).**
