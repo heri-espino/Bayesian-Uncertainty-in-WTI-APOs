@@ -2,7 +2,7 @@
 
 \subsection{Physical inference and risk-neutral pricing}
 
-Historical WTI returns are modeled under the physical measure with a constant-volatility geometric Brownian motion. For log return \(R_i\) over interval \(\Delta t\),
+We model historical WTI returns under the physical measure using geometric Brownian motion with constant volatility. For log return \(R_i\) over interval \(\Delta t\),
 \begin{equation}
  R_i\sim
  \mathcal N\!\left[
@@ -19,16 +19,16 @@ The baseline prior is
  \quad \sigma>0.
  \label{eq:priors}
 \end{equation}
-Posterior sampling uses a random-walk Metropolis algorithm in \((\mu,\log\sigma)\). The large synthetic experiments additionally integrate \(\mu\) analytically conditional on \(\sigma\), producing a one-dimensional deterministic posterior calculation that is independent of MCMC error. Sampler settings, calibration checks, and alternative specifications are reported in the online supplement.
+For the market data, we sample the posterior using random-walk Metropolis in \((\mu,\log\sigma)\). For the large synthetic experiment, we integrate out \(\mu\) analytically conditional on \(\sigma\). This gives a one-dimensional calculation without MCMC error. The online supplement provides sampler settings, calibration checks, and alternative models.
 
 Valuation is performed separately under the risk-neutral measure. For each unresolved WTI fixing, the maintained futures benchmark is
 \begin{equation}
  dF_u=\sigma F_u\,dW_u^Q.
  \label{eq:futures_q}
 \end{equation}
-The historical drift does not enter the pricing dynamics. Realized fixings enter the arithmetic average deterministically; only future first-nearby settlements remain stochastic. Each remaining fixing is initialized from the corresponding point of the observed CL futures curve rather than from one fixed futures contract. We keep this pricing model simple to distinguish the effect of posterior integration from that of additional commodity-price dynamics.
+The historical drift does not enter the pricing model. Known fixings enter the average as fixed numbers, and only future settlements are simulated. For each future fixing, we use the relevant contract price from the observed CL futures curve. The simple model allows us to compare volatility inputs without also changing the futures dynamics.
 
-Baseline empirical prices are computed by Monte Carlo. For the larger out-of-sample comparisons and constant-volatility sensitivity checks, we use Curran's deterministic conditioning approximation \cite{curran1994} under the same one-factor model. Difficult contracts are also checked with high-precision pseudo-random and scrambled-Sobol calculations. Numerical diagnostics are summarized in Section~\ref{sec:robustness} and documented in detail in the supplement.
+We calculate baseline empirical prices by Monte Carlo. For the larger out-of-sample comparisons and checks using constant-volatility inputs, we use Curran's deterministic conditioning approximation \cite{curran1994} under the same one-factor model. Difficult contracts are also checked with high-precision pseudo-random and scrambled-Sobol calculations. Numerical diagnostics are summarized in Section~\ref{sec:robustness} and documented in detail in the supplement.
 
 \subsection{Posterior integration and uncertainty about model prices}
 
@@ -49,7 +49,7 @@ A Taylor expansion around \(\bar\sigma\) gives the central mechanism,
  \operatorname{Var}(\sigma\mid\mathcal D).
  \label{eq:taylor_gap}
 \end{equation}
-The PI--PM difference is therefore locally proportional to posterior variance. By contrast,
+The PI--PM difference therefore depends locally on posterior variance and price curvature. By contrast,
 \begin{equation}
  \operatorname{SD}\!\left(C^Q(\sigma)\mid\mathcal D\right)
  \approx
@@ -57,34 +57,34 @@ The PI--PM difference is therefore locally proportional to posterior variance. B
  \sqrt{\operatorname{Var}(\sigma\mid\mathcal D)},
  \label{eq:price_uncertainty_delta}
 \end{equation}
-so the standard deviation of the posterior distribution of model prices is locally proportional to the posterior standard deviation of volatility. PI and PM can be close even when uncertainty about the conditional model price is substantial.
+so model-price uncertainty follows a different scale: its standard deviation is locally proportional to the posterior standard deviation of volatility. The PI--PM difference can be small even when the posterior distribution of model prices is wide.
 
-The paper also reports posterior-mode and likelihood plug-ins in the repeated-sampling benchmark, but they are secondary to the PI--PM comparison. A posterior-RMS volatility is used only as a scalar sensitivity check; it is not treated as an alternative Bayesian integration rule.
+The repeated-sampling benchmark also includes estimates based on the posterior mode and maximum likelihood. These are secondary comparisons. We also test a posterior root mean square (RMS) volatility as another constant-volatility input, not as a posterior-integration method.
 
 \subsection{Synthetic mechanism experiment}
 
-Synthetic return histories are generated under \(\mathbb P\), while target option values are evaluated under \(\mathbb Q\) at the known data-generating volatility. The large mechanism map contains 175,000 independent histories and spans short to long estimation samples, annual volatility from 0.10 to 0.80, multiple maturities and moneyness states, and partial-fixing configurations. For each history and contract state, the experiment records the PI--PM gap, posterior variance of volatility, local pricing curvature, and the approximation in Equation~\eqref{eq:taylor_gap}.
+We simulate return histories under \(\mathbb P\) and calculate target option values under \(\mathbb Q\) using the known volatility. The large mechanism map contains 175,000 independent histories and spans short to long estimation samples, annual volatility from 0.10 to 0.80, multiple maturities and moneyness states, and partial-fixing configurations. For each history and contract state, the experiment records the PI--PM gap, posterior variance of volatility, local pricing curvature, and the approximation in Equation~\eqref{eq:taylor_gap}.
 
-The synthetic experiment identifies when the PI--PM difference is large and tests whether Equation~\eqref{eq:taylor_gap} accounts for it. It is not designed to optimize pricing errors against market settlements. Exact grids and replication counts by cell are retained in the online supplement.
+This experiment tests when posterior averaging changes prices and how well Equation~\eqref{eq:taylor_gap} explains the change. It is not a test against market settlements. The supplement reports the complete simulation grid and replication counts.
 
 \subsection{Forward WTI APO validation}
 
-Historical-volatility posteriors are estimated using return histories available by each valuation date. We obtain APO implied volatilities by inverting the Curran pricing approximation for each contract. These implied volatilities are inputs to the maintained pricing model, not estimates of structural risk-neutral diffusion coefficients.
+We estimate historical volatility using returns available by each valuation date. We estimate APO implied volatility by finding the input to Curran's approximation that matches each observed option settlement. These implied volatilities are inputs to our pricing model, not structural estimates of risk-neutral diffusion volatility.
 
-For out-of-sample pricing, we fit APO implied-volatility smiles using only option observations from dates earlier than the target date. One specification uses the latest completed earlier date; another combines all earlier dates, giving more weight to recent observations. Seven expiries meet the data-coverage requirement, giving 2,381 contract-date observations over 15 target dates.
+We fit implied-volatility smiles using only option observations from earlier dates. One fit uses the most recent earlier date. Another uses all earlier dates with more weight on recent observations. Seven expiries provide 2,381 observations over 15 target dates.
 
-We compare the option-implied results with several historical-volatility estimates: rolling windows of 63, 126, and 252 returns, an exponentially weighted moving average (EWMA) with a 63-business-day half-life, and a Gaussian GARCH(1,1) forecast matched to the remaining fixing dates. These provide alternative volatility inputs under the same pricing model, not alternative risk-neutral pricing models. We also test whether fitting a smile is necessary. For each contract, we carry forward its latest implied volatility from an earlier date and reprice it using the target-date futures curve, discount factor, and realized and remaining fixings. GARCH estimation and the conversion of variance forecasts to one constant volatility are described in the supplement.
+We compare the option-implied results with several historical-volatility estimates: rolling windows of 63, 126, and 252 returns, an exponentially weighted moving average (EWMA) with a 63-business-day half-life, and a Gaussian GARCH(1,1) forecast matched to the remaining fixing dates. All methods provide volatility inputs to the same pricing model. We also test whether smile fitting adds value. We carry forward each contract's latest earlier implied volatility. We then price it with the current futures curve, discount factor, and known and remaining fixings. GARCH estimation and the conversion of variance forecasts to one constant volatility are described in the supplement.
 
-Pricing errors are measured against end-of-day option settlements using mean error, MAE, and RMSE. Because contracts observed on the same date share the market state and futures curve, uncertainty comparisons are resampled by valuation-date cluster rather than by individual option row. Liquidity restrictions based on positive volume and open interest are reported as robustness checks.
+We compare model prices with end-of-day settlements using mean error, MAE, and RMSE. Contracts on the same date share market conditions, so our bootstrap resamples valuation dates rather than individual contracts. Liquidity restrictions based on positive volume and open interest are reported as robustness checks.
 
 \subsection{Independent vanilla-WTI validation}\label{sec:external_lo_method}
 
-The APO experiment remains within the same option family used as the pricing target. A cross-instrument validation instead estimates implied volatility from standard monthly American WTI futures options (CME product LO). Official LO settlements are matched to their CL futures settlements and inverted with an American Cox--Ross--Rubinstein futures-option tree. The main inversion uses a 160-step tree. The supplement reports checks using different numbers of steps.
+The first out-of-sample comparison estimates implied volatility from earlier APOs. As a separate test, we use standard monthly American WTI futures options (CME product LO). We match LO settlements to the corresponding CL futures settlements and infer volatility with an American Cox--Ross--Rubinstein futures-option tree. The main inversion uses a 160-step tree. The supplement reports checks using different numbers of steps.
 
-For each APO target date, every LO observation used to construct the external volatility surface is strictly earlier than the target. Surfaces are fitted separately by underlying futures contract and evaluated at the target APO strike. The maturity-specific LO volatilities are then mapped into the maintained scalar-volatility APO engine. The primary mapping is a fixing-count weighted RMS rule; a separate sensitivity chooses the scalar volatility that matches the unresolved arithmetic-average variance under the same common-factor representation. The purpose of this sensitivity is to test the transfer rule, not to claim that either scalar is an exact structural representation.
+We fit the external LO volatility surfaces using only observations earlier than the APO target date. We fit each underlying futures contract separately and evaluate the surface at the APO strike. The APO model requires one volatility, so we combine the maturity-specific LO estimates. Our main method uses a fixing-count weighted RMS value. As a check, we choose a value that matches the variance of the remaining average under the common-factor model. Neither rule is claimed to be an exact representation of market dynamics.
 
 The primary external comparison is restricted to APO observations lying inside the observed prior LO moneyness support for both external specifications. This yields 253 common-support contract-dates over 10 target dates. Same-day APO prices never enter the external volatility construction. This checks whether the improvement over historical volatility remains when implied volatility is estimated from vanilla-WTI options rather than APOs.
 
 \subsection{Scope of supporting diagnostics}
 
-Several checks are deliberately kept outside the main evidentiary flow: prior and estimation-window sensitivity, Student-\(t\) physical returns, contract-reconstructed first-nearby return histories, posterior-RMS plug-in pricing, simulation-based calibration, detailed Monte Carlo/Sobol/Curran comparisons, LO tree refinement, surface-shape diagnostics, and full liquidity tables. Section~\ref{sec:robustness} reports only what these checks establish for the three central findings; implementation settings and complete numerical results are preserved in the online supplement.
+The online supplement contains additional checks: priors and return windows, Student-\(t\) returns, first-nearby return reconstruction, posterior-RMS pricing, posterior calibration, numerical pricing methods, LO tree size, volatility surface shape, and liquidity restrictions. Section~\ref{sec:robustness} reports only what these checks establish for the three central findings; implementation settings and complete numerical results are preserved in the online supplement.
