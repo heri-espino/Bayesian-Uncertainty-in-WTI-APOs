@@ -32,6 +32,11 @@ docs/_build/
 paper/build/
 paper/espino_2026_bayess-on-wti.pdf
 
+# Independent concise JFM build and REMEF Word draft
+paper/build_short/
+paper/espino_2026_bayess-on-wti_short.pdf
+paper/remef/build/
+
 # # Yahoo Finance market-data snapshots remain local. Version code, query metadata,
 # # hashes and derived scientific summaries rather than redistributing raw Yahoo data.
 # data/wti_yahoo/*.csv
