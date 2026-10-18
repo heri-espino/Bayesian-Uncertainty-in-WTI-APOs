@@ -36,6 +36,7 @@ scripts/                                             repository/reproducibility 
 data/                                                source data and provenance
 results/                                             experiment outputs and checkpoints
 paper/manuscript/                                    active JFM LaTeX manuscript
+paper/remef/                                         REMEF Word-format alternative and audit
 paper/vendor/wiley_njd_v5/                           frozen Wiley NJDv5 vendor bundle
 paper/build.py                                       canonical manuscript builder
 research/                                            methodological design notes
@@ -47,6 +48,15 @@ archive/                                             superseded papers/notebooks
 `main` is the only long-lived development branch. New work should use short-lived feature branches that are deleted after merge or explicit supersession. See `CONTRIBUTING.md` and `docs/development.md` for the branch/PR lifecycle and the read-only branch audit utility.
 
 The root `AGENTS.md` is mandatory reading for coding agents and maintainers. It defines the package and manuscript contracts and the scientific guardrails that must be preserved.
+
+## Submission candidates
+
+The publication-first adaptation for the **Revista Mexicana de Economía y Finanzas
+(REMEF)** is under [`paper/remef/`](paper/remef/README.md). It reuses the
+concise scientific results and has a separate editable-Word build and
+[reproducibility audit](paper/remef/PRESUBMISSION_AUDIT.md).
+It is a **draft, not a submitted paper**. The JFM manuscript remains available
+as an alternative, but these targets cannot be submitted simultaneously.
 
 ## JFM manuscript
 
