@@ -194,6 +194,30 @@ def format_docx(path: Path) -> None:
             style.font.size = Pt(12)
             style.paragraph_format.line_spacing = 1.0
             style.paragraph_format.space_after = Pt(3)
+    # REMEF requests progressive numbering up to heading level 3.
+    current = [0, 0, 0]
+    unnumbered = {"Abstract", "Resumen", "Data availability",
+                  "Code and results availability", "Competing interests",
+                  "Acknowledgments and funding", "References"}
+    for paragraph in doc.paragraphs:
+        name = paragraph.style.name
+        if name in {"Heading 1", "Heading 2", "Heading 3"}:
+            level = int(name[-1])
+            original = paragraph.text.strip()
+            if original not in unnumbered and original and not original[0].isdigit():
+                current[level - 1] += 1
+                for lower in range(level, 3):
+                    current[lower] = 0
+                prefix = ".".join(str(n) for n in current[:level]) + " "
+                # Insert as a new run instead of replacing existing formatting.
+                prefix_run = paragraph.add_run(prefix)
+                paragraph._p.remove(prefix_run._r)
+                paragraph._p.insert(0, prefix_run._r)
+        if paragraph.text.startswith(("Table ", "Figure ")):
+            for run in paragraph.runs:
+                run.font.name = "Times New Roman"
+                if paragraph.text.startswith("Table "):
+                    run.font.size = Pt(10)
     for table in doc.tables:
         for row in table.rows:
             for cell in row.cells:
