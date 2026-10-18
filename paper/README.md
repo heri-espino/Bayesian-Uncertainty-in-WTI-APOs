@@ -1,5 +1,18 @@
 # Journal of Futures Markets manuscript
 
+## Language and literature terminology
+
+Use [the manuscript wording dictionary](WORDING_DICTIONARY.md) and its
+[source-by-source literature evidence map](../literature/TERMINOLOGY_EVIDENCE.md)
+when editing the prose. Prefer established option-pricing terminology, direct
+sentences, and explicit information cutoffs. Distinguish the PI--PM difference
+from the posterior distribution of model prices. The fuller manuscript
+(`manuscript/main.tex`) and concise alternative (`manuscript/main_short.tex`)
+remain separate drafts. Both received the October 2026 plain-language edit;
+neither replaces the other until the author chooses the submission version.
+
+
+
 `paper/` contains the active internal manuscript for the Journal of Futures Markets target.
 The old REMEF-oriented drafts are preserved under `archive/paper_remef/` and are not active
 manuscript sources.

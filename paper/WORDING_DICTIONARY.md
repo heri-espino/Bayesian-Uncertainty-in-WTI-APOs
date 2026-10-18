@@ -348,11 +348,11 @@ covered here, prefer the terminology in the most directly relevant paper in
 
 ---
 
-## 13. Current-manuscript terminology audit
+## 13. Historical manuscript terminology audit (before the October 2026 language pass)
 
-As of commit `021c9ec3`, the shortened manuscript still contains several project-specific or
-software-like expressions. These are the highest-priority normalization targets for the next
-prose pass:
+At commit `021c9ec3`, before the present language pass, the shortened manuscript contained several project-specific or
+software-like expressions. These were the highest-priority normalization targets for the subsequent
+prose pass. The counts below describe that historical snapshot, not the revised paper:
 
 | Current term | Approx. occurrences | Priority | Recommended action |
 |---|---:|---|---|
@@ -373,3 +373,60 @@ Do not perform these as blind global substitutions. Some occurrences are mathema
 (for example, “pricing map” when explicitly discussing curvature of the function
 (\sigma\mapsto C^Q(\sigma))). The rule is to prefer literature-standard wording whenever the
 more specialized project label adds no precision.
+
+
+---
+
+## 14. Literature evidence and final plain-language standard (2026-10-17)
+
+For a source-by-source map of the vocabulary and the limits of each term, see
+[literature terminology evidence](../literature/TERMINOLOGY_EVIDENCE.md).
+The source map is based on actual extracted literature text; it is not an automated
+frequency count, and the literature contains some awkward English that should not
+be copied just because it appears in a published paper.
+
+### High-priority manuscript substitutions
+
+| Avoid | Use instead | Reason |
+|---|---|---|
+| weak-information states | cases with short historical samples / few return observations | Name the manipulated quantity |
+| volatility curvature | curvature of the option price with respect to volatility | Name the derivative and its argument |
+| integration correction | PI--PM difference | Avoid implying that PM is a pricing mistake |
+| main empirical pricing margin | difference in pricing errors between the evaluated volatility inputs | State the observed comparison |
+| main pricing hierarchy | relative pricing performance of the evaluated methods | Avoid an invented classification |
+| transaction-active observations | contract-date observations with positive reported volume | Do not imply that settlement marks are transactions |
+| at the production 160-step choice | using the 160-step tree in the main analysis | Natural numerical-method wording |
+| LO scalar-transfer and tree-refinement diagnostics | checks of the volatility mapping and number of tree steps | State the operations separately |
+| later-date valuations | out-of-sample pricing using only earlier option observations for volatility estimation | Explain precisely which inputs are lagged |
+| model-price interval | interval for the model price | Ordinary noun phrase |
+| posterior-mean price | posterior-mean plug-in price (PM), **if** evaluated at posterior mean volatility | Distinguish from the posterior-integrated mean |
+| option-informed state | option-implied volatility input | Name the source and measured quantity |
+
+### Example: GARCH method
+
+Preferred wording:
+
+> We estimate the GARCH parameters using returns from earlier dates. We then use the
+> target-date return to update the conditional variance. We forecast variance over the
+> remaining fixing dates and convert these forecasts into a constant volatility that
+> matches the variance of the remaining arithmetic average under the maintained pricing
+> model.
+
+Do not shorten this to “a volatility state is transferred to the pricing engine”: the
+sequence, the time cutoff, and the fact that the scalar is model-dependent all matter.
+
+### Preferred opening sentence
+
+> Option prices depend on parameters that are estimated rather than observed.
+
+This sentence is the stylistic model for the abstract, Introduction, and interpretation:
+short, concrete, technically accurate, with the mechanism explained only after the
+question has been introduced.
+
+### Editorial definition of simplicity
+
+Simplicity is **not** deletion of necessary distinctions. Retain moneyness, posterior
+variance, risk-neutral measure, implied-volatility smile, and valuation-date cluster
+bootstrap. Explain these on first use if the reader needs that context. Separate the
+posterior distribution of conditional model prices from a predictive distribution of
+future traded prices. This is a semantic constraint, not just a wording preference.
