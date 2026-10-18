@@ -2,8 +2,8 @@
 
 > REMEF is the currently prepared alternative route. Its separate Word-format
 > requirements, bilingual metadata and open audit items are documented in
-> [`paper/remef/README.md`](../paper/remef/README.md) and
-> [`paper/remef/PRESUBMISSION_AUDIT.md`](../paper/remef/PRESUBMISSION_AUDIT.md).
+> [`paper/remef/README.md`](https://github.com/heri-espino/Bayesian-Uncertainty-in-WTI-APOs/blob/main/paper/remef/README.md) and
+> [`paper/remef/PRESUBMISSION_AUDIT.md`](https://github.com/heri-espino/Bayesian-Uncertainty-in-WTI-APOs/blob/main/paper/remef/PRESUBMISSION_AUDIT.md).
 > Do not submit one paper to both journals simultaneously.
 
 
