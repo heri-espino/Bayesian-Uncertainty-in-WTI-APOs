@@ -19,14 +19,14 @@ with baseline priors
  \qquad \sigma>0.
  \label{eq:short_priors}
 \end{equation}
-The empirical posterior is sampled in \((\mu,\log\sigma)\) with a random-walk Metropolis algorithm. For the large synthetic experiment, \(\mu\) is integrated analytically conditional on \(\sigma\), leaving a one-dimensional posterior calculation. This removes MCMC error from the mechanism experiment without changing the statistical model.
+We sample the empirical posterior in \((\mu,\log\sigma)\) using random-walk Metropolis. For the large synthetic experiment, we integrate out \(\mu\) analytically conditional on \(\sigma\). This leaves a one-dimensional posterior calculation and avoids MCMC error in that experiment.
 
 Pricing is carried out separately under the risk-neutral measure. For futures maturity \(u\), the maintained benchmark is
 \begin{equation}
  dF_t^u=\sigma F_t^u\,dW_t^Q,
  \label{eq:short_q}
 \end{equation}
-where \(u\) indexes futures maturity and the same Brownian motion \(W^Q\) drives all maturities. This common-factor assumption fixes the cross-maturity dependence relevant for the variance of the arithmetic average. The historical drift does not enter the option value. The constant-volatility, one-factor specification is intentionally parsimonious: it provides a common pricing model within which the effect of posterior integration and the effect of changing the volatility input can be compared directly.
+where \(u\) indexes futures maturity and the same Brownian motion \(W^Q\) drives all maturities. Using the same Brownian motion specifies how futures prices at different maturities move together. The historical drift does not enter the option value. We keep volatility constant and use one factor so that the two comparisons use the same pricing model.
 
 For an arithmetic-average option with fixing dates \(t_1,\ldots,t_M\),
 \begin{equation}
@@ -49,7 +49,7 @@ We price the baseline historical-volatility model by Monte Carlo. For the large 
 
 \subsection{Posterior integration and price uncertainty}
 
-Equation~\eqref{eq:short_pi_pm} compares two summaries of the same posterior and the same pricing model. A Taylor expansion of \(C^Q(\sigma)\) around \(\bar\sigma\) yields Equation~\eqref{eq:short_taylor}. The leading PI--PM difference depends on two quantities: posterior variance and the curvature of the option-pricing function with respect to volatility. The correction can have either sign because the local curvature can be positive or negative. The second-order approximation is most accurate when the posterior is sufficiently concentrated and higher-order curvature is controlled over the relevant posterior support.
+Equation~\eqref{eq:short_pi_pm} compares two summaries of the same posterior and the same pricing model. A Taylor expansion of \(C^Q(\sigma)\) around \(\bar\sigma\) yields Equation~\eqref{eq:short_taylor}. Two features determine the leading PI--PM difference: how uncertain volatility is and how strongly the option price bends as volatility changes. The difference may be positive or negative. The approximation works best when the posterior is concentrated enough for higher-order terms to be small.
 
 The posterior distribution also induces a distribution of theoretical option values,
 \begin{equation}
@@ -64,12 +64,12 @@ Its dispersion is approximately
  \sqrt{\operatorname{Var}(\sigma\mid\mathcal D)}.
  \label{eq:short_delta}
 \end{equation}
-The contrast between Equations~\eqref{eq:short_taylor} and \eqref{eq:short_delta} is central. The change in the posterior mean price is locally second order in posterior dispersion, whereas uncertainty in the theoretical option value is locally first order. It is therefore possible for \(C_{PI}\) and \(C_{PM}\) to be almost identical while the posterior distribution of model prices remains economically nontrivial.
+These equations describe different effects. The PI--PM difference depends locally on posterior variance, while the standard deviation of model prices depends on posterior standard deviation. PI and PM may therefore be nearly identical even when the posterior distribution of model prices is wide.
 
-PI and PM are two summaries obtained from the same volatility posterior and pricing model. PI averages the conditional prices; PM uses posterior mean volatility. Neither is necessarily a market-consistent price when the maintained model is misspecified.
+Both prices come from the same model and posterior. Neither is guaranteed to match market prices if the pricing model is misspecified.
 
 \subsection{Synthetic mechanism experiment}
 
 The synthetic experiment is designed to vary the two ingredients in Equation~\eqref{eq:short_taylor}. It contains 175,000 independently generated return histories across historical sample sizes from 21 to 1,260 observations and annual volatility levels from 0.10 to 0.80. The option layer varies maturity, moneyness, and the fraction of the arithmetic average already fixed. For each history and contract state, the experiment computes the actual PI--PM difference, posterior variance of volatility, local price curvature, and the second-order approximation.
 
-The experiment identifies when the PI--PM difference is large and checks whether Equation~\eqref{eq:short_taylor} accounts for it. It does not assume that posterior integration always matters or never matters.
+The purpose is to find the conditions under which posterior averaging changes the price and to test the approximation.
