@@ -2,6 +2,17 @@
 
 Read this file before continuing research work.
 
+## Conditional journal fallback — 2026-10-17
+
+The author wants REMEF retained as a backup if a Journal of Futures Markets
+(Wiley) submission is rejected. JFM remains the current target; no submission
+or rejection is established by this note. See the conditional REMEF plan in
+[the submission checklist](../docs/submission_checklist.md#conditional-fallback-remef)
+for two relevant papers, citation placement, metadata checks, and adaptation steps.
+Do not switch the manuscript format or submit automatically. Preserve current
+results and distinguish stochastic volatility from parameter uncertainty.
+
+
 ## Canonical current checkpoint
 
 The current scientific state, completed experiments, exact numerical results, milestone status, and submission blockers are documented in:

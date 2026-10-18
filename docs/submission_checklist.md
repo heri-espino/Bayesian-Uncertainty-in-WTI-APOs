@@ -51,3 +51,79 @@ and should be used only after the scientific milestones are substantially closed
 
 Before upload, re-check the current Wiley/JFM author guidelines rather than relying on this
 static checklist.
+
+## Conditional fallback: REMEF
+
+Decision recorded on 2026-10-17: keep **Journal of Futures Markets (Wiley)** as
+the current target. If a submission there is rejected, prepare a revised submission
+to **Revista Mexicana de Economía y Finanzas, Nueva Época (REMEF)**.
+This is a contingency plan, not a record that submission or rejection has occurred.
+It does not authorize automatic submission or an immediate change of journal format.
+
+### Literature to consider when preparing the REMEF version
+
+1. **Ortiz Ramírez, A., and Jiménez Preciado, A. L.**
+   *Valuación de opciones asiáticas con volatilidad realizada y reversión a la
+   media: caso CEMEXCPO.* REMEF, volume 21, issue 1 (January–March 2026), e1470.
+   DOI: <https://doi.org/10.21919/remef.v21i1.1470>.
+   Official record: <https://remef.org.mx/index.php/remef/article/view/1470>.
+
+   Use in the introduction's discussion of volatility specifications and Monte Carlo
+   valuation of Asian options. The paper models volatility with mean reversion;
+   our baseline instead studies uncertainty about an estimated constant volatility.
+   Its reported market comparison uses European-option prices from MexDer.
+   Our WTI application uses settlements of actual arithmetic-average options.
+   Do not describe these as identical pricing targets or as a head-to-head model test.
+
+   **Metadata check:** the supplied corpus filename uses 2025, whereas the journal
+   assigns the article to the 2026 issue and reports online publication in 2025.
+   Reconcile the authoritative citation export and issue year before creating the
+   final BibTeX entry; do not infer the reference year from the filename.
+
+2. **Matías González, A., Martínez-Palacios, M. T. V., and Ortiz-Ramírez, A. (2019).**
+   *Consumo e inversión óptimos y valuación de opciones asiáticas en un entorno
+   estocástico con fundamentos microeconómicos y simulación Monte Carlo.*
+   REMEF, 14(3), 397–414.
+   DOI: <https://doi.org/10.21919/remef.v14i3.408>.
+   Official record: <https://remef.org.mx/index.php/remef/article/view/408>.
+
+   Use in the related-literature discussion of Asian-option valuation under
+   stochastic volatility, optimal control, and Monte Carlo simulation. Explain
+   that our question concerns posterior integration and pricing performance,
+   rather than a consumption–investment equilibrium model.
+
+An optional third reference is Martínez-Palacios, Ortiz-Ramírez, and
+Martínez-Sánchez (2017), *Valuación de opciones asiáticas con precio de ejercicio
+flotante igual a la media aritmética: un enfoque de control óptimo estocástico*,
+DOI: <https://doi.org/10.21919/remef.v12i4.240>.
+Include it only if the manuscript actually discusses floating-strike valuation
+or the stochastic-control approach.
+
+These references support Asian-option context and volatility modeling. They do
+not establish the PI–PM result or show that posterior integration improves prices.
+Retain the Bayesian and numerical references that support those separate claims.
+Choose citations for substantive relevance, without a target-journal citation quota.
+
+### Actions if the fallback is activated
+
+- [ ] Record the JFM decision and preserve the submitted manuscript version.
+- [ ] Address relevant editor/referee comments before preparing the next submission.
+- [ ] Recheck REMEF's current author instructions:
+      <https://remef.org.mx/index.php/remef/about/submissions>.
+      At the planning review, these requested Word, up to 25 pages including
+      references, and bilingual title, abstract, and keywords.
+- [ ] Recheck the current fees policy:
+      <https://www.remef.org.mx/index.php/remef/pages/view/politica>.
+      The reviewed policy states no submission or article-processing charges.
+- [ ] Verify the two articles against their full text, reconcile metadata, add
+      accurate bibliography entries, and integrate concise, supported discussion.
+- [ ] Keep the prose direct and use standard option-pricing terminology.
+      Distinguish stochastic volatility from parameter uncertainty.
+- [ ] Preserve all empirical results, information cutoffs, and market-date limitations.
+- [ ] Document any format migration before changing the active manuscript/build.
+      Archived REMEF drafts under `archive/paper_remef/` are historical material,
+      not a replacement for the current scientific results.
+- [ ] Assemble and review the REMEF submission package before uploading it.
+
+Published subject precedents support this fallback's relevance; they do not
+establish a numerical acceptance probability or guarantee publication.
