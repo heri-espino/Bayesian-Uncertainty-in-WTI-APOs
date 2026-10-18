@@ -42,7 +42,7 @@ CAPTION_RE = re.compile(r"\\caption\{((?:[^{}]|\{[^{}]*\})*)\}", re.DOTALL)
 
 
 def validate() -> None:
-    paths = [HERE / "frontmatter.tex", HERE / "introduction.tex", *BODY_SECTIONS, *REFERENCES]
+    paths = [HERE / "frontmatter.tex", HERE / "introduction.tex", HERE / "apa.csl", HERE / "postprocess.py", *BODY_SECTIONS, *REFERENCES]
     paths.extend(FIGURES / name for name in [
         "fig01_mechanism_map.png",
         "fig03_forward_q_cluster_bootstrap.png",
@@ -169,67 +169,8 @@ def make_latex(*, with_author: bool) -> str:
 
 
 def format_docx(path: Path) -> None:
-    from docx import Document
-    from docx.enum.text import WD_ALIGN_PARAGRAPH
-    from docx.oxml import OxmlElement
-    from docx.oxml.ns import qn
-    from docx.shared import Cm, Pt
-
-    doc = Document(path)
-    for section in doc.sections:
-        section.top_margin = Cm(2.5)
-        section.bottom_margin = Cm(2.5)
-        section.left_margin = Cm(3)
-        section.right_margin = Cm(3)
-        footer = section.footer.paragraphs[0]
-        footer.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        fld = OxmlElement("w:fldSimple")
-        fld.set(qn("w:instr"), "PAGE")
-        footer._p.append(fld)
-    for style_name in ("Normal", "Body Text", "First Paragraph",
-                       "Heading 1", "Heading 2", "Heading 3"):
-        if style_name in doc.styles:
-            style = doc.styles[style_name]
-            style.font.name = "Times New Roman"
-            style.font.size = Pt(12)
-            style.paragraph_format.line_spacing = 1.0
-            style.paragraph_format.space_after = Pt(3)
-    # REMEF requests progressive numbering up to heading level 3.
-    current = [0, 0, 0]
-    unnumbered = {"Abstract", "Resumen", "Data availability",
-                  "Code and results availability", "Competing interests",
-                  "Acknowledgments and funding", "References"}
-    for paragraph in doc.paragraphs:
-        name = paragraph.style.name
-        if name in {"Heading 1", "Heading 2", "Heading 3"}:
-            level = int(name[-1])
-            original = paragraph.text.strip()
-            if original not in unnumbered and original and not original[0].isdigit():
-                current[level - 1] += 1
-                for lower in range(level, 3):
-                    current[lower] = 0
-                prefix = ".".join(str(n) for n in current[:level]) + " "
-                # Insert as a new run instead of replacing existing formatting.
-                prefix_run = paragraph.add_run(prefix)
-                paragraph._p.remove(prefix_run._r)
-                paragraph._p.insert(1 if paragraph._p.pPr is not None else 0,
-                                    prefix_run._r)
-        if paragraph.text.startswith(("Table ", "Figure ")):
-            for run in paragraph.runs:
-                run.font.name = "Times New Roman"
-                if paragraph.text.startswith("Table "):
-                    run.font.size = Pt(10)
-    for table in doc.tables:
-        for row in table.rows:
-            for cell in row.cells:
-                for paragraph in cell.paragraphs:
-                    for run in paragraph.runs:
-                        run.font.name = "Times New Roman"
-                        run.font.size = Pt(10)
-    doc.core_properties.author = ""
-    doc.core_properties.last_modified_by = ""
-    doc.core_properties.comments = ""
-    doc.save(path)
+    from postprocess import prepare_docx
+    prepare_docx(path)
 
 
 def main() -> None:
@@ -253,6 +194,7 @@ def main() -> None:
         command = [
             "pandoc", "--from=latex", "--to=docx", "--standalone", "--citeproc",
             "--metadata=reference-section-title:References",
+            "--csl=" + str(HERE / "apa.csl"),
             "--resource-path=" + str(ROOT),
             "--bibliography=" + str(REFERENCES[0]),
             "--bibliography=" + str(REFERENCES[1]),
