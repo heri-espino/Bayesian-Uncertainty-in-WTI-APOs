@@ -60,8 +60,25 @@ jobs:
               tables = xml.count("<w:tbl>")
               media = [name for name in z.namelist() if name.startswith("word/media/")]
               print(f"Editable math elements: {math}; Word tables: {tables}; images: {len(media)}")
-              if math == 0 or tables < 4 or len(media) < 2:
-                  raise SystemExit("Expected native math/tables and manuscript figures")
+              if math < 30 or tables != 4 or len(media) < 2:
+                  raise SystemExit("Expected editable equations, four Word tables and figures")
+          from docx import Document
+          doc = Document(path)
+          heads = [p.text for p in doc.paragraphs if p.style.name == "Heading 1"]
+          expected = [
+              "1. Introduction", "2. Literature review", "3. Methodology",
+              "4. Results and discussion", "5. Conclusions and recommendations",
+          ]
+          if not all(name in heads for name in expected):
+              raise SystemExit(f"REMEF section structure not found: {heads}")
+          text = "\\n".join(p.text for p in doc.paragraphs)
+          if "Curran, M. (1994)" not in text or "Matías González" not in text:
+              raise SystemExit("APA bibliography or REMEF precedents are missing")
+          if "To be completed" in text:
+              raise SystemExit("Unfinished placeholder leaked into blinded review draft")
+          if len(doc.tables) != 4 or doc.tables[0].cell(0, 1).text != "N":
+              raise SystemExit("Table conversion / header missing")
+          print("REMEF section, APA, table and manuscript source checks passed.")
           PY
 
       - name: Make visual QA preview and check page cap
@@ -71,6 +88,13 @@ jobs:
             --convert-to pdf --outdir paper/remef/build \
             paper/remef/build/remef_blinded_draft.docx
           pdfinfo paper/remef/build/remef_blinded_draft.pdf | head -n 20
+          # Previous version lost every Word equation during LibreOffice PDF export.
+          # This detects a regression instead of silently accepting a short PDF.
+          pdftotext paper/remef/build/remef_blinded_draft.pdf paper/remef/build/preview.txt
+          if ! grep -q 'σ' paper/remef/build/preview.txt; then
+            echo "::error::Greek math symbols are absent from PDF preview"
+            exit 1
+          fi
           pages=$(pdfinfo paper/remef/build/remef_blinded_draft.pdf | awk '/^Pages:/ {print $2}')
           if [ "$pages" -gt 25 ]; then
             echo "::warning::The draft is $pages pages; REMEF limit is 25."
