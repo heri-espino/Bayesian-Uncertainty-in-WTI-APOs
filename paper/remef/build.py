@@ -53,15 +53,20 @@ def validate() -> None:
 
 
 def authorship() -> str:
-    # Keep reviewer and editorial metadata in distinct outputs.
+    """Author-identifying metadata, NEVER included in blinded review output.
+
+    REMEF requests a correspondence footnote on the first page. The author has
+    supplied a name, academic email, ORCID and professional pages but has not
+    supplied a mailing address or telephone. Do not fabricate either.
+    """
     return r"""
 \begin{center}
-\textbf{Heriberto Espino Montelongo}\\
-Universidad de las Américas Puebla, Mexico
+\textbf{Heriberto Espino-Montelongo}\footnote{Corresponding author: Heriberto Espino-Montelongo; email: heriberto.espinomo@udlap.mx. Postal correspondence address and telephone: [author to supply before submission].}\\
+Universidad de las Américas Puebla, Mexico\\
+ORCID: https://orcid.org/0009-0009-1230-2931
 \end{center}
-\noindent\textbf{ORCID:} [author to supply]\\
-\noindent\textbf{Corresponding-author email, address and telephone:} [author to supply]\\
-\noindent\textbf{Research funding:} [author to confirm]
+\noindent\textbf{Professional website:} https://heri-espino.github.io\\
+\noindent\textbf{LinkedIn:} https://www.linkedin.com/in/heri-espino/
 """
 
 
@@ -147,10 +152,10 @@ def make_latex(*, with_author: bool) -> str:
         "Reproducible experiment code and recorded derived summaries have "
         "been prepared in a version-controlled research repository. "
         "A non-identifying access route is to be established before submission.\n"
-        r"\section*{Competing interests}" + "\n"
-        "The author declares no competing interests.\n"
-        r"\section*{Acknowledgments and funding}" + "\n"
-        "To be completed and verified by the author before submission.\n"
+        r"\section*{Funding}" + "\n"
+        "This research received no external funding.\n"
+        r"\section*{Conflicts of interest}" + "\n"
+        "The author declares no conflicts of interest.\n"
     )
     combined = "\n\n".join(sections) + "\n" + statements
     labels = _numbered_labels(combined)
