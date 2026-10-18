@@ -56,8 +56,8 @@ def authorship() -> str:
     """Author-identifying metadata, NEVER included in blinded review output.
 
     REMEF requests a correspondence footnote on the first page. The author has
-    supplied a name, academic email, ORCID and professional pages but has not
-    supplied the university's public mailing address and telephone number.
+    supplied a name, academic email, ORCID, professional pages, campus
+    mailing address, and university telephone number.
     """
     return r"""
 \begin{center}
