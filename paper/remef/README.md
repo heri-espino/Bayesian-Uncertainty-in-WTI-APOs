@@ -91,3 +91,45 @@ No heavy inference or simulation is launched.
 
 The **JFM** source and the **REMEF** Word draft are alternative targets for
 the **same paper**, not simultaneous submissions.
+
+## REMEF section and formatting compliance pass — 2026-10-18
+
+The reviewer manuscript is now rebuilt through an explicit **APA 7 CSL** style
+(`paper/remef/apa.csl`) and a reproducible **Word postprocessing step**
+(`paper/remef/postprocess.py`). It retains the original scientific core and
+moves its sections into the structure REMEF requests:
+
+1. Introduction
+2. Literature review (including both REMEF Asian-option precedents and Gilder–Tsiaras)
+3. Methodology (Bayesian inference, synthetic design, empirical data, software,
+   reproducibility and AI assistance)
+4. Results and discussion (including robustness and limitations)
+5. Conclusions and recommendations
+
+The numbered headings are styled consistently in black Times New Roman 12 pt,
+with editable native Word math and tables, 10-pt table text, sources below
+figures/tables, 2.5-cm vertical margins, 3-cm horizontal margins and page
+numbers. JEL classifications are explicitly labelled in both languages.
+
+A supplied published REMEF article provided a **typographic reference**, not an
+editable Word template. Do not copy its publisher-only logos, issue masthead,
+acceptance dates or DOI into a new submission.
+
+The manual workflow now checks the required headings, APA bibliography, editable
+math/table structures and presence of Greek equations in the rendered PDF. It
+**does not certify scientific validity or legal data-sharing permission**.
+A previously generated 12-page Word draft was visually inspected in this
+conversation. The updated workflow must still be run and its **new** PDF inspected.
+
+### Items that cannot be made compliant without the author
+
+- Contact information, ORCID, full affiliation and correspondence footnote
+  for the editorial/author-identifying version (kept separate from blinded file)
+- Funding/acknowledgments and competing-interest statement confirmation;
+  no unverified funding acknowledgments are inserted
+- Signed authorship, originality and rights-transfer documentation
+- Data redistribution permissions and an approved anonymized data/code access route
+- Final empirical result-level audit, supplement packaging and editorial approval
+
+Accordingly, the Word output is an **editorial review draft, not an assertion
+that all REMEF submission checks have been satisfied**.
