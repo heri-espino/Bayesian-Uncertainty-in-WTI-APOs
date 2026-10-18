@@ -1,32 +1,13 @@
 \section{Introduction}\label{sec:short_intro}
 
-Parameter uncertainty enters option pricing when model parameters are estimated rather than observed. Bayesian valuation can account for this uncertainty by integrating conditional option values over the parameter posterior instead of substituting a point estimate \citep{guidolin2003,romboutsstentoft2014,guptareisinger2014}. We examine when posterior integration materially changes the value of a WTI Average Price Option (APO).
+Bayesian option valuation can account for parameter uncertainty by integrating conditional prices over a posterior distribution rather than using a point estimate \citep{guidolin2003,romboutsstentoft2014,guptareisinger2014}. Whether this integration materially changes the option price depends on the pricing function and the dispersion of the parameter posterior. We study this question for WTI Average Price Options (APOs), focusing on uncertainty about volatility estimated from historical returns.
 
-The volatility sensitivity of an arithmetic-average Asian option depends on moneyness, maturity, and the fraction of the averaging period already fixed. Geometric-average methods and conditioning approximations provide established numerical approaches \citep{kemnavorst1990,curran1994}. Commodity applications must also account for the futures term structure; richer specifications allow for stochastic convenience yields, jumps, or stochastic volatility \citep{schwartz1997,shirayatakahashi2011,ewaldwu2023}. Rather than proposing another pricing model, we hold the one-factor specification fixed and examine both posterior integration and the choice of volatility input.
+Arithmetic-average Asian option values are sensitive to moneyness, maturity, and the proportion of the average already fixed. Established methods exploit geometric-average control variates or conditioning approximations \citep{kemnavorst1990,curran1994}. Commodity applications must also account for the futures term structure; richer models can incorporate stochastic convenience yields, jumps, and stochastic volatility \citep{schwartz1997,shirayatakahashi2011,ewaldwu2023}. We instead hold a one-factor pricing model fixed to distinguish two effects: posterior integration of historical-volatility uncertainty and the choice between historical and option-implied volatility inputs.
 
-These comparisons isolate different questions. Posterior integration concerns how parameter uncertainty enters a conditional pricing function. The historical-versus-implied comparison concerns the volatility information used for valuation.
+These effects address different questions. The posterior-integrated price (PI) averages conditional option values over the volatility posterior, whereas the posterior-mean plug-in price (PM) uses posterior mean volatility. Their difference measures the effect of integration on the point price, not the full dispersion of model prices caused by parameter uncertainty. The volatility-input comparison asks a separate empirical question: which estimates yield smaller errors against subsequent APO settlements under the same pricing model?
 
-Let \(C^Q(\sigma)\) be the risk-neutral option value conditional on volatility \(\sigma\), let \(\mathcal D\) denote the historical return data, and let \(\bar\sigma=\mathbb E[\sigma\mid\mathcal D]\). The posterior-integrated price and posterior-mean plug-in price are
-\begin{equation}
- C_{PI}=\mathbb E[C^Q(\sigma)\mid\mathcal D],
- \qquad
- C_{PM}=C^Q(\bar\sigma).
- \label{eq:short_pi_pm}
-\end{equation}
-A second-order expansion gives
-\begin{equation}
- C_{PI}-C_{PM}
- \approx
- \frac12 C^{Q\prime\prime}(\bar\sigma)
- \operatorname{Var}(\sigma\mid\mathcal D).
- \label{eq:short_taylor}
-\end{equation}
-The approximation shows that the PI--PM difference depends locally on posterior variance and the curvature of the pricing function with respect to volatility. By contrast, the posterior standard deviation of model prices is first order in the posterior standard deviation of volatility. A negligible PI--PM difference therefore need not imply negligible parameter-induced price uncertainty.
+We investigate the PI--PM difference with synthetic return histories and October-2026 WTI APO observations. We then compare historical-volatility benchmarks with implied volatility estimated from earlier APO dates in an out-of-sample panel. As a cross-instrument check, we obtain implied volatility from standard monthly WTI futures options instead of APOs. Implied-volatility estimates use only earlier option observations; repricing uses the valuation-date futures curve, realized fixings, and discount factor.
 
-The empirical analysis uses CME WTI APOs, which settle against the calendar-month average of first-nearby WTI futures prices. We compare historical-volatility estimates with implied volatility obtained from APOs and standard monthly WTI futures options. Implied-volatility estimates use only earlier option observations; each target contract is repriced using the valuation-date futures curve, realized fixings, and discount factor. Historical estimates follow their stated return-data cutoff.
+The synthetic results show that posterior integration can matter when historical samples are short and the pricing function has substantial curvature in volatility. In the observed October-2026 sample, PI and PM are nearly identical despite much wider posterior dispersion in model prices. Earlier-date option-implied volatility also yields lower out-of-sample pricing errors than the tested historical benchmarks, including rolling windows, EWMA, and horizon-matched GARCH(1,1). This advantage persists without fitting a volatility smile and in the cross-instrument check.
 
-Three results emerge. First, the synthetic experiment supports Equation~\eqref{eq:short_taylor} and identifies large PI--PM differences in short-sample, high-curvature settings. Second, PI and PM are nearly identical for October-2026 WTI APOs, although the posterior distribution of model prices is considerably wider. Third, earlier-date option-implied volatility produces substantially lower out-of-sample pricing errors than the tested rolling-window, EWMA, and horizon-matched GARCH(1,1) benchmarks. This advantage does not depend on fitting a volatility smile and also appears when implied volatility is estimated from standard monthly WTI futures options.
-
-These are pricing comparisons under a maintained model, not estimates of a structural wedge between physical and risk-neutral volatility. Implied volatility may incorporate risk premia, omitted dynamics, liquidity effects, and settlement conventions. We restrict our conclusions to the samples and specifications evaluated.
-
-The paper proceeds as follows. Section~\ref{sec:short_method} develops the posterior-pricing mechanism. Section~\ref{sec:short_design} describes the WTI data and out-of-sample design. Section~\ref{sec:short_results} reports the synthetic and empirical results. Section~\ref{sec:short_robustness} summarizes robustness and interpretation, with complete historical-benchmark, numerical, liquidity, and external-transfer diagnostics reported in Online Supplement Sections S1--S4. Section~\ref{sec:short_conclusion} concludes.
+These are comparisons within a maintained pricing model, not estimates of a structural difference between physical and risk-neutral volatility. The methods and sample restrictions are described below; detailed numerical and robustness results appear in the online supplement.
