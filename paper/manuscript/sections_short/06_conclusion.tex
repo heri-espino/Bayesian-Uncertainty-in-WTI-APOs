@@ -1,9 +1,9 @@
 \section{Conclusion}\label{sec:short_conclusion}
 
-This paper compares two decisions in pricing WTI Average Price Options: whether to average over the volatility posterior, and whether to use historical or option-implied volatility. A second-order approximation links the first decision to posterior variance and price curvature. In synthetic data, posterior averaging can change the price substantially when the return history is short and curvature is strong.
+We examine posterior integration and the choice of volatility input in WTI APO valuation. A second-order approximation links the PI--PM difference to posterior volatility variance and price curvature. The synthetic experiment shows that posterior integration can materially affect option values with short historical samples and pronounced curvature.
 
-In the October-2026 WTI sample, posterior averaging barely changes the point price. Yet uncertainty about volatility still produces a much wider range of model prices. A small PI--PM difference is not evidence that parameter uncertainty is negligible.
+In the observed October-2026 sample, PI and PM are nearly identical, although the posterior distribution of model prices remains substantially wider. The effect of integration on the point price should therefore be distinguished from parameter-induced price uncertainty.
 
-The source of the volatility input matters much more for the observed pricing errors. Earlier option-implied volatility outperforms the tested historical estimates, including short windows, EWMA, and GARCH. This improvement does not require a fitted smile and also appears when implied volatility comes from standard monthly WTI futures options.
+For the out-of-sample observations, earlier-date option-implied volatility yields considerably lower pricing errors than the historical-volatility benchmarks, including rolling windows, EWMA, and horizon-matched GARCH. The advantage persists with same-contract lagged implied volatility and in the cross-instrument LO comparison.
 
-The evidence covers relatively few market dates and one simple pricing model. It does not identify a structural difference between physical and risk-neutral volatility. Within these limits, changing the source of volatility reduces pricing errors much more than changing from PM to PI.
+These results are conditional on a limited number of valuation dates and the maintained one-factor pricing model. They do not identify a structural physical-versus-risk-neutral volatility difference. Within that scope, the choice of volatility input matters far more for pricing accuracy than the PI--PM distinction.
