@@ -113,7 +113,25 @@ DOI, issue data and acceptance dates must not be reproduced.
       of the blinded version and reserved for the author-identifying draft.
 - [x] Author explicitly confirmed **no research funding** and **no conflicts
       of interest**; both declarations are included in both Word outputs.
-- [ ] REMEF first-page correspondence footnote still needs a **postal
-      mailing address and telephone** (not supplied, not invented).
+- [x] REMEF first-page correspondence footnote now has the author-supplied
+      institutional mailing address and telephone; verify generated Word layout.
 - [ ] Build both outputs in the manual GitHub workflow, inspect the new author
       first page, footnote, blinded metadata and PDF math rendering.
+
+## 2026-10-18 failed-build diagnosis and institutional contact
+
+- [x] Identified exact failure in GitHub Actions run 39158592891:
+      `ValueError: Expected REMEF paragraph not found: 1 Introduction`.
+      Pandoc-generated DOCX contains unnumbered section titles, and the
+      postprocessor erroneously expected pre-numbered titles.
+- [x] Updated the postprocessor's source-heading mapping and added a
+      reproducible Word fixture to the unit tests to check the full
+      REMEF section conversion (not just its Python source).
+- [x] Added the author-confirmed campus address
+      (Ex Hacienda Santa Catarina Mártir s/n, San Andrés Cholula,
+      Puebla, C.P. 72810, México) and institutional telephone
+      (+52 222 810 1202) to the *author-identifying version only*.
+- [ ] After merge, manually rerun `build-remef`, verify both Word files,
+      the corresponding-author footnote, blind metadata, equations,
+      citation style, and the 25-page limit. Do not infer success from
+      source compilation or lightweight CI alone.

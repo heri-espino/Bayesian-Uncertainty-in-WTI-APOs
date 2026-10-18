@@ -56,12 +56,12 @@ def authorship() -> str:
     """Author-identifying metadata, NEVER included in blinded review output.
 
     REMEF requests a correspondence footnote on the first page. The author has
-    supplied a name, academic email, ORCID and professional pages but has not
-    supplied a mailing address or telephone. Do not fabricate either.
+    supplied a name, academic email, ORCID, professional pages, campus
+    mailing address, and university telephone number.
     """
     return r"""
 \begin{center}
-\textbf{Heriberto Espino-Montelongo}\footnote{Corresponding author: Heriberto Espino-Montelongo; email: heriberto.espinomo@udlap.mx. Postal correspondence address and telephone: [author to supply before submission].}\\
+\textbf{Heriberto Espino-Montelongo}\footnote{Corresponding author: Heriberto Espino-Montelongo; email: heriberto.espinomo@udlap.mx. Institutional postal address: Ex Hacienda Santa Catarina M\'artir s/n, San Andr\'es Cholula, Puebla, C.P. 72810, M\'exico. Telephone: +52 222 810 1202.}\\
 Universidad de las Américas Puebla, Mexico\\
 ORCID: https://orcid.org/0009-0009-1230-2931
 \end{center}

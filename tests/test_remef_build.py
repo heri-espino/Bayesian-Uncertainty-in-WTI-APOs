@@ -95,4 +95,85 @@ def test_confirmed_funding_and_coi_in_both_versions():
         assert sensitive in private
         assert sensitive not in reviewer
     assert r"\footnote{" in private
-    assert "Postal correspondence address and telephone: [author to supply before submission]" in private
+    assert "Ex Hacienda Santa Catarina" in private
+    assert "San Andrés" not in reviewer
+    assert "+52 222 810 1202" in private
+    assert "+52 222 810 1202" not in reviewer
+    assert "[author to supply" not in private
+
+
+def test_actual_pandoc_heading_text_is_supported(tmp_path):
+    """Regression: Pandoc creates unnumbered headings in Word (run #39158592891).
+
+    Exercise actual python-docx postprocessing on minimal Pandoc-shaped source,
+    including moves between sections, so this bug fails lightweight pytest CI.
+    """
+    from docx import Document
+    spec = importlib.util.spec_from_file_location(
+        "_remef_postprocess", ROOT / "paper" / "remef" / "postprocess.py"
+    )
+    assert spec is not None and spec.loader is not None
+    processor = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(processor)
+
+    doc = Document()
+    doc.add_paragraph("Posterior Integration and Volatility Inputs in WTI Asian Options")
+    doc.add_paragraph("Integración posterior y volatilidad en opciones asiáticas WTI")
+    doc.add_paragraph("Abstract", style="Heading 1")
+    doc.add_paragraph("Keywords: Bayesian option pricing")
+    doc.add_paragraph("Resumen", style="Heading 1")
+    doc.add_paragraph("JEL: C11; C15; C58; G13; G17; Q40.")
+    doc.add_paragraph("Introduction", style="Heading 1")
+    doc.add_paragraph("Volatility is not observed directly")
+    doc.add_paragraph("Asian options depend on a price average")
+    doc.add_paragraph("WTI APOs provide a different test setting")
+    doc.add_paragraph("The distinction between historical and option-implied information")
+    doc.add_paragraph("Posterior uncertainty and Asian-option pricing", style="Heading 1")
+    for title in (
+        "Physical inference and risk-neutral valuation",
+        "Posterior integration and price uncertainty",
+        "Synthetic mechanism experiment",
+    ):
+        doc.add_paragraph(title, style="Heading 2")
+        doc.add_paragraph("A reproducible scientific calculation.")
+    doc.add_paragraph("Data and empirical design", style="Heading 1")
+    for title in (
+        "WTI Average Price Options",
+        "Out-of-sample volatility comparisons",
+        "Cross-instrument validation",
+        "AI-assisted manuscript preparation",
+    ):
+        doc.add_paragraph(title, style="Heading 2")
+        doc.add_paragraph("Data and analysis use earlier observations.")
+    doc.add_paragraph("Results", style="Heading 1")
+    doc.add_paragraph("When does posterior integration matter?", style="Heading 2")
+    doc.add_paragraph("Robustness and interpretation", style="Heading 1")
+    doc.add_paragraph("Conclusion", style="Heading 1")
+    doc.add_paragraph("Data availability", style="Heading 1")
+    doc.add_paragraph("External data subject to licensing.")
+    doc.add_paragraph("Funding", style="Heading 1")
+    doc.add_paragraph("This research received no external funding.")
+    doc.add_paragraph("Conflicts of interest", style="Heading 1")
+    doc.add_paragraph("The author declares no conflicts of interest.")
+    doc.add_paragraph("References", style="Heading 1")
+    for rows, cols in ((5, 3), (5, 5), (4, 5), (4, 3)):
+        tab = doc.add_table(rows=rows, cols=cols)
+        for cell in tab.rows[0].cells:
+            cell.text = "Value"
+    source = tmp_path / "pandoc_unumbered.docx"
+    doc.save(source)
+    processor.prepare_docx(source)
+    result = Document(source)
+    headings = [p.text for p in result.paragraphs if p.style.name.startswith("Heading")]
+    for required in (
+        "1. Introduction", "2. Literature review", "3. Methodology",
+        "3.7 Computational implementation", "3.8 AI-assisted manuscript preparation",
+        "4. Results and discussion", "4.5 Robustness, interpretation and limitations",
+        "5. Conclusions and recommendations",
+    ):
+        assert required in headings
+    assert "Data and empirical design" not in headings
+    assert len(result.tables) == 4
+    assert result.tables[0].cell(0, 1).text == "N"
+    assert any("The REMEF studies examine" in p.text for p in result.paragraphs)
+    assert any("no external funding" in p.text for p in result.paragraphs)

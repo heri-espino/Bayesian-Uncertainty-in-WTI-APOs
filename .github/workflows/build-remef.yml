@@ -94,7 +94,9 @@ jobs:
               joined = doc_xml + footnotes
               for phrase in ("Heriberto Espino-Montelongo",
                              "heriberto.espinomo@udlap.mx",
-                             "0009-0009-1230-2931"):
+                             "0009-0009-1230-2931",
+                             "Ex Hacienda Santa Catarina",
+                             "C.P. 72810", "+52 222 810 1202"):
                   if phrase not in joined:
                       raise SystemExit("Missing verified author metadata: " + phrase)
               if "footnoteReference" not in doc_xml:
@@ -109,6 +111,8 @@ jobs:
                           "0009-0009-1230-2931",
                           "heri-espino.github.io",
                           "linkedin.com/in/heri-espino",
+                          "Ex Hacienda Santa Catarina",
+                          "C.P. 72810", "+52 222 810 1202",
                       )):
                           raise SystemExit("Identifying metadata leaked into blinded draft: " + member)
           print("REMEF structure, APA, editable math, author metadata, declarations and blinding passed.")
