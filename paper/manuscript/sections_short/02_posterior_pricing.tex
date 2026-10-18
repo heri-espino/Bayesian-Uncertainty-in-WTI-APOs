@@ -49,7 +49,22 @@ We price the baseline historical-volatility model by Monte Carlo. For the large 
 
 \subsection{Posterior integration and price uncertainty}
 
-Equation~\eqref{eq:short_pi_pm} compares two summaries of the same posterior and the same pricing model. A Taylor expansion of \(C^Q(\sigma)\) around \(\bar\sigma\) yields Equation~\eqref{eq:short_taylor}. The leading difference is governed by posterior variance and the second derivative of the price with respect to volatility. Its sign follows local curvature; the second-order approximation is most reliable when higher-order terms are small over the posterior support.
+Let \(\mathcal D\) denote the historical return data, \(C^Q(\sigma)\) the conditional risk-neutral option value, and \(\bar\sigma=\mathbb E[\sigma\mid\mathcal D]\). We compare posterior-integrated (PI) and posterior-mean plug-in (PM) prices:
+\begin{equation}
+ C_{PI}=\mathbb E[C^Q(\sigma)\mid\mathcal D],
+ \qquad
+ C_{PM}=C^Q(\bar\sigma).
+ \label{eq:short_pi_pm}
+\end{equation}
+A second-order expansion around \(\bar\sigma\) gives
+\begin{equation}
+ C_{PI}-C_{PM}
+ \approx
+ \frac12 C^{Q\prime\prime}(\bar\sigma)
+ \operatorname{Var}(\sigma\mid\mathcal D).
+ \label{eq:short_taylor}
+\end{equation}
+The approximation links the PI--PM difference to posterior variance and price curvature. Its sign depends on local curvature, and it is most accurate when higher-order terms are small over the posterior support.
 
 The posterior distribution also induces a distribution of theoretical option values,
 \begin{equation}
