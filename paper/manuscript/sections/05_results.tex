@@ -1,10 +1,10 @@
 \section{Results}\label{sec:results}
 
-We report four comparisons. First, we use synthetic data to find when PI and PM differ. Second, we compare their difference with uncertainty about the model price in WTI data. Third, we test historical and earlier-date APO implied volatility against later option settlements. Finally, we repeat the comparison using implied volatility from standard monthly WTI futures options.
+We first examine the PI--PM difference in synthetic data, then compare posterior integration with parameter-induced price dispersion in the October-2026 APO sample. We next evaluate historical and earlier-date APO-implied volatility in out-of-sample pricing, followed by a cross-instrument validation using standard monthly WTI options.
 
 \subsection{Repeated-sampling benchmark}
 
-Table~\ref{tab:synthetic_pilot} reports the original repeated-sampling benchmark. PI and PM are nearly identical even with 63 daily returns. Their difference becomes smaller as the return history grows.
+Table~\ref{tab:synthetic_pilot} reports a repeated-sampling benchmark. PI and PM yield nearly identical pricing errors even with 63 daily returns, and their difference diminishes as the estimation sample increases.
 
 \begin{table*}[t]
 \centering
@@ -33,19 +33,19 @@ $N$ & Method & Bias & MAE & RMSE\\
 
 The central 95\% posterior interval for the model price has empirical coverage 0.9500, 0.9625, and 0.9250 for $N=63,252,$ and $1260$, respectively. These coverage rates describe the interval procedure, not the four point estimates separately.
 
-This first experiment finds little difference between PI and PM. The next experiment tests whether they still agree under more extreme volatility and contract conditions.
+The larger mechanism experiment therefore examines whether this near equality persists across more demanding volatility and contract states.
 
 \subsection{Where posterior integration matters}
 
-The synthetic experiment contains 175,000 independently simulated return histories and 168 WTI-like contract settings. Its largest absolute PI--PM difference is 0.1384, and the largest 99th percentile within a setting is 0.1271. These values are much larger than the differences near $10^{-3}$ in the WTI baseline. The pricing model does not force PI and PM to agree.
+The synthetic experiment contains 175,000 independently simulated return histories and 168 WTI-like contract settings. Its largest absolute PI--PM difference is 0.1384, and the largest 99th percentile within a setting is 0.1271. These differences exceed those near $10^{-3}$ in the observed WTI baseline, showing that the maintained pricing model does not mechanically imply PI--PM equivalence.
 
-The mechanism map normalizes the WTI-like forward level to \$100 per barrel, so the maximum gap of 0.1384 is \$0.1384 per barrel. Under the WTI APO contract multiplier of 1,000 barrels and ordinary minimum price fluctuation of \$0.01 per barrel, that scale corresponds to approximately \$138.40 per contract, or 13.84 ordinary ticks \cite{cme_wti_apo_rule}. This illustrates the size of the difference. It does not mean the most extreme synthetic contract could be traded at those prices.
+The mechanism map normalizes the WTI-like forward level to \$100 per barrel, so the maximum gap of 0.1384 is \$0.1384 per barrel. Under the WTI APO contract multiplier of 1,000 barrels and ordinary minimum price fluctuation of \$0.01 per barrel, that scale corresponds to approximately \$138.40 per contract, or 13.84 ordinary ticks \cite{cme_wti_apo_rule}. The conversion illustrates economic scale rather than tradability in the extreme simulated states.
 
 The largest differences occur with short historical samples, high volatility, long times to maturity, few realized fixings, and strikes far from the expected average. For example, with $n=21$, $\sigma_0=0.80$, 126 days to maturity, no realized fixing, and moneyness 1.50, the mean PI--PM gap is 0.1176 and the 99th percentile is 0.1271. With $n=21$, $\sigma_0=0.50$, 252 days, no realized fixing, and moneyness 1.50, the mean gap is 0.1103 and the maximum observed gap is 0.1384.
 
-Equation~\eqref{eq:taylor_gap} closely matches the simulated PI--PM differences. Even in the most extreme settings, the correlation between the actual difference and the approximation is about 0.999, and slopes fitted through the origin are close to one. Posterior dispersion also behaves as expected: for $\sigma_0=0.80$, mean posterior standard deviation falls from approximately 0.122 at $n=21$ to 0.0159 at $n=1260$. PI and PM can therefore differ substantially when \emph{both} posterior variance and price curvature are large.
+The curvature--variance approximation in Equation~\eqref{eq:taylor_gap} closely tracks the simulated PI--PM differences. Correlations are approximately 0.999 even in the most extreme settings, with through-origin slopes close to one. Posterior dispersion also behaves as expected: for $\sigma_0=0.80$, mean posterior standard deviation falls from approximately 0.122 at $n=21$ to 0.0159 at $n=1260$. PI and PM can therefore differ substantially when \emph{both} posterior variance and price curvature are large.
 
-As more prices are fixed, less of the average depends on future volatility. The PI--PM difference generally shrinks, even with high volatility and strikes far from the expected average. Posterior averaging may matter early in the month but little near its end.
+The PI--PM difference generally declines with the realized-fixing fraction as the remaining average becomes less sensitive to volatility. Thus, integration may matter early in the averaging period but have little effect near expiry.
 
 Figure~\ref{fig:mechanism_map} summarizes the experiment. Panel A shows how posterior uncertainty changes with historical sample size. Panels B and C show PI--PM differences across moneyness and realized-fixing fractions. Panel D compares simulated differences with the second-order approximation.
 
@@ -60,7 +60,7 @@ Figure~\ref{fig:mechanism_map} summarizes the experiment. Panel A shows how post
 
 The October-2026 baseline contains 310 contract-date observations over 12 eligible valuation dates. Of the 12 dates, five have at least one contract with positive reported volume. Those dates contain 136 observations in total, but only six individual contract-date observations have positive volume. We report these samples separately.
 
-Table~\ref{tab:oct26_empirical} reports pooled model-to-market errors. All methods use the same futures curves, known fixings, discount factors, and market settlements. Only the rule for using estimated volatility changes.
+Table~\ref{tab:oct26_empirical} reports pooled model-to-market errors. The futures curve, realized fixings, discount factor, and settlement benchmark are held fixed across methods; only the volatility decision rule changes.
 
 \begin{table*}[t]
 \centering
@@ -104,9 +104,9 @@ Positive-volume contracts & 6 & 0.000591 & 0.3660 & 619.7\\
 \end{tabular}
 \end{table*}
 
-PI and PM are close in every sample. Yet parameter uncertainty leads to a much wider range of model prices. Across 310 observations, the mean width of the central 95\% posterior interval is 0.2733, about 367 times the mean absolute PI--PM difference. For the six observations with positive volume, the ratio is about 620. Posterior averaging barely changes the point price, even though model prices vary considerably over the volatility posterior.
+PI and PM are nearly identical across liquidity subsets, but the distribution of conditional model prices is substantially wider. Among 310 observations, the central 95\% posterior interval has mean width 0.2733, approximately 367 times the mean absolute PI--PM difference. The corresponding ratio is about 620 for the six positive-volume observations. A small point-price effect therefore coexists with meaningful parameter-induced price dispersion.
 
-All four historical-volatility methods underprice settlements on average. Because PI and PM are nearly identical, switching between them cannot explain this shared pricing error. We next compare other sources of volatility.
+All four historical-volatility rules underprice October settlements on average. The similarity of PI and PM indicates that posterior integration cannot explain the common pricing bias, motivating the volatility-input comparison.
 
 Because the empirical PI--PM differences are sub-cent, Section~\ref{sec:numerical_robustness} subjects them to high-precision pseudo-random Monte Carlo, randomized Sobol, and Curran benchmarks. The methods agree at a scale much smaller than the observed PI--PM difference. Simulation noise therefore does not explain the result.
 
@@ -114,7 +114,7 @@ Because the empirical PI--PM differences are sub-cent, Section~\ref{sec:numerica
 
 The September--October APO cross-section provides 402 contract-date observations for implied-volatility inversion. All 402 settlements can be mapped to a finite implied volatility under the maintained Curran-equivalent one-factor model. The median historical posterior mean is 0.4155. By contrast, the median date-level common volatility calibrated to the complete APO cross-section is 0.4577, a median difference of 0.0425. Contract-level implied volatilities have a still higher median of 0.4835 because the cross section contains pronounced strike variation.
 
-These are implied volatilities under our pricing model, not direct estimates of different diffusion coefficients under $\mathbb P$ and $\mathbb Q$. Their differences from historical volatility are much larger than the PI--PM price difference.
+These implied volatilities are model-equivalent parameters, not direct estimates of distinct diffusion coefficients under $\mathbb P$ and $\mathbb Q$. Their divergence from historical volatility is more consequential for the observed pricing errors than the PI--PM difference.
 
 Figure~\ref{fig:historical_vs_apo_iv} shows this distinction at both the date and strike levels. The historical posterior mean is relatively stable, whereas APO-implied volatility varies by valuation date and strike.
 
@@ -125,13 +125,13 @@ Figure~\ref{fig:historical_vs_apo_iv} shows this distinction at both the date an
 \label{fig:historical_vs_apo_iv}
 \end{figure*}
 
-We first test whether volatility fitted from other APO contracts can price a contract left out of calibration. Across 399 target observations, using one APO-calibrated volatility lowers MAE from 0.3450 to 0.1557 and RMSE from 0.4625 to 0.1900. But the improvement is not uniform. For nine positive-volume observations, errors increase on average. Results are also weaker when fitting one option type and pricing the other. A single volatility cannot capture the full strike pattern, and calls and puts cover different moneyness ranges.
+Leave-one-contract-out calibration provides an initial cross-sectional test. Across 399 observations, a common APO-calibrated volatility reduces MAE from 0.3450 to 0.1557 and RMSE from 0.4625 to 0.1900. Performance is not uniform: errors rise on average for the nine positive-volume observations, and transfer between calls and puts is weaker. These limitations are consistent with strike-dependent implied volatility and differences in the moneyness regions covered by each option type.
 
 \subsection{Out-of-sample pricing using earlier implied volatility}
 
-We fit implied-volatility smiles on earlier dates, then use them to price APOs on later dates. The sample contains 2,381 observations over seven expiries from September 2026 through September 2028. We do not use target-date APO settlements to estimate volatility.
+We estimate implied-volatility smiles using only earlier option dates and evaluate them in subsequent APO pricing. The panel contains 2,381 contract-date observations across seven expiries from September 2026 through September 2028. Target-date APO settlements are excluded from volatility estimation.
 
-The implied volatility required by the maintained pricing model differs substantially across maturities. Median date-level common $\sigma_Q$ is 0.4478, 0.4572, and 0.4444 for the September, October, and November 2026 expiries, respectively; it then declines to 0.3609 for March 2027, 0.3001 for September 2027, 0.2647 for March 2028, and 0.2416 for September 2028. Over the same valuation dates, the historical posterior mean remains near 0.416. These are volatilities implied by the chosen model, not structural diffusion estimates. Differences across maturities may also reflect risk premia, strike effects, missing futures-curve dynamics, liquidity, or settlement practices.
+The implied volatility required by the maintained pricing model differs substantially across maturities. Median date-level common $\sigma_Q$ is 0.4478, 0.4572, and 0.4444 for the September, October, and November 2026 expiries, respectively; it then declines to 0.3609 for March 2027, 0.3001 for September 2027, 0.2647 for March 2028, and 0.2416 for September 2028. Over the same valuation dates, the historical posterior mean remains near 0.416. The maturity pattern is model dependent and may reflect risk premia, smile effects, omitted futures-curve dynamics, or liquidity and settlement conventions; it is not a term structure of uniquely identified diffusion parameters.
 
 Table~\ref{tab:forward_q} reports out-of-sample pricing errors by expiry.
 
@@ -166,9 +166,9 @@ Figure~\ref{fig:forward_q_bootstrap} complements the point estimates with valuat
 \label{fig:forward_q_bootstrap}
 \end{figure*}
 
-Both earlier-date specifications reduce MAE and RMSE for every included expiry. In the pooled panel, the expanding smile lowers MAE by 95.8\% and RMSE by 94.9\%, while the previous-day smile lowers MAE by 95.9\% and RMSE by 95.3\%. Mean pricing error moves from +2.4030 under the historical-volatility baseline to $-0.0697$ and $-0.0352$, respectively. The sign differs from the October baseline because historical volatility near 0.416 is below the APO-implied level for some 2026 contracts but above the level implied by longer-dated 2027--2028 settlements.
+Both earlier-date smile specifications reduce MAE and RMSE relative to historical PI in all seven expiries. In the pooled panel, the expanding smile lowers MAE by 95.8\% and RMSE by 94.9\%, while the previous-day smile lowers MAE by 95.9\% and RMSE by 95.3\%. Mean pricing error moves from +2.4030 under the historical-volatility baseline to $-0.0697$ and $-0.0352$, respectively. The sign differs from the October baseline because historical volatility near 0.416 is below the APO-implied level for some 2026 contracts but above the level implied by longer-dated 2027--2028 settlements.
 
-We next test shorter historical return windows and a model that forecasts time-varying volatility. Table~\ref{tab:recent_history_persistence}, Panel A, compares four pre-specified historical-volatility estimates and a horizon-matched Gaussian GARCH(1,1) forecast on the same 2,381 observations. Among the recent-window methods, the 63-return estimate has the lowest pooled error, with MAE 4.5201 and RMSE 5.6465; both exceed the long-window historical PI errors. For GARCH, we estimate model parameters from earlier returns. We use the target-date return to update conditional variance at the end of that date, then forecast variance for the remaining fixings. We choose one annualized volatility that matches the variance of the remaining average under the pricing model. GARCH gives MAE 2.6730 and RMSE 3.4441, close to the historical PI values of 2.6187 and 3.4090. None of the historical methods tested comes close to the option-implied errors. Other forecasting models might perform differently.
+We assess whether more responsive historical-volatility estimates account for this improvement. Table~\ref{tab:recent_history_persistence}, Panel A, compares four pre-specified historical-volatility estimates and a horizon-matched Gaussian GARCH(1,1) forecast on the same 2,381 observations. Among the recent-window methods, the 63-return estimate has the lowest pooled error, with MAE 4.5201 and RMSE 5.6465; both exceed the long-window historical PI errors. For GARCH, we estimate model parameters from earlier returns. We use the target-date return to update conditional variance at the end of that date, then forecast variance for the remaining fixings. We choose one annualized volatility that matches the variance of the remaining average under the pricing model. GARCH gives MAE 2.6730 and RMSE 3.4441, close to the historical PI values of 2.6187 and 3.4090. None of these historical-volatility specifications approaches the option-implied performance; the comparison does not extend to untested forecasting models.
 
 \begin{table*}[t]
 \centering
@@ -203,21 +203,21 @@ Previous-day fitted APO smile & 2,366 & 15 & 0.1074 & 0.1594\\
 \end{tabular}
 \end{table*}
 
-Panel B tests whether we need to fit a smile. We instead carry forward each contract's latest earlier implied volatility and price it with the current futures curve, discount factor, and fixing schedule. This is possible for 2,366 observations. The same-contract method has pooled MAE 0.0992 and RMSE 0.1403, compared with 0.1074 and 0.1594 for the fitted previous-day smile. This does not establish a general advantage for carrying volatility forward. It shows that a fitted smile is not required to outperform historical volatility in this sample.
+Panel B tests same-contract implied-volatility persistence by carrying forward each contract's latest earlier implied volatility and repricing it with the valuation-date futures curve, discount factor, and fixing schedule. This is possible for 2,366 observations. The same-contract method has pooled MAE 0.0992 and RMSE 0.1403, compared with 0.1074 and 0.1594 for the fitted previous-day smile. The pooled ranking does not establish a general advantage for persistence, but it shows that fitting a smile is unnecessary for the main historical-versus-implied comparison.
 
 Section~\ref{sec:robustness} reconstructs the physical return history contract by contract from official first-nearby CL settlements. On these 2,381 observations, the reconstructed historical baseline has MAE 2.6468 and RMSE 3.4451 rather than 2.6187 and 3.4090. Pricing errors for the implied-volatility methods are unchanged, so the central forward comparison is insensitive to the continuous-contract return proxy.
 
 Liquidity restrictions preserve the central result. The 62 positive-volume holdouts span 13 valuation-date clusters: historical PI has MAE 1.6340 and RMSE 2.3391, compared with 0.1003 and 0.1358 for the expanding smile and 0.1084 and 0.1333 for the previous-day smile. At open interest of at least 100, the corresponding forward MAEs are approximately 0.106--0.107 versus 1.990 for the historical baseline. However, there are few observations with positive reported volume in some longer-dated expiries. The clearest comparison is therefore for the pooled positive-volume sample and the larger open-interest-filtered samples.
 
-The large pricing errors cannot mainly be attributed to using PM instead of PI. More recent historical returns and the tested GARCH forecast do not give errors close to those obtained with earlier option-implied volatility. GARCH improves RMSE relative to the long-window historical baseline for October 2026 and September 2028, but remains far from the option-implied specifications at every expiry. The same-contract comparison adds another result: the large improvement over historical volatility does not depend on fitting a smile.
+The dominant model-to-market pricing errors are not attributable to substituting PM for PI. More recent historical returns and the tested GARCH forecast do not give errors close to those obtained with earlier option-implied volatility. GARCH improves RMSE relative to the long-window historical baseline for October 2026 and September 2028, but remains far from the option-implied specifications at every expiry. The same-contract comparison adds another result: the large improvement over historical volatility does not depend on fitting a smile.
 
-Parameter uncertainty can still matter: the synthetic experiment identifies cases with substantial PI--PM differences. In the observed out-of-sample comparisons, however, changing the volatility input produces a much larger difference in pricing errors than switching between PI and PM. This is a comparison of pricing inputs, not a structural decomposition. Historical and implied volatility use different information, and implied volatility may reflect risk premia, omitted market dynamics, and settlement practices.
+The synthetic evidence establishes conditions under which posterior integration matters. In the observed out-of-sample panel, however, changing volatility inputs has a much larger effect on pricing errors than switching between PI and PM. This empirical comparison does not identify a structural risk premium, because implied volatility also reflects model misspecification and market-marking conventions.
 
 \subsection{Independent vanilla-WTI validation}\label{sec:external_lo_results}
 
-The earlier experiment estimates volatility from APOs before using it to price other APOs. Here we estimate volatility from standard monthly WTI options instead. We use only earlier LO option and CL futures settlements. With LO strikes from 70 to 120, 253 of 280 matched October APO observations fall inside the moneyness range covered by earlier LO data. The initial narrower strike sample covered only 60. Across 620 external-surface prediction rows, 50 require clipping to the observed support.
+The cross-instrument test replaces APO-implied volatility with volatility inferred from earlier settlements of standard monthly WTI futures options (LO), matched to CL futures. With LO strikes from 70 to 120, 253 of 280 matched October APO observations fall inside the moneyness range covered by earlier LO data. The initial narrower strike sample covered only 60. Across 620 external-surface prediction rows, 50 require clipping to the observed support.
 
-Table~\ref{tab:external_lo} reports the exact no-clipping comparison. Historical-volatility posterior integration has MAE/RMSE 0.4464/0.5562 with Yahoo \texttt{CL=F} and 0.4362/0.5466 with the reconstructed first-nearby history. The external previous-day LO surface lowers these errors to 0.1559/0.2599, while the expanding LO surface gives 0.1604/0.2858. The corresponding prior-date APO smiles are 0.1676/0.2686 and 0.1612/0.2912. Implied volatility from standard monthly WTI options therefore also outperforms the historical benchmark. Reconstructing historical returns from individual futures contracts does not change that finding.
+Table~\ref{tab:external_lo} reports the exact no-clipping comparison. Historical-volatility posterior integration has MAE/RMSE 0.4464/0.5562 with Yahoo \texttt{CL=F} and 0.4362/0.5466 with the reconstructed first-nearby history. The external previous-day LO surface lowers these errors to 0.1559/0.2599, while the expanding LO surface gives 0.1604/0.2858. The corresponding prior-date APO smiles are 0.1676/0.2686 and 0.1612/0.2912. LO-implied volatility therefore also outperforms the historical benchmark, regardless of whether physical returns use the continuous-contract proxy or reconstructed first-nearby series.
 
 \begin{table*}[t]
 \centering
@@ -236,9 +236,9 @@ Prior-date APO smile, expanding & 253 & 0.1612 & 0.2912\\
 \end{tabular}
 \end{table*}
 
-We use a valuation-date cluster bootstrap so that contracts observed on the same date are not treated as independent. For the previous-day LO surface, the MAE difference relative to historical PI is $-0.2905$, with a 95\% interval of $[-0.3439,-0.2333]$, and the RMSE difference is $-0.2963$, with interval $[-0.3503,-0.2580]$. The expanding LO surface produces corresponding differences of $-0.2860$ and $-0.2704$, again with intervals entirely below zero.
+Valuation-date cluster bootstrap inference accounts for dependence among contracts on the same trading date. For the previous-day LO surface, the MAE difference relative to historical PI is $-0.2905$, with a 95\% interval of $[-0.3439,-0.2333]$, and the RMSE difference is $-0.2963$, with interval $[-0.3503,-0.2580]$. The expanding LO surface produces corresponding differences of $-0.2860$ and $-0.2704$, again with intervals entirely below zero.
 
-The external and APO-implied surfaces are much closer to one another. Previous-day LO has an MAE difference of $-0.0117$ relative to the previous-day APO smile, with a 95\% interval of $[-0.0251,-0.0001]$; its RMSE difference is $-0.0087$, with interval $[-0.0149,0.0002]$. For the expanding specifications, both the MAE and RMSE intervals include zero. We do not conclude that LO-implied volatility is always better than APO-implied volatility. The important finding is that earlier LO-implied volatility also produces much lower errors than historical volatility.
+The external and APO-implied surfaces are much closer to one another. Previous-day LO has an MAE difference of $-0.0117$ relative to the previous-day APO smile, with a 95\% interval of $[-0.0251,-0.0001]$; its RMSE difference is $-0.0087$, with interval $[-0.0149,0.0002]$. For the expanding specifications, both the MAE and RMSE intervals include zero. The results do not establish a general ranking between LO- and APO-implied volatility. They show that the improvement over historical volatility persists in the cross-instrument test.
 
 The APO and vanilla-WTI experiments therefore lead to the same conclusion. In this sample, changing from historical volatility to earlier-date option-implied volatility affects pricing errors much more than integrating over the historical-volatility posterior. Bayesian integration accounts for uncertainty conditional on the pricing model; it does not ensure that the chosen volatility input matches market settlements.
 
