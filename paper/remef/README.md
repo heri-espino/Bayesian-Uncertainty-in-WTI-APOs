@@ -55,8 +55,10 @@ python paper/remef/build.py
 The default is a **blinded review draft** at
 `paper/remef/build/remef_blinded_draft.docx`. Use
 `python paper/remef/build.py --author-version` for a separate author draft
-with author metadata placeholders to be completed. Generated drafts stay
-ignored by Git.
+with the verified author identity, academic email, ORCID, optional
+professional links and a corresponding-author footnote. **The postal mailing
+address and telephone are still required**; these are explicitly marked pending
+rather than invented. Generated drafts stay ignored by Git.
 
 The build reads the existing six-section concise research text (substituting
 `paper/remef/introduction.tex` for its introduction), uses the REMEF front
@@ -68,7 +70,7 @@ not a new statistical estimation or independent experimental reproduction.
 ### Manual GitHub build
 
 Run **Actions → build-remef → Run workflow**. The manual-only workflow
-generates the blinded editable Word draft and an intermediate PDF for
+generates **both** the blinded and author-identifying Word drafts and an intermediate PDF for
 page-count verification, then uploads the Word artifact (30-day retention).
 No heavy inference or simulation is launched.
 
@@ -123,13 +125,31 @@ conversation. The updated workflow must still be run and its **new** PDF inspect
 
 ### Items that cannot be made compliant without the author
 
-- Contact information, ORCID, full affiliation and correspondence footnote
-  for the editorial/author-identifying version (kept separate from blinded file)
-- Funding/acknowledgments and competing-interest statement confirmation;
-  no unverified funding acknowledgments are inserted
+- **Pending:** institutional postal mailing address and telephone for REMEF's
+  required first-page corresponding-author footnote; all supplied identity
+  details are already in the author version, never the blinded version
+- **Confirmed:** no external research funding and no conflicts of interest;
+  both versions include these author-confirmed declarations
 - Signed authorship, originality and rights-transfer documentation
 - Data redistribution permissions and an approved anonymized data/code access route
 - Final empirical result-level audit, supplement packaging and editorial approval
 
 Accordingly, the Word output is an **editorial review draft, not an assertion
 that all REMEF submission checks have been satisfied**.
+
+## Confirmed author information — 2026-10-18
+
+- Author name: **Heriberto Espino-Montelongo** (author-confirmed spelling)
+- Affiliation: Universidad de las Américas Puebla, Mexico
+- Corresponding email: **heriberto.espinomo@udlap.mx**
+- ORCID: https://orcid.org/0009-0009-1230-2931
+- Personal website: https://heri-espino.github.io
+- LinkedIn: `in/heri-espino` (expanded to conventional LinkedIn URL in the author version; verify link before upload)
+- Funding: **This research received no external funding.**
+- Conflicts: **The author declares no conflicts of interest.**
+
+The personal website and LinkedIn are optional editorial contact information,
+not scientific references. Neither they nor the name, email, or ORCID appear
+in the blinded Word manuscript. They are included only in the author-identifying
+version. Postal address and telephone are absent and must still be supplied
+before claiming complete compliance with REMEF's author-identification rules.
