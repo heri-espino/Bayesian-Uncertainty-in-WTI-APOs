@@ -34,9 +34,13 @@ def remove(p):
 
 def adapt_sections(doc):
     """Five REMEF-style scientific sections; preserve scientific paragraphs and formulas."""
-    intro = find(doc, "1 Introduction")
+    # Pandoc writes unnumbered heading text by default; numbering belongs
+    # to the REMEF Word layout, not to the LaTeX-to-DOCX converter.
+    intro = find(doc, "Introduction")
+    if intro.style.name != "Heading 1":
+        raise ValueError("Pandoc introduction did not retain Heading 1 style")
     intro.text = "1. Introduction"
-    original = find(doc, "2 Posterior uncertainty")
+    original = find(doc, "Posterior uncertainty and Asian-option pricing")
     insert_before(original, "2. Literature review", "Heading 1")
     for prefix in (
         "Asian options depend on a price average",
@@ -54,26 +58,42 @@ def adapt_sections(doc):
         "model values, and the contribution of previously available volatility inputs "
         "to out-of-sample APO pricing errors.",
     )
+    # These are the actual Pandoc-generated Heading 1/2 paragraph texts.
+    # Do not assume the LaTeX section numbers will survive conversion.
     new = {
-        "2 Posterior uncertainty and Asian-option pricing": "3. Methodology",
-        "2.1 Physical inference and risk-neutral valuation": "3.1 Physical-measure inference and risk-neutral valuation",
-        "2.2 Posterior integration and price uncertainty": "3.2 Posterior integration and price uncertainty",
-        "2.3 Synthetic mechanism experiment": "3.3 Synthetic experiment",
-        "3.1 WTI Average Price Options": "3.4 WTI Average Price Options and market data",
-        "3.2 Out-of-sample volatility comparisons": "3.5 Forward-in-time volatility comparisons",
-        "3.3 Cross-instrument validation": "3.6 Cross-instrument validation",
-        "3.4 AI-assisted manuscript preparation": "3.8 AI-assisted manuscript preparation",
-        "4 Results": "4. Results and discussion",
-        "5 Robustness and interpretation": "4.5 Robustness, interpretation and limitations",
-        "6 Conclusion": "5. Conclusions and recommendations",
+        "Posterior uncertainty and Asian-option pricing": "3. Methodology",
+        "Physical inference and risk-neutral valuation": "3.1 Physical-measure inference and risk-neutral valuation",
+        "Posterior integration and price uncertainty": "3.2 Posterior integration and price uncertainty",
+        "Synthetic mechanism experiment": "3.3 Synthetic experiment",
+        "WTI Average Price Options": "3.4 WTI Average Price Options and market data",
+        "Out-of-sample volatility comparisons": "3.5 Forward-in-time volatility comparisons",
+        "Cross-instrument validation": "3.6 Cross-instrument validation",
+        "AI-assisted manuscript preparation": "3.8 AI-assisted manuscript preparation",
+        "Results": "4. Results and discussion",
+        "Robustness and interpretation": "4.5 Robustness, interpretation and limitations",
+        "Conclusion": "5. Conclusions and recommendations",
     }
     for p in doc.paragraphs:
         key = p.text.strip()
         if key in new:
             p.text = new[key]
-            if key == "5 Robustness and interpretation":
+            if key == "Robustness and interpretation":
                 p.style = find(doc, "3.1 Physical-measure").style
-    remove(find(doc, "3 Data and empirical design"))
+    remove(find(doc, "Data and empirical design"))
+    expected = [
+        "1. Introduction", "2. Literature review", "3. Methodology",
+        "3.1 Physical-measure inference and risk-neutral valuation",
+        "3.2 Posterior integration and price uncertainty",
+        "3.3 Synthetic experiment", "3.4 WTI Average Price Options and market data",
+        "3.5 Forward-in-time volatility comparisons", "3.6 Cross-instrument validation",
+        "3.8 AI-assisted manuscript preparation", "4. Results and discussion",
+        "4.5 Robustness, interpretation and limitations",
+        "5. Conclusions and recommendations",
+    ]
+    titles = [p.text.strip() for p in doc.paragraphs if p.style.name.startswith("Heading")]
+    missing = [title for title in expected if title not in titles]
+    if missing:
+        raise ValueError(f"REMEF section conversion missed headings: {missing}")
     ai = find(doc, "3.8 AI-assisted manuscript preparation")
     insert_before(ai, "3.7 Computational implementation", "Heading 2")
     insert_before(
