@@ -212,7 +212,8 @@ def format_docx(path: Path) -> None:
                 # Insert as a new run instead of replacing existing formatting.
                 prefix_run = paragraph.add_run(prefix)
                 paragraph._p.remove(prefix_run._r)
-                paragraph._p.insert(0, prefix_run._r)
+                paragraph._p.insert(1 if paragraph._p.pPr is not None else 0,
+                                    prefix_run._r)
         if paragraph.text.startswith(("Table ", "Figure ")):
             for run in paragraph.runs:
                 run.font.name = "Times New Roman"
