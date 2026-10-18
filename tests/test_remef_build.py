@@ -62,3 +62,17 @@ def test_rem_e_f_sources_distinct_from_original_wiley():
     assert r"\subsection{AI-assisted manuscript preparation}" in tex
     assert r"\noindent\textbf{Table " in tex
     assert r"\noindent\textbf{Figure " in tex
+
+def test_remef_apa_and_required_section_postprocessor_exist():
+    """Keep APA and REMEF section structure explicit in the reproducible build."""
+    style = ROOT / "paper" / "remef" / "apa.csl"
+    post = ROOT / "paper" / "remef" / "postprocess.py"
+    builder = SOURCE.read_text(encoding="utf-8")
+    assert style.is_file()
+    assert "American Psychological Association" in style.read_text(encoding="utf-8") or "APA" in style.read_text(encoding="utf-8")
+    assert post.is_file()
+    content = post.read_text(encoding="utf-8")
+    for heading in ("Literature review", "Methodology", "Results and discussion", "Conclusions and recommendations"):
+        assert heading in content
+    assert '"--csl=" + str(HERE / "apa.csl")' in builder
+    assert "prepare_docx(path)" in builder
