@@ -378,7 +378,7 @@ def test_requested_figure1_ranges_full_heatmap_and_identity_line(
     # Axline is unbounded in data space and draws the y=x reference through
     # the entire visible shared data range, unlike the old data-range segment.
     assert len(d.lines) == 1
-    assert type(d.lines[0]).__name__ == "_AxLine"
+    assert type(d.lines[0]).__name__ in {"AxLine", "_AxLine"}
     assert np.allclose(d.get_xlim(), d.get_ylim())
     assert np.isclose(d.get_xlim()[0], d.get_xticks()[0])
     assert np.isclose(d.get_xlim()[1], d.get_xticks()[-1])
