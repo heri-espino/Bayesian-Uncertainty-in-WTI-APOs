@@ -62,6 +62,9 @@ jobs:
               tables = xml.count("<w:tbl>")
               media = [name for name in z.namelist() if name.startswith("word/media/")]
               vectors = [name for name in media if name.endswith(".svg")]
+              noncanonical = [name for name in media if name.endswith(".svgz")]
+              if noncanonical:
+                  raise SystemExit("Misnamed SVG media: " + str(noncanonical))
               native_svg = xml.count("svgBlip")
               print(f"Editable math: {math}; Word tables: {tables}; "
                     f"embedded SVG: {len(vectors)}; native SVG references: {native_svg}")
