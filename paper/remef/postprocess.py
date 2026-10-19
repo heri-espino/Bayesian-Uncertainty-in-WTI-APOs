@@ -6,6 +6,8 @@ Source: REMEF author instructions and a published article supplied for layout re
 from __future__ import annotations
 
 from pathlib import Path
+from zipfile import ZipFile, ZIP_DEFLATED
+from lxml import etree
 from docx import Document
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.oxml import OxmlElement
@@ -334,6 +336,72 @@ def fit_figures_to_word_text_width(doc) -> None:
         shape.height = int(round(original_height * target_width / original_width))
 
 
+
+def normalize_word_svg_media(path: Path) -> None:
+    """Convert incorrectly named plain SVG .svgz parts to canonical SVG media.
+
+    The Pandoc export inserts native SVG drawing references, but gives their
+    plain XML media parts a .svgz extension in some versions. These bytes are
+    not gzip. Correct every ZIP member, image relationship and part content
+    type together, retaining the vector XML and unchanged math and tables.
+    """
+    from tempfile import NamedTemporaryFile
+
+    path = Path(path)
+    with ZipFile(path) as source:
+        members = [
+            name for name in source.namelist()
+            if name.startswith("word/media/") and name.endswith(".svgz")
+        ]
+        if not members:
+            return
+        relpath = "word/_rels/document.xml.rels"
+        typepath = "[Content_Types].xml"
+        rels = etree.fromstring(source.read(relpath))
+        types = etree.fromstring(source.read(typepath))
+        for name in members:
+            payload = source.read(name)
+            try:
+                root = etree.fromstring(payload)
+            except etree.XMLSyntaxError as exc:
+                raise ValueError(f"Invalid XML SVG: {name}") from exc
+            if root.tag.rsplit("}", 1)[-1] != "svg":
+                raise ValueError(f"Mislabelled media not SVG: {name}")
+            original = name.removeprefix("word/")
+            matching = [node for node in rels if node.get("Target") == original]
+            if len(matching) != 1:
+                raise ValueError(f"Missing unique image relationship: {name}")
+            matching[0].set("Target", original[:-1])
+            overrides = [node for node in types
+                         if node.get("PartName") == "/" + name]
+            if len(overrides) != 1 or overrides[0].get("ContentType") != "image/svg+xml":
+                raise ValueError(f"Missing SVG content-type override: {name}")
+            overrides[0].set("PartName", "/" + name[:-1])
+        with NamedTemporaryFile(
+            prefix="remef-svg-", suffix=".docx", dir=path.parent, delete=False
+        ) as handle:
+            temporary = Path(handle.name)
+        try:
+            with ZipFile(temporary, "w", compression=ZIP_DEFLATED) as output:
+                for item in source.infolist():
+                    name = item.filename
+                    if name in members:
+                        output.writestr(name[:-1], source.read(name))
+                    elif name == relpath:
+                        output.writestr(name, etree.tostring(
+                            rels, encoding="UTF-8", xml_declaration=True
+                        ))
+                    elif name == typepath:
+                        output.writestr(name, etree.tostring(
+                            types, encoding="UTF-8", xml_declaration=True
+                        ))
+                    else:
+                        output.writestr(item, source.read(name))
+            temporary.replace(path)
+        finally:
+            temporary.unlink(missing_ok=True)
+
+
 def prepare_docx(path: Path) -> None:
     doc = Document(path)
     adapt_sections(doc)
@@ -341,6 +409,7 @@ def prepare_docx(path: Path) -> None:
     format_tables(doc)
     fit_figures_to_word_text_width(doc)
     doc.save(path)
+    normalize_word_svg_media(path)
 
 
 if __name__ == "__main__":
