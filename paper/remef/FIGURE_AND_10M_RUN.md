@@ -242,3 +242,42 @@ the full panel) and both Figure 4 panels, then stage only the six outputs
 for Figures 1 and 4 and the regenerated figure_manifest.json. The manifest
 reflects only the figures requested on that run; to retain one complete
 four-figure manifest, regenerate all four with --figures 1 2 3 4 instead.
+
+
+## Requested fixed axis windows and square Figure 4 (2026-10-19)
+
+These **presentation-only** adjustments deliberately override the generic
+"nice" tick expansion after all normal plot data have been computed:
+
+- Figure 1A: y from 0 to 0.15, with ticks at 0, 0.05, 0.10, 0.15.
+- Figure 1B: show every simulated moneyness and fixing-fraction tick,
+  retaining full image-cell extents; use compact, rotated labels.
+- Figure 1C: x from 0 to 1.5 and y from 0 to 0.15. Its existing high-fixing
+  zoom remains and retains its own independent axes.
+- Figure 1D: same nice-tick limits for both axes; an infinite-slope-one
+  Matplotlib axline runs from the lower-left to the upper-right of the
+  visible graph instead of ending at the observed data extremes.
+- Figure 2A: y from 0.4 to 0.6.
+- Figure 2C: y from 0.3 to 0.8.
+- Figure 4B: y from -15 to 15 (millionths relative to the Curran
+  approximation), with labeled ticks at -15, 0, and 15.
+- Figure 4: a physically square plot at manuscript width, with two
+  **equal-height** panels.
+
+The fixed view limits were explicitly selected for publication layout:
+values outside them may be visually clipped but are not removed, modified or
+excluded from the saved numerical results. The four-figure export still
+produces PNG, PDF and SVG using the existing 10m run and empirical summaries.
+
+PowerShell (after this PR is merged):
+
+    git switch main
+    git pull --ff-only origin main
+    conda run --no-capture-output -n asian-options python -m pytest tests/test_publication_figures.py -q
+    conda run --no-capture-output -n asian-options python -m scripts.build_publication_figures --figures 1 2 3 4 --formats png pdf svg --mechanism-run results/analysis/massive_mechanism_map/6e23d5aabc519982 --output-dir figures/publication
+
+Review each PNG and SVG at true manuscript width, then commit only the
+12 final figures and figure_manifest.json. For a figure-only commit, the
+commit message may include [skip ci] to suppress CI triggered by that
+asset-only push. Do not stage unrelated licensed market data or experiment
+checkpoints.
