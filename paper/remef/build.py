@@ -133,6 +133,21 @@ def _sanitize_and_repair_svg(path: Path, *, repair_figure_3: bool = False) -> No
             if child.tag.split("}")[-1].lower() in {"metadata", "desc"}:
                 parent.remove(child)
     if repair_figure_3:
+        # The original clipped heading remains as text inside the PDF-derived
+        # SVG even when the top band is overpainted. Some Word/LibreOffice
+        # renderers draw it *outside* that band. Remove only this stale label.
+        obsolete = "Strict forward-in-time volatility improvement across expiries"
+        removed = 0
+        for parent in root.iter():
+            for child in list(parent):
+                if child.tag.rsplit("}", 1)[-1] != "text":
+                    continue
+                if obsolete in "".join(child.itertext()):
+                    parent.remove(child)
+                    removed += 1
+        # Old export contains one; synthetic test exports may contain zero.
+        if removed > 1:
+            raise ValueError("Multiple obsolete Figure 3 headings found")
         box = root.attrib.get("viewBox")
         if not box:
             raise ValueError(f"SVG lacks viewBox for title correction: {path}")
