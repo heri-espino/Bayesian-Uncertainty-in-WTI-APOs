@@ -146,7 +146,14 @@ def test_actual_pandoc_heading_text_is_supported(tmp_path):
         doc.add_paragraph(title, style="Heading 2")
         doc.add_paragraph("Data and analysis use earlier observations.")
     doc.add_paragraph("Results", style="Heading 1")
-    doc.add_paragraph("When does posterior integration matter?", style="Heading 2")
+    for title in (
+        "When does posterior integration matter?",
+        "Posterior integration in the WTI sample",
+        "Historical versus option-implied volatility",
+        "Cross-instrument validation using vanilla-WTI options",
+    ):
+        doc.add_paragraph(title, style="Heading 2")
+        doc.add_paragraph("The results are calculated from saved experiments.")
     doc.add_paragraph("Robustness and interpretation", style="Heading 1")
     doc.add_paragraph("Conclusion", style="Heading 1")
     doc.add_paragraph("Data availability", style="Heading 1")

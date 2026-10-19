@@ -33,6 +33,27 @@ def remove(p):
     element.getparent().remove(element)
 
 
+
+def repair_equation_references(doc):
+    """Repair equation labels lost when converting LaTeX math to editable Word math."""
+    substitutions = (
+        ("Equation\u00a0(4)", "the arithmetic-average definition above"),
+        ("Equation (4)", "the arithmetic-average definition above"),
+        ("the two ingredients in Equation\u00a0(7)",
+         "posterior variance and price curvature in the second-order approximation"),
+        ("the two ingredients in Equation (7)",
+         "posterior variance and price curvature in the second-order approximation"),
+        ("the corresponding second-order approximation in Equation\u00a0(7)",
+         "the corresponding second-order approximation"),
+        ("the corresponding second-order approximation in Equation (7)",
+         "the corresponding second-order approximation"),
+    )
+    for paragraph in doc.paragraphs:
+        for run in paragraph.runs:
+            for old, replacement in substitutions:
+                if old in run.text:
+                    run.text = run.text.replace(old, replacement)
+
 def adapt_sections(doc):
     """Five REMEF-style scientific sections; preserve scientific paragraphs and formulas."""
     # Pandoc writes unnumbered heading text by default; numbering belongs
@@ -71,6 +92,10 @@ def adapt_sections(doc):
         "Cross-instrument validation": "3.6 Cross-instrument validation",
         "AI-assisted manuscript preparation": "3.8 AI-assisted manuscript preparation",
         "Results": "4. Results and discussion",
+        "When does posterior integration matter?": "4.1 When does posterior integration matter?",
+        "Posterior integration in the WTI sample": "4.2 Posterior integration in the WTI sample",
+        "Historical versus option-implied volatility": "4.3 Historical versus option-implied volatility",
+        "Cross-instrument validation using vanilla-WTI options": "4.4 Cross-instrument validation using vanilla-WTI options",
         "Robustness and interpretation": "4.5 Robustness, interpretation and limitations",
         "Conclusion": "5. Conclusions and recommendations",
     }
@@ -88,6 +113,10 @@ def adapt_sections(doc):
         "3.3 Synthetic experiment", "3.4 WTI Average Price Options and market data",
         "3.5 Forward-in-time volatility comparisons", "3.6 Cross-instrument validation",
         "3.8 AI-assisted manuscript preparation", "4. Results and discussion",
+        "4.1 When does posterior integration matter?",
+        "4.2 Posterior integration in the WTI sample",
+        "4.3 Historical versus option-implied volatility",
+        "4.4 Cross-instrument validation using vanilla-WTI options",
         "4.5 Robustness, interpretation and limitations",
         "5. Conclusions and recommendations",
     ]
@@ -100,13 +129,15 @@ def adapt_sections(doc):
     insert_before(
         ai,
         "The computations are implemented in Python using NumPy, SciPy and pandas "
-        "for inference, simulation and market data processing, and Matplotlib for "
-        "figures. The research repository records the experiment scripts, "
-        "configurations, seeds, saved derived results and provenance manifests. "
-        "The synthetic calculation integrates physical drift analytically "
-        "conditional on volatility. For empirical validation, estimated volatility "
-        "inputs obey the documented time cutoffs, and errors are resampled by "
-        "valuation date to retain within-date contract dependence.",
+        "for inference, simulation and market-data processing, and Matplotlib "
+        "for figures. A public source-only repository contains the pricing "
+        "library, experiment scripts, a synthetic demonstration, numerical "
+        "tests, and source-provenance records. The original vendor observations "
+        "and internal market-dependent outputs are retained privately. The "
+        "synthetic calculation integrates physical drift analytically "
+        "conditional on volatility. For empirical validation, estimated "
+        "volatility inputs follow the documented time cutoffs, and errors "
+        "are resampled by valuation date to retain within-date dependence.",
     )
     conclusion = find(doc, "5. Conclusions and recommendations")
     insert_before(
@@ -124,6 +155,8 @@ def adapt_sections(doc):
         "Future work should expand the number of valuation dates and liquid "
         "contracts and examine stochastic-volatility and multifactor alternatives.",
     )
+
+    repair_equation_references(doc)
 
 
 def format_tables(doc):
@@ -284,11 +317,29 @@ def format_layout(doc):
     doc.core_properties.comments = ""
 
 
+def fit_figures_to_word_text_width(doc) -> None:
+    """Use the actual Word section width rather than rescaling a wide plot.
+
+    The REMEF manuscript is US Letter with 3 cm left and right margins.
+    6.1375 inches is the physical text width; the Matplotlib figures are
+    independently authored at this same width. Do not alter image pixels.
+    """
+    sec = doc.sections[0]
+    target_width = int(sec.page_width - sec.left_margin - sec.right_margin)
+    for shape in doc.inline_shapes:
+        original_width, original_height = int(shape.width), int(shape.height)
+        if original_width <= 0 or original_height <= 0:
+            continue
+        shape.width = target_width
+        shape.height = int(round(original_height * target_width / original_width))
+
+
 def prepare_docx(path: Path) -> None:
     doc = Document(path)
     adapt_sections(doc)
     format_layout(doc)
     format_tables(doc)
+    fit_figures_to_word_text_width(doc)
     doc.save(path)
 
 
