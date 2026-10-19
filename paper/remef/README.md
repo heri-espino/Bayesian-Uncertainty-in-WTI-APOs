@@ -164,3 +164,11 @@ correspondence footnote; the generated author version still requires review.
   Pandoc headings explicitly, with a lightweight regression test that runs
   postprocessing on a Word fixture before merge. The manual Word workflow
   must be rerun on the repaired revision and both resulting files inspected.
+
+## PDF math and GitHub Actions build — 2026-10-18
+
+The original `build-remef` run 39161447621 produced both native Word drafts, 44 editable Word math elements, four tables and two images. Its final PDF-preview step failed because LibreOffice 24.2 dropped native Word OMML equations. The faulty LibreOffice PDF must never be submitted as a mathematical manuscript.
+
+The manual-only build now uses LibreOffice **only for approximate pagination** (discarding that incomplete PDF), and runs `pandoc <blinded.docx> --pdf-engine=xelatex` to generate `remef_math_reference.pdf` from the **same Word document**. That separate reference displays equations, but its typesetting and pagination differ from Word. It is not a substitute for opening the native DOCX in Microsoft Word and inspecting every page. A local test on the failed build's actual blinded DOCX produced a 10-page XeLaTeX reference with visible math, versus the incomplete 12-page LibreOffice PDF. The workflow independently enforces the 25-page limit in both outputs and checks Greek math after Unicode normalization.
+
+GitHub actions now use Node24-compatible checkout v5, setup-python v6 and upload-artifact v6, and the workflow pins Ubuntu 24.04. These address the Node.js warning and runner-image notice, which did not cause the math failure. This workflow remains exclusively `workflow_dispatch`; scientific experiments are never started by paper edits. Rerun the manual workflow after merge and inspect its new artifact.
