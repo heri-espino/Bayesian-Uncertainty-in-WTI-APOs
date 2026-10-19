@@ -9,6 +9,7 @@ from pathlib import Path
 from docx import Document
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.oxml import OxmlElement
+from docx.oxml.ns import qn
 from docx.shared import Cm, Pt, RGBColor
 
 
@@ -161,6 +162,24 @@ def format_layout(doc):
         sec.page_width, sec.page_height = Cm(21.59), Cm(27.94)
         sec.top_margin = sec.bottom_margin = Cm(2.5)
         sec.left_margin = sec.right_margin = Cm(3)
+        # Page numbers are mandatory in REMEF submissions. Use a real Word
+        # PAGE field rather than a hardcoded number that would not update.
+        footer = sec.footer.paragraphs[0]
+        footer.text = ""
+        footer.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        footer.paragraph_format.space_before = Pt(0)
+        footer.paragraph_format.space_after = Pt(0)
+        run = footer.add_run()
+        run.font.name = "Times New Roman"
+        run.font.size = Pt(10)
+        field = OxmlElement("w:fldSimple")
+        field.set(qn("w:instr"), "PAGE")
+        display_run = OxmlElement("w:r")
+        display_text = OxmlElement("w:t")
+        display_text.text = "1"
+        display_run.append(display_text)
+        field.append(display_run)
+        footer._p.append(field)
     styles = {p.style.name: p.style for p in doc.paragraphs}
     for name in ("Normal", "Body Text", "First Paragraph", "Bibliography",
                  "Heading 1", "Heading 2", "Heading 3"):
@@ -188,12 +207,22 @@ def format_layout(doc):
                 run.font.size = Pt(12)
                 run.font.bold = True
 
-    for p in doc.paragraphs[:2]:
-        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        p.paragraph_format.space_after = Pt(7)
-        for run in p.runs:
-            run.font.size = Pt(12)
-            run.font.bold = True
+    # Match the approved math-reference PDF's flush-left bilingual titles
+    # while retaining REMEF's mandatory Times New Roman 12-pt Word typography.
+    # Identify the titles by content, not by position: the unblinded document
+    # includes author/contact paragraphs before its titles.
+    publication_titles = {
+        "Posterior Integration and Volatility Inputs in WTI Asian Options",
+        "Integración posterior y volatilidad en opciones asiáticas WTI",
+    }
+    for p in doc.paragraphs:
+        if p.text.strip() in publication_titles:
+            p.alignment = WD_ALIGN_PARAGRAPH.LEFT
+            p.paragraph_format.space_after = Pt(4)
+            for run in p.runs:
+                run.font.name = "Times New Roman"
+                run.font.size = Pt(12)
+                run.font.bold = True
 
     # JEL codes explicitly labelled in both languages.
     english = find(doc, "Keywords:")

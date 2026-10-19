@@ -172,3 +172,26 @@ The original `build-remef` run 39161447621 produced both native Word drafts, 44 
 The manual-only build now uses LibreOffice **only for approximate pagination** (discarding that incomplete PDF), and runs `pandoc <blinded.docx> --pdf-engine=xelatex` to generate `remef_math_reference.pdf` from the **same Word document**. That separate reference displays equations, but its typesetting and pagination differ from Word. It is not a substitute for opening the native DOCX in Microsoft Word and inspecting every page. A local test on the failed build's actual blinded DOCX produced a 10-page XeLaTeX reference with visible math, versus the incomplete 12-page LibreOffice PDF. The workflow independently enforces the 25-page limit in both outputs and checks Greek math after Unicode normalization.
 
 GitHub actions now use Node24-compatible checkout v5, setup-python v6 and upload-artifact v6, and the workflow pins Ubuntu 24.04. These address the Node.js warning and runner-image notice, which did not cause the math failure. This workflow remains exclusively `workflow_dispatch`; scientific experiments are never started by paper edits. Rerun the manual workflow after merge and inspect its new artifact.
+
+## Word appearance benchmark — 2026-10-18
+
+Use `remef_math_reference.pdf` (the Pandoc/XeLaTeX mathematical-content
+reference built from the blinded DOCX) as the **visual benchmark** for the
+mathematical manuscript, not as the file to upload to REMEF. The two Word
+documents remain the required editable submission files.
+
+The Word postprocessor aligns the English and Spanish article titles to the
+left, as in that PDF, and adds real consecutively updating PAGE fields in the
+centered footer. REMEF's Times New Roman 12-pt font, single spacing, 2.5/3-cm
+margins, and native editable OMML equations take precedence over exact PDF
+page breaks; therefore the Word draft has approximately 12 pages while
+the independent XeLaTeX math reference has 10.
+
+The original GitHub runner (LibreOffice 24.2) omitted native Word equations in
+PDF exports. In a later local review, LibreOffice 25.2 rendered most equations
+but truncated one long conditional-expectation formula. These are
+**LibreOffice compatibility limitations**, and neither preview proves perfect
+Microsoft Word math display. Before submission, open the actual DOCX in
+Microsoft Word and compare every formula, especially the risk-neutral call
+valuation, against the math-reference PDF. Do not replace editable equations
+with screenshots or distribute the broken LibreOffice PDF.
