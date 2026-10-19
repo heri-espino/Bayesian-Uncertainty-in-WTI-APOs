@@ -133,20 +133,21 @@ def make_latex(*, with_author: bool) -> str:
     # Place the required disclosure in Methods, not outside the research design.
     disclosure = (
         r"\subsection{AI-assisted manuscript preparation}" + "\n"
-        "OpenAI ChatGPT assisted with language editing, literature organization, "
-        "manuscript formatting, and research software development. The reported "
-        "numerical results are drawn from the documented computational experiments, "
-        "not directly from AI-generated numerical responses. The author is "
-        "responsible for validating the computations, interpreting the findings, "
-        "and approving the final manuscript.\n"
+        "OpenAI ChatGPT assisted with language editing, manuscript preparation, "
+        "and research software development. All numerical results reported in this "
+        "paper were obtained from computational experiments executed by the author."
+        + (" The corresponding research software is archived on Zenodo.\n"
+           if with_author else "\n")
     )
     sections[3] += "\n" + disclosure
     if with_author:
         sections[0] = authorship() + "\n" + sections[0]
     data_note = (
         r"\section*{Data availability}" + "\n"
-        "The empirical analysis uses WTI futures and options data obtained "
-        "from Barchart and Databento. The underlying observations are subject "
+        "The empirical analysis uses Barchart WTI Average Price Option "
+        "settlements and individual CL futures histories, and Databento "
+        "standard WTI (LO) option and corresponding CL futures observations. "
+        "The underlying observations are subject "
         "to vendor and exchange licensing conditions and are not redistributed. "
         "Researchers who wish to repeat the empirical analyses must obtain the "
         "necessary data and permissions directly from the providers. The "
