@@ -85,8 +85,11 @@ def test_remef_word_plot_geometry_and_contrast() -> None:
 def test_figure_three_title_stays_inside_canvas():
     import inspect
     source = inspect.getsource(figures.build_figure_3)
+    shared_title = inspect.getsource(figures._apply_suptitle)
+    assert "_apply_suptitle" in source
     assert "y=1.02" not in source
-    assert "y=0.98" in source
+    assert "y=0.985" in shared_title
+    assert 'PUBLICATION_FONT_PT["suptitle"]' in shared_title
 
 
 def test_final_default_exports_are_vector_formats():
