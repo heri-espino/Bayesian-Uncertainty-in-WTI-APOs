@@ -248,3 +248,54 @@ def test_figure3_vector_title_and_sanitization(tmp_path):
     labels = [el.text for el in root.iter() if el.tag.endswith("}text")]
     assert labels == ["Forward-in-time volatility comparisons across expiries"]
     assert any(el.tag.endswith("}path") for el in root.iter())
+
+
+def test_normalize_word_svg_media_extension(tmp_path):
+    """Pandoc can name ordinary XML SVG files with an .svgz suffix."""
+    from zipfile import ZipFile, ZIP_DEFLATED
+    from lxml import etree
+    import importlib.util
+    from docx import Document
+
+    spec = importlib.util.spec_from_file_location(
+        "_remef_svg_fix", ROOT / "paper" / "remef" / "postprocess.py"
+    )
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    sample = tmp_path / "before.docx"
+    Document().save(sample)
+    tmp = tmp_path / "assembled.docx"
+    with ZipFile(sample) as zin, ZipFile(tmp, "w", ZIP_DEFLATED) as zout:
+        for item in zin.infolist():
+            data = zin.read(item.filename)
+            if item.filename == "word/_rels/document.xml.rels":
+                root = etree.fromstring(data)
+                node = etree.SubElement(root, "{http://schemas.openxmlformats.org/package/2006/relationships}Relationship")
+                node.set("Id", "rIdVectorTest")
+                node.set("Type", "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image")
+                node.set("Target", "media/rIdVectorTest.svgz")
+                data = etree.tostring(root)
+            elif item.filename == "[Content_Types].xml":
+                root = etree.fromstring(data)
+                node = etree.SubElement(root, "{http://schemas.openxmlformats.org/package/2006/content-types}Override")
+                node.set("PartName", "/word/media/rIdVectorTest.svgz")
+                node.set("ContentType", "image/svg+xml")
+                data = etree.tostring(root)
+            zout.writestr(item, data)
+        zout.writestr(
+            "word/media/rIdVectorTest.svgz",
+            b'<svg xmlns="http://www.w3.org/2000/svg" width="10" height="5"></svg>',
+        )
+    tmp.replace(sample)
+    mod.normalize_word_svg_media(sample)
+    mod.normalize_word_svg_media(sample)
+    with ZipFile(sample) as z:
+        names = z.namelist()
+        assert "word/media/rIdVectorTest.svg" in names
+        assert "word/media/rIdVectorTest.svgz" not in names
+        assert z.read("word/media/rIdVectorTest.svg").startswith(b"<svg")
+        assert b"rIdVectorTest.svgz" not in z.read("word/_rels/document.xml.rels")
+        assert b"rIdVectorTest.svgz" not in z.read("[Content_Types].xml")
+        assert b"rIdVectorTest.svg" in z.read("[Content_Types].xml")
+    Document(sample)
+
