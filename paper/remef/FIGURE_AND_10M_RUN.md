@@ -281,3 +281,26 @@ Review each PNG and SVG at true manuscript width, then commit only the
 commit message may include [skip ci] to suppress CI triggered by that
 asset-only push. Do not stage unrelated licensed market data or experiment
 checkpoints.
+
+
+## Latest user-selected axis and panel proportions (2026-10-19)
+
+These adjustments supersede the earlier Figure 1C x-axis ending at 1.5,
+the previous near-zero zoom starting at 0.65, and the equal-height
+Figure 4 panels.
+
+- Figure 1C main graph: x-axis 0–2.5; unchanged y-axis 0–0.15.
+- Figure 1C near-zero inset: x-axis 0.75–1.00, with x-ticks
+  0.75, 0.875, 1.00; previous y-axis and other plotting features unchanged.
+- Figure 2C APO-implied volatility smile: x-axis -0.5–0.75,
+  with ticks every 0.25; unchanged y-axis 0.3–0.8.
+- Figure 4 dashboard remains physically square, but the panel height
+  ratios become 0.78:1.22, leaving more room for panel B.
+  Figure 4B y-axis remains -15–15, with ticks at -15, -10, -5, 0,
+  5, 10, and 15.
+
+The source data, numerical results, figure typography, colors, PNG/PDF/SVG
+exports, and manual generation workflow are unchanged. On Windows, run
+the existing all-figures command after pulling main, inspect the exports,
+and commit **only** the new figures plus the manifest using [skip ci]
+for the generated-asset commit.
