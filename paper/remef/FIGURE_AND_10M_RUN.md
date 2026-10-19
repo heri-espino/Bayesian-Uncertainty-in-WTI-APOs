@@ -168,3 +168,46 @@ times-new-roman in figures/publication/figure_manifest.json. Version only
 those eight PDF/SVG files and that manifest; do not stage raw market data
 or checkpoint archives. The REMEF Word builder must be run separately only
 after final figures are available and reviewed.
+
+
+## Final panel titles, categorical endpoints and all three figure formats (2026-10-19)
+
+Panel letters are bold inline prefixes in their titles, rather than floating
+separately outside the axes. Figure 3 previous-day red square markers use
+#5c0010 dark-red edges. Figure 1 deliberately draws white-centered blue-edged
+circles over the short-maturity blue line and over the bottom spine.
+
+The numeric axes retain nice tick endpoints and do not crop numerical data or
+confidence intervals. In Figure 3 expiry categories and Figure 4 target IDs,
+blank boundary ticks at integer 0 and N+1 make each axis end at a real tick
+and keep its lower-left corner connected. Category positions remain inside
+those boundaries; the points and error bars are not cropped. Figure 1's
+logarithmic sample axis keeps four representative observations and no minor
+ticks. Heatmap cells are not truncated to their tick centers.
+
+The plotter now produces PNG, PDF, and SVG by default. PNG is a convenient
+proof image; PDF and SVG are manuscript-quality vector deliverables.
+A submission run requires an installed Times New Roman. Verify that the
+figure manifest reports font_mode times-new-roman, not a preview fallback.
+
+After merging the PR into main, from Windows PowerShell in the repository:
+
+    git switch main
+    git pull --ff-only origin main
+    git sparse-checkout add results figures
+    conda run --no-capture-output -n asian-options python -m pytest tests/test_publication_figures.py -q
+    conda run --no-capture-output -n asian-options python -m scripts.build_publication_figures --figures 1 2 3 4 --formats png pdf svg --mechanism-run results/analysis/massive_mechanism_map/6e23d5aabc519982 --output-dir figures/publication
+
+Inspect all four PNGs, SVGs, PDFs and figure_manifest.json. Stage only the
+12 final image files and the manifest (no proprietary data or checkpoints):
+
+    $stem = @('fig01_mechanism_map', 'fig02_historical_vs_apo_implied_volatility', 'fig03_forward_q_cluster_bootstrap', 'fig04_numerical_identification')
+    $paths = foreach ($name in $stem) { foreach ($ext in @('png', 'pdf', 'svg')) { "figures/publication/$name.$ext" } }
+    $paths += 'figures/publication/figure_manifest.json'
+    git add --sparse -- $paths
+    git diff --cached --name-only
+    git commit -m 'Regenerate final REMEF figures in PNG PDF SVG'
+    git push origin main
+
+These outputs use previously committed synthetic and empirical summaries.
+No new Monte Carlo simulation or raw market-data download is required.
