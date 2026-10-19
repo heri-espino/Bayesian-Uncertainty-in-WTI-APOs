@@ -31,7 +31,7 @@ def test_publication_styles_are_colorful_and_grayscale_safe() -> None:
         "#97001c",
         "#0083f9",
         "#00b49c",
-        "#ffc600",
+        "#9b6500",
         "#f198ff",
     ]
     assert figures.HEATMAP_CMAP.name == "tol_iridescent"
@@ -48,7 +48,7 @@ def test_publication_styles_are_colorful_and_grayscale_safe() -> None:
     assert figures.FIG3_COLORS["expanding"] == "#a5d3ff"
     assert figures.FIG3_COLORS["previous_day"] == "#97001c"
     assert figures.FIG4_COLORS == {
-        "pseudo_mc": "#ffc600",
+        "pseudo_mc": "#9b6500",
         "curran": "#0083f9",
         "sobol": "#97001c",
     }
@@ -72,3 +72,10 @@ def test_publication_styles_are_colorful_and_grayscale_safe() -> None:
     }
     assert len(sigma_encodings) == len(figures.SIGMA_STYLES)
     assert len(maturity_encodings) == len(figures.MATURITY_STYLES)
+
+def test_remef_word_plot_geometry_and_contrast() -> None:
+    assert abs(figures.WORD_TEXT_WIDTH_IN - 6.1375) < 1e-10
+    assert all(abs(figures._word_figsize(i)[0] - 6.1375) < 1e-10
+               for i in (1, 2, 3, 4))
+    assert figures.MECHANISM_CMAP.name == "cividis_ink"
+    assert max(figures.MECHANISM_CMAP(0.0)[:3]) < 0.6
