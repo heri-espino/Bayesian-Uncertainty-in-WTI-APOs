@@ -53,6 +53,11 @@ def test_publication_styles_are_colorful_and_grayscale_safe() -> None:
         "curran": "#0083f9",
         "sobol": "#97001c",
     }
+    assert figures.FIG4_EDGE_COLORS == {
+        "pseudo_mc": "#5f3d00",
+        "curran": "#005aa8",
+        "sobol": "#5c0010",
+    }
 
     # Color is never the only categorical cue.
     sigma_encodings = {
@@ -270,4 +275,75 @@ def test_all_three_formats_and_blue_short_maturity_circles(tmp_path: Path, monke
     )
     for ax in captured["fig"].axes[:4]:
         assert r"\mathbf{(" in ax.get_title(loc="left")
+    plt.close(captured["fig"])
+
+
+
+def test_figure1_panel_c_zoom_is_inset_and_preserves_main_domain(tmp_path: Path) -> None:
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import pandas as pd
+    from xml.etree import ElementTree as ET
+
+    figures._configure_matplotlib(force_no_tex=True)
+    curve = pd.DataFrame({
+        "maturity_days": [21, 21, 21, 63, 63, 63, 126, 126, 126],
+        "fraction_fixed": [0.0, 0.75, 0.90] * 3,
+        "mean_abs_pi_minus_pm": [
+            0.016, 0.002, 0.0002,
+            0.08, 0.020, 0.001,
+            0.12, 0.019, 0.002,
+        ],
+    })
+    fig, ax = plt.subplots()
+    ax.plot(curve["fraction_fixed"][:3], curve["mean_abs_pi_minus_pm"][:3])
+    old = (ax.get_xlim(), ax.get_ylim())
+    inset = figures._add_partial_fixing_zoom(ax, curve)
+    assert inset in ax.child_axes
+    assert tuple(round(v, 3) for v in inset.get_xlim()) == (0.65, 0.97)
+    assert tuple(round(v, 3) for v in inset.get_ylim()) == (-0.001, 0.023)
+    assert len(inset.lines) == 3
+    assert inset.lines[0].get_marker() == "o"
+    assert inset.lines[0].get_markerfacecolor() == "white"
+    assert len(inset.get_xticks()) == 2
+    assert len(inset.get_yticks()) == 3
+    assert np.allclose(ax.get_xlim(), old[0])
+    assert np.allclose(ax.get_ylim(), old[1])
+
+    svg = tmp_path / "partial_fixing_zoom.svg"
+    fig.savefig(svg)
+    assert "Near-zero detail" in svg.read_text(encoding="utf-8")
+    ET.parse(svg)
+    plt.close(fig)
+
+
+def test_figure4_marker_borders_have_distinct_dark_outline_colors(
+    tmp_path: Path, monkeypatch,
+) -> None:
+    import matplotlib.pyplot as plt
+
+    figures._configure_matplotlib(force_no_tex=True)
+    captured = {}
+    def save_figure(fig, stem, formats):
+        captured["fig"] = fig
+        return []  # Inspect actual artists before any save/close.
+    monkeypatch.setattr(figures, "_save", save_figure)
+    figures.build_figure_4(tmp_path, ("svg",))
+    top, bottom = captured["fig"].axes[:2]
+    for ax, expected in (
+        (top, ("pseudo_mc", "curran", "sobol")),
+        (bottom, ("pseudo_mc", "sobol")),
+    ):
+        artists = [
+            container.lines[0]
+            for container in ax.containers
+            if hasattr(container, "lines") and container.lines[0] is not None
+        ]
+        assert len(artists) == len(expected)
+        for artist, key in zip(artists, expected, strict=True):
+            assert artist.get_markeredgecolor().lower() == figures.FIG4_EDGE_COLORS[key]
+            assert artist.get_markeredgewidth() >= 0.95
+            assert artist.get_markerfacecolor().lower() in (
+                figures.FIG4_COLORS[key], "white",
+            )
     plt.close(captured["fig"])
