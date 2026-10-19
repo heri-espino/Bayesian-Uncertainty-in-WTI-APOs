@@ -17,14 +17,14 @@ Optionally choose another output directory or subset of figures::
 
 Outputs
 -------
-fig01_mechanism_map.{pdf,svg}
+fig01_mechanism_map.{png,pdf,svg}
     When posterior integration matters and how the Taylor mechanism explains it.
-fig02_historical_vs_apo_implied_volatility.{pdf,svg}
+fig02_historical_vs_apo_implied_volatility.{png,pdf,svg}
     Historical posterior volatility versus APO-implied effective volatility and
     representative strike smiles.
-fig03_forward_q_cluster_bootstrap.{pdf,svg}
+fig03_forward_q_cluster_bootstrap.{png,pdf,svg}
     Strict forward-in-time pricing improvement with valuation-date cluster intervals.
-fig04_numerical_identification.{pdf,svg}
+fig04_numerical_identification.{png,pdf,svg}
     Agreement of Curran, high-precision pseudo-MC, and randomized Sobol PI--PM gaps.
 figure_manifest.json
     Source paths and plotting choices used for the build.
@@ -142,6 +142,7 @@ FIG2_COLORS = {
 FIG3_COLORS = {
     "expanding": "#a5d3ff",
     "previous_day": "#97001c",
+    "previous_day_edge": "#5c0010",
     "zero_line": "#555555",
 }
 
@@ -426,17 +427,15 @@ def _discover_monster_mechanism_run(explicit: Path | None) -> Path:
     return candidates[-1][2]
 
 
-def _panel_label(ax: plt.Axes, label: str) -> None:
-    ax.text(
-        -0.10,
-        1.015,
-        label,
-        transform=ax.transAxes,
-        fontsize=PUBLICATION_FONT_PT["panel_letter"],
-        fontweight="bold",
-        va="bottom",
-        ha="left",
-        color=NEUTRAL["dark"],
+def _panel_title(ax: plt.Axes, label: str, title: str) -> None:
+    """Inline bold panel label followed by a normal-weight panel title."""
+    ax.set_title(
+        rf"$\mathbf{{({label})}}$  {title}",
+        loc="left",
+        pad=4,
+        fontsize=PUBLICATION_FONT_PT["panel_title"],
+        fontweight="normal",
+        color=NEUTRAL["black"],
     )
 
 
@@ -494,9 +493,8 @@ def build_figure_1(
         line.set_clip_on(False)
     ax_a.set_xlabel("Historical observations $n$")
     ax_a.set_ylabel(r"Mean posterior SD of $\sigma$")
-    ax_a.set_title("Posterior dispersion")
+    _panel_title(ax_a, "A", "Posterior dispersion")
     ax_a.legend(ncol=2, frameon=False)
-    _panel_label(ax_a, "A")
 
     adverse = _closest_rows(summary, n_obs=MECHANISM_N, sigma_true=MECHANISM_SIGMA)
 
@@ -527,14 +525,9 @@ def build_figure_1(
     ax_b.set_yticklabels([f"{heat.index[i]:.3g}" for i in y_ids])
     ax_b.set_xlabel(r"Moneyness $K/F$")
     ax_b.set_ylabel("Fraction already fixed")
-    ax_b.set_title(
-        fr"Mean $|PI-PM|$: $n={MECHANISM_N}$, "
-        fr"$\sigma_0={MECHANISM_SIGMA:.2f}$, "
-        fr"$T={MECHANISM_HEATMAP_MATURITY_DAYS}$d"
-    )
+    _panel_title(ax_b, "B", r"Mean $|PI-PM|$ by option state")
     cbar = fig.colorbar(image, ax=ax_b, fraction=0.047, pad=0.04)
     cbar.set_label(r"Mean $|PI-PM|$")
-    _panel_label(ax_b, "B")
 
     # C. Partial fixing for extreme moneyness, separated by maturity.
     curve = adverse.loc[
@@ -560,13 +553,8 @@ def build_figure_1(
         )
     ax_c.set_xlabel("Fraction already fixed")
     ax_c.set_ylabel(r"Mean $|PI-PM|$")
-    ax_c.set_title(
-        fr"Partial fixing: $n={MECHANISM_N}$, "
-        fr"$\sigma_0={MECHANISM_SIGMA:.2f}$, "
-        fr"$K/F={MECHANISM_MONEYNESS:.2f}$"
-    )
+    _panel_title(ax_c, "C", "Partial fixing by maturity")
     ax_c.legend(frameon=False)
-    _panel_label(ax_c, "C")
 
     # D. Taylor mechanism across every synthetic cell.
     x = summary["mean_taylor_gap"].to_numpy(dtype=float)
@@ -596,10 +584,9 @@ def build_figure_1(
         r"\mathrm{Var}(\sigma\mid D)$"
     )
     ax_d.set_ylabel(r"Actual mean $PI-PM$")
-    ax_d.set_title(fr"Second-order mechanism ($r={corr:.4f}$)")
+    _panel_title(ax_d, "D", fr"Second-order mechanism ($r={corr:.4f}$)")
     cbar2 = fig.colorbar(hb, ax=ax_d, fraction=0.047, pad=0.04)
     cbar2.set_label("Cell count")
-    _panel_label(ax_d, "D")
 
     _apply_suptitle(fig, "When posterior integration matters")
     _align_numeric_axes(fig)
@@ -657,7 +644,6 @@ def _plot_sigma_timeseries(ax: plt.Axes, by_date: pd.DataFrame, expiry: str) -> 
         for line in ax.lines:
             line.set_clip_on(False)
     ax.set_ylabel("Annualized volatility")
-    ax.set_title(f"{expiry} expiry")
     ax.tick_params(axis="x", rotation=20)
     ax.legend(frameon=False)
 
@@ -718,7 +704,6 @@ def _plot_smile(
     )
     ax.set_xlabel(r"Log moneyness $\log(K/\widehat A^Q)$")
     ax.set_ylabel("APO-implied volatility")
-    ax.set_title(str(date.date()))
     ax.legend(frameon=False, ncol=2)
     return {"sigma_p": sigma_p, "sigma_q": sigma_q, "contracts": int(len(day))}
 
@@ -734,14 +719,14 @@ def build_figure_2(
 
     fig, axes = plt.subplots(2, 2, figsize=_word_figsize(2))
     _plot_sigma_timeseries(axes[0, 0], by_date, "2026-09")
-    _panel_label(axes[0, 0], "A")
+    _panel_title(axes[0, 0], "A", "2026-09 expiry")
     _plot_sigma_timeseries(axes[0, 1], by_date, "2026-10")
-    _panel_label(axes[0, 1], "B")
+    _panel_title(axes[0, 1], "B", "2026-10 expiry")
 
     smile_meta: dict[str, object] = {}
     for ax, date, label in zip(axes[1], SMILE_DATES, ("C", "D"), strict=True):
         smile_meta[str(date.date())] = _plot_smile(ax, contracts, by_date, date)
-        _panel_label(ax, label)
+        _panel_title(ax, label, str(date.date()))
 
     _apply_suptitle(fig, "Historical and APO-implied effective volatility")
     _align_numeric_axes(fig, date_axes=(axes[0, 0], axes[0, 1]))
@@ -820,7 +805,7 @@ def _forest_panel(
         marker_edge = (
             NEUTRAL["dark"]
             if experiment == "forward_q_expanding_smile"
-            else color
+            else FIG3_COLORS["previous_day_edge"]
         )
         ax.errorbar(
             value,
@@ -861,7 +846,6 @@ def _forest_panel(
         fr"{metric.upper()}_{{\mathrm{{forward}}}}-"
         fr"{metric.upper()}_{{\mathrm{{historical\ PI}}}}$"
     )
-    ax.set_title(f"{metric.upper()} difference by expiry")
     ax.legend(frameon=False)
 
 
@@ -872,9 +856,9 @@ def build_figure_3(
     boot = pd.read_csv(BOOTSTRAP_PATH)
     fig, axes = plt.subplots(1, 2, figsize=_word_figsize(3), sharey=True)
     _forest_panel(axes[0], boot, metric="mae")
-    _panel_label(axes[0], "A")
+    _panel_title(axes[0], "A", "MAE difference by expiry")
     _forest_panel(axes[1], boot, metric="rmse")
-    _panel_label(axes[1], "B")
+    _panel_title(axes[1], "B", "RMSE difference by expiry")
     _apply_suptitle(fig, "Forward-in-time volatility comparisons across expiries")
     _align_numeric_axes(fig, categorical_y_axes=tuple(axes))
     outputs = _save(fig, output_dir / "fig03_forward_q_cluster_bootstrap", formats)
@@ -968,9 +952,8 @@ def build_figure_4(
             label=label,
         )
     ax_top.set_ylabel(r"$PI-PM$ price difference")
-    ax_top.set_title("Independent pricing engines recover the same integration gap")
+    _panel_title(ax_top, "A", "Pricing engine comparison")
     ax_top.legend(frameon=False, ncol=3)
-    _panel_label(ax_top, "A")
 
     curran = matched["curran_pi_minus_pm_mc"].to_numpy(dtype=float)
     deviations = [
@@ -1018,7 +1001,7 @@ def build_figure_4(
     ax_bottom.set_ylabel(r"Difference from Curran ($\times 10^6$)")
     ax_bottom.set_xlabel("Empirical target")
     ax_bottom.legend(frameon=False, ncol=2)
-    _panel_label(ax_bottom, "B")
+    _panel_title(ax_bottom, "B", "Deviation from Curran")
 
     labels = [_target_label(row) for _, row in matched.iterrows()]
     ax_bottom.set_xticks(x)
@@ -1046,7 +1029,7 @@ def parse_args() -> argparse.Namespace:
         "--formats",
         nargs="+",
         choices=("pdf", "png", "svg"),
-        default=("pdf", "svg"),
+        default=("png", "pdf", "svg"),
     )
     parser.add_argument(
         "--figures",
