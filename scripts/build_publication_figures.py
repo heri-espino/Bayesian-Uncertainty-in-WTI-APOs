@@ -152,6 +152,13 @@ FIG4_COLORS = {
     "sobol": "#97001c",
 }
 
+# Darker outlines preserve marker shape against colored lines and white paper.
+FIG4_EDGE_COLORS = {
+    "pseudo_mc": "#5f3d00",
+    "curran": "#005aa8",
+    "sobol": "#5c0010",
+}
+
 SIGMA_STYLES = {
     0.10: {"color": FIG1_DISCRETE[0], "linestyle": "-", "marker": "o", "filled": False},
     0.20: {"color": FIG1_DISCRETE[1], "linestyle": (0, (5, 2)), "marker": "s", "filled": False},
@@ -460,6 +467,61 @@ def _panel_title(ax: plt.Axes, label: str, title: str) -> None:
     )
 
 
+def _add_partial_fixing_zoom(
+    ax: plt.Axes, curve: pd.DataFrame,
+) -> plt.Axes:
+    """Show the near-zero PI--PM differences without changing the main axes.
+
+    The inset occupies the bottom-right of panel C, below the existing legend.
+    Plot it only after the main tight layout and numeric-axis alignment, so
+    global tick formatting cannot override the zoom's deliberately small
+    x/y ranges. The zoom window is explicitly outlined in the main panel.
+    """
+    zoom = ax.inset_axes((0.55, 0.10, 0.42, 0.41), zorder=9)
+    for maturity, group in curve.groupby("maturity_days", sort=True):
+        group = group.sort_values("fraction_fixed")
+        style = MATURITY_STYLES.get(
+            int(maturity),
+            {"color": NEUTRAL["dark"], "linestyle": "-", "marker": "o", "filled": False},
+        )
+        zoom.plot(
+            group["fraction_fixed"],
+            group["mean_abs_pi_minus_pm"],
+            marker=style["marker"],
+            linestyle=style["linestyle"],
+            color=style["color"],
+            markerfacecolor=style["color"] if style["filled"] else "white",
+            markeredgecolor=style["color"],
+            markeredgewidth=0.9,
+            markersize=3.6,
+            linewidth=1.0,
+            zorder=4,
+        )
+    zoom.set_xlim(0.65, 0.97)
+    zoom.set_ylim(-0.001, 0.023)
+    zoom.set_xticks((0.70, 0.90))
+    zoom.set_yticks((0.00, 0.01, 0.02))
+    zoom.tick_params(
+        axis="both", which="major",
+        labelsize=PUBLICATION_FONT_PT["tick"] - 0.6,
+        length=2.0, width=0.65, pad=1.0,
+    )
+    zoom.minorticks_off()
+    zoom.grid(True, color=NEUTRAL["grid"], linewidth=0.35, alpha=0.45)
+    zoom.set_facecolor("white")
+    for side in ("top", "right"):
+        zoom.spines[side].set_visible(False)
+    for side in ("bottom", "left"):
+        zoom.spines[side].set_color(NEUTRAL["dark"])
+        zoom.spines[side].set_linewidth(0.65)
+    zoom.set_title("Near-zero detail", fontsize=PUBLICATION_FONT_PT["tick"], pad=2)
+
+    # Outlined rectangle and subdued connectors show which original domain
+    # is magnified; no error bars or observations are removed from panel C.
+    ax.indicate_inset_zoom(zoom, edgecolor=NEUTRAL["mid"], alpha=0.65)
+    return zoom
+
+
 def _closest_rows(
     frame: pd.DataFrame,
     *,
@@ -630,6 +692,7 @@ def build_figure_1(
 
     _apply_suptitle(fig, "When posterior integration matters")
     _align_numeric_axes(fig)
+    _add_partial_fixing_zoom(ax_c, curve)
     outputs = _save(fig, output_dir / "fig01_mechanism_map", formats)
     metadata = {
         "mechanism_run": str(mechanism_run.relative_to(ROOT)),
@@ -952,6 +1015,7 @@ def build_figure_4(
             "o",
             FIG4_COLORS["pseudo_mc"],
             FIG4_COLORS["pseudo_mc"],
+            FIG4_EDGE_COLORS["pseudo_mc"],
         ),
         (
             "Curran",
@@ -960,6 +1024,7 @@ def build_figure_4(
             "D",
             FIG4_COLORS["curran"],
             FIG4_COLORS["curran"],
+            FIG4_EDGE_COLORS["curran"],
         ),
         (
             "Randomized Sobol",
@@ -968,10 +1033,11 @@ def build_figure_4(
             "s",
             FIG4_COLORS["sobol"],
             "white",
+            FIG4_EDGE_COLORS["sobol"],
         ),
     ]
 
-    for offset, (label, value, se, marker, color, facecolor) in zip(
+    for offset, (label, value, se, marker, color, facecolor, edgecolor) in zip(
         offsets, values, strict=True
     ):
         ax_top.errorbar(
@@ -984,8 +1050,8 @@ def build_figure_4(
             color=color,
             ecolor=color,
             markerfacecolor=facecolor,
-            markeredgecolor=NEUTRAL["dark"] if label.startswith("Pseudo-MC") else color,
-            markeredgewidth=0.95,
+            markeredgecolor=edgecolor,
+            markeredgewidth=1.0,
             capsize=2,
             label=label,
         )
@@ -1002,6 +1068,7 @@ def build_figure_4(
             "o",
             FIG4_COLORS["pseudo_mc"],
             FIG4_COLORS["pseudo_mc"],
+            FIG4_EDGE_COLORS["pseudo_mc"],
         ),
         (
             "Sobol minus Curran",
@@ -1010,9 +1077,10 @@ def build_figure_4(
             "s",
             FIG4_COLORS["sobol"],
             "white",
+            FIG4_EDGE_COLORS["sobol"],
         ),
     ]
-    for offset, (label, value, se, marker, color, facecolor) in zip(
+    for offset, (label, value, se, marker, color, facecolor, edgecolor) in zip(
         (-0.09, 0.09), deviations, strict=True
     ):
         ax_bottom.errorbar(
@@ -1025,8 +1093,8 @@ def build_figure_4(
             color=color,
             ecolor=color,
             markerfacecolor=facecolor,
-            markeredgecolor=color,
-            markeredgewidth=0.85,
+            markeredgecolor=edgecolor,
+            markeredgewidth=0.95,
             capsize=2,
             label=label,
         )
