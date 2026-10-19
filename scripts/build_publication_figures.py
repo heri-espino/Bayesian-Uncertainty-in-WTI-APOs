@@ -344,7 +344,7 @@ def _discover_monster_mechanism_run(explicit: Path | None) -> Path:
     candidates: list[tuple[int, str, Path]] = []
     for report_path in MECHANISM_ROOT.glob("*/mechanism_map_report.json"):
         report = json.loads(report_path.read_text(encoding="utf-8"))
-        if report.get("preset") != "monster":
+        if report.get("preset") not in {"monster", "ten-million"}:
             continue
         run_dir = report_path.parent
         if not (run_dir / "mechanism_map_summary.csv").exists():
