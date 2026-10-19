@@ -358,6 +358,27 @@ def _align_numeric_axes(
             _snap_numeric_axis_to_ticks(ax, "y")
 
 
+def _category_ticks_with_endpoints(ax: plt.Axes, axis: str, labels: list[str]) -> None:
+    """Put unlabeled boundary ticks at integer endpoints of category axes.
+
+    Actual category centers are 1..N; endpoints are 0 and N+1. This keeps
+    shifted marker/errorbar groups fully visible while giving both spines
+    a visible terminal tick and a clean shared lower-left corner.
+    """
+    positions = np.arange(len(labels) + 2, dtype=float)
+    printed = ["", *labels, ""]
+    if axis == "x":
+        ax.set_xticks(positions)
+        ax.set_xticklabels(printed, rotation=35, ha="right")
+        ax.set_xlim(positions[0], positions[-1])
+    elif axis == "y":
+        ax.set_yticks(positions)
+        ax.set_yticklabels(printed)
+        ax.set_ylim(positions[-1], positions[0])
+    else:
+        raise ValueError("axis must be x or y")
+
+
 def _apply_suptitle(fig: plt.Figure, text: str) -> None:
     """Apply one compact, in-canvas title and reserve a consistent top margin."""
     fig.suptitle(text, y=0.985, fontsize=PUBLICATION_FONT_PT["suptitle"])
@@ -486,6 +507,7 @@ def build_figure_1(
         )
     ax_a.set_xscale("log")
     ax_a.set_xticks([21, 63, 252, 1260])
+    ax_a.set_xticklabels(["21", "63", "252", "1260"])
     ax_a.xaxis.set_major_formatter(ScalarFormatter())
     ax_a.xaxis.set_minor_locator(NullLocator())
     ax_a.set_xlim(21, 1260)
@@ -548,8 +570,26 @@ def build_figure_1(
             color=style["color"],
             markerfacecolor=marker_face,
             markeredgecolor=style["color"],
-            markeredgewidth=0.85,
+            markeredgewidth=1.0,
+            markersize=5.5,
+            zorder=4,
+            clip_on=False,
             label=f"{int(maturity)} days",
+        )
+    # Re-mark the short-maturity blue curve over the other lines and the
+    # bottom spine. Its small positive gaps previously hid hollow circles.
+    short_maturity = curve.loc[curve["maturity_days"].eq(21)]
+    if not short_maturity.empty:
+        ax_c.scatter(
+            short_maturity["fraction_fixed"],
+            short_maturity["mean_abs_pi_minus_pm"],
+            marker="o",
+            s=36,
+            facecolors="white",
+            edgecolors=FIG1_DISCRETE[1],
+            linewidths=1.25,
+            zorder=8,
+            clip_on=False,
         )
     ax_c.set_xlabel("Fraction already fixed")
     ax_c.set_ylabel(r"Mean $|PI-PM|$")
@@ -787,7 +827,7 @@ def _forest_panel(
         & boot["sample"].eq("all")
         & boot["apo_expiry"].isin(expiry_order)
     ].copy()
-    y_base = np.arange(len(expiry_order), dtype=float)
+    y_base = np.arange(1, len(expiry_order) + 1, dtype=float)
     offsets = (-0.11, 0.11)
 
     for offset, (experiment, label, marker, color, facecolor) in zip(
@@ -838,9 +878,7 @@ def _forest_panel(
         color=FIG3_COLORS["zero_line"],
         zorder=0,
     )
-    ax.set_yticks(y_base)
-    ax.set_yticklabels(labels)
-    ax.invert_yaxis()
+    _category_ticks_with_endpoints(ax, "y", labels)
     ax.set_xlabel(
         fr"$\Delta {metric.upper()}="
         fr"{metric.upper()}_{{\mathrm{{forward}}}}-"
@@ -894,7 +932,7 @@ def build_figure_4(
         raise ValueError("No matched high-precision MC and randomized-QMC targets")
     matched = matched.sort_values(["valuation_date", "strike", "contract_id"]).reset_index(drop=True)
 
-    x = np.arange(len(matched), dtype=float)
+    x = np.arange(1, len(matched) + 1, dtype=float)
     offsets = (-0.18, 0.0, 0.18)
 
     fig, axes = plt.subplots(
@@ -1004,9 +1042,7 @@ def build_figure_4(
     _panel_title(ax_bottom, "B", "Deviation from Curran")
 
     labels = [_target_label(row) for _, row in matched.iterrows()]
-    ax_bottom.set_xticks(x)
-    ax_bottom.set_xticklabels(labels, rotation=35, ha="right")
-    ax_bottom.set_xlim(-0.5, len(labels) - 0.5)
+    _category_ticks_with_endpoints(ax_bottom, "x", labels)
 
     _apply_suptitle(fig, "Numerical identification of the posterior-integration effect")
     _align_numeric_axes(fig, categorical_x_axes=tuple(axes))
