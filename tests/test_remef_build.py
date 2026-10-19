@@ -177,3 +177,21 @@ def test_actual_pandoc_heading_text_is_supported(tmp_path):
     assert result.tables[0].cell(0, 1).text == "N"
     assert any("The REMEF studies examine" in p.text for p in result.paragraphs)
     assert any("no external funding" in p.text for p in result.paragraphs)
+
+
+def test_remef_manual_workflow_produces_math_reference_not_broken_lo_pdf():
+    """Guard against regressing to LibreOffice-only rendering of Word OMML."""
+    path = ROOT / ".github" / "workflows" / "build-remef.yml"
+    workflow = path.read_text(encoding="utf-8")
+    assert "workflow_dispatch:" in workflow
+    assert "on:\\n  push:" not in workflow
+    assert "ubuntu-24.04" in workflow
+    for action in ("actions/checkout@v5", "actions/setup-python@v6",
+                   "actions/upload-artifact@v6"):
+        assert action in workflow
+    assert "--from=docx --to=pdf --pdf-engine=xelatex" in workflow
+    assert "remef_math_reference.pdf" in workflow
+    assert "unicodedata.normalize(" in workflow
+    assert "lo_layout" in workflow
+    assert "Greek math symbols are absent from PDF preview" not in workflow
+    assert "            paper/remef/build/remef_blinded_draft.pdf" not in workflow

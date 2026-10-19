@@ -9,17 +9,17 @@ permissions:
 jobs:
   word:
     name: REMEF editable Word draft and preview
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
 
     steps:
       - name: Check out exact selected revision
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           lfs: true
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.11"
           cache: "pip"
@@ -28,7 +28,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-            pandoc libreoffice-writer poppler-utils
+            pandoc libreoffice-writer poppler-utils texlive-xetex texlive-latex-recommended texlive-latex-extra fonts-liberation
 
       - name: Install project and Word dependency
         run: |
@@ -118,34 +118,83 @@ jobs:
           print("REMEF structure, APA, editable math, author metadata, declarations and blinding passed.")
           PY
 
-      - name: Make visual QA preview and check page cap
+      # LibreOffice 24.2 can drop native OMML mathematical glyphs on PDF export.
+      # Keep the editable Word document as the submission deliverable.
+      # Use LibreOffice ONLY for a conservative pagination/layout check.
+      # Independently typeset mathematical content from the SAME DOCX using
+      # Pandoc + XeLaTeX, so formulas remain visible in the reference PDF.
+      - name: Generate pagination check and mathematical-content PDF reference
         run: |
-          mkdir -p paper/remef/build/lo_profile
+          mkdir -p paper/remef/build/lo_layout
           libreoffice -env:UserInstallation=file:///tmp/lo_remef --headless \
-            --convert-to pdf --outdir paper/remef/build \
+            --convert-to pdf --outdir paper/remef/build/lo_layout \
             paper/remef/build/remef_blinded_draft.docx
-          pdfinfo paper/remef/build/remef_blinded_draft.pdf | head -n 20
-          # Previous version lost every Word equation during LibreOffice PDF export.
-          # This detects a regression instead of silently accepting a short PDF.
-          pdftotext paper/remef/build/remef_blinded_draft.pdf paper/remef/build/preview.txt
-          if ! grep -q 'σ' paper/remef/build/preview.txt; then
-            echo "::error::Greek math symbols are absent from PDF preview"
-            exit 1
-          fi
-          pages=$(pdfinfo paper/remef/build/remef_blinded_draft.pdf | awk '/^Pages:/ {print $2}')
-          if [ "$pages" -gt 25 ]; then
-            echo "::warning::The draft is $pages pages; REMEF limit is 25."
-            exit 1
-          fi
+          pandoc paper/remef/build/remef_blinded_draft.docx \
+            --from=docx --to=pdf --pdf-engine=xelatex \
+            -V mainfont="Liberation Serif" \
+            -V papersize=letter \
+            -V geometry:margin=1in \
+            -o paper/remef/build/remef_math_reference.pdf
+
+          # Important: the Pandoc PDF is a mathematical CONTENT reference, not
+          # a pixel-perfect rendering of the Word layout.
+          pdftotext -layout paper/remef/build/remef_math_reference.pdf \
+            paper/remef/build/math_reference_text.txt
+          python - <<'PY'
+          import re
+          import subprocess
+          import unicodedata
+          from pathlib import Path
+          from zipfile import ZipFile
+
+          out = Path("paper/remef/build")
+          word = out / "remef_blinded_draft.docx"
+          layout_pdf = out / "lo_layout" / "remef_blinded_draft.pdf"
+          math_pdf = out / "remef_math_reference.pdf"
+
+          def page_count(path):
+              info = subprocess.check_output(["pdfinfo", str(path)], text=True)
+              match = re.search(r"^Pages:\s*(\d+)$", info, re.M)
+              if not match:
+                  raise SystemExit(f"Cannot determine PDF page count: {path}")
+              return int(match.group(1))
+
+          # Both references must respect REMEF's 25-page limit.
+          for pdf, label in ((layout_pdf, "LibreOffice pagination"),
+                             (math_pdf, "XeLaTeX mathematical reference")):
+              pages = page_count(pdf)
+              print(f"{label}: {pages} pages")
+              if pages > 25:
+                  raise SystemExit(f"{label} exceeds REMEF's 25-page limit")
+
+          # pdftotext often represents italic Greek mathematical letters with
+          # U+1D70E-style Unicode. NFKC folds those back to plain Greek letters.
+          text = unicodedata.normalize(
+              "NFKC", (out / "math_reference_text.txt").read_text(encoding="utf-8")
+          )
+          for symbol in ("σ", "μ"):
+              if symbol not in text:
+                  raise SystemExit(
+                      f"Mathematical content missing from XeLaTeX reference: {symbol}"
+                  )
+          if "Physical-measure inference" not in text:
+              raise SystemExit("Methodology content missing from math reference")
+          with ZipFile(word) as z:
+              xml = z.read("word/document.xml").decode("utf-8")
+              if xml.count("<m:oMath") < 30:
+                  raise SystemExit("Native Word equation objects are missing")
+          print("Native Word equations and visible XeLaTeX mathematics verified.")
+          print("Review Word layout in Microsoft Word before submission.")
+          PY
 
       - name: Upload REMEF review draft
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: remef-wti-apo-draft-${{ github.sha }}
           path: |
             paper/remef/build/remef_blinded_draft.docx
             paper/remef/build/remef_author_draft.docx
-            paper/remef/build/remef_blinded_draft.pdf
+            paper/remef/build/remef_math_reference.pdf
           if-no-files-found: warn
           retention-days: 30
