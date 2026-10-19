@@ -601,12 +601,18 @@ def build_figure_1(
         rasterized=True,
     )
     ax_b.grid(False)
-    x_ids = np.unique(np.linspace(0, len(heat.columns) - 1, min(5, len(heat.columns))).round().astype(int))
-    y_ids = np.unique(np.linspace(0, len(heat.index) - 1, min(5, len(heat.index))).round().astype(int))
-    ax_b.set_xticks(x_ids)
-    ax_b.set_xticklabels([f"{heat.columns[i]:.2f}" for i in x_ids], rotation=30, ha="right")
-    ax_b.set_yticks(y_ids)
-    ax_b.set_yticklabels([f"{heat.index[i]:.3g}" for i in y_ids])
+    # Show the complete simulated design grid (not sampled tick labels).
+    # Small type and vertical labels avoid overlaps at Word column width.
+    ax_b.set_xticks(np.arange(len(heat.columns)))
+    ax_b.set_xticklabels(
+        [f"{value:.2f}" for value in heat.columns], rotation=65, ha="right",
+        fontsize=PUBLICATION_FONT_PT["tick"] - 0.6,
+    )
+    ax_b.set_yticks(np.arange(len(heat.index)))
+    ax_b.set_yticklabels(
+        [f"{value:.3g}" for value in heat.index],
+        fontsize=PUBLICATION_FONT_PT["tick"] - 0.6,
+    )
     ax_b.set_xlabel(r"Moneyness $K/F$")
     ax_b.set_ylabel("Fraction already fixed")
     _panel_title(ax_b, "B", r"Mean $|PI-PM|$ by option state")
@@ -671,15 +677,6 @@ def build_figure_1(
         linewidths=0.0,
         rasterized=True,
     )
-    lo = float(min(x[finite].min(), y[finite].min()))
-    hi = float(max(x[finite].max(), y[finite].max()))
-    ax_d.plot(
-        [lo, hi],
-        [lo, hi],
-        linestyle="--",
-        linewidth=1.15,
-        color=NEUTRAL["black"],
-    )
     corr = float(np.corrcoef(x[finite], y[finite])[0, 1])
     ax_d.set_xlabel(
         r"Taylor prediction $\frac{1}{2}C^{Q\prime\prime}(\bar\sigma)"
@@ -692,6 +689,32 @@ def build_figure_1(
 
     _apply_suptitle(fig, "When posterior integration matters")
     _align_numeric_axes(fig)
+
+    # Explicit publication zoom ranges: apply AFTER automatic tick alignment.
+    # Ticks end exactly on the requested bounds.
+    ax_a.set_yticks((0.00, 0.05, 0.10, 0.15))
+    ax_a.set_ylim(0.0, 0.15)
+    ax_c.set_xticks((0.0, 0.5, 1.0, 1.5))
+    ax_c.set_yticks((0.00, 0.05, 0.10, 0.15))
+    ax_c.set_xlim(0.0, 1.5)
+    ax_c.set_ylim(0.0, 0.15)
+
+    # The identity line must extend from corner to corner, not stop at the
+    # observed minimum/maximum. Shared x/y limits preserve unit slope.
+    xy_min = float(min(x[finite].min(), y[finite].min()))
+    xy_max = float(max(x[finite].max(), y[finite].max()))
+    pad = 0.04 * max(xy_max - xy_min, 1e-8)
+    d_locator = MaxNLocator(nbins=4, min_n_ticks=3, steps=[1, 2, 2.5, 5, 10])
+    d_ticks = d_locator.tick_values(xy_min - pad, xy_max + pad)
+    ax_d.set_xticks(d_ticks)
+    ax_d.set_yticks(d_ticks)
+    ax_d.set_xlim(float(d_ticks[0]), float(d_ticks[-1]))
+    ax_d.set_ylim(float(d_ticks[0]), float(d_ticks[-1]))
+    ax_d.axline(
+        (0.0, 0.0), slope=1.0,
+        linestyle="--", linewidth=1.0, color=NEUTRAL["black"],
+        zorder=5,
+    )
     _add_partial_fixing_zoom(ax_c, curve)
     outputs = _save(fig, output_dir / "fig01_mechanism_map", formats)
     metadata = {
@@ -833,6 +856,13 @@ def build_figure_2(
 
     _apply_suptitle(fig, "Historical and APO-implied effective volatility")
     _align_numeric_axes(fig, date_axes=(axes[0, 0], axes[0, 1]))
+
+    # Preserve the explicitly requested zooms even when the generic clean
+    # tick alignment would otherwise expand their limits.
+    axes[0, 0].set_yticks((0.40, 0.45, 0.50, 0.55, 0.60))
+    axes[0, 0].set_ylim(0.4, 0.6)
+    axes[1, 0].set_yticks((0.3, 0.4, 0.5, 0.6, 0.7, 0.8))
+    axes[1, 0].set_ylim(0.3, 0.8)
     outputs = _save(
         fig,
         output_dir / "fig02_historical_vs_apo_implied_volatility",
@@ -1001,9 +1031,9 @@ def build_figure_4(
     fig, axes = plt.subplots(
         2,
         1,
-        figsize=_word_figsize(4),
+        figsize=(WORD_TEXT_WIDTH_IN, WORD_TEXT_WIDTH_IN),
         sharex=True,
-        gridspec_kw={"height_ratios": [2.1, 1.0]},
+        gridspec_kw={"height_ratios": [1.0, 1.0]},
     )
     ax_top, ax_bottom = axes
 
@@ -1114,6 +1144,8 @@ def build_figure_4(
 
     _apply_suptitle(fig, "Numerical identification of the posterior-integration effect")
     _align_numeric_axes(fig, categorical_x_axes=tuple(axes))
+    ax_bottom.set_yticks((-15.0, 0.0, 15.0))
+    ax_bottom.set_ylim(-15.0, 15.0)
     outputs = _save(fig, output_dir / "fig04_numerical_identification", formats)
     return outputs, {
         "matched_targets": int(len(matched)),
