@@ -497,9 +497,9 @@ def _add_partial_fixing_zoom(
             linewidth=1.0,
             zorder=4,
         )
-    zoom.set_xlim(0.65, 0.97)
+    zoom.set_xlim(0.75, 1.00)
     zoom.set_ylim(-0.001, 0.023)
-    zoom.set_xticks((0.70, 0.90))
+    zoom.set_xticks((0.75, 0.875, 1.00))
     zoom.set_yticks((0.00, 0.01, 0.02))
     zoom.tick_params(
         axis="both", which="major",
@@ -694,9 +694,9 @@ def build_figure_1(
     # Ticks end exactly on the requested bounds.
     ax_a.set_yticks((0.00, 0.05, 0.10, 0.15))
     ax_a.set_ylim(0.0, 0.15)
-    ax_c.set_xticks((0.0, 0.5, 1.0, 1.5))
+    ax_c.set_xticks((0.0, 0.5, 1.0, 1.5, 2.0, 2.5))
     ax_c.set_yticks((0.00, 0.05, 0.10, 0.15))
-    ax_c.set_xlim(0.0, 1.5)
+    ax_c.set_xlim(0.0, 2.5)
     ax_c.set_ylim(0.0, 0.15)
 
     # The identity line must extend from corner to corner, not stop at the
@@ -863,6 +863,8 @@ def build_figure_2(
     axes[0, 0].set_ylim(0.4, 0.6)
     axes[1, 0].set_yticks((0.3, 0.4, 0.5, 0.6, 0.7, 0.8))
     axes[1, 0].set_ylim(0.3, 0.8)
+    axes[1, 0].set_xticks((-0.5, -0.25, 0.0, 0.25, 0.5, 0.75))
+    axes[1, 0].set_xlim(-0.5, 0.75)
     outputs = _save(
         fig,
         output_dir / "fig02_historical_vs_apo_implied_volatility",
@@ -1033,7 +1035,7 @@ def build_figure_4(
         1,
         figsize=(WORD_TEXT_WIDTH_IN, WORD_TEXT_WIDTH_IN),
         sharex=True,
-        gridspec_kw={"height_ratios": [1.0, 1.0]},
+        gridspec_kw={"height_ratios": [0.78, 1.22]},
     )
     ax_top, ax_bottom = axes
 
@@ -1144,7 +1146,7 @@ def build_figure_4(
 
     _apply_suptitle(fig, "Numerical identification of the posterior-integration effect")
     _align_numeric_axes(fig, categorical_x_axes=tuple(axes))
-    ax_bottom.set_yticks((-15.0, 0.0, 15.0))
+    ax_bottom.set_yticks((-15.0, -10.0, -5.0, 0.0, 5.0, 10.0, 15.0))
     ax_bottom.set_ylim(-15.0, 15.0)
     outputs = _save(fig, output_dir / "fig04_numerical_identification", formats)
     return outputs, {

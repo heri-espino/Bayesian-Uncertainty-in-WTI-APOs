@@ -300,12 +300,12 @@ def test_figure1_panel_c_zoom_is_inset_and_preserves_main_domain(tmp_path: Path)
     old = (ax.get_xlim(), ax.get_ylim())
     inset = figures._add_partial_fixing_zoom(ax, curve)
     assert inset in ax.child_axes
-    assert tuple(round(v, 3) for v in inset.get_xlim()) == (0.65, 0.97)
+    assert tuple(round(v, 3) for v in inset.get_xlim()) == (0.75, 1.0)
     assert tuple(round(v, 3) for v in inset.get_ylim()) == (-0.001, 0.023)
     assert len(inset.lines) == 3
     assert inset.lines[0].get_marker() == "o"
     assert inset.lines[0].get_markerfacecolor() == "white"
-    assert len(inset.get_xticks()) == 2
+    assert np.allclose(inset.get_xticks(), [0.75, 0.875, 1.0])
     assert len(inset.get_yticks()) == 3
     assert np.allclose(ax.get_xlim(), old[0])
     assert np.allclose(ax.get_ylim(), old[1])
@@ -367,7 +367,8 @@ def test_requested_figure1_ranges_full_heatmap_and_identity_line(
     a, b, c, d = figure["fig"].axes[:4]
     assert np.allclose(a.get_ylim(), [0.0, 0.15])
     assert np.allclose(c.get_ylim(), [0.0, 0.15])
-    assert np.allclose(c.get_xlim(), [0.0, 1.5])
+    assert np.allclose(c.get_xlim(), [0.0, 2.5])
+    assert np.allclose(c.get_xticks(), [0.0, 0.5, 1.0, 1.5, 2.0, 2.5])
 
     heat = b.images[0].get_array()
     assert len(b.get_xticks()) == heat.shape[1]
@@ -401,10 +402,14 @@ def test_requested_figure2_explicit_a_and_c_ylims(tmp_path: Path, monkeypatch) -
     axes = figure["fig"].axes
     assert np.allclose(axes[0].get_ylim(), [0.4, 0.6])
     assert np.allclose(axes[2].get_ylim(), [0.3, 0.8])
+    assert np.allclose(axes[2].get_xlim(), [-0.5, 0.75])
+    assert np.allclose(
+        axes[2].get_xticks(), [-0.5, -0.25, 0.0, 0.25, 0.5, 0.75]
+    )
     plt.close(figure["fig"])
 
 
-def test_requested_figure4_square_dashboard_and_equal_heights(
+def test_requested_figure4_square_dashboard_and_taller_panel_b(
     tmp_path: Path, monkeypatch,
 ) -> None:
     import matplotlib.pyplot as plt
@@ -422,8 +427,15 @@ def test_requested_figure4_square_dashboard_and_equal_heights(
     width, height = fig.get_size_inches()
     assert np.isclose(width, height)
     assert np.isclose(width, figures.WORD_TEXT_WIDTH_IN)
-    assert list(a.get_gridspec().get_height_ratios()) == [1.0, 1.0]
+    assert list(a.get_gridspec().get_height_ratios()) == [0.78, 1.22]
     assert np.allclose(b.get_ylim(), [-15.0, 15.0])
-    assert np.allclose(b.get_yticks(), [-15.0, 0.0, 15.0])
-    assert np.isclose(a.get_position().height, b.get_position().height)
+    assert np.allclose(
+        b.get_yticks(), [-15.0, -10.0, -5.0, 0.0, 5.0, 10.0, 15.0]
+    )
+    assert a.get_position().height < b.get_position().height
+    assert np.isclose(
+        a.get_position().height / b.get_position().height,
+        0.78 / 1.22,
+        rtol=1e-6,
+    )
     plt.close(fig)
