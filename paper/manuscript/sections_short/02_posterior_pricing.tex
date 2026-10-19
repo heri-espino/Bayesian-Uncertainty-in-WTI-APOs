@@ -83,6 +83,6 @@ The two quantities have different local orders in posterior dispersion. The PI--
 
 \subsection{Synthetic mechanism experiment}
 
-The synthetic experiment is designed to vary the two ingredients in Equation~\eqref{eq:short_taylor}. It contains 175,000 independently generated return histories across historical sample sizes from 21 to 1,260 observations and annual volatility levels from 0.10 to 0.80. The option layer varies maturity, moneyness, and the fraction of the arithmetic average already fixed. For each history and contract state, the experiment computes the actual PI--PM difference, posterior variance of volatility, local price curvature, and the second-order approximation.
+The synthetic experiment is designed to vary the two ingredients in Equation~\eqref{eq:short_taylor}. It contains 10 million simulated return histories, generated with root seed 2468 and distributed over 35 combinations of historical sample size (21 to 1,260 observations) and annual volatility (0.10 to 0.80). We evaluate 168 option states varying maturity, moneyness, and the fraction of the arithmetic average already fixed. For each history and option state, we calculate the PI--PM difference, posterior volatility variance, local price curvature, and the second-order approximation. The volatility posterior is evaluated on a 4,097-point grid; computations are batched without changing the model or pricing grid.
 
 This design isolates the conditions under which posterior integration matters and tests the curvature--variance approximation independently of market pricing errors.

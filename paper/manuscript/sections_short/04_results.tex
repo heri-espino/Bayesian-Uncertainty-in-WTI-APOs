@@ -2,7 +2,7 @@
 
 \subsection{When does posterior integration matter?}
 
-Figure~\ref{fig:short_mechanism} shows how the PI--PM difference varies across the synthetic design. The largest differences occur with short estimation windows, high volatility, long maturities, few realized fixings, and pronounced price curvature. The maximum absolute difference is 0.1384 for a normalized \$100 forward, and the largest within-cell 99th percentile is 0.1271. Both exceed the differences observed in the October-2026 sample.
+Figure~\ref{fig:short_mechanism} shows how the PI--PM difference varies across the synthetic design. The largest differences occur with short estimation windows, high volatility, long maturities, few realized fixings, and pronounced price curvature. Across the 10 million synthetic histories, the maximum observed absolute difference is 0.1565 for a normalized \$100 forward, and the largest within-cell 99th percentile is 0.1273. These extremes exceed the differences observed in the October-2026 sample. The sample maximum depends on the number of simulated histories; the within-cell percentile is less sensitive to rare simulated outcomes.
 
 The second-order approximation tracks the simulated differences closely: the correlation between cell-level mean PI--PM differences and the curvature--variance term is 0.9995. Through-origin slopes are also close to one in the most extreme settings. These results support posterior variance and price curvature as the principal local determinants of the difference.
 
@@ -10,8 +10,8 @@ The PI--PM difference generally declines as the share of realized fixings increa
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=\textwidth]{figures/publication/fig01_mechanism_map.pdf}
-\caption{Posterior integration across synthetic WTI-like states. Panel A shows posterior dispersion against historical sample size. Panels B and C show how the absolute PI--PM difference varies with moneyness and the fraction of the averaging period already fixed. Panel D compares cell-level mean PI--PM differences with the corresponding second-order approximation in Equation~\eqref{eq:short_taylor}; the correlation is 0.9995. The color bar labeled \textit{Cell count} records how many synthetic scenario cells fall in each hexagonal bin of Panel D.}
+\includegraphics[width=\textwidth]{figures/publication/ten_million/fig01_mechanism_map.pdf}
+\caption{Posterior integration across 10 million synthetic return histories and WTI-like option states (root seed 2468). Panel A shows posterior dispersion by historical sample size. Panels B and C show the absolute PI--PM difference across moneyness and the realized-fixing fraction. Panel D compares mean PI--PM differences for 5,880 scenario cells with the second-order approximation in Equation~\eqref{eq:short_taylor}; the cell-level correlation is 0.9995. The color bar shows the number of scenario cells per hexagonal bin.}
 \label{fig:short_mechanism}
 \end{figure*}
 
