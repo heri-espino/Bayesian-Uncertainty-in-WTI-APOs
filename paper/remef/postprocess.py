@@ -51,7 +51,8 @@ def repair_equation_references(doc):
     for paragraph in doc.paragraphs:
         for run in paragraph.runs:
             for old, replacement in substitutions:
-                run.text = run.text.replace(old, replacement)
+                if old in run.text:
+                    run.text = run.text.replace(old, replacement)
 
 def adapt_sections(doc):
     """Five REMEF-style scientific sections; preserve scientific paragraphs and formulas."""
