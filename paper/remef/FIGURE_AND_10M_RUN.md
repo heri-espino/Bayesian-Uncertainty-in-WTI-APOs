@@ -142,3 +142,29 @@ Figure 2 (outlined square/circle harmonization) and figures 3–4 still
 require regeneration from their saved empirical summary tables before
 the final Word build. Do not replace existing embedded DOCX figures
 with previews on a different branch without reviewing the final documents.
+
+
+## Native Times New Roman figure revision — 2026-10-19
+
+The four plots use a consistent point hierarchy at 6.1375 inches:
+suptitle 9, panel title 8, axes 7.3, major ticks 6.5, legends 6.5,
+and panel labels 7.5. The CLI **requires actual Times New Roman**.
+The preview-only --allow-font-fallback flag never produces submission-ready
+artwork. SVG retains editable text and PDF uses embedded TrueType.
+Axis endpoints expand to regular numeric ticks **without clipping data or
+confidence intervals**; date, log, heatmap and categorical axes are treated
+separately. External style packages are not necessary.
+
+On the Windows VM, once this branch is merged into main, run:
+
+    git switch main
+    git pull --ff-only
+    git sparse-checkout add results figures
+    conda run --no-capture-output -n asian-options python -m pytest tests/test_publication_figures.py -q
+    conda run --no-capture-output -n asian-options python -m scripts.build_publication_figures --figures 1 2 3 4 --formats pdf svg --mechanism-run results/analysis/massive_mechanism_map/6e23d5aabc519982 --output-dir figures/publication
+
+Inspect the four PDFs and four SVGs and confirm font_mode =
+times-new-roman in figures/publication/figure_manifest.json. Version only
+those eight PDF/SVG files and that manifest; do not stage raw market data
+or checkpoint archives. The REMEF Word builder must be run separately only
+after final figures are available and reviewed.
