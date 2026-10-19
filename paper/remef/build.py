@@ -17,12 +17,14 @@ import shutil
 import subprocess
 import tempfile
 from pathlib import Path
+from xml.etree import ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent
 SHORT = ROOT / "paper" / "manuscript" / "sections_short"
 FIGURES = ROOT / "figures" / "publication"
 BUILD = HERE / "build"
+SVG_DIR = BUILD / "vector_figures"
 BODY_SECTIONS = [
     SHORT / "02_posterior_pricing.tex",
     SHORT / "03_data_design.tex",
@@ -44,8 +46,10 @@ CAPTION_RE = re.compile(r"\\caption\{((?:[^{}]|\{[^{}]*\})*)\}", re.DOTALL)
 def validate() -> None:
     paths = [HERE / "frontmatter.tex", HERE / "introduction.tex", HERE / "apa.csl", HERE / "postprocess.py", *BODY_SECTIONS, *REFERENCES]
     paths.extend(FIGURES / name for name in [
-        "fig01_mechanism_map.png",
-        "fig03_forward_q_cluster_bootstrap.png",
+        "ten_million/fig01_mechanism_map.pdf",
+        "fig02_historical_vs_apo_implied_volatility.pdf",
+        "fig03_forward_q_cluster_bootstrap.pdf",
+        "fig04_numerical_identification.pdf",
     ])
     missing = [str(p.relative_to(ROOT)) for p in paths if not p.is_file()]
     if missing:
@@ -96,17 +100,104 @@ def _rewrite_figures(tex: str, labels: dict[str, str]) -> str:
         if caption is None or path_match is None or not ids:
             raise ValueError("Figure without caption, image path, or label")
         source = Path(path_match.group(1))
-        img = source.with_suffix(".png")
-        if not (ROOT / img).is_file():
-            raise ValueError(f"Missing 300-dpi PNG version of {source}")
+        pdf = ROOT / source
+        if source.suffix.lower() != ".pdf" or not pdf.is_file():
+            raise ValueError(f"Missing vector PDF source: {source}")
+        img = SVG_DIR / (source.stem + ".svg")
         n = labels[ids[0]]
         cap = caption.group(1)
         return (r"\begin{center}" + "\n" +
-                r"\includegraphics[width=0.94\linewidth]{" + img.as_posix() + "}\n" +
+                r"\includegraphics[width=0.94\linewidth]{" + img.relative_to(ROOT).as_posix() + "}\n" +
                 r"\end{center}" + "\n" +
                 r"\noindent\textbf{Figure " + n + ".} " + cap + "\n" +
                 r"\noindent\textit{Source: Authors' calculations from the recorded experiment outputs.}" + "\n")
     return FIG_RE.sub(convert, tex)
+
+
+
+def _sanitize_and_repair_svg(path: Path, *, repair_figure_3: bool = False) -> None:
+    """Remove inherited PDF metadata; repair Figure 3's clipped top heading.
+
+    Conversion from the committed vector PDF retains paths, text outlines,
+    axes and hybrid raster artists. A white band replaces the originally
+    cropped Figure 3 heading, and clean centered SVG text is drawn below the
+    top edge. No numerical data or plotting coordinates are changed.
+    """
+    ns = "http://www.w3.org/2000/svg"
+    ET.register_namespace("", ns)
+    ET.register_namespace("xlink", "http://www.w3.org/1999/xlink")
+    tree = ET.parse(path)
+    root = tree.getroot()
+    for parent in root.iter():
+        for child in list(parent):
+            if child.tag.split("}")[-1].lower() in {"metadata", "desc"}:
+                parent.remove(child)
+    if repair_figure_3:
+        box = root.attrib.get("viewBox")
+        if not box:
+            raise ValueError(f"SVG lacks viewBox for title correction: {path}")
+        x, y, width, height = [float(part) for part in box.split()]
+        # The original PDF clipped its title above the top page edge.
+        # The upper 12% is white space preceding both chart panels.
+        ET.SubElement(root, f"{{{ns}}}rect", {
+            "x": str(x), "y": str(y),
+            "width": str(width), "height": str(0.12 * height),
+            "fill": "#ffffff",
+        })
+        title = ET.SubElement(root, f"{{{ns}}}text", {
+            "x": str(x + width / 2), "y": str(y + 0.072 * height),
+            "text-anchor": "middle",
+            "font-family": "Times New Roman",
+            "font-size": "10.5",
+            "fill": "#111111",
+        })
+        title.text = "Forward-in-time volatility comparisons across expiries"
+    tree.write(path, encoding="utf-8", xml_declaration=True)
+    # The blinded copy must not receive the source PDF's Author metadata.
+    data = path.read_text(encoding="utf-8")
+    if any(token in data.lower() for token in (
+        "heriberto", "espino-montelongo", "@udlap.mx",
+    )):
+        raise ValueError(f"Author-identifying metadata in reviewer SVG: {path}")
+
+
+def prepare_vector_figures() -> list[Path]:
+    """Generate genuine SVG drawings from the four committed vector PDFs.
+
+    Pandoc 3 embeds them with DrawingML asvg:svgBlip. A raster compatibility
+    fallback may be included for older Word versions, but SVG is the main
+    rendering source. Requires Inkscape, not Monte Carlo or proprietary data.
+    """
+    inkscape = shutil.which("inkscape")
+    if not inkscape:
+        raise SystemExit(
+            "Inkscape is required for native SVG Word figures. "
+            "Install it before building the REMEF Word manuscript."
+        )
+    sources = (
+        FIGURES / "ten_million" / "fig01_mechanism_map.pdf",
+        FIGURES / "fig02_historical_vs_apo_implied_volatility.pdf",
+        FIGURES / "fig03_forward_q_cluster_bootstrap.pdf",
+        FIGURES / "fig04_numerical_identification.pdf",
+    )
+    SVG_DIR.mkdir(parents=True, exist_ok=True)
+    paths = []
+    for source in sources:
+        if not source.is_file():
+            raise FileNotFoundError(f"Missing committed vector PDF: {source}")
+        dest = SVG_DIR / (source.stem + ".svg")
+        subprocess.run(
+            [inkscape, str(source), "--export-plain-svg",
+             "--export-filename=" + str(dest)],
+            check=True, capture_output=True, text=True,
+        )
+        if not dest.is_file() or dest.stat().st_size < 512:
+            raise ValueError(f"Vector figure conversion failed: {dest}")
+        _sanitize_and_repair_svg(
+            dest, repair_figure_3=(source.stem == "fig03_forward_q_cluster_bootstrap")
+        )
+        paths.append(dest)
+    return paths
 
 
 def _rewrite_tables(tex: str, labels: dict[str, str]) -> str:
@@ -221,6 +312,8 @@ def main() -> None:
     if not shutil.which("pandoc"):
         raise SystemExit("Install pandoc for native Word tables and editable OMML equations.")
     BUILD.mkdir(parents=True, exist_ok=True)
+    vector_paths = prepare_vector_figures()
+    print(f"Prepared {len(vector_paths)} native SVG figures for Word.")
     target = BUILD / ("remef_author_draft.docx" if args.author_version else "remef_blinded_draft.docx")
     with tempfile.TemporaryDirectory(prefix="remef-") as td:
         tex = Path(td) / "manuscript.tex"
