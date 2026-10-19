@@ -85,11 +85,80 @@ def test_remef_word_plot_geometry_and_contrast() -> None:
 def test_figure_three_title_stays_inside_canvas():
     import inspect
     source = inspect.getsource(figures.build_figure_3)
+    shared_title = inspect.getsource(figures._apply_suptitle)
+    assert "_apply_suptitle" in source
     assert "y=1.02" not in source
-    assert "y=0.98" in source
+    assert "y=0.985" in shared_title
+    assert 'PUBLICATION_FONT_PT["suptitle"]' in shared_title
 
 
 def test_final_default_exports_are_vector_formats():
     import inspect
     source = inspect.getsource(figures.parse_args)
     assert 'default=("pdf", "svg")' in source
+
+
+def test_times_font_svg_and_numeric_axes(tmp_path: Path):
+    import matplotlib as mpl
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from xml.etree import ElementTree as ET
+
+    figures._configure_matplotlib(force_no_tex=True)
+    assert mpl.rcParams["svg.fonttype"] == "none"
+    assert mpl.rcParams["pdf.fonttype"] == 42
+    assert mpl.rcParams["figure.titlesize"] == figures.PUBLICATION_FONT_PT["suptitle"]
+    assert mpl.rcParams["axes.labelsize"] == figures.PUBLICATION_FONT_PT["axis_label"]
+    assert mpl.rcParams["xtick.labelsize"] == figures.PUBLICATION_FONT_PT["tick"]
+
+    fig, ax = plt.subplots()
+    ax.plot([-2.31, 1.76], [0.013, 0.237], marker="o")
+    initial_x, initial_y = ax.get_xlim(), ax.get_ylim()
+    figures._align_numeric_axes(fig)
+    final_x, final_y = ax.get_xlim(), ax.get_ylim()
+    assert final_x[0] <= initial_x[0] and final_x[1] >= initial_x[1]
+    assert final_y[0] <= initial_y[0] and final_y[1] >= initial_y[1]
+    assert 3 <= len(ax.get_xticks()) <= 6
+    assert 3 <= len(ax.get_yticks()) <= 6
+    assert np.allclose(final_x, [ax.get_xticks()[0], ax.get_xticks()[-1]])
+    assert np.allclose(final_y, [ax.get_yticks()[0], ax.get_yticks()[-1]])
+    fig.suptitle("Test")
+    vector = tmp_path / "test.svg"
+    fig.savefig(vector)
+    plt.close(fig)
+    assert any(e.tag.endswith("text") for e in ET.parse(vector).getroot().iter())
+
+
+def test_date_and_categorical_axes_are_not_snapped():
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    figures._configure_matplotlib(force_no_tex=True)
+    fig, (time_ax, category_ax) = plt.subplots(1, 2)
+    dates = pd.date_range("2026-08-25", periods=12)
+    time_ax.plot(dates, np.arange(12))
+    time_ax.set_xlim(dates[0], dates[-1])
+    category_ax.plot([-6, 0], [0, 6])
+    category_ax.set_yticks(range(7), [str(k) for k in range(7)])
+    category_ax.invert_yaxis()
+    x0, y0 = time_ax.get_xlim(), category_ax.get_ylim()
+    figures._align_numeric_axes(fig, date_axes=(time_ax,), categorical_y_axes=(category_ax,))
+    assert time_ax.get_xlim() == x0
+    assert category_ax.get_ylim() == y0
+    plt.close(fig)
+
+
+def test_missing_times_new_roman_fails_publication(monkeypatch):
+    from matplotlib import font_manager
+    import pytest
+
+    def missing(*args, **kwargs):
+        if kwargs.get("fallback_to_default") is False:
+            raise ValueError("not installed")
+        return "fallback.ttf"
+
+    monkeypatch.setattr(font_manager, "findfont", missing)
+    with pytest.raises(SystemExit, match="Times New Roman"):
+        figures._configure_matplotlib(require_times_new_roman=True)
+    with pytest.warns(RuntimeWarning, match="Preview only"):
+        assert figures._configure_matplotlib() == "preview-font-fallback"
