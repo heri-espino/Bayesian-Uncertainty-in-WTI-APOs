@@ -317,11 +317,29 @@ def format_layout(doc):
     doc.core_properties.comments = ""
 
 
+def fit_figures_to_word_text_width(doc) -> None:
+    """Use the actual Word section width rather than rescaling a wide plot.
+
+    The REMEF manuscript is US Letter with 3 cm left and right margins.
+    6.1375 inches is the physical text width; the Matplotlib figures are
+    independently authored at this same width. Do not alter image pixels.
+    """
+    sec = doc.sections[0]
+    target_width = int(sec.page_width - sec.left_margin - sec.right_margin)
+    for shape in doc.inline_shapes:
+        original_width, original_height = int(shape.width), int(shape.height)
+        if original_width <= 0 or original_height <= 0:
+            continue
+        shape.width = target_width
+        shape.height = int(round(original_height * target_width / original_width))
+
+
 def prepare_docx(path: Path) -> None:
     doc = Document(path)
     adapt_sections(doc)
     format_layout(doc)
     format_tables(doc)
+    fit_figures_to_word_text_width(doc)
     doc.save(path)
 
 
