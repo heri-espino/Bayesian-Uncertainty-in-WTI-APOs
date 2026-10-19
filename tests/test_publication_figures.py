@@ -79,3 +79,17 @@ def test_remef_word_plot_geometry_and_contrast() -> None:
                for i in (1, 2, 3, 4))
     assert figures.MECHANISM_CMAP.name == "cividis_ink"
     assert max(figures.MECHANISM_CMAP(0.0)[:3]) < 0.6
+
+
+
+def test_figure_three_title_stays_inside_canvas():
+    import inspect
+    source = inspect.getsource(figures.build_figure_3)
+    assert "y=1.02" not in source
+    assert "y=0.98" in source
+
+
+def test_final_default_exports_are_vector_formats():
+    import inspect
+    source = inspect.getsource(figures.parse_args)
+    assert 'default=("pdf", "svg")' in source

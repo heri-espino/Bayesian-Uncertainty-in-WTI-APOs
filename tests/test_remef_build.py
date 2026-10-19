@@ -214,3 +214,37 @@ def test_remef_manual_workflow_produces_math_reference_not_broken_lo_pdf():
     assert "lo_layout" in workflow
     assert "Greek math symbols are absent from PDF preview" not in workflow
     assert "            paper/remef/build/remef_blinded_draft.pdf" not in workflow
+
+
+
+def test_word_builder_prefers_native_svg_over_png():
+    b = _build_module()
+    src = b.make_latex(with_author=False)
+    assert "fig01_mechanism_map.svg" in src
+    assert "fig03_forward_q_cluster_bootstrap.svg" in src
+    assert "fig01_mechanism_map.png" not in src
+    assert "fig03_forward_q_cluster_bootstrap.png" not in src
+    assert "vector_figures" in src
+    workflow = (ROOT / ".github" / "workflows" / "build-remef.yml").read_text(encoding="utf-8")
+    assert "inkscape librsvg2-bin" in workflow
+    assert 'native_svg = xml.count("svgBlip")' in workflow
+    assert "paper/remef/build/vector_figures/*.svg" in workflow
+
+
+def test_figure3_vector_title_and_sanitization(tmp_path):
+    import xml.etree.ElementTree as ET
+    b = _build_module()
+    p = tmp_path / "fig03_forward_q_cluster_bootstrap.svg"
+    p.write_text(
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 230">'
+        '<metadata>Old PDF metadata</metadata>'
+        '<path d="M0 0 L5 5"/></svg>', encoding="utf-8",
+    )
+    b._sanitize_and_repair_svg(p, repair_figure_3=True)
+    root = ET.parse(p).getroot()
+    names = [el.tag.split("}")[-1] for el in root.iter()]
+    assert "metadata" not in names
+    assert "rect" in names and "text" in names
+    labels = [el.text for el in root.iter() if el.tag.endswith("}text")]
+    assert labels == ["Forward-in-time volatility comparisons across expiries"]
+    assert any(el.tag.endswith("}path") for el in root.iter())

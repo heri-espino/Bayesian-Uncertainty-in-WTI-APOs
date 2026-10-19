@@ -62,7 +62,7 @@ The build reads the existing six-section concise research text (substituting
 `paper/remef/introduction.tex` for its introduction), uses the REMEF front
 matter and two additional references, converts equations to native Word math
 via Pandoc, and styles native Word tables to 10 pt. Its two inserted publication
-figures use the committed 600-dpi PNG outputs. This is **format conversion**,
+figures use native SVG created from the committed vector PDF outputs. This is **format conversion**,
 not a new statistical estimation or independent experimental reproduction.
 
 ### Manual GitHub build
@@ -195,3 +195,28 @@ Microsoft Word math display. Before submission, open the actual DOCX in
 Microsoft Word and compare every formula, especially the risk-neutral call
 valuation, against the math-reference PDF. Do not replace editable equations
 with screenshots or distribute the broken LibreOffice PDF.
+
+
+## Vector figures in Word (2026-10-19)
+
+The reviewed REMEF Word build **does not insert flattened PNG figures**.
+The plotting script preserves publication-quality PDF exports for all four
+figures. At manual build time, `paper/remef/build.py` converts each committed
+vector PDF to a native SVG via Inkscape, removes inherited PDF metadata,
+and inserts the SVG into the Pandoc Word source. Word's DrawingML
+`asvg:svgBlip` uses the native SVG; a PNG fallback may exist solely for
+older Office compatibility. The artwork is not flattened to PNG.
+
+Figure 3's previously cropped main title is replaced in the SVG with a clean
+centered vector heading. Its source plotting script also uses an in-bounds
+suptitle position for any future plot regeneration. Numerical panels and
+scientific statistics are not changed.
+
+Run `python paper/remef/build.py` with `pandoc`, `inkscape`,
+`rsvg-convert` (librsvg2-bin on Ubuntu), and `python-docx` installed.
+The manual-only `build-remef` workflow verifies that at least two SVGs
+are embedded as native Word SVG elements, that math is editable, and that
+the blinded SVG assets do not contain author-identifying metadata.
+The workflow uploads four SVG exports alongside both Word documents and
+the clearly labeled mathematical-reference PDF. Do not submit the reference
+PDF as a publisher-perfect Word export. Inspect the DOCX in Microsoft Word.

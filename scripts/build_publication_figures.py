@@ -799,9 +799,9 @@ def build_figure_3(
     _forest_panel(axes[1], boot, metric="rmse")
     _panel_label(axes[1], "B")
     fig.suptitle(
-        "Strict forward-in-time volatility improvement across expiries",
-        y=1.02,
-        fontsize=10.5,
+        "Forward-in-time volatility comparisons across expiries",
+        y=0.98,
+        fontsize=10.0,
     )
     fig.tight_layout(rect=(0, 0, 1, 0.955))
     _align_numeric_axes(fig)
@@ -978,7 +978,7 @@ def parse_args() -> argparse.Namespace:
         "--formats",
         nargs="+",
         choices=("pdf", "png", "svg"),
-        default=("pdf", "png"),
+        default=("pdf", "svg"),
     )
     parser.add_argument(
         "--figures",
