@@ -155,15 +155,18 @@ def make_latex(*, with_author: bool) -> str:
     )
     if with_author:
         code_note = (
-            "A public, source-only companion repository includes pricing and "
-            "Bayesian-inference code, synthetic demonstrations, numerical tests, "
-            "and scripts for market-data experiments: "
+            "The source-only research software accompanying this study is "
+            "archived as version 0.1.0 on Zenodo "
+            "\\citep{espino2026software}: "
+            "https://doi.org/10.5281/zenodo.23468649. "
+            "Its public source repository is "
             "https://github.com/heri-espino/WTI-Asian-Option-Pricing. "
-            "The synthetic tests require no proprietary inputs; empirical "
-            "experiments require separately licensed market data. The repository "
-            "is not a deposit of the underlying market dataset. A version-specific "
-            "Zenodo citation will replace this repository link once a verified "
-            "archival release is available.\n"
+            "It includes pricing and Bayesian-inference code, synthetic "
+            "demonstrations, numerical tests, and scripts for empirical "
+            "WTI Average Price Option comparisons. The synthetic examples "
+            "do not require proprietary inputs; reproducing empirical "
+            "results requires independently licensed market observations, "
+            "which are neither redistributed nor deposited in Zenodo.\n"
         )
     else:
         code_note = (
