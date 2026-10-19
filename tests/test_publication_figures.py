@@ -347,3 +347,83 @@ def test_figure4_marker_borders_have_distinct_dark_outline_colors(
                 figures.FIG4_COLORS[key], "white",
             )
     plt.close(captured["fig"])
+
+
+
+def test_requested_figure1_ranges_full_heatmap_and_identity_line(
+    tmp_path: Path, monkeypatch,
+) -> None:
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    figures._configure_matplotlib(force_no_tex=True)
+    figure = {}
+    def retain(fig, stem, formats):
+        figure["fig"] = fig
+        return []
+    monkeypatch.setattr(figures, "_save", retain)
+    run = figures._discover_monster_mechanism_run(None)
+    figures.build_figure_1(run, tmp_path, ("svg",))
+    a, b, c, d = figure["fig"].axes[:4]
+    assert np.allclose(a.get_ylim(), [0.0, 0.15])
+    assert np.allclose(c.get_ylim(), [0.0, 0.15])
+    assert np.allclose(c.get_xlim(), [0.0, 1.5])
+
+    heat = b.images[0].get_array()
+    assert len(b.get_xticks()) == heat.shape[1]
+    assert len(b.get_yticks()) == heat.shape[0]
+    assert np.allclose(b.get_xlim(), [-0.5, heat.shape[1] - 0.5])
+    assert np.allclose(b.get_ylim(), [-0.5, heat.shape[0] - 0.5])
+
+    # Axline is unbounded in data space and draws the y=x reference through
+    # the entire visible shared data range, unlike the old data-range segment.
+    assert len(d.lines) == 1
+    assert type(d.lines[0]).__name__ == "_AxLine"
+    assert np.allclose(d.get_xlim(), d.get_ylim())
+    assert np.isclose(d.get_xlim()[0], d.get_xticks()[0])
+    assert np.isclose(d.get_xlim()[1], d.get_xticks()[-1])
+    assert np.isclose(d.get_ylim()[0], d.get_yticks()[0])
+    assert np.isclose(d.get_ylim()[1], d.get_yticks()[-1])
+    plt.close(figure["fig"])
+
+
+def test_requested_figure2_explicit_a_and_c_ylims(tmp_path: Path, monkeypatch) -> None:
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    figures._configure_matplotlib(force_no_tex=True)
+    figure = {}
+    def retain(fig, stem, formats):
+        figure["fig"] = fig
+        return []
+    monkeypatch.setattr(figures, "_save", retain)
+    figures.build_figure_2(tmp_path, ("svg",))
+    axes = figure["fig"].axes
+    assert np.allclose(axes[0].get_ylim(), [0.4, 0.6])
+    assert np.allclose(axes[2].get_ylim(), [0.3, 0.8])
+    plt.close(figure["fig"])
+
+
+def test_requested_figure4_square_dashboard_and_equal_heights(
+    tmp_path: Path, monkeypatch,
+) -> None:
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    figures._configure_matplotlib(force_no_tex=True)
+    figure = {}
+    def retain(fig, stem, formats):
+        figure["fig"] = fig
+        return []
+    monkeypatch.setattr(figures, "_save", retain)
+    figures.build_figure_4(tmp_path, ("svg",))
+    fig = figure["fig"]
+    a, b = fig.axes[:2]
+    width, height = fig.get_size_inches()
+    assert np.isclose(width, height)
+    assert np.isclose(width, figures.WORD_TEXT_WIDTH_IN)
+    assert list(a.get_gridspec().get_height_ratios()) == [1.0, 1.0]
+    assert np.allclose(b.get_ylim(), [-15.0, 15.0])
+    assert np.allclose(b.get_yticks(), [-15.0, 0.0, 15.0])
+    assert np.isclose(a.get_position().height, b.get_position().height)
+    plt.close(fig)
