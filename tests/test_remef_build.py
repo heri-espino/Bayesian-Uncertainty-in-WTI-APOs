@@ -177,6 +177,18 @@ def test_actual_pandoc_heading_text_is_supported(tmp_path):
     assert result.tables[0].cell(0, 1).text == "N"
     assert any("The REMEF studies examine" in p.text for p in result.paragraphs)
     assert any("no external funding" in p.text for p in result.paragraphs)
+    # Reference-PDF title alignment and REMEF pagination are deterministic.
+    from docx.enum.text import WD_ALIGN_PARAGRAPH
+    titles = [
+        "Posterior Integration and Volatility Inputs in WTI Asian Options",
+        "Integración posterior y volatilidad en opciones asiáticas WTI",
+    ]
+    for title in titles:
+        para = next(p for p in result.paragraphs if p.text.strip() == title)
+        assert para.alignment == WD_ALIGN_PARAGRAPH.LEFT
+    assert result.sections[0].footer._element.xpath(".//w:fldSimple")
+    assert "PAGE" in result.sections[0].footer._element.xml
+
 
 
 def test_remef_manual_workflow_produces_math_reference_not_broken_lo_pdf():
