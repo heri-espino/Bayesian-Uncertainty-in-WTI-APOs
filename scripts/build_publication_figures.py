@@ -17,14 +17,14 @@ Optionally choose another output directory or subset of figures::
 
 Outputs
 -------
-fig01_mechanism_map.{pdf,png}
+fig01_mechanism_map.{pdf,svg}
     When posterior integration matters and how the Taylor mechanism explains it.
-fig02_historical_vs_apo_implied_volatility.{pdf,png}
+fig02_historical_vs_apo_implied_volatility.{pdf,svg}
     Historical posterior volatility versus APO-implied effective volatility and
     representative strike smiles.
-fig03_forward_q_cluster_bootstrap.{pdf,png}
+fig03_forward_q_cluster_bootstrap.{pdf,svg}
     Strict forward-in-time pricing improvement with valuation-date cluster intervals.
-fig04_numerical_identification.{pdf,png}
+fig04_numerical_identification.{pdf,svg}
     Agreement of Curran, high-precision pseudo-MC, and randomized Sobol PI--PM gaps.
 figure_manifest.json
     Source paths and plotting choices used for the build.
@@ -45,6 +45,8 @@ from typing import Iterable
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+from matplotlib.ticker import MaxNLocator, NullLocator, ScalarFormatter
 from matplotlib.colors import LinearSegmentedColormap
 import numpy as np
 import pandas as pd
@@ -209,11 +211,25 @@ def _word_figsize(number: int) -> tuple[float, float]:
     return WORD_TEXT_WIDTH_IN, WORD_TEXT_WIDTH_IN * FIGURE_ASPECT_RATIOS[number]
 
 
-def _configure_matplotlib(*, force_no_tex: bool = False) -> str:
-    """Use the REMEF manuscript's Times New Roman, not Wiley's Utopia stack.
 
-    REMEF figures are physically sized for insertion into the Word manuscript.
-    This clean style uses native Matplotlib rendering (never LaTeX).
+# Typographic hierarchy in points at the real 6.1375-inch Word width.
+PUBLICATION_FONT_PT = {
+    "suptitle": 9.0,
+    "panel_title": 8.0,
+    "axis_label": 7.3,
+    "tick": 6.5,
+    "legend": 6.5,
+    "panel_letter": 7.5,
+}
+
+
+def _configure_matplotlib(
+    *, force_no_tex: bool = False, require_times_new_roman: bool = False,
+) -> str:
+    """Use Times New Roman, no external LaTeX, and retain native SVG text.
+
+    Publication CLI builds require the font on the machine; portable unit
+    tests and explicit non-submission previews may use a visible fallback.
     """
     import warnings
     from matplotlib import font_manager
@@ -224,81 +240,127 @@ def _configure_matplotlib(*, force_no_tex: bool = False) -> str:
             font_manager.FontProperties(family="Times New Roman"),
             fallback_to_default=False,
         )
-        font_family, font_mode = "Times New Roman", "times-new-roman"
-    except ValueError:
-        font_family, font_mode = "Liberation Serif", "liberation-serif-fallback"
+        family, mode = "Times New Roman", "times-new-roman"
+    except ValueError as exc:
+        if require_times_new_roman:
+            raise SystemExit(
+                "Times New Roman is not installed or visible to Matplotlib. "
+                "Install it and refresh the font cache, then rerun. "
+                "Use --allow-font-fallback only for a NON-SUBMISSION preview."
+            ) from exc
+        family, mode = "Liberation Serif", "preview-font-fallback"
         warnings.warn(
-            "Times New Roman is missing. The preview uses Liberation Serif; "
-            "regenerate the final figures on a machine with Times New Roman.",
-            RuntimeWarning, stacklevel=2,
+            "Preview only: Times New Roman unavailable; using Liberation Serif. "
+            "Do not submit these figures.", RuntimeWarning, stacklevel=2,
         )
     rc = {
         "text.usetex": False,
-        "font.family": "serif",
-        "font.serif": [font_family],
-        "font.size": 8.5,
-        "axes.labelsize": 8.5,
-        "axes.titlesize": 8.8,
-        "legend.fontsize": 7.5,
-        "xtick.labelsize": 7.6,
-        "ytick.labelsize": 7.6,
+        "font.family": [family],
+        "font.serif": [family],
+        "font.size": PUBLICATION_FONT_PT["axis_label"],
+        "figure.titlesize": PUBLICATION_FONT_PT["suptitle"],
+        "axes.titlesize": PUBLICATION_FONT_PT["panel_title"],
+        "axes.labelsize": PUBLICATION_FONT_PT["axis_label"],
+        "legend.fontsize": PUBLICATION_FONT_PT["legend"],
+        "xtick.labelsize": PUBLICATION_FONT_PT["tick"],
+        "ytick.labelsize": PUBLICATION_FONT_PT["tick"],
         "mathtext.fontset": "custom",
-        "mathtext.rm": font_family,
-        "mathtext.it": font_family + ":italic",
-        "mathtext.bf": font_family + ":bold",
+        "mathtext.rm": family,
+        "mathtext.it": family + ":italic",
+        "mathtext.bf": family + ":bold",
+        "mathtext.fallback": "stix",
         "axes.unicode_minus": False,
+        "svg.fonttype": "none",
+        "pdf.fonttype": 42,
+        "ps.fonttype": 42,
         "figure.dpi": 180,
         "savefig.dpi": 600,
         "savefig.bbox": None,
         "savefig.pad_inches": 0,
-        "pdf.fonttype": 42,
-        "ps.fonttype": 42,
         "axes.spines.top": False,
         "axes.spines.right": False,
-        "axes.linewidth": 0.9,
+        "axes.linewidth": 0.8,
         "axes.edgecolor": NEUTRAL["dark"],
         "axes.facecolor": "white",
         "axes.axisbelow": True,
         "axes.grid": True,
         "grid.color": NEUTRAL["grid"],
-        "grid.linewidth": 0.5,
-        "grid.alpha": 0.4,
+        "grid.linewidth": 0.45,
+        "grid.alpha": 0.35,
         "xtick.direction": "out",
         "ytick.direction": "out",
-        "xtick.major.size": 3,
-        "ytick.major.size": 3,
-        "lines.linewidth": 1.5,
-        "lines.markersize": 4.6,
+        "xtick.major.size": 2.5,
+        "ytick.major.size": 2.5,
+        "lines.linewidth": 1.15,
+        "lines.markersize": 4.0,
         "legend.frameon": False,
     }
     mpl.rcParams.update(rc)
-    return font_mode
+    return mode
 
 
-def _align_numeric_axes(fig: plt.Figure) -> None:
-    """Align linear axes with the Colors library without using its Heri theme.
-
-    Colors' clean/default setting does not align endpoints. Import only its
-    independent elegante geometry helper to keep the Word theme neutral.
-    Date, logarithmic, image and colorbar axes are left as plotted.
-    """
-    try:
-        from contrastcolors.elegant import apply_elegant_axes
-    except ImportError:
-        import warnings
-        warnings.warn(
-            "Install contrastcolors from heri-espino/Colors to align numeric "
-            "ticks and spines. Falling back to standard Matplotlib axes.",
-            RuntimeWarning, stacklevel=2,
-        )
+def _snap_numeric_axis_to_ticks(ax: plt.Axes, axis: str, *, bins: int = 4) -> None:
+    """Expand a numeric axis to regular outer ticks; never crop data or errors."""
+    dim = ax.xaxis if axis == "x" else ax.yaxis
+    if (ax.get_xscale() if axis == "x" else ax.get_yscale()) != "linear":
         return
+    lo0, hi0 = ax.get_xlim() if axis == "x" else ax.get_ylim()
+    if not (np.isfinite(lo0) and np.isfinite(hi0)) or np.isclose(lo0, hi0):
+        return
+    inverted = lo0 > hi0
+    lo, hi = sorted((float(lo0), float(hi0)))
+    locator = MaxNLocator(nbins=bins, min_n_ticks=3, steps=[1, 2, 2.5, 5, 10])
+    ticks = np.asarray(locator.tick_values(lo, hi), dtype=float)
+    ticks = ticks[np.isfinite(ticks)]
+    if len(ticks) > 6:
+        locator = MaxNLocator(nbins=3, min_n_ticks=3, steps=[1, 2, 2.5, 5, 10])
+        ticks = np.asarray(locator.tick_values(lo, hi), dtype=float)
+    if len(ticks) < 2:
+        return
+    if ticks[0] > lo or ticks[-1] < hi:
+        raise AssertionError("Nice ticks must enclose the original plot limits")
+    if axis == "x":
+        ax.set_xticks(ticks)
+        ax.set_xlim(ticks[-1], ticks[0]) if inverted else ax.set_xlim(ticks[0], ticks[-1])
+    else:
+        ax.set_yticks(ticks)
+        ax.set_ylim(ticks[-1], ticks[0]) if inverted else ax.set_ylim(ticks[0], ticks[-1])
+    dim.set_minor_locator(NullLocator())
+
+
+def _align_numeric_axes(
+    fig: plt.Figure,
+    *,
+    date_axes: tuple[plt.Axes, ...] = (),
+    categorical_x_axes: tuple[plt.Axes, ...] = (),
+    categorical_y_axes: tuple[plt.Axes, ...] = (),
+) -> None:
+    """Clean spines and few ticks; skip dates, categories, log axes and images."""
     for ax in fig.axes:
-        if ax.images or getattr(ax, "_colorbar", None) is not None:
+        if getattr(ax, "_colorbar", None) is not None:
+            ax.tick_params(labelsize=PUBLICATION_FONT_PT["tick"])
             continue
-        apply_elegant_axes(
-            ax, target_xticks=5, target_yticks=5,
-            marker_inset_pt=3.0, marker_count=9,
+        ax.tick_params(
+            axis="both", which="major",
+            labelsize=PUBLICATION_FONT_PT["tick"], length=2.5, width=0.8,
         )
+        ax.tick_params(axis="both", which="minor", length=0)
+        for side in ("top", "right"):
+            ax.spines[side].set_visible(False)
+        for side in ("left", "bottom"):
+            ax.spines[side].set_linewidth(0.8)
+        if ax.images:
+            continue  # Heatmaps need visible outer cell boundaries.
+        if ax not in date_axes and ax not in categorical_x_axes:
+            _snap_numeric_axis_to_ticks(ax, "x")
+        if ax not in categorical_y_axes:
+            _snap_numeric_axis_to_ticks(ax, "y")
+
+
+def _apply_suptitle(fig: plt.Figure, text: str) -> None:
+    """Apply one compact, in-canvas title and reserve a consistent top margin."""
+    fig.suptitle(text, y=0.985, fontsize=PUBLICATION_FONT_PT["suptitle"])
+    fig.tight_layout(rect=(0, 0, 1, 0.94))
 
 
 def _portable_path(path: Path) -> str:
@@ -315,7 +377,6 @@ def _save(fig: plt.Figure, stem: Path, formats: Iterable[str]) -> list[str]:
     stem.parent.mkdir(parents=True, exist_ok=True)
     metadata = {
         "Title": stem.stem,
-        "Author": "Heriberto Espino Montelongo",
         "Subject": "Posterior integration in WTI average price options",
     }
     for fmt in formats:
@@ -367,10 +428,11 @@ def _discover_monster_mechanism_run(explicit: Path | None) -> Path:
 
 def _panel_label(ax: plt.Axes, label: str) -> None:
     ax.text(
-        -0.12,
-        1.05,
+        -0.10,
+        1.015,
         label,
         transform=ax.transAxes,
+        fontsize=PUBLICATION_FONT_PT["panel_letter"],
         fontweight="bold",
         va="bottom",
         ha="left",
@@ -424,6 +486,12 @@ def build_figure_1(
             label=fr"$\sigma_0={sigma_true:.2f}$",
         )
     ax_a.set_xscale("log")
+    ax_a.set_xticks([21, 63, 252, 1260])
+    ax_a.xaxis.set_major_formatter(ScalarFormatter())
+    ax_a.xaxis.set_minor_locator(NullLocator())
+    ax_a.set_xlim(21, 1260)
+    for line in ax_a.lines:
+        line.set_clip_on(False)
     ax_a.set_xlabel("Historical observations $n$")
     ax_a.set_ylabel(r"Mean posterior SD of $\sigma$")
     ax_a.set_title("Posterior dispersion")
@@ -451,10 +519,12 @@ def build_figure_1(
         rasterized=True,
     )
     ax_b.grid(False)
-    ax_b.set_xticks(np.arange(len(heat.columns)))
-    ax_b.set_xticklabels([f"{x:.2f}" for x in heat.columns], rotation=45, ha="right")
-    ax_b.set_yticks(np.arange(len(heat.index)))
-    ax_b.set_yticklabels([f"{x:.3g}" for x in heat.index])
+    x_ids = np.unique(np.linspace(0, len(heat.columns) - 1, min(5, len(heat.columns))).round().astype(int))
+    y_ids = np.unique(np.linspace(0, len(heat.index) - 1, min(5, len(heat.index))).round().astype(int))
+    ax_b.set_xticks(x_ids)
+    ax_b.set_xticklabels([f"{heat.columns[i]:.2f}" for i in x_ids], rotation=30, ha="right")
+    ax_b.set_yticks(y_ids)
+    ax_b.set_yticklabels([f"{heat.index[i]:.3g}" for i in y_ids])
     ax_b.set_xlabel(r"Moneyness $K/F$")
     ax_b.set_ylabel("Fraction already fixed")
     ax_b.set_title(
@@ -531,8 +601,7 @@ def build_figure_1(
     cbar2.set_label("Cell count")
     _panel_label(ax_d, "D")
 
-    fig.suptitle("When posterior integration matters", y=0.997, fontsize=10)
-    fig.tight_layout(rect=(0, 0, 1, 0.955))
+    _apply_suptitle(fig, "When posterior integration matters")
     _align_numeric_axes(fig)
     outputs = _save(fig, output_dir / "fig01_mechanism_map", formats)
     metadata = {
@@ -578,9 +647,18 @@ def _plot_sigma_timeseries(ax: plt.Axes, by_date: pd.DataFrame, expiry: str) -> 
         markeredgewidth=0.9,
         label=r"APO-implied common $\sigma_Q$",
     )
+    dates = pd.to_datetime(group["valuation_date"]).drop_duplicates().sort_values()
+    if len(dates) > 1:
+        ids = np.unique(np.linspace(0, len(dates) - 1, min(5, len(dates))).round().astype(int))
+        ax.set_xticks(dates.iloc[ids].tolist())
+        ax.xaxis.set_major_formatter(mdates.DateFormatter("%m-%d"))
+        ax.xaxis.set_minor_locator(NullLocator())
+        ax.set_xlim(dates.iloc[0], dates.iloc[-1])
+        for line in ax.lines:
+            line.set_clip_on(False)
     ax.set_ylabel("Annualized volatility")
     ax.set_title(f"{expiry} expiry")
-    ax.tick_params(axis="x", rotation=35)
+    ax.tick_params(axis="x", rotation=20)
     ax.legend(frameon=False)
 
 
@@ -610,7 +688,7 @@ def _plot_smile(
             group["log_moneyness"],
             group["apo_implied_sigma_q"],
             marker=marker,
-            s=32,
+            s=24,
             alpha=1.0,
             facecolors=facecolor,
             edgecolors=color,
@@ -665,9 +743,8 @@ def build_figure_2(
         smile_meta[str(date.date())] = _plot_smile(ax, contracts, by_date, date)
         _panel_label(ax, label)
 
-    fig.suptitle("Historical and APO-implied effective volatility", y=0.997, fontsize=10)
-    fig.tight_layout(rect=(0, 0, 1, 0.955))
-    _align_numeric_axes(fig)
+    _apply_suptitle(fig, "Historical and APO-implied effective volatility")
+    _align_numeric_axes(fig, date_axes=(axes[0, 0], axes[0, 1]))
     outputs = _save(
         fig,
         output_dir / "fig02_historical_vs_apo_implied_volatility",
@@ -798,13 +875,8 @@ def build_figure_3(
     _panel_label(axes[0], "A")
     _forest_panel(axes[1], boot, metric="rmse")
     _panel_label(axes[1], "B")
-    fig.suptitle(
-        "Forward-in-time volatility comparisons across expiries",
-        y=0.98,
-        fontsize=10.0,
-    )
-    fig.tight_layout(rect=(0, 0, 1, 0.955))
-    _align_numeric_axes(fig)
+    _apply_suptitle(fig, "Forward-in-time volatility comparisons across expiries")
+    _align_numeric_axes(fig, categorical_y_axes=tuple(axes))
     outputs = _save(fig, output_dir / "fig03_forward_q_cluster_bootstrap", formats)
 
     selected = boot.loc[
@@ -950,15 +1022,11 @@ def build_figure_4(
 
     labels = [_target_label(row) for _, row in matched.iterrows()]
     ax_bottom.set_xticks(x)
-    ax_bottom.set_xticklabels(labels, rotation=45, ha="right")
+    ax_bottom.set_xticklabels(labels, rotation=35, ha="right")
+    ax_bottom.set_xlim(-0.5, len(labels) - 0.5)
 
-    fig.suptitle(
-        "Numerical identification of the posterior-integration effect",
-        y=0.997,
-        fontsize=10,
-    )
-    fig.tight_layout(rect=(0, 0, 1, 0.955))
-    _align_numeric_axes(fig)
+    _apply_suptitle(fig, "Numerical identification of the posterior-integration effect")
+    _align_numeric_axes(fig, categorical_x_axes=tuple(axes))
     outputs = _save(fig, output_dir / "fig04_numerical_identification", formats)
     return outputs, {
         "matched_targets": int(len(matched)),
@@ -999,12 +1067,20 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Legacy flag: REMEF Word figures always avoid external TeX.",
     )
+    parser.add_argument(
+        "--allow-font-fallback",
+        action="store_true",
+        help="Preview only: permit Liberation Serif when Times New Roman is unavailable.",
+    )
     return parser.parse_args()
 
 
 def main() -> None:
     args = parse_args()
-    font_mode = _configure_matplotlib(force_no_tex=args.no_tex)
+    font_mode = _configure_matplotlib(
+        force_no_tex=args.no_tex,
+        require_times_new_roman=not args.allow_font_fallback,
+    )
     output_dir = args.output_dir
     if not output_dir.is_absolute():
         output_dir = ROOT / output_dir
@@ -1018,7 +1094,9 @@ def main() -> None:
         "font_mode": font_mode,
         "word_text_width_inches": WORD_TEXT_WIDTH_IN,
         "format_target": "REMEF Word, Times New Roman",
-        "numeric_axis_alignment": "contrastcolors.elegant.apply_elegant_axes, if installed",
+        "numeric_axis_alignment": "built-in nice-tick endpoints (never crop data)",
+        "typographic_hierarchy_pt": PUBLICATION_FONT_PT,
+        "svg_text_mode": "editable-native-text",
         "hybrid_pdf": True,
         "raster_dpi": 600,
         "categorical_palettes": {
