@@ -195,3 +195,28 @@ Microsoft Word math display. Before submission, open the actual DOCX in
 Microsoft Word and compare every formula, especially the risk-neutral call
 valuation, against the math-reference PDF. Do not replace editable equations
 with screenshots or distribute the broken LibreOffice PDF.
+
+
+## Vector figures in Word (2026-10-19)
+
+The reviewed REMEF Word build **does not insert flattened PNG figures**.
+The plotting script preserves publication-quality PDF exports for all four
+figures. At manual build time, `paper/remef/build.py` converts each committed
+vector PDF to a native SVG via Inkscape, removes inherited PDF metadata,
+and inserts the SVG into the Pandoc Word source. Word's DrawingML
+`asvg:svgBlip` uses the native SVG; a PNG fallback may exist solely for
+older Office compatibility. The artwork is not flattened to PNG.
+
+Figure 3's previously cropped main title is replaced in the SVG with a clean
+centered vector heading. Its source plotting script also uses an in-bounds
+suptitle position for any future plot regeneration. Numerical panels and
+scientific statistics are not changed.
+
+Run `python paper/remef/build.py` with `pandoc`, `inkscape`,
+`rsvg-convert` (librsvg2-bin on Ubuntu), and `python-docx` installed.
+The manual-only `build-remef` workflow verifies that at least two SVGs
+are embedded as native Word SVG elements, that math is editable, and that
+the blinded SVG assets do not contain author-identifying metadata.
+The workflow uploads four SVG exports alongside both Word documents and
+the clearly labeled mathematical-reference PDF. Do not submit the reference
+PDF as a publisher-perfect Word export. Inspect the DOCX in Microsoft Word.
