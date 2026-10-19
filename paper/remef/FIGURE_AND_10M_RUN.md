@@ -211,3 +211,34 @@ Inspect all four PNGs, SVGs, PDFs and figure_manifest.json. Stage only the
 
 These outputs use previously committed synthetic and empirical summaries.
 No new Monte Carlo simulation or raw market-data download is required.
+
+
+## Figure 1C close-up and Figure 4 marker outlines (2026-10-19)
+
+Figure 1 panel C now contains a **near-zero inset** showing the small
+PI–PM differences at high realized-fixing fractions. Its selected window
+is fraction fixed 0.65–0.97 and mean absolute PI–PM difference
+−0.001 to 0.023; the small lower extension prevents the 0 baseline from
+being cut off. The inset retains the original maturity-specific colors,
+line patterns and markers. A subdued source rectangle connects the zoom
+to its actual location in the unmodified main panel. It is placed in the
+bottom-right below the legend and added *after* tight layout / global axis
+styling, so its small coordinate ranges and ticks remain intact.
+
+Figure 4 now uses darker, explicit marker-edge colors in both panels:
+Pseudo-MC brown #5f3d00, Curran blue #005aa8, and randomized Sobol red
+#5c0010. Marker fills and uncertainty bars are otherwise unchanged.
+
+After this patch is merged, no numerical experiments need to be repeated.
+On the Windows VM, from the repository root, run:
+
+    git switch main
+    git pull --ff-only origin main
+    conda run --no-capture-output -n asian-options python -m pytest tests/test_publication_figures.py -q
+    conda run --no-capture-output -n asian-options python -m scripts.build_publication_figures --figures 1 4 --formats png pdf svg --mechanism-run results/analysis/massive_mechanism_map/6e23d5aabc519982 --output-dir figures/publication
+
+Review Figure 1C (the inset must not obscure the legend or remove data from
+the full panel) and both Figure 4 panels, then stage only the six outputs
+for Figures 1 and 4 and the regenerated figure_manifest.json. The manifest
+reflects only the figures requested on that run; to retain one complete
+four-figure manifest, regenerate all four with --figures 1 2 3 4 instead.
