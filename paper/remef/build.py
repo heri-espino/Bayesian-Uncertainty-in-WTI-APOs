@@ -133,25 +133,50 @@ def make_latex(*, with_author: bool) -> str:
     # Place the required disclosure in Methods, not outside the research design.
     disclosure = (
         r"\subsection{AI-assisted manuscript preparation}" + "\n"
-        "OpenAI ChatGPT was used for language editing, literature organization, "
-        "and manuscript restructuring and conversion. It was not the source of "
-        "the reported data or computed results. The author is responsible for "
-        "verifying the scientific content and disclosure before submission.\n"
+        "OpenAI ChatGPT assisted with language editing, literature organization, "
+        "manuscript formatting, and research software development. The reported "
+        "numerical results are drawn from the documented computational experiments, "
+        "not directly from AI-generated numerical responses. The author is "
+        "responsible for validating the computations, interpreting the findings, "
+        "and approving the final manuscript.\n"
     )
     sections[3] += "\n" + disclosure
     if with_author:
         sections[0] = authorship() + "\n" + sections[0]
-    # The reviewer version must not publish identifying repo URLs or affiliations.
-    statements = (
+    data_note = (
         r"\section*{Data availability}" + "\n"
-        "The original market data are subject to the vendors' redistribution "
-        "conditions. Derived summaries, provenance records and source code "
-        "are available from the corresponding author subject to a licensing "
-        "and double-blind-review check.\n"
-        r"\section*{Code and results availability}" + "\n"
-        "Reproducible experiment code and recorded derived summaries have "
-        "been prepared in a version-controlled research repository. "
-        "A non-identifying access route is to be established before submission.\n"
+        "The empirical analysis uses WTI futures and options data obtained "
+        "from Barchart and Databento. The underlying observations are subject "
+        "to vendor and exchange licensing conditions and are not redistributed. "
+        "Researchers who wish to repeat the empirical analyses must obtain the "
+        "necessary data and permissions directly from the providers. The "
+        "public source-only software does not contain raw market data or "
+        "proprietary contract-date price panels.\n"
+    )
+    if with_author:
+        code_note = (
+            "A public, source-only companion repository includes pricing and "
+            "Bayesian-inference code, synthetic demonstrations, numerical tests, "
+            "and scripts for market-data experiments: "
+            "https://github.com/heri-espino/WTI-Asian-Option-Pricing. "
+            "The synthetic tests require no proprietary inputs; empirical "
+            "experiments require separately licensed market data. The repository "
+            "is not a deposit of the underlying market dataset. A version-specific "
+            "Zenodo citation will replace this repository link once a verified "
+            "archival release is available.\n"
+        )
+    else:
+        code_note = (
+            "The source-only companion software contains pricing and Bayesian-"
+            "inference code, synthetic demonstrations, numerical tests, and "
+            "scripts for the empirical analyses. Its identifying repository "
+            "location is omitted here to preserve double-blind review and may "
+            "be provided confidentially to the editor. Re-executing empirical "
+            "experiments requires separately licensed vendor observations.\n"
+        )
+    statements = (
+        data_note +
+        r"\section*{Code and results availability}" + "\n" + code_note +
         r"\section*{Funding}" + "\n"
         "This research received no external funding.\n"
         r"\section*{Conflicts of interest}" + "\n"
