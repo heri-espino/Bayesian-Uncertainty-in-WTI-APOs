@@ -60,20 +60,20 @@
       },
       "mechanism_run": "results\\analysis\\massive_mechanism_map\\6e23d5aabc519982",
       "outputs": [
-        "figures\\publication\\ten_million\\fig01_mechanism_map.pdf",
-        "figures\\publication\\ten_million\\fig01_mechanism_map.png"
+        "figures\\publication\\fig01_mechanism_map.pdf",
+        "figures\\publication\\fig01_mechanism_map.svg"
       ],
       "partial_fixing_state": {
         "moneyness": 1.5,
         "n_obs": 21,
         "sigma_true": 0.8
       },
-      "taylor_cell_correlation": 0.9995456741795187
+      "taylor_cell_correlation": 0.9995456741795191
     },
     "2": {
       "outputs": [
-        "figures\\publication\\ten_million\\fig02_historical_vs_apo_implied_volatility.pdf",
-        "figures\\publication\\ten_million\\fig02_historical_vs_apo_implied_volatility.png"
+        "figures\\publication\\fig02_historical_vs_apo_implied_volatility.pdf",
+        "figures\\publication\\fig02_historical_vs_apo_implied_volatility.svg"
       ],
       "smile_dates": {
         "2026-08-26": {
@@ -104,15 +104,15 @@
         "2028-09"
       ],
       "outputs": [
-        "figures\\publication\\ten_million\\fig03_forward_q_cluster_bootstrap.pdf",
-        "figures\\publication\\ten_million\\fig03_forward_q_cluster_bootstrap.png"
+        "figures\\publication\\fig03_forward_q_cluster_bootstrap.pdf",
+        "figures\\publication\\fig03_forward_q_cluster_bootstrap.svg"
       ]
     },
     "4": {
       "matched_targets": 8,
       "outputs": [
-        "figures\\publication\\ten_million\\fig04_numerical_identification.pdf",
-        "figures\\publication\\ten_million\\fig04_numerical_identification.png"
+        "figures\\publication\\fig04_numerical_identification.pdf",
+        "figures\\publication\\fig04_numerical_identification.svg"
       ],
       "target_labels": [
         "08-26\n$K=102.05$",
@@ -130,7 +130,7 @@
   "format_target": "REMEF Word, Times New Roman",
   "formats": [
     "pdf",
-    "png"
+    "svg"
   ],
   "hybrid_pdf": true,
   "neutral_palette": {
@@ -140,11 +140,20 @@
     "light": "#B0B0B0",
     "mid": "#777777"
   },
-  "numeric_axis_alignment": "contrastcolors.elegant.apply_elegant_axes, if installed",
-  "output_dir": "figures\\publication\\ten_million",
+  "numeric_axis_alignment": "built-in nice-tick endpoints (never crop data)",
+  "output_dir": "figures\\publication",
   "print_mode": "color + grayscale-safe redundancy",
   "raster_dpi": 600,
   "second_order_colormap": "cividis_ink",
   "style_encoding": "color + marker + line pattern + marker fill",
+  "svg_text_mode": "editable-native-text",
+  "typographic_hierarchy_pt": {
+    "axis_label": 7.3,
+    "legend": 6.5,
+    "panel_letter": 7.5,
+    "panel_title": 8.0,
+    "suptitle": 9.0,
+    "tick": 6.5
+  },
   "word_text_width_inches": 6.1375
 }
