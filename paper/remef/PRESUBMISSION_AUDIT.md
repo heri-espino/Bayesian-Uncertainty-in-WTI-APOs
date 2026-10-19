@@ -135,3 +135,13 @@ DOI, issue data and acceptance dates must not be reproduced.
       the corresponding-author footnote, blind metadata, equations,
       citation style, and the 25-page limit. Do not infer success from
       source compilation or lightweight CI alone.
+
+## 2026-10-18 REMEF math-preview remediation
+
+- [x] Inspected failed run 39161447621: blinded and author DOCX generated, editable math and table QA passed; LibreOffice PDF missing equations.
+- [x] Independently typeset the same blinded Word artifact using Pandoc and XeLaTeX; mathematical content rendered successfully in the local 10-page reference PDF.
+- [x] Revised the manual-only workflow to retain both DOCX files, discard the broken LibreOffice preview, check its page count only, and upload a **separately labeled math-content reference PDF** with actual equations.
+- [x] Replace the brittle literal-sigma grep with mathematical-symbol extraction after NFKC normalization; require sigma, mu, scientific methods text and native OOXML math.
+- [x] Pin Ubuntu 24.04 and update Node.js 24-compatible checkout/setup-python/upload-artifact actions. Neither warning was the build error.
+- [ ] Execute the updated manual workflow on merged `main`; examine both DOCX outputs in Microsoft Word (including their math), preview figures, page count, references and blinding.
+- [ ] Finish scientific-data and rights audit, supplement and journal-signed forms before submission.
