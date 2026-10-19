@@ -238,6 +238,7 @@ def test_figure3_vector_title_and_sanitization(tmp_path):
     p.write_text(
         '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 230">'
         '<metadata>Old PDF metadata</metadata>'
+        '<g><text><tspan>Strict forward-in-time volatility improvement across expiries</tspan></text></g>'
         '<path d="M0 0 L5 5"/></svg>', encoding="utf-8",
     )
     b._sanitize_and_repair_svg(p, repair_figure_3=True)
@@ -248,6 +249,7 @@ def test_figure3_vector_title_and_sanitization(tmp_path):
     labels = [el.text for el in root.iter() if el.tag.endswith("}text")]
     assert labels == ["Forward-in-time volatility comparisons across expiries"]
     assert any(el.tag.endswith("}path") for el in root.iter())
+    assert "Strict forward-in-time" not in p.read_text(encoding="utf-8")
 
 
 def test_normalize_word_svg_media_extension(tmp_path):
