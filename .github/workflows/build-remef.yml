@@ -28,7 +28,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-            pandoc libreoffice-writer poppler-utils texlive-xetex texlive-latex-recommended texlive-latex-extra fonts-liberation
+            pandoc inkscape librsvg2-bin libreoffice-writer poppler-utils texlive-xetex texlive-latex-recommended texlive-latex-extra fonts-liberation
 
       - name: Install project and Word dependency
         run: |
@@ -61,9 +61,16 @@ jobs:
               math = xml.count("<m:oMath")
               tables = xml.count("<w:tbl>")
               media = [name for name in z.namelist() if name.startswith("word/media/")]
-              print(f"Editable math elements: {math}; Word tables: {tables}; images: {len(media)}")
-              if math < 30 or tables != 4 or len(media) < 2:
-                  raise SystemExit("Expected editable equations, four Word tables and figures")
+              vectors = [name for name in media if name.endswith(".svg")]
+              native_svg = xml.count("svgBlip")
+              print(f"Editable math: {math}; Word tables: {tables}; "
+                    f"embedded SVG: {len(vectors)}; native SVG references: {native_svg}")
+              if math < 30 or tables != 4 or len(vectors) < 2 or native_svg < 2:
+                  raise SystemExit("Expected editable equations, four Word tables and native SVG figures")
+              for name in vectors:
+                  raw = z.read(name).decode("utf-8")
+                  if any(t in raw.lower() for t in ("heriberto", "espino-montelongo", "@udlap.mx")):
+                      raise SystemExit("Identifying data leaked into blinded SVG: " + name)
           from docx import Document
           doc = Document(path)
           heads = [p.text for p in doc.paragraphs if p.style.name == "Heading 1"]
@@ -196,5 +203,6 @@ jobs:
             paper/remef/build/remef_blinded_draft.docx
             paper/remef/build/remef_author_draft.docx
             paper/remef/build/remef_math_reference.pdf
+            paper/remef/build/vector_figures/*.svg
           if-no-files-found: warn
           retention-days: 30
