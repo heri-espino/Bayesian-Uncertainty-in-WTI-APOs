@@ -29,9 +29,9 @@ fig04_numerical_identification.{pdf,png}
 figure_manifest.json
     Source paths and plotting choices used for the build.
 
-The plotting code uses only matplotlib/pandas/numpy at runtime.  When the exact Wiley
-Utopia TeX stack is installed, labels are rendered with the same Utopia + mathastext
-configuration used by WileyNJDv5; otherwise the script falls back deterministically to STIX.
+The REMEF figures use the Times New Roman font family and the physical content
+width of the Word manuscript. The optional contrastcolors library supplies
+endpoint-aligned axes. This script does not rerun scientific experiments.
 """
 
 from __future__ import annotations
@@ -98,7 +98,7 @@ FIG1_DISCRETE = [
     "#97001c",
     "#0083f9",
     "#00b49c",
-    "#ffc600",
+    "#9b6500",  # dark ochre, readable on white
     "#f198ff",
 ]
 
@@ -115,6 +115,12 @@ HEATMAP_CMAP = LinearSegmentedColormap.from_list(
     N=256,
 )
 HEATMAP_CMAP.set_bad(BAD_DATA_COLOR)
+# Avoid pale yellow near-white bins in the second-order mechanism panel.
+# A restricted cividis range remains perceptually ordered and print readable.
+MECHANISM_CMAP = LinearSegmentedColormap.from_list(
+    "cividis_ink",
+    mpl.colormaps["cividis"](np.linspace(0.08, 0.82, 256)),
+)
 
 NEUTRAL = {
     "black": "#111111",
@@ -138,7 +144,7 @@ FIG3_COLORS = {
 }
 
 FIG4_COLORS = {
-    "pseudo_mc": "#ffc600",
+    "pseudo_mc": "#9b6500",
     "curran": "#0083f9",
     "sobol": "#97001c",
 }
@@ -193,66 +199,106 @@ def _wiley_utopia_mode() -> str | None:
     return None
 
 
-def _configure_matplotlib(*, force_no_tex: bool = False) -> str:
-    """Match the active Wiley Utopia2COL manuscript when TeX is available."""
-    try:
-        plt.style.use("seaborn-v0_8-whitegrid")
-    except OSError:
-        plt.style.use("default")
 
-    utopia_mode = None if force_no_tex else _wiley_utopia_mode()
-    use_tex = utopia_mode is not None
+# REMEF Word (US Letter; 3 cm side margins), measured from the final DOCX.
+WORD_TEXT_WIDTH_IN = 6.1375
+FIGURE_ASPECT_RATIOS = {1: 5.8 / 7.25, 2: 5.8 / 7.25, 3: 3.7 / 7.2, 4: 4.9 / 7.2}
+
+
+def _word_figsize(number: int) -> tuple[float, float]:
+    return WORD_TEXT_WIDTH_IN, WORD_TEXT_WIDTH_IN * FIGURE_ASPECT_RATIOS[number]
+
+
+def _configure_matplotlib(*, force_no_tex: bool = False) -> str:
+    """Use the REMEF manuscript's Times New Roman, not Wiley's Utopia stack.
+
+    REMEF figures are physically sized for insertion into the Word manuscript.
+    This clean style uses native Matplotlib rendering (never LaTeX).
+    """
+    import warnings
+    from matplotlib import font_manager
+
+    plt.style.use("default")
+    try:
+        font_manager.findfont(
+            font_manager.FontProperties(family="Times New Roman"),
+            fallback_to_default=False,
+        )
+        font_family, font_mode = "Times New Roman", "times-new-roman"
+    except ValueError:
+        font_family, font_mode = "Liberation Serif", "liberation-serif-fallback"
+        warnings.warn(
+            "Times New Roman is missing. The preview uses Liberation Serif; "
+            "regenerate the final figures on a machine with Times New Roman.",
+            RuntimeWarning, stacklevel=2,
+        )
     rc = {
-        "text.usetex": use_tex,
+        "text.usetex": False,
         "font.family": "serif",
+        "font.serif": [font_family],
         "font.size": 8.5,
         "axes.labelsize": 8.5,
-        "axes.titlesize": 9.0,
+        "axes.titlesize": 8.8,
         "legend.fontsize": 7.5,
-        "xtick.labelsize": 7.5,
-        "ytick.labelsize": 7.5,
+        "xtick.labelsize": 7.6,
+        "ytick.labelsize": 7.6,
+        "mathtext.fontset": "custom",
+        "mathtext.rm": font_family,
+        "mathtext.it": font_family + ":italic",
+        "mathtext.bf": font_family + ":bold",
         "axes.unicode_minus": False,
         "figure.dpi": 180,
         "savefig.dpi": 600,
-        "savefig.bbox": "tight",
-        "savefig.pad_inches": 0.035,
+        "savefig.bbox": None,
+        "savefig.pad_inches": 0,
         "pdf.fonttype": 42,
         "ps.fonttype": 42,
         "axes.spines.top": False,
         "axes.spines.right": False,
-        "axes.linewidth": 0.85,
+        "axes.linewidth": 0.9,
         "axes.edgecolor": NEUTRAL["dark"],
         "axes.facecolor": "white",
         "axes.axisbelow": True,
         "axes.grid": True,
         "grid.color": NEUTRAL["grid"],
-        "grid.linewidth": 0.50,
-        "grid.alpha": 0.72,
+        "grid.linewidth": 0.5,
+        "grid.alpha": 0.4,
         "xtick.direction": "out",
         "ytick.direction": "out",
-        "xtick.major.size": 3.0,
-        "ytick.major.size": 3.0,
-        "xtick.major.width": 0.7,
-        "ytick.major.width": 0.7,
-        "lines.linewidth": 1.60,
-        "lines.markersize": 4.5,
+        "xtick.major.size": 3,
+        "ytick.major.size": 3,
+        "lines.linewidth": 1.5,
+        "lines.markersize": 4.6,
         "legend.frameon": False,
-        "legend.borderaxespad": 0.25,
-        "legend.handlelength": 1.8,
     }
-    if use_tex:
-        rc["text.latex.preamble"] = (
-            r"\usepackage[T1]{fontenc}"
-            r"\usepackage{utopia}"
-            r"\usepackage[defaultmathsizes,italic]{mathastext}"
-            r"\usepackage{amsmath,amssymb}"
-        )
-        font_mode = utopia_mode or "wiley-utopia-system"
-    else:
-        rc["mathtext.fontset"] = "stix"
-        font_mode = "stix-fallback"
     mpl.rcParams.update(rc)
     return font_mode
+
+
+def _align_numeric_axes(fig: plt.Figure) -> None:
+    """Align linear axes with the Colors library without using its Heri theme.
+
+    Colors' clean/default setting does not align endpoints. Import only its
+    independent elegante geometry helper to keep the Word theme neutral.
+    Date, logarithmic, image and colorbar axes are left as plotted.
+    """
+    try:
+        from contrastcolors.elegant import apply_elegant_axes
+    except ImportError:
+        import warnings
+        warnings.warn(
+            "Install contrastcolors from heri-espino/Colors to align numeric "
+            "ticks and spines. Falling back to standard Matplotlib axes.",
+            RuntimeWarning, stacklevel=2,
+        )
+        return
+    for ax in fig.axes:
+        if ax.images or getattr(ax, "_colorbar", None) is not None:
+            continue
+        apply_elegant_axes(
+            ax, target_xticks=5, target_yticks=5,
+            marker_inset_pt=3.0, marker_count=9,
+        )
 
 
 def _portable_path(path: Path) -> str:
@@ -277,8 +323,8 @@ def _save(fig: plt.Figure, stem: Path, formats: Iterable[str]) -> list[str]:
         fig.savefig(
             path,
             dpi=600,
-            bbox_inches="tight",
-            pad_inches=0.035,
+            bbox_inches=None,
+            pad_inches=0,
             metadata=metadata if fmt == "pdf" else None,
         )
         outputs.append(_portable_path(path))
@@ -354,7 +400,7 @@ def build_figure_1(
     summary = pd.read_csv(mechanism_run / "mechanism_map_summary.csv")
     posterior = pd.read_csv(mechanism_run / "posterior_cell_summary.csv")
 
-    fig, axes = plt.subplots(2, 2, figsize=(7.25, 5.8))
+    fig, axes = plt.subplots(2, 2, figsize=_word_figsize(1))
     ax_a, ax_b, ax_c, ax_d = axes.flat
 
     # A. Posterior dispersion shrinks with information.
@@ -461,7 +507,7 @@ def build_figure_1(
         y[finite],
         gridsize=42,
         mincnt=1,
-        cmap=HEATMAP_CMAP,
+        cmap=MECHANISM_CMAP,
         linewidths=0.0,
         rasterized=True,
     )
@@ -485,8 +531,9 @@ def build_figure_1(
     cbar2.set_label("Cell count")
     _panel_label(ax_d, "D")
 
-    fig.suptitle("When posterior integration matters", y=1.01, fontsize=11)
-    fig.tight_layout()
+    fig.suptitle("When posterior integration matters", y=0.997, fontsize=10)
+    fig.tight_layout(rect=(0, 0, 1, 0.955))
+    _align_numeric_axes(fig)
     outputs = _save(fig, output_dir / "fig01_mechanism_map", formats)
     metadata = {
         "mechanism_run": str(mechanism_run.relative_to(ROOT)),
@@ -526,7 +573,7 @@ def _plot_sigma_timeseries(ax: plt.Axes, by_date: pd.DataFrame, expiry: str) -> 
         marker="s",
         linestyle="--",
         color=FIG2_COLORS["apo_common"],
-        markerfacecolor=FIG2_COLORS["apo_common"],
+        markerfacecolor="white",
         markeredgecolor=FIG2_COLORS["apo_common"],
         markeredgewidth=0.9,
         label=r"APO-implied common $\sigma_Q$",
@@ -552,7 +599,7 @@ def _plot_smile(
             "s",
             FIG2_COLORS["puts"],
             "Puts",
-            FIG2_COLORS["puts"],
+            "white",
         ),
     }
     for option_type, (marker, color, label, facecolor) in styles.items():
@@ -607,7 +654,7 @@ def build_figure_2(
     by_date["valuation_date"] = pd.to_datetime(by_date["valuation_date"])
     contracts["valuation_date"] = pd.to_datetime(contracts["valuation_date"])
 
-    fig, axes = plt.subplots(2, 2, figsize=(7.25, 5.8))
+    fig, axes = plt.subplots(2, 2, figsize=_word_figsize(2))
     _plot_sigma_timeseries(axes[0, 0], by_date, "2026-09")
     _panel_label(axes[0, 0], "A")
     _plot_sigma_timeseries(axes[0, 1], by_date, "2026-10")
@@ -618,8 +665,9 @@ def build_figure_2(
         smile_meta[str(date.date())] = _plot_smile(ax, contracts, by_date, date)
         _panel_label(ax, label)
 
-    fig.suptitle("Historical and APO-implied effective volatility", y=1.01, fontsize=11)
-    fig.tight_layout()
+    fig.suptitle("Historical and APO-implied effective volatility", y=0.997, fontsize=10)
+    fig.tight_layout(rect=(0, 0, 1, 0.955))
+    _align_numeric_axes(fig)
     outputs = _save(
         fig,
         output_dir / "fig02_historical_vs_apo_implied_volatility",
@@ -745,7 +793,7 @@ def build_figure_3(
     formats: Iterable[str],
 ) -> tuple[list[str], dict[str, object]]:
     boot = pd.read_csv(BOOTSTRAP_PATH)
-    fig, axes = plt.subplots(1, 2, figsize=(7.20, 3.70), sharey=True)
+    fig, axes = plt.subplots(1, 2, figsize=_word_figsize(3), sharey=True)
     _forest_panel(axes[0], boot, metric="mae")
     _panel_label(axes[0], "A")
     _forest_panel(axes[1], boot, metric="rmse")
@@ -755,7 +803,8 @@ def build_figure_3(
         y=1.02,
         fontsize=10.5,
     )
-    fig.tight_layout()
+    fig.tight_layout(rect=(0, 0, 1, 0.955))
+    _align_numeric_axes(fig)
     outputs = _save(fig, output_dir / "fig03_forward_q_cluster_bootstrap", formats)
 
     selected = boot.loc[
@@ -795,7 +844,7 @@ def build_figure_4(
     fig, axes = plt.subplots(
         2,
         1,
-        figsize=(7.20, 4.90),
+        figsize=_word_figsize(4),
         sharex=True,
         gridspec_kw={"height_ratios": [2.1, 1.0]},
     )
@@ -905,10 +954,11 @@ def build_figure_4(
 
     fig.suptitle(
         "Numerical identification of the posterior-integration effect",
-        y=1.005,
-        fontsize=10.5,
+        y=0.997,
+        fontsize=10,
     )
-    fig.tight_layout()
+    fig.tight_layout(rect=(0, 0, 1, 0.955))
+    _align_numeric_axes(fig)
     outputs = _save(fig, output_dir / "fig04_numerical_identification", formats)
     return outputs, {
         "matched_targets": int(len(matched)),
@@ -947,7 +997,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--no-tex",
         action="store_true",
-        help="Force STIX fallback instead of the Wiley Utopia TeX stack.",
+        help="Legacy flag: REMEF Word figures always avoid external TeX.",
     )
     return parser.parse_args()
 
@@ -966,6 +1016,9 @@ def main() -> None:
         "output_dir": _portable_path(output_dir),
         "formats": list(formats),
         "font_mode": font_mode,
+        "word_text_width_inches": WORD_TEXT_WIDTH_IN,
+        "format_target": "REMEF Word, Times New Roman",
+        "numeric_axis_alignment": "contrastcolors.elegant.apply_elegant_axes, if installed",
         "hybrid_pdf": True,
         "raster_dpi": 600,
         "categorical_palettes": {
@@ -974,7 +1027,8 @@ def main() -> None:
             "figure3": FIG3_COLORS,
             "figure4": FIG4_COLORS,
         },
-        "continuous_colormap": "Paul Tol Iridescent",
+        "continuous_colormap": "Paul Tol Iridescent (heatmap B)",
+        "second_order_colormap": MECHANISM_CMAP.name,
         "continuous_colormap_hex": IRIDESCENT_HEX,
         "bad_data_color": BAD_DATA_COLOR,
         "neutral_palette": NEUTRAL,
@@ -1007,10 +1061,6 @@ def main() -> None:
     )
     print(f"Built publication figures under {output_dir}")
     print(f"Font mode: {font_mode}")
-    if font_mode == "stix-fallback":
-        report = diagnostic_report()
-        print("TeX diagnostic:")
-        print(json.dumps(report, indent=2))
     for item in manifest["figures"].values():
         for output in item["outputs"]:
             print(f"  {output}")
