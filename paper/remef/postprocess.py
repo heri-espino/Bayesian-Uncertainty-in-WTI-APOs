@@ -397,6 +397,8 @@ def normalize_word_svg_media(path: Path) -> None:
                         ))
                     else:
                         output.writestr(item, source.read(name))
+            # Windows cannot atomically replace an opened source archive.
+            source.close()
             temporary.replace(path)
         finally:
             temporary.unlink(missing_ok=True)
