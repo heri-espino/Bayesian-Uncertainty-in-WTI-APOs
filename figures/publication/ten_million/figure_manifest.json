@@ -69,6 +69,61 @@
         "sigma_true": 0.8
       },
       "taylor_cell_correlation": 0.9995456741795187
+    },
+    "2": {
+      "outputs": [
+        "figures\\publication\\ten_million\\fig02_historical_vs_apo_implied_volatility.pdf",
+        "figures\\publication\\ten_million\\fig02_historical_vs_apo_implied_volatility.png"
+      ],
+      "smile_dates": {
+        "2026-08-26": {
+          "contracts": 27,
+          "sigma_p": 0.4156123363824248,
+          "sigma_q": 0.4547849592930665
+        },
+        "2026-09-10": {
+          "contracts": 29,
+          "sigma_p": 0.4166311397436242,
+          "sigma_q": 0.5489639282827785
+        }
+      }
+    },
+    "3": {
+      "bootstrap_iterations": 100000,
+      "experiments": [
+        "forward_q_expanding_smile",
+        "forward_q_previous_day_smile"
+      ],
+      "expiries": [
+        "2026-09",
+        "2026-10",
+        "2026-11",
+        "2027-03",
+        "2027-09",
+        "2028-03",
+        "2028-09"
+      ],
+      "outputs": [
+        "figures\\publication\\ten_million\\fig03_forward_q_cluster_bootstrap.pdf",
+        "figures\\publication\\ten_million\\fig03_forward_q_cluster_bootstrap.png"
+      ]
+    },
+    "4": {
+      "matched_targets": 8,
+      "outputs": [
+        "figures\\publication\\ten_million\\fig04_numerical_identification.pdf",
+        "figures\\publication\\ten_million\\fig04_numerical_identification.png"
+      ],
+      "target_labels": [
+        "08-26\n$K=102.05$",
+        "08-26\n$K=102.4$",
+        "08-27\n$K=98$",
+        "08-27\n$K=102.4$",
+        "08-28\n$K=98$",
+        "08-31\n$K=100$",
+        "09-10\n$K=102.4$",
+        "09-10\n$K=103$"
+      ]
     }
   },
   "font_mode": "times-new-roman",
