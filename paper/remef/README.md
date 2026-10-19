@@ -62,7 +62,7 @@ The build reads the existing six-section concise research text (substituting
 `paper/remef/introduction.tex` for its introduction), uses the REMEF front
 matter and two additional references, converts equations to native Word math
 via Pandoc, and styles native Word tables to 10 pt. Its two inserted publication
-figures use the committed 600-dpi PNG outputs. This is **format conversion**,
+figures use native SVG created from the committed vector PDF outputs. This is **format conversion**,
 not a new statistical estimation or independent experimental reproduction.
 
 ### Manual GitHub build
