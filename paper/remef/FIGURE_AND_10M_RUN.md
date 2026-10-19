@@ -1,15 +1,21 @@
 # REMEF publication figures and 10-million-history experiment
 
-**Status:** source prepared; the 10,000,000-history run and its updated figures
-have **not** been executed or accepted for publication yet.
+**Status (2026-10-19):** author executed the 10,000,000-history experiment
+on an NVIDIA RTX 4500 Ada VM with CuPy and pushed the summary/report and
+updated Figure 1 to PR #82. The scientific result and figure metadata have
+been checked against the committed report; remaining figure 2–4 and final
+Word-production steps are not yet complete.
 
 ## Source of the scientific numbers
 
-The paper currently describes the previously completed 175,000-history
-synthetic mechanism run. This change **does not replace or invalidate** those
-recorded results. Do not change the paper's simulation count, correlation,
-figure, or table until the new report and visualization have been generated
-and inspected on the workstation.
+The previous 175,000-history experiment remains preserved at
+`results/analysis/massive_mechanism_map/200169bc7780a11d`.
+The updated short-manuscript sources now cite the completed 10-million-history
+run in `results/analysis/massive_mechanism_map/6e23d5aabc519982`
+and point to the committed new Figure 1 under
+`figures/publication/ten_million/`. All empirical results remain unchanged.
+The 175k and 10m runs have different root seeds and sample sizes and are not
+expected to have identical sample extremes.
 
 ## 10 million synthetic histories — seed 2468
 
@@ -103,3 +109,36 @@ final figure report capture the run fingerprint, Git SHA, config, root seed,
 number of histories, timestamp, figure manifest and SHA256 of resulting
 figures. New derived results are distinct from Zenodo software v0.1.0;
 that DOI refers to the original frozen source-only software archive.
+
+## Verified ten-million result (2026-10-19)
+
+| Item | Result |
+| --- | --- |
+| Completed simulations | 10,000,000 |
+| Root seed | 2468 |
+| Backend | cupy |
+| Posterior sigma grid | 4,097 nodes |
+| Contract-state scenarios | 168 |
+| Scenario-cell summary rows | 5,880 |
+| Maximum observed absolute PI–PM difference | 0.15653617444596035 |
+| Largest within-cell 99th percentile | 0.12733794889857514 |
+| Cell-level Taylor prediction / PI–PM correlation | 0.9995456741795187 |
+| Completed run | `6e23d5aabc519982` |
+
+Compared with the old 175k report, the maximum is larger
+(0.13836448229415188 -> 0.15653617444596035) as expected for a much
+larger simulation sample, while the 99th percentile changes little
+(0.1270730579715583 -> 0.12733794889857514).
+The older figure correlation was 0.9995451248988855, virtually identical
+to the new 0.9995456741795187. This is stability of the **cell summary
+relationship**, not an out-of-model validation theorem. The source comparison
+uses the repository's versioned reports and manifests, not raw reruns.
+
+The new Figure 1 is currently uploaded in
+`figures/publication/ten_million/`; `figure_manifest.json` confirms the
+Times New Roman font, width 6.1375 inches, and cividis_ink panel-D colormap.
+The figure was visually reviewed for legend, annotations and contrast.
+Figure 2 (outlined square/circle harmonization) and figures 3–4 still
+require regeneration from their saved empirical summary tables before
+the final Word build. Do not replace existing embedded DOCX figures
+with previews on a different branch without reviewing the final documents.
