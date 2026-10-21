@@ -101,4 +101,40 @@ A useful working aspiration is **dozens of extra distinct dates spanning multipl
 - Retain source-specific files, definition-to-symbol mapping, CME reference-date semantics, cost quotes, SHA256s, exact historical cutoffs, selected/failed dates and source-code commit in every run manifest.
 - The user reviews the Stage 1/2 report and **approves actual spending and expansion** before large downloads.
 
-**Immediate next action:** complete Phase 0 attrition reconciliation, then implement the AAO quote-only coverage probe for Issue #90. No Databento expense is incurred by the present change.
+## Implemented first gate (2026-10-21; results not yet executed on VM)
+
+**Both diagnostic commands are now implemented**, with synthetic local
+tests and **no data download function** in the AAO probe:
+
+```powershell
+git switch main
+git pull --ff-only origin main
+conda run --no-capture-output -n asian-options python -m pytest tests/test_wti_aao_history_feasibility.py -q
+conda run --no-capture-output -n asian-options python -m experiments.wti_aao_existing_attrition
+# Set DATABENTO_API_KEY in your local session, then:
+conda run --no-capture-output -n asian-options python -m experiments.wti_databento_aao_feasibility --mode quote --years 2023 2024 2025 2026 --parents AAO AO --max-quote-usd 5
+```
+
+Output directory:
+`results/analysis/wti_aao_history_feasibility/`.
+
+- `existing_sample_attrition.csv`: market row/key/date decomposition, liquidity
+  counts, source-specific CL eligibility, the necessary earlier-smile date
+  condition and recorded exact forward holdouts (if the saved file exists).
+- `existing_sample_attrition.json`: totals, by-expiry counts and failure flags.
+- `aao_metadata_quotes.json`: dataset/schema availability, candidate
+  AAO/AO parent resolution *counts* on June 17 of each requested year,
+  one-day **USD quotes** for definition/statistics where supported,
+  redacted API errors, and `historical_aao_settlements_confirmed=false`.
+
+No historical AAO price or final settlement download is performed or
+asserted. A price quote is not a purchase, and `--max-quote-usd` only
+highlights estimates that exceed the proposed pilot limit; it does not
+authorize any spending. Databento's `symbology.resolve` or `get_cost`
+may reject candidates and that negative/error result must be reported,
+not replaced by guessed symbols or a different contract family.
+
+**Next action:** run these two scripts on the VM; inspect the returned
+reports and decide whether a separately approved small paid acquisition
+is scientifically and economically justified. No Databento cost or new
+empirical result is claimed by the current coding PR.
