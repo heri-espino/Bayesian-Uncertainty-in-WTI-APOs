@@ -80,6 +80,18 @@ python paper/build.py --check
 
 See `paper/README.md` for the manuscript directory contract. The older REMEF-oriented draft is retained under `archive/paper_remef/` for provenance.
 
+## Proposed Databento AAO history expansion
+
+The next empirical research decision is **feasibility first**:
+audit why the Barchart archive yields only 15 strict-forward evaluation
+dates, then check whether Databento actually supplies historical WTI
+Average Price Option `AAO`/`AO` definitions and official settlements.
+The active [plan](research/DATABENTO_AAO_EXPANSION_PLAN.md) and
+[Issue #90](https://github.com/heri-espino/Bayesian-Uncertainty-in-WTI-APOs/issues/90)
+define quote-only metadata checks, cross-vendor reconciliation,
+cost-capped pilot gates and the conditional longer-history study. No
+extra market data have been purchased or downloaded by the plan.
+
 ## Research roadmap
 
 The active research roadmap is tracked through GitHub Issues and the project wiki in the documentation:
