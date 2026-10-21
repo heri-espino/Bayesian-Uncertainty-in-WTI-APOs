@@ -19,7 +19,7 @@ respective exit criteria.
 The finished 2026-based results remain valid as a fallback, but limited independent
 valuation-date coverage merits a **feasibility-first** data extension before selecting
 a higher-ambition journal target. See the full
-[Databento AAO history-expansion plan](../research/DATABENTO_AAO_EXPANSION_PLAN.md)
+[Databento AAO history-expansion plan](https://github.com/heri-espino/Bayesian-Uncertainty-in-WTI-APOs/blob/main/research/DATABENTO_AAO_EXPANSION_PLAN.md)
 and [tracking Issue #90](https://github.com/heri-espino/Bayesian-Uncertainty-in-WTI-APOs/issues/90).
 
 **Order:** (0) reconcile attrition between 11,179 raw APO observations and the
