@@ -12,6 +12,17 @@ paper.
 - [Development](development.md) — engineering workflow.
 - [Submission checklist](submission_checklist.md) — final Journal of Futures Markets package.
 
+## Next empirical step (not yet executed)
+
+[Databento AAO expansion plan](../research/DATABENTO_AAO_EXPANSION_PLAN.md)
+([Issue #90](https://github.com/heri-espino/Bayesian-Uncertainty-in-WTI-APOs/issues/90))
+is the active feasibility investigation: first explain the present
+15-date/10-date limitations, then verify and **quote** historical WTI APO
+data availability before buying any records. AAO access, added dates and
+improved publication prospects are unconfirmed; the REMEF manuscript
+remains a completed candidate and none of its empirical numbers change
+until reproducible new runs exist.
+
 ## Current scientific thesis
 
 The paper asks when Bayesian posterior integration materially changes a WTI Average Price
