@@ -4,6 +4,23 @@ The REMEF adaptation is based on the **concise** JFM research text, but it has i
 introduction, bilingual metadata and bibliography supplement. Nothing here replaces
 `paper/manuscript/main.tex`, `paper/manuscript/main_short.tex`, or their Wiley builds.
 
+## Pending optional empirical extension — do not replace current results yet
+
+The [historical Databento WTI APO expansion plan](../../research/DATABENTO_AAO_EXPANSION_PLAN.md)
+([Issue #90](https://github.com/heri-espino/Bayesian-Uncertainty-in-WTI-APOs/issues/90))
+will first determine whether longer historical **AAO APO** option marks
+exist in Databento, and whether those marks provide materially more
+independent out-of-sample valuation dates. It is **not** a confirmed
+new dataset, a pending paid order, or a reason to change the finished
+10-million-history experiment. LO option history alone increases
+cross-instrument information but not the number of APO outcome dates.
+
+Retain this REMEF candidate (including all current validated numerical
+claims) as the submission fallback. Any move to a more demanding
+commodity/derivatives journal depends on a documented quote, a feasible
+pilot, longer valid date coverage, preserved lagged-information rules,
+and new reproducible empirical results. No simultaneous submissions.
+
 ## Editorial framing
 
 **English title (9 words):** Posterior Integration and Volatility Inputs in WTI Asian Options
