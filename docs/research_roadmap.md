@@ -14,6 +14,31 @@ The project is considered submission-ready only when the empirical evidence, lit
 positioning, manuscript, reproducibility layer, and journal package all pass their
 respective exit criteria.
 
+## Priority research extension — longer Databento histories (proposed, not yet downloaded)
+
+The finished 2026-based results remain valid as a fallback, but limited independent
+valuation-date coverage merits a **feasibility-first** data extension before selecting
+a higher-ambition journal target. See the full
+[Databento AAO history-expansion plan](https://github.com/heri-espino/Bayesian-Uncertainty-in-WTI-APOs/blob/main/research/DATABENTO_AAO_EXPANSION_PLAN.md)
+and [tracking Issue #90](https://github.com/heri-espino/Bayesian-Uncertainty-in-WTI-APOs/issues/90).
+
+**Order:** (0) reconcile attrition between 11,179 raw APO observations and the
+2,381 strict-forward holdouts across 15 target dates; (1) verify whether
+Databento `GLBX.MDP3` actually contains accessible historical WTI APO
+`AAO`/`AO` definitions and final settlements and obtain an itemized
+quote; (2) obtain the author's permission for a small cost-capped pilot;
+(3) compare overlapping Barchart marks, required CL fixings, LO implied
+volatility and exact valid date counts; (4) only then broaden the longitudinal
+analysis and reassess manuscript/journal placement.
+
+**Critical distinction:** adding more standard `LO` option records cannot
+increase the independent APO outcome dates by itself. Unverified `AAO`
+symbology/historical access and hypothetical 100–250-date targets are
+**not findings**. No bulk purchase or numerical manuscript revision is
+authorized by this roadmap update. Existing `scripts/run_extended_forward_validation.py`
+and `experiments/wti_databento_external_q.py` should be reused rather
+than duplicating the pricing/LO engine. Heavy workflows remain manual-only.
+
 ## Milestone map
 
 | Milestone | Goal | Issues | Exit criterion |

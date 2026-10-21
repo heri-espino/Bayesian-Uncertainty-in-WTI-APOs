@@ -18,6 +18,24 @@ In the Barchart histories used by this project, `Latest` is the CME settlement f
 
 A live workstation test showed that Yahoo can return 404 / `YFTzMissingError` for older delisted individual contracts such as `CLG24.NYM`. Individual Yahoo CL pages are therefore no longer required by the canonical pilot.
 
+## Planned historical APO expansion (quote-only first)
+
+**Not implemented/downloaded:** Historical WTI APO `AAO`/`AO`
+instrument definitions and settlement statistics on Databento have not
+yet been verified as available. The current implemented Databento workflow
+(`experiments/wti_databento_external_q.py`) is for **standard LO options
+and CL futures**, and its `--mode quote` should not be used or described
+as an AAO quote. Historical coverage and entitlement must be checked on
+the provider's actual symbols and CME reference dates.
+
+The [feasibility and expansion plan](https://github.com/heri-espino/Bayesian-Uncertainty-in-WTI-APOs/blob/main/research/DATABENTO_AAO_EXPANSION_PLAN.md)
+and [Issue #90](https://github.com/heri-espino/Bayesian-Uncertainty-in-WTI-APOs/issues/90)
+define an ordered audit of existing panel attrition, AAO metadata and
+cost, cross-vendor settlement agreement, distinct evaluation dates,
+strictly earlier volatility inputs, and a go/no-go decision before
+substantial spending. Do not overwrite the Barchart-era panels or alter
+the canonical pricing driver merely because another vendor is available.
+
 ## 1. Ingest the option histories
 
 Use all downloaded APO contracts in the raw panel. Do not select strikes according to the final observed WTI level.
