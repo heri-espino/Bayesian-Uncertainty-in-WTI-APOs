@@ -36,6 +36,67 @@ strictly earlier volatility inputs, and a go/no-go decision before
 substantial spending. Do not overwrite the Barchart-era panels or alter
 the canonical pricing driver merely because another vendor is available.
 
+## Implemented: existing-sample attrition and cost-free AAO feasibility quote
+
+The first gate of [Issue #90](https://github.com/heri-espino/Bayesian-Uncertainty-in-WTI-APOs/issues/90)
+is now implemented in two **separate**, reproducible commands. Neither
+calls a pricing model or initiates a time-series download.
+
+**A. Explain the existing Barchart sample attrition locally (no API key):**
+
+```powershell
+conda run --no-capture-output -n asian-options python -m experiments.wti_aao_existing_attrition
+```
+
+Inputs: committed Barchart APO histories, contract-specific Barchart CL
+curve and expiry table, and the previously computed strict-forward
+holdout CSV if present. This reuses `_date_audit` for actual CL
+fixing-curve/date eligibility. Outputs are under
+`results/analysis/wti_aao_history_feasibility/`:
+
+- `existing_sample_attrition.csv`: every date/expiry, raw options, unique
+  market keys, valid marks, positive-volume/positive-OI counts, eligible
+  CL/fixing support, at-least-six prior-smile-contract diagnostic, and
+  matched distinct recorded forward holdouts;
+- `existing_sample_attrition.json`: overall and expiry-specific date
+  counts, recorded holdout counts, failure/missing-input warnings and
+  explicit diagnostic limitations.
+
+**Note:** six available contracts and an earlier eligible day are a
+*necessary* screen, **not proof** of a successful lagged implied-volatility
+smile calibration, a complete posterior run or a newly verified test date.
+If the forward prediction CSV is absent, actual recorded counts remain
+unknown rather than inferred from eligibility alone.
+
+**B. Probe Databento metadata and quote *without downloading* AAO data:**
+
+```powershell
+# Set this only on your VM/session; never put it into git.
+$env:DATABENTO_API_KEY = "<your account API key>"
+conda run --no-capture-output -n asian-options python -m experiments.wti_databento_aao_feasibility --mode quote --years 2023 2024 2025 2026 --parents AAO AO --max-quote-usd 5
+```
+
+The probe calls only `metadata.list_datasets`,
+`metadata.list_schemas`, `metadata.get_dataset_range`,
+`symbology.resolve` and `metadata.get_cost`. It does **not** call
+`timeseries.get_range` or the paid batch APIs. It checks one day per
+year (June 17, end exclusive June 18), and labels `AAO`/`AO` as
+**candidate parent symbols**, not verified APO tickers. The returned
+`aao_metadata_quotes.json` stores dates, availability ranges, whether
+each parent resolves, quoted USD amounts, errors and a no-download flag,
+without recording credentials, proprietary time series or raw symbol
+mapping lists.
+
+**A nonzero quote or successful parent-symbol resolution is not proof
+that historical AAO final settlements exist.** The next gate is to
+inspect the metadata/quoted costs and request permission for one
+explicitly bounded, potentially billable definition/statistics pilot.
+There is **no** `download` mode in this AAO feasibility script.
+
+These commands do not rerun the 10-million synthetic experiment, do not
+modify the existing WTI LO pipeline, and do not change the main
+manuscript's empirical results. Use a future PR for any paid pilot.
+
 ## 1. Ingest the option histories
 
 Use all downloaded APO contracts in the raw panel. Do not select strikes according to the final observed WTI level.
