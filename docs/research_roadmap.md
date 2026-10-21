@@ -39,6 +39,20 @@ authorized by this roadmap update. Existing `scripts/run_extended_forward_valida
 and `experiments/wti_databento_external_q.py` should be reused rather
 than duplicating the pricing/LO engine. Heavy workflows remain manual-only.
 
+### First gate available in code (not yet executed on the research VM)
+
+- `python -m experiments.wti_aao_existing_attrition`: reconcile the
+  existing Barchart history against strict forward observation/date coverage.
+- `python -m experiments.wti_databento_aao_feasibility --mode quote`:
+  check free Databento metadata/AAO candidate parent mappings and
+  quoted one-day definition/statistics costs for 2023–2026, with no
+  historical-data downloads.
+
+The reports, when run, will appear under
+`results/analysis/wti_aao_history_feasibility/`. Never describe
+unexecuted quote checks as verified market coverage. Any data acquisition
+requires a separate explicit approval.
+
 ## Milestone map
 
 | Milestone | Goal | Issues | Exit criterion |
