@@ -148,7 +148,7 @@ def probe_aao_quotes(
             try:
                 mapping = client.symbology.resolve(
                     dataset=DATASET, symbols=[parent],
-                    stype_in="parent", stype_out="raw_symbol",
+                    stype_in="parent", stype_out="instrument_id",
                     start_date=start, end_date=end,
                 )
                 found = mapping.get("result", {}).get(parent, [])
