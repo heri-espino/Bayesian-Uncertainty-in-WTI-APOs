@@ -28,7 +28,7 @@ and CL futures**, and its `--mode quote` should not be used or described
 as an AAO quote. Historical coverage and entitlement must be checked on
 the provider's actual symbols and CME reference dates.
 
-The [feasibility and expansion plan](../research/DATABENTO_AAO_EXPANSION_PLAN.md)
+The [feasibility and expansion plan](https://github.com/heri-espino/Bayesian-Uncertainty-in-WTI-APOs/blob/main/research/DATABENTO_AAO_EXPANSION_PLAN.md)
 and [Issue #90](https://github.com/heri-espino/Bayesian-Uncertainty-in-WTI-APOs/issues/90)
 define an ordered audit of existing panel attrition, AAO metadata and
 cost, cross-vendor settlement agreement, distinct evaluation dates,
