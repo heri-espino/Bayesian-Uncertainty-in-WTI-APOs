@@ -14,7 +14,7 @@ paper.
 
 ## Next empirical step (not yet executed)
 
-[Databento AAO expansion plan](../research/DATABENTO_AAO_EXPANSION_PLAN.md)
+[Databento AAO expansion plan](https://github.com/heri-espino/Bayesian-Uncertainty-in-WTI-APOs/blob/main/research/DATABENTO_AAO_EXPANSION_PLAN.md)
 ([Issue #90](https://github.com/heri-espino/Bayesian-Uncertainty-in-WTI-APOs/issues/90))
 is the active feasibility investigation: first explain the present
 15-date/10-date limitations, then verify and **quote** historical WTI APO
