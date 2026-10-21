@@ -134,7 +134,7 @@ class _Symbology:
     def resolve(self, **kwargs):
         self.calls.append(kwargs)
         assert kwargs["stype_in"] == "parent"
-        assert kwargs["stype_out"] == "raw_symbol"
+        assert kwargs["stype_out"] == "instrument_id"
         parent = kwargs["symbols"][0]
         return {
             "result": {
