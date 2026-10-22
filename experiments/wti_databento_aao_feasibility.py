@@ -2,12 +2,15 @@
 
 Only Historical.metadata.* and Historical.symbology.resolve are permitted.
 No timeseries.get_range(), batch.submit_job(), or chargeable acquisition.
+Parent symbol syntax is [ROOT].OPT (e.g. AAO.OPT); bare product-code
+aliases AAO and AO are normalized automatically. Each probe uses a trading
+weekday rather than an arbitrary Saturday/Sunday.
 A resolved candidate parent and a positive cost quote do NOT prove that
 historical WTI Asian option final settlements are available.
 
 PowerShell
 ----------
-python -m experiments.wti_databento_aao_feasibility --mode quote
+python -m experiments.wti_databento_aao_feasibility --mode quote --parents AAO.OPT AO.OPT
 
 DATABENTO_API_KEY is read only from the local environment.
 """
@@ -17,6 +20,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 from pathlib import Path
 from typing import Any
 
@@ -26,7 +30,7 @@ ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "results" / "analysis" / "wti_aao_history_feasibility"
 DATASET = "GLBX.MDP3"
 DEFAULT_YEARS = (2023, 2024, 2025, 2026)
-CANDIDATE_PARENTS = ("AAO", "AO")
+CANDIDATE_PARENTS = ("AAO.OPT", "AO.OPT")
 DEFAULT_MAX_QUOTE_USD = 5.0
 
 
@@ -53,11 +57,29 @@ def _safe_exception(exc: Exception) -> str:
     return message[:450]
 
 
+_PARENT_RE = re.compile(r"^[A-Z0-9]+\.OPT$")
+
+
+def _normalize_parent(value: str) -> str:
+    """Accept CME product-code aliases but query Databento option parents."""
+    raw = value.strip().upper()
+    if "." not in raw:
+        raw += ".OPT"
+    if not _PARENT_RE.fullmatch(raw):
+        raise ValueError(
+            f"Invalid option parent {value!r}. Expected [ROOT].OPT "
+            "(for example AAO.OPT); .FUT is not an option parent."
+        )
+    return raw
+
+
 def _anchor(year: int) -> tuple[str, str]:
-    """One whole UTC day, not a full-year billable statistics request."""
+    """Use June's second Wednesday, avoiding weekend-only metadata probes."""
     if not 2000 <= year <= 2100:
         raise ValueError(f"Invalid anchor year: {year}")
-    day = pd.Timestamp(f"{year}-06-17")
+    first = pd.Timestamp(f"{year}-06-01")
+    # Mon=0, Wed=2; second Wednesday is the first + seven days.
+    day = first + pd.Timedelta(days=(2 - first.weekday()) % 7 + 7)
     return day.strftime("%Y-%m-%d"), (
         day + pd.Timedelta(days=1)
     ).strftime("%Y-%m-%d")
@@ -95,7 +117,7 @@ def probe_aao_quotes(
     if not years or not parents:
         raise ValueError("years and parents must be nonempty")
     years = tuple(sorted(set(int(y) for y in years)))
-    parents = tuple(dict.fromkeys(p.strip().upper() for p in parents if p.strip()))
+    parents = tuple(dict.fromkeys(_normalize_parent(p) for p in parents if p.strip()))
     if not parents:
         raise ValueError("No nonblank candidate parent symbols")
 
@@ -210,7 +232,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--years", nargs="+", type=int, default=list(DEFAULT_YEARS))
     parser.add_argument(
         "--parents", nargs="+", default=list(CANDIDATE_PARENTS),
-        help="Unverified Databento parent candidates (NOT guaranteed product symbols).",
+        help=(
+            "Databento option parents, e.g. AAO.OPT AO.OPT. Bare CME codes "
+            "AAO AO are accepted and normalized to .OPT; coverage is unverified."
+        ),
     )
     parser.add_argument(
         "--max-quote-usd", type=float, default=DEFAULT_MAX_QUOTE_USD,

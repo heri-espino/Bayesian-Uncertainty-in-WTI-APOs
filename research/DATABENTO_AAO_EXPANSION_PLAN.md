@@ -49,7 +49,7 @@ Databento source candidate: `GLBX.MDP3`, subject to actual dataset entitlements 
 - Record quote basis, requested interval (end exclusive), symbol count, returned definitions/statistics, selected contracts and entitlements, proposed total acquisition costs, and versioned **aggregate** coverage—never the API key. Never extrapolate the old small LO cost quote to a multiyear AAO download.
 
 Proposed command **to implement in the next coding PR**, not an existing command:
-`python -m experiments.wti_databento_aao_feasibility --mode quote --years 2023 2024 2025 2026 --max-cost-usd 5`.
+`python -m experiments.wti_databento_aao_feasibility --mode quote --years 2023 2024 2025 2026 --max-quote-usd 5`.
 
 Deliverables: `results/analysis/wti_aao_history_feasibility/metadata_coverage.csv`, `cost_quotes.json`, `feasibility_report.md` and redacted manifest, with no licensed records committed.
 
@@ -112,7 +112,7 @@ git pull --ff-only origin main
 conda run --no-capture-output -n asian-options python -m pytest tests/test_wti_aao_history_feasibility.py -q
 conda run --no-capture-output -n asian-options python -m experiments.wti_aao_existing_attrition
 # Set DATABENTO_API_KEY in your local session, then:
-conda run --no-capture-output -n asian-options python -m experiments.wti_databento_aao_feasibility --mode quote --years 2023 2024 2025 2026 --parents AAO AO --max-quote-usd 5
+conda run --no-capture-output -n asian-options python -m experiments.wti_databento_aao_feasibility --mode quote --years 2023 2024 2025 2026 --parents AAO.OPT AO.OPT --max-quote-usd 5
 ```
 
 Output directory:
@@ -123,7 +123,7 @@ Output directory:
   condition and recorded exact forward holdouts (if the saved file exists).
 - `existing_sample_attrition.json`: totals, by-expiry counts and failure flags.
 - `aao_metadata_quotes.json`: dataset/schema availability, candidate
-  AAO/AO parent resolution *counts* on June 17 of each requested year,
+  AAO/AO parent resolution *counts* on June's second Wednesday in each requested year,
   one-day **USD quotes** for definition/statistics where supported,
   redacted API errors, and `historical_aao_settlements_confirmed=false`.
 
@@ -133,6 +133,16 @@ highlights estimates that exceed the proposed pilot limit; it does not
 authorize any spending. Databento's `symbology.resolve` or `get_cost`
 may reject candidates and that negative/error result must be reported,
 not replaced by guessed symbols or a different contract family.
+
+**Live-probe correction (2026-10-22):** The first user-side metadata
+run successfully listed `GLBX.MDP3` (including available historical
+`definition` and `statistics` schema ranges) but **all 8 parent
+resolution probes failed before any quotes**: Databento requires
+`[ROOT].OPT` under `stype_in=parent`. We now use `AAO.OPT` and
+`AO.OPT` as candidates, normalize bare aliases, and probe on the
+second Wednesday of June to avoid the former Saturday anchor for
+2023. This does not yet establish APO contract presence or any
+historical final settlements. No paid acquisition took place.
 
 **Next action:** run these two scripts on the VM; inspect the returned
 reports and decide whether a separately approved small paid acquisition

@@ -73,19 +73,30 @@ unknown rather than inferred from eligibility alone.
 ```powershell
 # Set this only on your VM/session; never put it into git.
 $env:DATABENTO_API_KEY = "<your account API key>"
-conda run --no-capture-output -n asian-options python -m experiments.wti_databento_aao_feasibility --mode quote --years 2023 2024 2025 2026 --parents AAO AO --max-quote-usd 5
+conda run --no-capture-output -n asian-options python -m experiments.wti_databento_aao_feasibility --mode quote --years 2023 2024 2025 2026 --parents AAO.OPT AO.OPT --max-quote-usd 5
 ```
 
 The probe calls only `metadata.list_datasets`,
 `metadata.list_schemas`, `metadata.get_dataset_range`,
 `symbology.resolve` and `metadata.get_cost`. It does **not** call
 `timeseries.get_range` or the paid batch APIs. It checks one day per
-year (June 17, end exclusive June 18), and labels `AAO`/`AO` as
+year (June's second Wednesday, end exclusive the next day), and labels `AAO.OPT`/`AO.OPT` as
 **candidate parent symbols**, not verified APO tickers. The returned
 `aao_metadata_quotes.json` stores dates, availability ranges, whether
 each parent resolves, quoted USD amounts, errors and a no-download flag,
 without recording credentials, proprietary time series or raw symbol
 mapping lists.
+
+**Correction after the first real VM probe (22 October 2026):** Databento
+rejected bare `AAO` and `AO` under `stype_in="parent"` because it
+requires a product-family suffix. The script now uses documented
+`[ROOT].OPT` syntax (`AAO.OPT`, `AO.OPT`) and transparently normalizes
+bare `--parents AAO AO` aliases for compatibility. The original
+2023-06-17 anchor was a Saturday; it now uses the second Wednesday of
+June, without changing the no-download restriction. The historical
+dataset-wide 2010 start date does *not* establish AAO-specific
+contract or settlement coverage. See
+[Databento symbology documentation](https://databento.com/docs/standards-and-conventions/symbology).
 
 **A nonzero quote or successful parent-symbol resolution is not proof
 that historical AAO final settlements exist.** The next gate is to
