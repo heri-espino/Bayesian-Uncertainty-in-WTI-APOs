@@ -78,7 +78,7 @@ conda run --no-capture-output -n asian-options python -m experiments.wti_databen
 
 The probe calls only `metadata.list_datasets`,
 `metadata.list_schemas`, `metadata.get_dataset_range`,
-`symbology.resolve` and `metadata.get_cost`. It does **not** call
+`symbology.resolve`, `metadata.get_record_count` and `metadata.get_cost`. It does **not** call
 `timeseries.get_range` or the paid batch APIs. It checks one day per
 year (June's second Wednesday, end exclusive the next day), and labels `AAO.OPT`/`AO.OPT` as
 **candidate parent symbols**, not verified APO tickers. The returned
@@ -97,6 +97,30 @@ June, without changing the no-download restriction. The historical
 dataset-wide 2010 start date does *not* establish AAO-specific
 contract or settlement coverage. See
 [Databento symbology documentation](https://databento.com/docs/standards-and-conventions/symbology).
+
+**Important correction after the 22 October 2026 LO positive-control failure:**
+The 2025/2026 `LO.OPT` family returned *zero* parent-to-instrument-ID
+mappings under `symbology.resolve`, even though the repository
+already has a successful Databento `LO.OPT` definition acquisition
+dated **2026-08-24**. Therefore an empty mapping cannot be used as
+a gate for metadata counts or quotes. The feasibility script now
+queries both `metadata.get_record_count` and `metadata.get_cost`
+for each parent and schema **even if symbology resolution is empty
+or raises an error**, and includes an independent
+`positive_control` for `LO.OPT` on `2026-08-24`. The
+`record_counts` field measures provider metadata estimates, not
+instrument identity, individual final settlements, or year-long coverage.
+
+**Suggested validation after updating `main`:**
+
+```powershell
+python -m experiments.wti_databento_aao_feasibility --mode quote --years 2023 2024 2025 2026 --parents AAO.OPT AO.OPT --max-quote-usd 5
+$report = Get-Content "results/analysis/wti_aao_history_feasibility/aao_metadata_quotes.json" -Raw | ConvertFrom-Json
+$report.positive_control | Format-List
+$report.probes | Select-Object year,parent_candidate,status,mapping_count,record_counts,quotes_usd,error | Format-List
+```
+
+**No acquired AAO price data are created by this command.**
 
 **A nonzero quote or successful parent-symbol resolution is not proof
 that historical AAO final settlements exist.** The next gate is to
