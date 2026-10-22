@@ -125,8 +125,23 @@ class _Metadata:
     def get_cost(self, **kwargs):
         self.calls.append(("get_cost", kwargs))
         assert kwargs["stype_in"] == "parent"
-        assert kwargs["symbols"] == ["AAO.OPT"]
+        assert kwargs["symbols"][0] in {"AAO.OPT", "AO.OPT", "LO.OPT"}
+        parent = kwargs["symbols"][0]
+        if parent == "AO.OPT":
+            raise ValueError("No matching AO records for quote")
+        if parent == "LO.OPT":
+            return 0.20
         return 0.25 if kwargs["schema"] == "definition" else 0.40
+
+    def get_record_count(self, **kwargs):
+        self.calls.append(("get_record_count", kwargs))
+        assert kwargs["stype_in"] == "parent"
+        parent = kwargs["symbols"][0]
+        if parent == "LO.OPT":
+            return 26411 if kwargs["schema"] == "definition" else 863567
+        if parent == "AAO.OPT":
+            return 17 if kwargs["schema"] == "definition" else 8
+        raise ValueError("No matching AO records")
 
 
 class _Symbology:
@@ -170,13 +185,22 @@ def test_quote_only_candidate_resolution_never_downloads() -> None:
     assert found["start_inclusive"] == "2025-06-11"
     assert found["parent_symbology_verified"]
     assert found["mapping_count"] == 1
+    assert found["record_counts"] == {"definition": 17, "statistics": 8}
+    assert found["status"] == (
+        "metadata_records_reported_not_final_settlement_proven"
+    )
     assert found["quotes_usd"] == {"definition": 0.25, "statistics": 0.4}
     assert found["within_quote_ceiling"]
     assert found["total_one_day_quote_usd"] == 0.65
     assert not missing["parent_symbology_verified"]
-    assert missing["status"] == "candidate_parent_not_resolved_on_anchor_day"
-    assert len(client.symbology.calls) == 2
-    assert len([n for n in client.metadata.calls if n[0] == "get_cost"]) == 2
+    assert missing["status"] == "inconclusive_metadata_query"
+    assert not missing["metadata_records_reported"]
+    assert len(client.symbology.calls) == 3
+    assert report["positive_control"]["parent_candidate"] == "LO.OPT"
+    assert report["positive_control"]["mapping_count"] == 0
+    assert report["positive_control"]["record_counts"]["definition"] == 26411
+    assert report["positive_control_metadata_pass"]
+    assert len([n for n in client.metadata.calls if n[0] == "get_cost"]) == 6
 
 
 def test_schema_range_blocks_outside_year_quote() -> None:
@@ -185,8 +209,13 @@ def test_schema_range_blocks_outside_year_quote() -> None:
     assert report["probes"][0]["status"] == (
         "definition_schema_day_outside_available_range"
     )
-    assert not client.symbology.calls
-    assert not any(entry[0] == "get_cost" for entry in client.metadata.calls)
+    assert len(client.symbology.calls) == 1  # LO.OPT control only
+    queried_dates = [
+        item[1]["start"]
+        for item in client.metadata.calls
+        if item[0] == "get_cost"
+    ]
+    assert queried_dates == ["2026-08-24", "2026-08-24"]
 
 
 def test_missing_dataset_is_no_go() -> None:
@@ -245,3 +274,32 @@ def test_explicit_databento_parent_and_bare_code_deduplicate() -> None:
     assert report["candidate_parents"] == ["AAO.OPT"]
     assert len(report["probes"]) == 1
     assert client.symbology.calls[0]["symbols"] == ["AAO.OPT"]
+    assert client.symbology.calls[1]["symbols"] == ["LO.OPT"]
+
+
+def test_symbology_failure_does_not_suppress_metadata_cost_or_count() -> None:
+    client = _FakeClient()
+    def raising_resolve(**kwargs):
+        if kwargs["symbols"] == ["AAO.OPT"]:
+            raise RuntimeError("Unresolvable parent despite available metadata")
+        return _Symbology().resolve(**kwargs)
+    client.symbology.resolve = raising_resolve
+    result = probe_aao_quotes(
+        client, years=(2025,), parents=("AAO.OPT",),
+    )
+    row = result["probes"][0]
+    assert "Unresolvable" in row["error"]
+    assert row["record_counts"]["statistics"] == 8
+    assert row["quotes_usd"]["statistics"] == 0.40
+    assert row["status"] == "metadata_records_reported_not_final_settlement_proven"
+    assert result["historical_aao_settlements_confirmed"] is False
+
+
+def test_positive_control_does_not_prove_aao_availability() -> None:
+    client = _FakeClient()
+    result = probe_aao_quotes(
+        client, years=(2025,), parents=("AO.OPT",),
+    )
+    assert result["positive_control_metadata_pass"]
+    assert result["probes"][0]["status"] == "inconclusive_metadata_query"
+    assert result["historical_aao_settlements_confirmed"] is False
