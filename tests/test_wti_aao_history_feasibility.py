@@ -10,7 +10,9 @@ from experiments.wti_aao_existing_attrition import (
     build_attrition_report,
 )
 from experiments.wti_databento_aao_feasibility import (
+    _anchor,
     _is_within_schema_range,
+    _normalize_parent,
     _safe_exception,
     probe_aao_quotes,
 )
@@ -123,7 +125,7 @@ class _Metadata:
     def get_cost(self, **kwargs):
         self.calls.append(("get_cost", kwargs))
         assert kwargs["stype_in"] == "parent"
-        assert kwargs["symbols"] == ["AAO"]
+        assert kwargs["symbols"] == ["AAO.OPT"]
         return 0.25 if kwargs["schema"] == "definition" else 0.40
 
 
@@ -139,10 +141,10 @@ class _Symbology:
         return {
             "result": {
                 parent: ([{"d0": kwargs["start_date"], "d1": kwargs["end_date"], "s": "TEST"}]
-                         if parent == "AAO" else [])
+                         if parent == "AAO.OPT" else [])
             },
-            "message": "OK" if parent == "AAO" else "Not found",
-            "not_found": [] if parent == "AAO" else [parent],
+            "message": "OK" if parent == "AAO.OPT" else "Not found",
+            "not_found": [] if parent == "AAO.OPT" else [parent],
         }
 
 
@@ -161,8 +163,11 @@ def test_quote_only_candidate_resolution_never_downloads() -> None:
     )
     assert report["no_timeseries_download"]
     assert report["historical_aao_settlements_confirmed"] is False
+    assert report["candidate_parents"] == ["AAO.OPT", "AO.OPT"]
     assert len(report["probes"]) == 2
     found, missing = report["probes"]
+    assert found["parent_candidate"] == "AAO.OPT"
+    assert found["start_inclusive"] == "2025-06-11"
     assert found["parent_symbology_verified"]
     assert found["mapping_count"] == 1
     assert found["quotes_usd"] == {"definition": 0.25, "statistics": 0.4}
@@ -208,3 +213,35 @@ def test_range_boundary_and_error_redaction(monkeypatch) -> None:
     )
     with pytest.raises(ValueError, match="finite positive"):
         probe_aao_quotes(_FakeClient(), max_quote_usd=-1)
+
+
+def test_normalize_parent_aliases_and_reject_other_asset_classes() -> None:
+    assert _normalize_parent("aao") == "AAO.OPT"
+    assert _normalize_parent(" AO.OPT ") == "AO.OPT"
+    with pytest.raises(ValueError, match="Expected"):
+        _normalize_parent("AAO.FUT")
+    with pytest.raises(ValueError, match="Expected"):
+        _normalize_parent("AAO.OPT.FUT")
+
+
+@pytest.mark.parametrize("year,start", [
+    (2023, "2023-06-14"),
+    (2024, "2024-06-12"),
+    (2025, "2025-06-11"),
+    (2026, "2026-06-10"),
+])
+def test_anchor_is_second_june_wednesday(year: int, start: str) -> None:
+    observed, end = _anchor(year)
+    assert observed == start
+    assert pd.Timestamp(end) == pd.Timestamp(start) + pd.Timedelta(days=1)
+    assert pd.Timestamp(observed).weekday() == 2
+
+
+def test_explicit_databento_parent_and_bare_code_deduplicate() -> None:
+    client = _FakeClient()
+    report = probe_aao_quotes(
+        client, years=(2026,), parents=("AAO", "AAO.OPT"),
+    )
+    assert report["candidate_parents"] == ["AAO.OPT"]
+    assert len(report["probes"]) == 1
+    assert client.symbology.calls[0]["symbols"] == ["AAO.OPT"]
