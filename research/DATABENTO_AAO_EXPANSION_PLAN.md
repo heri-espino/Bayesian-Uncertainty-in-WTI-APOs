@@ -49,7 +49,7 @@ Databento source candidate: `GLBX.MDP3`, subject to actual dataset entitlements 
 - Record quote basis, requested interval (end exclusive), symbol count, returned definitions/statistics, selected contracts and entitlements, proposed total acquisition costs, and versioned **aggregate** coverage—never the API key. Never extrapolate the old small LO cost quote to a multiyear AAO download.
 
 Proposed command **to implement in the next coding PR**, not an existing command:
-`python -m experiments.wti_databento_aao_feasibility --mode quote --years 2023 2024 2025 2026 --max-cost-usd 5`.
+`python -m experiments.wti_databento_aao_feasibility --mode quote --years 2023 2024 2025 2026 --max-quote-usd 5`.
 
 Deliverables: `results/analysis/wti_aao_history_feasibility/metadata_coverage.csv`, `cost_quotes.json`, `feasibility_report.md` and redacted manifest, with no licensed records committed.
 
