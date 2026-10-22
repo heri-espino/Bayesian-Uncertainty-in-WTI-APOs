@@ -1,11 +1,13 @@
 """Query Databento AAO/AO availability and quoted costs WITHOUT downloading data.
 
 Only Historical.metadata.* and Historical.symbology.resolve are permitted.
+The LO.OPT positive control uses the existing validated 2026-08-24 data date.
+Zero symbology.resolve mappings NEVER suppress independent cost/count probes.
 No timeseries.get_range(), batch.submit_job(), or chargeable acquisition.
 Parent symbol syntax is [ROOT].OPT (e.g. AAO.OPT); bare product-code
 aliases AAO and AO are normalized automatically. Each probe uses a trading
 weekday rather than an arbitrary Saturday/Sunday.
-A resolved candidate parent and a positive cost quote do NOT prove that
+Even positive record counts and a positive quote do NOT prove that
 historical WTI Asian option final settlements are available.
 
 PowerShell
@@ -98,6 +100,111 @@ def _is_within_schema_range(
     return bool(pd.notna(start) and pd.notna(end) and start <= target < end)
 
 
+def _probe_parent_day(
+    client: Any,
+    *,
+    parent: str,
+    start: str,
+    end: str,
+    schemas: list[str],
+    available: dict[str, Any],
+    max_quote_usd: float,
+) -> dict[str, Any]:
+    """Probe parent resolution and independently query counts/quotes for one day.
+
+    A parent-to-instrument_id resolution may not enumerate a large options
+    family. The metadata queries are attempted independently of its status.
+    No time-series API is called.
+    """
+    row: dict[str, Any] = {
+        "parent_candidate": parent,
+        "start_inclusive": start,
+        "end_exclusive": end,
+        "parent_symbology_verified": False,
+        "mapping_count": 0,
+        "record_counts": {},
+        "quotes_usd": {},
+        "historical_final_settlements_verified": False,
+    }
+    if not _is_within_schema_range(
+        start, ranges=available, schema="definition"
+    ):
+        row["status"] = "definition_schema_day_outside_available_range"
+        return row
+
+    try:
+        mapping = client.symbology.resolve(
+            dataset=DATASET, symbols=[parent],
+            stype_in="parent", stype_out="instrument_id",
+            start_date=start, end_date=end,
+        )
+        found = mapping.get("result", {}).get(parent, [])
+        row["mapping_count"] = int(len(found))
+        row["parent_symbology_verified"] = bool(found) and (
+            parent not in mapping.get("not_found", [])
+        )
+        row["mapping_status"] = str(mapping.get("message", "unknown"))
+    except Exception as exc:
+        row["symbology_error"] = _safe_exception(exc)
+        # Preserve the old field for user-side PowerShell report compatibility.
+        row["error"] = row["symbology_error"]
+
+    # Key correction: do NOT gate metadata on symbology.resolve.
+    # Databento publishes record counts and USD quotes via free metadata APIs.
+    for schema in ("definition", "statistics"):
+        if schema not in schemas or not _is_within_schema_range(
+            start, ranges=available, schema=schema
+        ):
+            row["record_counts"][schema] = None
+            row["quotes_usd"][schema] = None
+            continue
+        request = {
+            "dataset": DATASET, "start": start, "end": end,
+            "symbols": [parent], "schema": schema, "stype_in": "parent",
+        }
+        try:
+            count = int(client.metadata.get_record_count(**request))
+            if count < 0:
+                raise ValueError("Negative record count")
+            row["record_counts"][schema] = count
+        except Exception as exc:
+            row["record_counts"][schema] = None
+            row.setdefault("record_count_errors", {})[schema] = (
+                _safe_exception(exc)
+            )
+        try:
+            quote = float(client.metadata.get_cost(**request))
+            if not 0 <= quote < float("inf"):
+                raise ValueError("Nonfinite or negative USD quote")
+            row["quotes_usd"][schema] = quote
+        except Exception as exc:
+            row["quotes_usd"][schema] = None
+            row.setdefault("quote_errors", {})[schema] = _safe_exception(exc)
+
+    values = tuple(row["quotes_usd"].get(k) for k in ("definition", "statistics"))
+    if all(isinstance(v, (float, int)) for v in values):
+        total = float(sum(values))
+        row["total_one_day_quote_usd"] = round(total, 9)
+        row["within_quote_ceiling"] = total <= max_quote_usd
+    else:
+        row["total_one_day_quote_usd"] = None
+        row["within_quote_ceiling"] = False
+    row["metadata_records_reported"] = any(
+        isinstance(x, int) and x > 0
+        for x in row["record_counts"].values()
+    )
+    if row["metadata_records_reported"]:
+        row["status"] = "metadata_records_reported_not_final_settlement_proven"
+    elif all(
+        isinstance(row["record_counts"].get(k), int)
+        for k in ("definition", "statistics")
+    ):
+        row["status"] = "zero_metadata_records_on_anchor_day"
+    else:
+        row["status"] = "inconclusive_metadata_query"
+    return row
+
+
 def probe_aao_quotes(
     client: Any,
     *,
@@ -153,73 +260,41 @@ def probe_aao_quotes(
     for year in years:
         start, end = _anchor(year)
         for parent in parents:
-            row: dict[str, Any] = {
-                "year": year, "parent_candidate": parent,
-                "start_inclusive": start, "end_exclusive": end,
-                "parent_symbology_verified": False,
-                "mapping_count": 0,
-                "quotes_usd": {},
-                "historical_final_settlements_verified": False,
-            }
-            if not _is_within_schema_range(
-                start, ranges=available, schema="definition"
-            ):
-                row["status"] = "definition_schema_day_outside_available_range"
-                report["probes"].append(row)
-                continue
-            try:
-                mapping = client.symbology.resolve(
-                    dataset=DATASET, symbols=[parent],
-                    stype_in="parent", stype_out="instrument_id",
-                    start_date=start, end_date=end,
-                )
-                found = mapping.get("result", {}).get(parent, [])
-                row["mapping_count"] = int(len(found))
-                row["parent_symbology_verified"] = bool(found) and (
-                    parent not in mapping.get("not_found", [])
-                )
-                row["mapping_status"] = str(mapping.get("message", "unknown"))
-            except Exception as exc:
-                row["status"] = "symbology_resolution_error"
-                row["error"] = _safe_exception(exc)
-                report["probes"].append(row)
-                continue
-            if not row["parent_symbology_verified"]:
-                row["status"] = "candidate_parent_not_resolved_on_anchor_day"
-                report["probes"].append(row)
-                continue
-            for schema in ("definition", "statistics"):
-                if schema not in schemas or not _is_within_schema_range(
-                    start, ranges=available, schema=schema
-                ):
-                    row["quotes_usd"][schema] = None
-                    continue
-                try:
-                    quote = float(client.metadata.get_cost(
-                        dataset=DATASET, start=start, end=end,
-                        symbols=[parent], schema=schema, stype_in="parent",
-                    ))
-                    if not 0 <= quote < float("inf"):
-                        raise ValueError("Nonfinite or negative USD quote")
-                    row["quotes_usd"][schema] = quote
-                except Exception as exc:
-                    row["quotes_usd"][schema] = None
-                    row.setdefault("quote_errors", {})[schema] = _safe_exception(exc)
-            total = sum(
-                value for value in row["quotes_usd"].values()
-                if isinstance(value, (int, float))
+            row = _probe_parent_day(
+                client, parent=parent, start=start, end=end,
+                schemas=schemas, available=available,
+                max_quote_usd=max_quote_usd,
             )
-            missing_quotes = any(
-                row["quotes_usd"].get(k) is None for k in ("definition", "statistics")
-            )
-            row["total_one_day_quote_usd"] = None if missing_quotes else round(total, 9)
-            row["within_quote_ceiling"] = (
-                not missing_quotes and total <= max_quote_usd
-            )
-            row["status"] = "parent_resolved_quote_only_not_settlement_proven"
+            row["year"] = year
             report["probes"].append(row)
+
+    # Positive control: the repository's previously verified LO acquisition
+    # covers 2026-08-24. If LO counts are positive but symbology mapping is
+    # empty, an empty mapping alone is not meaningful evidence of absence.
+    control = _probe_parent_day(
+        client, parent="LO.OPT", start="2026-08-24",
+        end="2026-08-25", schemas=schemas, available=available,
+        max_quote_usd=max_quote_usd,
+    )
+    report["positive_control"] = control
+    report["positive_control_expected_source"] = (
+        "Existing local Databento LO definition/statistics acquisition "
+        "for 2026-08-24, independently documented in "
+        "results/analysis/wti_databento_external_q/acquisition_manifest.json."
+    )
+    report["positive_control_metadata_pass"] = bool(
+        control["metadata_records_reported"]
+    ) if "metadata_records_reported" in control else False
+    report["interpretation"] = (
+        "Parent resolution, estimated record counts and USD cost quotes are "
+        "metadata-only. A count>0 does not prove a specific instrument, "
+        "official final settlement, or continuous historical coverage. "
+        "A count=0 on one date does not rule out other dates. "
+        "Always inspect the known LO.OPT 2026-08-24 positive control "
+        "before concluding anything about AAO availability."
+    )
     report["recommendation"] = (
-        "Review parent coverage and quoted USD amounts; no download performed. "
+        "Review record counts, parent mappings, positive control and quoted USD amounts; no download performed. "
         "Only if verified promising, explicitly approve a small cost-capped "
         "historical definition/statistics pilot."
     )
