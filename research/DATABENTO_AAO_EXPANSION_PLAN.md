@@ -144,6 +144,20 @@ second Wednesday of June to avoid the former Saturday anchor for
 2023. This does not yet establish APO contract presence or any
 historical final settlements. No paid acquisition took place.
 
+**Second live-probe correction (2026-10-22):**
+The `LO.OPT` positive-control family also reported zero resolved
+parent mappings for the June 2025/2026 anchor dates, despite the
+previously successful Databento LO acquisition on 2026-08-24.
+This invalidates the decision to skip record counts and price
+quotes when `symbology.resolve` is empty or returns 422.
+The revised script independently requests **free metadata record counts
+and cost estimates** for `definition` and `statistics` on every
+candidate and adds a separate known-data `LO.OPT` control on
+2026-08-24. The prior zero mappings are not evidence that
+Databento AAO data are absent. Both new record counts and cost
+quotes remain only *metadata estimates*, not proof of actual
+final settlement records or year-wide coverage.
+
 **Next action:** run these two scripts on the VM; inspect the returned
 reports and decide whether a separately approved small paid acquisition
 is scientifically and economically justified. No Databento cost or new
