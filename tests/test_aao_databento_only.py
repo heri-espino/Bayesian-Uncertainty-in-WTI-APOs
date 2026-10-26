@@ -123,3 +123,60 @@ def test_common_support_summary_and_date_cluster_inference():
     assert ci["mean_daily_mae_improvement"] == pytest.approx(.5)
     assert ci["n_paired_dates"] == 3
     assert ci["ci_low"] == pytest.approx(.5)
+
+
+
+def test_end_to_end_sqlite_fixture_without_databento_client(tmp_path, monkeypatch):
+    """Synthetic 45-day panel exercises real SQLite, all benchmarks and outputs."""
+    import sqlite3
+    from experiments import wti_aao_databento_only as driver
+
+    definition_rows = []
+    for k in np.arange(55., 92., 2.):
+        for side in ("C", "P"):
+            definition_rows.append({
+                "publisher_id": 1,
+                "symbol": f"AAO_{int(k)}_{side}",
+                "strike": float(k),
+                "expiry": "2026-04-30",
+                "side": side,
+            })
+    defs = pd.DataFrame(definition_rows)
+    monkeypatch.setattr(driver, "date_definitions", lambda _root, _day: defs)
+    state = tmp_path / "contract_candidates.sqlite3"
+    conn = sqlite3.connect(state)
+    conn.execute(
+        "CREATE TABLE states (publisher_id INTEGER,symbol TEXT,"
+        "ref_date TEXT,price REAL,flags INTEGER,action INTEGER,"
+        "tie_conflict INTEGER)"
+    )
+    calendar = pd.bdate_range("2026-01-02", periods=49)
+    for i, ref_date in enumerate(calendar):
+        forward = 71. + .12*np.sin(i/2.) + .008*i
+        t = (pd.Timestamp("2026-04-30")-ref_date).days/365.25
+        for rec in definition_rows:
+            premium = float(average_black(
+                forward, rec["strike"], .31, t, .985, rec["side"]
+            ))
+            conn.execute(
+                "INSERT INTO states VALUES(?,?,?,?,?,?,?)",
+                (1, rec["symbol"], ref_date.strftime("%Y-%m-%d"),
+                 premium, 3, 1, 0)
+            )
+    conn.commit()
+    conn.close()
+    output = tmp_path / "results"
+    private = tmp_path / "private"
+    report = driver.evaluate(
+        sqlite_path=state, raw_dir=tmp_path,
+        output_dir=output, private_dir=private,
+        start_date="2026-01-02", eval_start="2026-02-03",
+        date_stride=5, max_dates=0, max_contracts=20, n_boot=19,
+    )
+    assert report["n_priced_dates"] >= 2
+    assert report["n_target_contract_dates"] > 0
+    assert set(pd.read_csv(output/"method_metrics.csv")["method"]) == set(METHODS)
+    assert (output/"cluster_intervals.csv").is_file()
+    assert (private/"AAO_DATABENTO_REDUCED_FORM_CONTRACT_PRICING.csv.gz").is_file()
+    assert report["no_barchart"] is True
+    assert report["no_provider_calls"] is True
