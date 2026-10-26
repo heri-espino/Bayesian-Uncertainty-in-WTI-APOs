@@ -1,3 +1,37 @@
+## Latest author decision: prepare Databento-only journal study (2026-10-26)
+
+The author explicitly abandoned the Barchart-based option-price
+comparisons for the **new Elsevier CAS manuscript** and requests
+Bayesian PI/PM, historical-volatility and lagged AAO IV benchmarking
+using the owned Databento AAO source data alone. The assistant prepared
+`bayesian_asian_options.aao_databento_only`,
+`experiments.wti_aao_databento_only`,
+`scripts.plot_aao_databento_only`,
+`paper/jcm/databento_main.tex` and
+`paper/jcm/build_databento.py`, with synthetic tests and runbook
+`research/AAO_DATABENTO_ONLY_PAPER_RUNBOOK_2026-10-26.md`.
+
+**Scientific constraint:** AAO definitions+statistics do NOT contain
+the original CL first-nearby futures returns, fixings or current
+CL forward curve. This new study deliberately uses **reduced-form
+terminal-average Black valuation**, inferred expected average and
+discount from same-day AAO parity emph{at reserved strikes}, and
+strictly lagged volatility inputs. Anchors never become evaluated
+target strikes. Historical proxy changes in parity-implied forwards
+are NOT independent observed P-measure CL returns. Do not relabel
+this as the old structural Asian Monte Carlo or as fully ex-ante
+forecast accuracy. Actual/theoretical exchange marks are reported
+separately; inference resamples dates, not option rows.
+
+The source files and SQLite were lost during prior unsafe sparse
+checkout and remain unavailable until the author performs the paid
+replacement and **LFS-push** procedure already in PR #109/main.
+No Databento-only model results or publication charts have been
+computed yet. After user runs the experiment, inspect its manifest,
+`method_metrics.csv`, `cluster_intervals.csv`, and three
+generated figures, then **update the new CAS manuscript with the
+actual validated results**, not anticipated rankings.
+
 # AI handoff
 
 ## URGENT: recovered data must be backed up via Git LFS (26 October 2026)
