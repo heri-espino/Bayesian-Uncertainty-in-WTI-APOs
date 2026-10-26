@@ -1,0 +1,305 @@
+% Databento-only AAO reduced-form article; prospective analysis, NOT run results.
+% This paper uses no Barchart option marks or historical CL data.
+% No fabricated address, email, experimental count or inference.
+\documentclass[a4paper,fleqn]{cas-dc}
+\usepackage[authoryear,longnamesfirst]{natbib}
+\usepackage{amsmath,amssymb,booktabs}
+\usepackage{graphicx}
+
+\begin{document}
+\let\WriteBookmarks\relax
+\shorttitle{Volatility uncertainty in average-price options}
+\shortauthors{Espino Montelongo}
+\title[mode=title]{Historical and Implied Volatility in WTI Average Price Options:
+A Bayesian Assessment Using Exchange Settlement Data}
+\author[1]{Heriberto Espino Montelongo}
+\affiliation[1]{organization={Universidad de las Am\'ericas Puebla},
+ city={San Andr\'es Cholula},state={Puebla},country={Mexico}}
+
+\begin{abstract}
+We develop an empirical design for assessing whether integrating historical
+volatility uncertainty changes the valuation of WTI average-price options
+relative to more consequential differences among volatility inputs.
+The evidence is drawn solely from exchange contract definitions and
+settlement statistics provided through Databento. We estimate the
+risk-neutral expected terminal average and a discount factor using
+call--put parity at reserved strikes, and price other contracts under
+a reduced-form lognormal approximation to the terminal arithmetic
+average. Volatility estimates use only prior-date option-implied
+forward-average changes or preceding implied-volatility observations.
+We compare posterior integration, posterior-mean plug-in pricing,
+two rolling estimates, EWMA and lagged option-implied volatility on
+identical option-date observations. We distinguish actual-flagged
+and theoretical-flagged settlements and use date-cluster inference.
+The structural first-nearby WTI futures model cannot be identified
+from the purchased AAO definitions and settlement statistics alone;
+the proposed analysis is therefore a cross-sectional, reduced-form
+exercise, not a fully independent ex-ante futures-based pricing test.
+\textit{Empirical results will be inserted only after the complete
+reproducible Databento run and its validation.}
+\end{abstract}
+
+\begin{keywords}
+Asian options \sep WTI crude oil \sep Bayesian inference \sep
+historical volatility \sep implied volatility \sep exchange settlements
+\end{keywords}
+\maketitle
+
+\section{Introduction}
+\label{sec:db_intro}
+
+Parameter uncertainty is distinct from volatility-input selection in
+option pricing. Under nonlinear valuation, averaging option values
+over a posterior distribution of volatility need not equal evaluating
+the same pricing function at posterior-mean volatility. The difference
+depends on price curvature and posterior dispersion. Conversely, even
+an accurate posterior under the physical distribution need not identify
+risk-neutral volatility; pricing-model assumptions and volatility risk
+premia remain relevant \citep{guidolin2003,romboutsstentoft2014}.
+
+We examine these differences for WTI average-price options using
+one source of observed exchange settlement statistics.
+Unlike the earlier Barchart-based study, this study does not use
+Barchart option histories or independent LO option marks.
+The study separates the question of \emph{posterior integration}
+from the empirical comparison of historical and previously observed
+same-family implied-volatility inputs.
+
+CME's WTI Average Price Option is a European-style option on the
+arithmetic average of daily first-nearby CL futures settlements
+during its contract month. This contract specification implies a
+multi-fixing payoff, which existing Asian-option methods model
+explicitly \citep{kemnavorst1990,curran1994,kahale2020}.
+The purchased Databento data here comprise AAO definitions
+and option settlement statistics, not the CL term structure or the
+underlying daily fixing history. We therefore estimate the
+\emph{risk-neutral expected average} from AAO put--call parity and
+make a transparent lognormal approximation to the terminal average.
+We do not present that approximation as exact structural Asian pricing.
+
+\section{Data and eligibility}
+\label{sec:db_data}
+
+The proposed data window comprises January 2020 through September
+2026, subject to availability and final integrity checks after
+the archive's reacquisition. We identify contracts by publisher,
+native symbol, expiry, strike and option right, rather than by
+temporary numeric instrument ID. Settlement messages are reconciled
+across source-file months in publication timestamp order, including
+preliminary reports, later finalizations, and correction/delete
+actions. A contract--reference-date mark is eligible only if its
+latest reconstructed action is active, final, non-intraday and
+has a finite, nonnegative price.
+
+A settlement marked \emph{actual} by the exchange is not necessarily
+a transaction execution, and a \emph{theoretical} settlement may be
+model-derived. We retain this distinction in all empirical summaries
+and do not count millions of correlated option-date marks as
+independent statistical replications. Model results are organized by
+distinct CME settlement reference date.
+
+We restrict the principal pricing sample to valuation dates
+\emph{before the first calendar day of the option's averaging month}.
+This deliberately avoids claiming to know already-realized CL daily
+fixings, which are absent from the purchased AAO data. Prices and
+strikes are required to satisfy separately documented unit
+sanity checks. The data-eligibility funnel, final number of
+dates, final contract-date count and method common support
+are \textit{pending actual execution}.
+
+\section{Pricing design}
+\label{sec:db_method}
+
+\subsection{Expected average and discount from separate parity strikes}
+
+For a European arithmetic-average call and put sharing strike $K$,
+contract expiry and reference date, the parity identity is
+\begin{equation}
+ C_t(K)-P_t(K)
+ =D(t,T)\{\mathbb{E}_t^Q[A_T]-K\}.
+ \label{eq:db_parity}
+\end{equation}
+Write $F_{A,t}=\mathbb{E}_t^Q[A_T]$ and
+fit, across a predesignated set of matched call--put
+\emph{anchor strikes}, the cross-sectional relation
+\begin{equation}
+ C_t(K)-P_t(K)=a_t-b_t K,\qquad
+ D(t,T)=b_t,\quad F_{A,t}=a_t/b_t.
+ \label{eq:db_reg}
+\end{equation}
+A group requires at least four available paired strikes and
+sensible estimated discount and forward values. Groups that
+fail parity-dispersion, strike-unit or discount checks are excluded.
+\textbf{Every anchor strike is removed from both sides of the
+evaluated target cross-section.} This avoids fitting an option's
+own price mechanically through parity. Nevertheless, information
+from \emph{other} current-date options determines the same-date
+forward average; the exercise is a conditional cross-sectional
+valuation, not a wholly prior-date prediction.
+
+\subsection{Lognormal terminal-average approximation}
+
+Because the first-nearby CL daily fixing path is not observed in
+this dataset, we use the reduced-form approximation
+\begin{equation}
+ A_T \approx F_{A,t}
+  \exp\!\left(-\tfrac12\sigma_A^2\tau+
+  \sigma_A\sqrt{\tau}\,Z\right),\quad Z\sim N(0,1),
+\end{equation}
+where $\tau$ is time to option expiry and $\sigma_A$ is a
+\emph{proxy average-forward volatility}, not the original
+first-nearby CL spot/futures diffusion coefficient.
+Its discounted call price is
+\begin{equation}
+ C_t^B(\sigma_A)=D(t,T)
+ \bigl[F_{A,t}\Phi(d_1)-K\Phi(d_2)\bigr],\quad
+ d_{1,2}=\frac{\log(F_{A,t}/K)}{\sigma_A\sqrt{\tau}}
+ \pm \tfrac12\sigma_A\sqrt{\tau}.
+\end{equation}
+Put prices follow parity. This compact model provides a controlled
+comparison of volatility estimators under a common pricing rule;
+it does not reconstruct the exact arithmetic-average payoff law.
+
+\subsection{Historical proxy volatility and Bayesian pricing}
+
+For each expiry, define the \emph{option-implied forward-average}
+return using parity estimates on successive eligible earlier
+reference dates:
+\begin{equation}
+ r_u=\log F_{A,u}-\log F_{A,u-1}.
+\end{equation}
+We use only available past returns, omitting large gaps, and
+annualize by a 252-observation convention. These are NOT
+observations of first-nearby crude-oil futures returns and
+cannot by themselves estimate the latter's physical volatility.
+For $y_u=\sqrt{252}\,r_u$, let
+$y_u\mid m,v\sim N(m,v)$ and
+$v\sim\mathrm{InvGamma}(\alpha_0,\beta_0)$, with
+$(\alpha_0,\beta_0)=(3,0.16)$ and the usual integrated
+flat-prior treatment of the unknown mean. The resulting shape
+and scale are
+\begin{equation}
+ \alpha_n=\alpha_0+(n-1)/2,\quad
+ \beta_n=\beta_0+\tfrac12\sum_u(y_u-\bar y)^2.
+\end{equation}
+Draw $\sigma_A=\sqrt v$ from the posterior. We compare
+posterior-integrated and posterior-mean plug-in values,
+\begin{equation}
+ C_{PI}=\mathbb E[C_t^B(\sigma_A)\mid\mathcal D_{<t}],
+ \qquad C_{PM}=C_t^B(\mathbb E[\sigma_A\mid\mathcal D_{<t}]).
+\end{equation}
+Their second-order difference is approximately
+$\tfrac12 C_t^{B\prime\prime}(\bar\sigma_A)
+\operatorname{Var}(\sigma_A\mid\mathcal D_{<t})$,
+subject to the smoothness and concentration of the posterior.
+
+\subsection{Benchmark volatility estimates and timing}
+
+We compare six specifications on identical contract-date rows:
+posterior integration (PI), posterior-mean plug-in (PM),
+21- and 63-observation rolling volatility, exponentially weighted
+volatility with 63-observation half-life, and prior-date
+AAO-implied volatility. The last is obtained by inverting the
+same reduced-form pricing function on earlier non-anchor
+option marks, selecting near-the-money contracts.
+Every volatility input is determined strictly before $t$;
+only the disjoint-strike parity estimate of $F_{A,t}$ and
+$D(t,T)$ uses the current-date AAO surface.
+
+\section{Empirical evaluation}
+\label{sec:db_results}
+
+We evaluate all six methods on their common target contracts
+and reference dates. For method $m$, pricing errors are
+$e_{i,t}^{(m)}=\widehat C_{i,t}^{(m)}-C_{i,t}^{\mathrm{settlement}}$,
+and report bias, mean absolute error and root mean squared error.
+The principal comparisons are paired at the date level;
+valuation dates are resampled in the cluster bootstrap so
+contract-level dependence is not mistaken for independent evidence.
+
+We separately report actual- and theoretical-flagged settlement
+marks, number of eligible dates, and the fraction of attempted
+expiry-date groups lost at the parity, volatility-history,
+lagged-IV or pricing stages. A comparison favoring a prior
+option-implied specification would establish reduced-form
+same-family information content, not an independently identified
+variance risk premium or a claim about actual execution prices.
+
+\subsection{Results to be inserted after execution}
+
+\textit{The Databento-only experiment has not yet been run and validated.
+No benchmark rankings, confidence intervals, statistical significance
+or out-of-sample error figures are asserted here. The evaluation
+runner will produce method\_metrics.csv, daily\_metrics.csv,
+cluster\_intervals.csv and an experiment manifest.}
+
+\IfFileExists{figures/fig06_databento_benchmark_mae.pdf}{
+\begin{figure*}[t]
+\centering
+\includegraphics[width=.9\textwidth]{figures/fig06_databento_benchmark_mae.pdf}
+\caption{Common-support reduced-form valuation MAE by settlement-mark type;
+generated only after running the empirical analysis.}
+\end{figure*}
+}{}
+\IfFileExists{figures/fig07_databento_date_cluster_intervals.pdf}{
+\begin{figure*}[t]
+\centering
+\includegraphics[width=.82\textwidth]{figures/fig07_databento_date_cluster_intervals.pdf}
+\caption{Paired date-cluster improvements relative to posterior-mean
+plug-in pricing; confidence intervals are based on date resampling.}
+\end{figure*}
+}{}
+\IfFileExists{figures/fig08_databento_mae_time_series.pdf}{
+\begin{figure*}[t]
+\centering
+\includegraphics[width=.9\textwidth]{figures/fig08_databento_mae_time_series.pdf}
+\caption{Reduced-form method errors through time; points summarize
+date-level errors rather than independent contract-level samples.}
+\end{figure*}
+}{}
+
+\section{Limitations and robustness}
+\label{sec:db_limits}
+This design has three nontrivial limitations. First, parity requires
+current-day prices for other AAO contracts; selection of non-overlapping
+anchor and target strikes prevents direct price reuse but does not
+create independent ex-ante volatility forecasts. Second, the
+historical series consists of parity-implied average-forward levels,
+not actual returns on the constituent first-nearby WTI futures.
+Third, theoretical CME settlements may be generated from pricing
+procedures related to the evaluated benchmarks.
+
+Sensitivity analysis will re-estimate the comparison on the
+actual-flagged subsample and under alternative parity-anchor
+sizes, tighter parity-residual cutoffs and posterior-prior
+choices. The numerical assumptions and complete common-support
+funnel must be archived before journal submission.
+
+\section{Conclusion}
+\label{sec:db_conclusion}
+The study is designed to distinguish the incremental numerical
+effect of integrating historical proxy-volatility uncertainty from
+the choice of volatility source using one exchange-supplied AAO
+dataset. Its scope is necessarily narrower than structural Asian
+pricing with observed futures-fixing histories. Conclusions on
+model ranking and economic magnitude are deliberately deferred
+until a fully audited Databento-only run has been completed.
+
+\section*{Data availability}
+The study relies on Databento CME AAO contract definitions and
+settlement statistics. The privately maintained research archive,
+source hashes and reproducibility manifests record the exact
+sample vintage. Public redistribution is subject to the vendor's
+terms; no additional Barchart option data are used.
+
+\section*{Code availability}
+The code and an explicit execution recipe are maintained in
+\texttt{github.com/heri-espino/Bayesian-Uncertainty-in-WTI-APOs}.
+A final version will identify a frozen source commit and empirical run.
+
+\section*{Declaration of competing interests}
+The author declares no competing interests.
+
+\bibliographystyle{cas-model2-names}
+\bibliography{references}
+\end{document}
