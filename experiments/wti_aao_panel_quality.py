@@ -113,14 +113,66 @@ def source_final_dates(raw: Path) -> dict[str, int]:
     return dict(days)
 
 
-def barchart_overlap(selected: set[str]) -> dict:
+
+def reference_date_status(
+    conn: sqlite3.Connection, date: str
+) -> dict:
+    """Explain a raw final-event date by latest private SQLite statuses."""
+    try:
+        target = pd.Timestamp(date)
+        if target.strftime("%Y-%m-%d") != date:
+            raise ValueError
+    except (TypeError, ValueError):
+        raise ValueError("Date must be YYYY-MM-DD") from None
+    row = conn.execute("""
+      SELECT COUNT(*),
+        COALESCE(SUM(action!=1),0),
+        COALESCE(SUM(action=1 AND (flags & 1)=0),0),
+        COALESCE(SUM(action=1 AND (flags & 1)!=0 AND (flags & 8)!=0),0),
+        COALESCE(SUM(action=1 AND (flags & 1)!=0 AND (flags & 8)=0
+          AND (price IS NULL OR price<0)),0),
+        COALESCE(SUM(action=1 AND (flags & 1)!=0 AND (flags & 8)=0
+          AND price>=0 AND tie_conflict!=0),0),
+        COALESCE(SUM(action=1 AND (flags & 1)!=0 AND (flags & 8)=0
+          AND price>=0 AND tie_conflict=0),0)
+      FROM states WHERE ref_date=?
+    """, (date,)).fetchone()
+    labels = (
+        "last_update_keys", "last_deleted", "last_preliminary",
+        "last_intraday_final", "last_invalid_price", "last_tied_conflict",
+        "last_selected_final",
+    )
+    return {
+        "reference_date": date,
+        **{key: int(value or 0) for key, value in zip(labels, row)},
+        "raw_final_events_on_day": "Use --scan-final-dates for source-event count",
+        "warning": (
+            "Current latest state only; the two original final events may "
+            "have been superseded or excluded. No symbols/prices disclosed."
+        ),
+    }
+
+
+def barchart_overlap(selected: set[str], root: Path | None = None) -> dict:
     """Only counts dates shared with Barchart, not matched option contracts."""
     from bayesian_asian_options.barchart_apo import (
         build_apo_panel, discover_barchart_histories,
     )
-    files = discover_barchart_histories(ROOT / "data" / "csv")
+    folder = root if root is not None else ROOT / "data" / "csv"
+    files = discover_barchart_histories(folder)
     if not files:
-        return {"available": False}
+        return {
+            "available": False,
+            "root_exists": folder.is_dir(),
+            "csv_files_found": sum(1 for _ in folder.rglob("*.csv"))
+                if folder.is_dir() else 0,
+            "filename_matching_apo_history_count": 0,
+            "reason": (
+                "No local CSV names matched the existing Barchart APO "
+                "filename parser; check checkout/sparse checkout, location "
+                "or use --barchart-root. This is NOT zero market overlap."
+            ),
+        }
     panel = build_apo_panel(files)
     dates = pd.to_datetime(panel["trade_date"]).dt.strftime("%Y-%m-%d")
     return {
@@ -135,7 +187,9 @@ def barchart_overlap(selected: set[str]) -> dict:
 
 
 def audit(db_path: Path, inventory: Path, *, raw: Path | None = None,
-          include_barchart: bool = True) -> dict:
+          include_barchart: bool = True,
+          barchart_root: Path | None = None,
+          explain_date: str | None = None) -> dict:
     if not db_path.is_file():
         raise FileNotFoundError(f"Private cross-month state not found: {db_path}")
     source = json.loads(inventory.read_text(encoding="utf-8"))
@@ -145,6 +199,10 @@ def audit(db_path: Path, inventory: Path, *, raw: Path | None = None,
     conn = sqlite3.connect(db_path.resolve().as_uri() + "?mode=ro", uri=True)
     try:
         result, selected = audit_state(conn)
+        if explain_date is not None:
+            result["reference_date_status"] = reference_date_status(
+                conn, explain_date
+            )
     finally:
         conn.close()
     result.update({
@@ -160,7 +218,9 @@ def audit(db_path: Path, inventory: Path, *, raw: Path | None = None,
             int(summary["distinct_final_reference_dates"]),
         )
     if include_barchart:
-        result["barchart_date_only_overlap"] = barchart_overlap(selected)
+        result["barchart_date_only_overlap"] = barchart_overlap(
+            selected, barchart_root
+        )
     return result
 
 
@@ -171,11 +231,17 @@ def main() -> None:
     parser.add_argument("--scan-final-dates", action="store_true",
                         help="Heavy offline scan of all 81 original statistics DBNs")
     parser.add_argument("--skip-barchart", action="store_true")
+    parser.add_argument("--barchart-root", type=Path,
+                        help="Alternative local Barchart APO CSV root")
+    parser.add_argument("--explain-date",
+                        help="Aggregate latest update state for YYYY-MM-DD")
     parser.add_argument("--output", type=Path, default=OUT)
     args = parser.parse_args()
     result = audit(args.sqlite, args.inventory,
                    raw=RAW if args.scan_final_dates else None,
-                   include_barchart=not args.skip_barchart)
+                   include_barchart=not args.skip_barchart,
+                   barchart_root=args.barchart_root,
+                   explain_date=args.explain_date)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(result, indent=2))
