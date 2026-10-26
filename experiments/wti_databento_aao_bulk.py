@@ -111,6 +111,12 @@ def acquire(
     """Budget-check ALL pending chunks before the first billable request."""
     if not (0 < max_budget_usd <= 40 and 0 < safety_fraction <= 0.8):
         raise ValueError("Unsafe budget or safety fraction")
+    if plan["eligible_months"] != plan["total_months"]:
+        raise RuntimeError(
+            "Refusing incomplete AAO recovery plan: require all 81 months "
+            "to have BOTH positive definition and statistics quotes; "
+            "no new purchases made"
+        )
     data_dir.mkdir(parents=True, exist_ok=True)
     report_dir.mkdir(parents=True, exist_ok=True)
     ledger_path = report_dir / "bulk_acquisition_manifest.json"
