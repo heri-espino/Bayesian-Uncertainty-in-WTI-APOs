@@ -120,13 +120,16 @@ def audit(raw_dir: Path, manifests: list[Path], *,
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--data-dir", type=Path, default=DATA_DIR)
+    parser.add_argument("--manifest", type=Path, action="append", dest="manifests",
+                        help="Use one or more replacement acquisition manifests")
     parser.add_argument("--original", type=Path, default=ORIGINAL)
     parser.add_argument("--february", type=Path, default=FEBRUARY)
     parser.add_argument("--output", type=Path, default=OUTPUT)
     parser.add_argument("--skip-sha", action="store_true",
                         help="File-size check only, NOT integrity certification")
     args = parser.parse_args()
-    report = audit(args.data_dir, [args.original, args.february],
+    manifests = args.manifests if args.manifests else [args.original, args.february]
+    report = audit(args.data_dir, manifests,
                    verify_sha=not args.skip_sha)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
