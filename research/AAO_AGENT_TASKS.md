@@ -26,7 +26,9 @@ HTTP **504 gateway timeout**, whereas `statistics` quoted
 USD `0.042790770531`. This was a metadata outage, **not absent
 market coverage**. The one-month total cost remains unknown.
 
-Next action is only the targeted **free quote** (see
+Use a **USD 1 separate one-month budget** (USD 0.80 quote-based planning
+threshold), not another USD 40 authorization. Next action is only the
+targeted **free quote** (see
 `research/AAO_INVENTORY_RESULTS_2026-10-25.md`). Use the separate
 `--report-dir results/analysis/wti_aao_history_feasibility/bulk_feb2021`
 to avoid overwriting the original acquisition manifest. Do not rerun
