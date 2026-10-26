@@ -1,5 +1,12 @@
 # Journal of Commodity Markets — Elsevier CAS working draft
 
+
+> **Paper-completion gate:** [the canonical research plan](../../research/PAPER_COMPLETION_MASTER_PLAN_2026-10-26.md)
+> and [new experiment register](../../research/AAO_EXPERIMENT_REGISTER_2026-10-26.md)
+> define the prerequisites for changing any CAS result table, figure or claim.
+> The original 2,381-row/15-date Barchart/LO results remain here until new AAO
+> contract parity and true strictly chronological experiments are verified and stored.
+
 This is a **pre-submission source adaptation**, not a validated 81-month option-pricing paper or an approved journal submission.
 
 The author added Elsevier CAS v2.4 under paper/els-cas-templates/. This project uses **cas-dc.cls** (double-column) for an internal working draft. The final Journal of Commodity Markets Guide for Authors still needs verification before preparing the actual submission.
