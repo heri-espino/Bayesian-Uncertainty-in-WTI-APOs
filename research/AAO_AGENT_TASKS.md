@@ -61,6 +61,25 @@ agreement, exact CL fixings and lagged information, frozen dates and
 out-of-sample model results. Do not regenerate old model performance
 figures as if their data came from the 81-month history.
 
+## Completed local SHA256 + identity checks; newest gate (2026-10-25)
+
+Confirmed by user VM console: **162/162 verified SHA256 files**,
+**81/81 months**, and a successful 81-month diagnostic event coverage
+figure. For 2021-02: 55,326 final settlement events, 48,730 tentative
+ID/date keys, zero missing same-month outright ID joins. For 2026-06:
+118,094 final events, 101,397 tentative ID/date keys, again zero
+missing same-month outright joins. **These are not stable contract-date
+prices or forward-validation dates.**
+
+Use the new strictly offline
+`experiments/wti_aao_settlement_gate.py` on `2021-02` and `2026-06`
+before broader normalization. It applies a conservative *as-of same
+publication UTC day* definition match and last-update check and reports
+only aggregate counts. **This is a diagnostic gate**, not final
+multi-month contract identity or market validation. Read
+`research/AAO_POST_DOWNLOAD_VALIDATION_2026-10-25.md`.
+No fees, API requests, inference, large figures or paper rewriting.
+
 ## Coordinating invariants
 
 - PR #95 was merged with the quote-first downloader and offline inventory; all 160 author-reported DBN files live **only on the author's Windows VM**, not on GitHub. Do not use GitHub-hosted CI to access those raw files. Do not request the API key, paste it into a chat, or commit secrets or licensed data.
