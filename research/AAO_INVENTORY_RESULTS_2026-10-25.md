@@ -36,6 +36,45 @@ Definition `asset` was consistently reported as **AAO** in all 80 printed months
 
 The 81 monthly windows from January 2020 through September 2026 have an apparent missing **February 2021** in the decoded file list. The original latest `bulk_quote_plan.json` must still be inspected to establish *why* that month was excluded (zero count, failed quote, permission, API error, or another condition). **Do not purchase February 2021 just to fill the gap until its metadata reason is understood.**
 
+## February 2021 exclusion diagnosed: transient metadata quote timeout
+
+The author's local `bulk_quote_plan.json` identifies the exact reason the
+81st monthly window (2021-02-01 through 2021-03-01, exclusive) was excluded:
+
+| Schema | Metadata count | Quoted USD | Eligibility | Diagnosis |
+|---|---:|---:|---|---|
+| `definition` | **140,790** | unavailable | false | `BentoServerError: 504 The remote gateway timed out.` while quoting |
+| `statistics` | **574,328** | **0.042790770531** | false | Count and price quote succeeded |
+
+The missing February window is **not evidence of absent AAO market history**.
+Both schema count queries were positive. The month was ineligible because
+the cost preflight for `definition` failed transiently. Its precise total
+cost is **unknown** until the missing quote succeeds. Do not mistake the
+80-month acquisition total USD 17.33487324 for February's quote.
+
+The **first recovery step is FREE metadata only**, deliberately writing a
+separate report directory so the original full-window plan and acquisition
+ledger are preserved:
+
+```powershell
+conda activate asian-options
+python -m experiments.wti_databento_aao_bulk --mode quote --start 2021-02-01 --end 2021-03-01 --max-budget-usd 40 --report-dir results/analysis/wti_aao_history_feasibility/bulk_feb2021
+```
+
+If and only if the output reports `eligible_months=1` and a valid combined
+price, any future *explicitly approved* billable backfill must use **the same
+month window AND the separate `--report-dir`**. The existing downloader's
+`bulk_acquisition_manifest.json` is tied to its original date range, and
+will reject a different date window when pointed at the old ledger.
+
+When backfilling, do not rerun the entire 81-month `--mode download` job.
+The single-month backfill will create **two additional files** in the usual
+local `data/databento/wti_aao_bulk/raw/` directory and a separate
+`bulk_feb2021/bulk_acquisition_manifest.json`; the old 80-month manifest
+remains a separate accounting ledger. Actual billed cost should be checked
+on the Databento account page. Recompute the offline inventory only **after**
+February is successfully acquired.
+
 ## Representative-month result details (after correcting only for no facts)
 
 | Month | Definition `AAO` events | Final settle events | Final + actual events |
