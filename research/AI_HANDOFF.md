@@ -7,6 +7,29 @@ The author completed the February 2021 `AAO.OPT` recovery: **two files** for Feb
 **Next agent action:** run *offline* `python -m experiments.wti_databento_aao_inventory --all` on the VM to refresh the old 80-month report, then check all 162 file hashes against both manifests and proceed to definitive contract/settlement-day identity. Do not rerun any billable download. Until that inventory is supplied, **1,682 final reference dates is an old 80-month figure**, not the full history. Journal planning remains conditional JCM / ready REMEF fallback / preserved JFM manuscript.
 
 
+## New experiment/figure/manuscript working stage (2026-10-25)
+
+The author added the Elsevier CAS template in `paper/els-cas-templates/`.
+A separate `paper/jcm/` **CAS double-column working draft** preserves the
+validated earlier concise paper and is explicitly **not** a new 81-month
+pricing study. Source files, research workstreams and instructions are in
+`research/AAO_81_MONTH_EXECUTION_PLAN.md`.
+
+Offline executable gates:
+`python -m scripts.audit_aao_manifests` checks all 162 source files
+against both ledgers (including 2021-02);
+`python -m experiments.wti_databento_aao_inventory --all` refreshes
+the event counts if needed;
+`python -m scripts.plot_aao_history_coverage` produces an intentionally
+**diagnostic-only** new coverage figure and requires an 81-month report;
+`python paper/jcm/build.py --check` validates the CAS working source.
+
+**Do not** replace published-draft figures/tables with an event-count graph.
+Priority is time-aware historical contract mapping, unique final contract-day
+mark normalization, Barchart/CL and strictly lagged-IV eligibility, and then
+reproducible chronological backtests before replacing empirical claims.
+All heavy output generation remains manual-only and local to licensed data.
+
 Read this file before continuing research work.
 
 ## Canonical current checkpoint
