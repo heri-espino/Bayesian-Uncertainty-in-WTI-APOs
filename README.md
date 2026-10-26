@@ -124,6 +124,31 @@ Do **not** run another `--mode download` by default; charges may recur. Keep lic
 market data gitignored and publish only permitted aggregate results. Heavy builds and
 experiments remain manual-only.
 
+## 81-month research execution and provisional Elsevier paper
+
+The completed AAO acquisitions cover **all 81 months (2020-01 through
+2026-09)**, with **162 local DBN chunks** and a combined **USD 17.49357489
+quoted cost**; those quotes are not confirmed provider charges. The previous
+**80-month** inventory's 1,682 reference dates and 5,843,770 final settlement
+*events* are not valid expanded-paper holdout counts. The next steps require
+contract-specific price validation and chronological cross-vendor backtests.
+
+The new [execution plan](research/AAO_81_MONTH_EXECUTION_PLAN.md) documents
+the evidence and stage gates. The repo now includes:
+
+- `python -m scripts.audit_aao_manifests` to validate both acquisition ledgers
+  and 162 source file SHA256 hashes, entirely offline.
+- `python -m scripts.plot_aao_history_coverage` to create a *diagnostic*
+  AAO event-coverage figure from a complete 81-month inventory, refusing
+  obsolete/incomplete reports.
+- [paper/jcm/](paper/jcm/README.md), an **Elsevier CAS double-column
+  working draft**, staged from the old validated concise research; it is
+  not a finished expanded empirical manuscript.
+
+Both the old Wiley/JFM and the REMEF alternatives are preserved. No
+Databento purchases, backtest numerical claims or new pricing result
+tables are implied by the CAS manuscript or coverage figure.
+
 ## Research roadmap
 
 The active research roadmap is tracked through GitHub Issues and the project wiki in the documentation:

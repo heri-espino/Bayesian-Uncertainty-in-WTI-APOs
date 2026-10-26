@@ -1,0 +1,56 @@
+% Working CAS adaptation, NOT a completed 2020--2026 Databento study.
+% The sections and figures below reproduce the earlier validated Barchart/LO paper.
+\documentclass[a4paper,fleqn]{cas-dc}
+\usepackage[authoryear,longnamesfirst]{natbib}
+\usepackage{amsmath,amssymb,booktabs}
+\usepackage{graphicx}
+
+\begin{document}
+\let\WriteBookmarks\relax
+\shorttitle{Posterior integration in WTI Asian options}
+\shortauthors{Espino Montelongo}
+\title[mode=title]{When Does Posterior Integration Change Option Values? Evidence from WTI Average Price Options}
+\author[1]{Heriberto Espino Montelongo}
+\cormark[1]
+\ead{heriberto.espinomo@udlap.mx}
+\affiliation[1]{organization={Universidad de las Am\'ericas Puebla},
+    city={San Andr\'es Cholula},state={Puebla},country={Mexico}}
+\cortext[1]{Corresponding author}
+
+\begin{abstract}
+We examine whether integrating historical-volatility parameter uncertainty materially changes WTI Average Price Option (APO) values relative to the choice of volatility input. Posterior-integrated pricing averages conditional option values over the volatility posterior, whereas posterior-mean plug-in pricing uses its mean. A second-order approximation relates their difference to posterior dispersion and pricing curvature. In the earlier validated WTI evaluation, historical-volatility posterior integration makes little difference to point prices, whereas option-implied volatility estimated on earlier dates yields lower pricing errors under the maintained one-factor futures model. Synthetic experiments isolate conditions under which posterior integration becomes material. The empirical evidence presented in this working draft is limited to the original Barchart and LO option panels: newly acquired 2020--2026 Databento AAO data have not yet been validated at the contract-date level or used in new forward tests.
+\end{abstract}
+
+\begin{keywords}
+Bayesian option pricing \sep Asian options \sep WTI crude oil \sep
+parameter uncertainty \sep implied volatility
+\end{keywords}
+\maketitle
+
+% Original verified concise results, preserved until new experiments are completed.
+\input{sections_short/01_introduction}
+\input{sections_short/02_posterior_pricing}
+\input{sections_short/03_data_design}
+\input{sections_short/04_results}
+\input{sections_short/05_robustness}
+\input{sections_short/06_conclusion}
+
+\section*{Data availability}
+The earlier WTI APO and CL histories were obtained through Barchart and the
+independent LO option validation through Databento. Additional historical
+2020--2026 AAO definitions and settlement statistics have been acquired but
+are not yet included in the pricing analysis. Proprietary vendor source data
+are not redistributed. Query provenance and license-permitted derived data
+will be made available alongside reproducible code.
+
+\section*{Code availability}
+The software, reproducibility documentation, and tests are available at
+\texttt{github.com/heri-espino/Bayesian-Uncertainty-in-WTI-APOs}. The final
+scientific version will reference a frozen version/commit.
+
+\section*{Declaration of competing interests}
+The author declares no conflicts of interest.
+
+\bibliographystyle{cas-model2-names}
+\bibliography{references}
+\end{document}

@@ -13,6 +13,18 @@
 > alternative submission, **never simultaneous** with REMEF or JCM.
 
 
+## Elsevier working-draft adaptation
+
+The author's new `paper/els-cas-templates/` CAS v2.4 bundle is now wired
+into a separate provisional double-column working source in
+[paper/jcm/](jcm/README.md). Use `python paper/jcm/build.py --check` or
+a manual compile; the builder copies the earlier validated concise
+sections and existing figures to an isolated staging directory. These
+old numbers **do not** represent the new 81-month AAO dataset, which
+must pass the scientific gates in
+`research/AAO_81_MONTH_EXECUTION_PLAN.md` before manuscript revision.
+The original frozen Wiley source and REMEF Word version remain intact.
+
 ## Language and literature terminology
 
 Use [the manuscript wording dictionary](WORDING_DICTIONARY.md) and its

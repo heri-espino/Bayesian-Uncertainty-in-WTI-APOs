@@ -83,3 +83,7 @@ dist/
 *.out
 *.run.xml
 *.synctex.gz
+
+# Expanded AAO diagnostic plots and conditional Elsevier working paper
+paper/jcm/build/
+figures/extended_aao/

@@ -43,6 +43,24 @@ the paid 80-month acquisition and do not assume that February is
 already downloaded. If backfilled, its separate acquisition ledger
 must be reconciled with the original 160 file hashes.
 
+## Implemented post-acquisition tools — stage gates
+
+Read `research/AAO_81_MONTH_EXECUTION_PLAN.md`. The repo includes a
+fail-closed two-ledger offline SHA256 validator
+(`python -m scripts.audit_aao_manifests`), a complete-inventory-only
+diagnostic coverage-figure generator
+(`python -m scripts.plot_aao_history_coverage`), and a separate manual
+Elsevier CAS manuscript source in `paper/jcm/` with
+`python paper/jcm/build.py --check`.
+
+These tools **do not constitute** a cleaned 81-month contract/day panel,
+new Bayesian pricing experiments, fresh model-comparison figures or
+an approved Journal of Commodity Markets submission. Those deliverables
+remain explicitly gated on file hashes, source normalization, Barchart
+agreement, exact CL fixings and lagged information, frozen dates and
+out-of-sample model results. Do not regenerate old model performance
+figures as if their data came from the 81-month history.
+
 ## Coordinating invariants
 
 - PR #95 was merged with the quote-first downloader and offline inventory; all 160 author-reported DBN files live **only on the author's Windows VM**, not on GitHub. Do not use GitHub-hosted CI to access those raw files. Do not request the API key, paste it into a chat, or commit secrets or licensed data.
