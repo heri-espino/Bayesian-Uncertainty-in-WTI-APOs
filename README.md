@@ -1,14 +1,37 @@
 # Bayesian parameter uncertainty for Asian options
 
+> **Authoritative current handoff:** [HANDOFF.md](HANDOFF.md), [master plan](research/PAPER_COMPLETION_MASTER_PLAN_2026-10-26.md), [evidence ledger](research/AAO_EVIDENCE_LEDGER_2026-10-26.md), [experiments](research/AAO_EXPERIMENT_REGISTER_2026-10-26.md), [independent verification](research/AAO_AGENT_VERIFICATION_PROTOCOL_2026-10-26.md). The **Databento-only** project below is implemented but no real 81-month pricing results have been verified. LFS setup is not proof the lost source files were reuploaded.
 
-> **Canonical current research/paper status (2026-10-26):** Start at [HANDOFF.md](HANDOFF.md),
-> [the completion master plan](research/PAPER_COMPLETION_MASTER_PLAN_2026-10-26.md),
-> [numerical evidence ledger](research/AAO_EVIDENCE_LEDGER_2026-10-26.md),
-> [sequential experiment plan](research/AAO_EXPERIMENT_REGISTER_2026-10-26.md), and
-> [agent verification protocol](research/AAO_AGENT_VERIFICATION_PROTOCOL_2026-10-26.md).
-> The earlier 81-month diagnostic numbers are historical VM results. Replacement AAO source DBNs
-> and full SQLite are **not verified as uploaded**; no expanded chronological pricing comparisons
-> or final JCM paper exist yet. Older paragraphs below are preserved as dated provenance.
+## Current research priority: finish Databento-only Bayesian AAO paper
+
+The author chose a **Databento-only** exchange settlement study, with
+NO Barchart option-price comparison. The final new study uses
+`experiments/wti_aao_databento_only.py` and
+`bayesian_asian_options.aao_databento_only` to compare posterior
+integration (PI), posterior-mean pricing (PM), rolling-21, rolling-63,
+EWMA and strictly lagged AAO-implied volatility on a common set of
+non-anchor option contracts; it makes **no paid provider calls**.
+The input is the 81-month AAO source DBNs and rebuilt private SQLite.
+
+**Methodological boundary:** The downloaded AAO definitions and
+statistics do not contain CL first-nearby futures curves or daily
+settlement fixings, so the new model is a **reduced-form lognormal
+terminal-average approximation**. It derives the expected average
+and discount factor from separate same-day matched AAO call/put
+parity anchors, excluded from pricing targets. Volatility features
+are strictly lagged; forward-average proxy changes are NOT actual
+WTI P-measure CL returns. The evaluation is conditionally
+cross-sectional, not fully independent ex-ante structural Asian pricing.
+
+The new standalone Elsevier source `paper/jcm/databento_main.tex`,
+CAS builder `paper/jcm/build_databento.py`, 3 figures in
+`scripts/plot_aao_databento_only.py` and full execution commands
+are in
+[Databento-only paper runbook](research/AAO_DATABENTO_ONLY_PAPER_RUNBOOK_2026-10-26.md).
+**No new experimental numerical performance claims are available
+until the author runs the code.** This preserves the old Barchart/Wiley
+papers separately. Re-acquire and Git LFS-back-up the missing source
+data BEFORE running the new experiment.
 
 ## URGENT — Databento raw history recovery and Git LFS backup (2026-10-26)
 

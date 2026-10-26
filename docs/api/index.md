@@ -1,5 +1,13 @@
 # API reference
 
+## Databento-only reduced-form AAO pricing and volatility
+
+```{automodule} bayesian_asian_options.aao_databento_only
+:members: average_black, reserve_parity_anchors, implied_average_sigma, prior_volatility_features, summarize_errors, date_cluster_ci
+:show-inheritance:
+```
+
+
 This is the canonical inventory of reusable public functions/classes. It is generated from package docstrings at Sphinx build time.
 
 ## Bayesian GBM inference
