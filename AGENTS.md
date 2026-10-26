@@ -1,5 +1,15 @@
 # Repository contract for coding agents and maintainers
 
+
+> **Required first read for all new agents (2026-10-26):** [root HANDOFF](HANDOFF.md),
+> [canonical master plan](research/PAPER_COMPLETION_MASTER_PLAN_2026-10-26.md),
+> [evidence ledger](research/AAO_EVIDENCE_LEDGER_2026-10-26.md),
+> [sequential experiment register](research/AAO_EXPERIMENT_REGISTER_2026-10-26.md), and
+> [verification protocol](research/AAO_AGENT_VERIFICATION_PROTOCOL_2026-10-26.md).
+> Existing historical checkpoint and manuscript instructions must not be interpreted as
+> evidence that the replacement AAO DBNs, price-level SQLite or expanded model tests have run.
+> Preserve all artifacts via private Git/Git LFS. **Do not merge without author approval.**
+
 This file is normative. Future coding agents and maintainers must preserve the repository
 architecture unless a deliberate migration is documented and completed atomically.
 
