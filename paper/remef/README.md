@@ -1,5 +1,9 @@
 # REMEF submission candidate (separate from JFM)
 
+> **Publication status update (2026-10-26):** Preserve this fallback manuscript while finishing
+> [the canonical Databento/Barchart extension](../../research/PAPER_COMPLETION_MASTER_PLAN_2026-10-26.md).
+> Expanded 2020–2026 pricing tests have **not** yet produced manuscript-ready figures or results.
+
 The REMEF adaptation is based on the **concise** JFM research text, but it has its own
 introduction, bilingual metadata and bibliography supplement. Nothing here replaces
 `paper/manuscript/main.tex`, `paper/manuscript/main_short.tex`, or their Wiley builds.
