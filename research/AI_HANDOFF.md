@@ -8,6 +8,14 @@ Read this file before continuing research work.
 
 The earlier scientifically validated results, exact numbers and 2026 experimental status are preserved in `research/CHECKPOINT_2026-09-29.md`. The **October 25 checkpoint supersedes earlier statements that historical AAO acquisition is merely proposed**. The author's VM reports 160 completed DBN chunks (80 months, `AAO.OPT` definitions/statistics) at USD 17.33487324 *quoted*. Actual billing, file contents, valid final settlements and extended market tests are not yet verified. **No automatic redownload, new charges, or new manuscript numerical claims.**
 
+## Current local-data validation update — 2026-10-25
+
+The author **already completed** both offline inventory commands on the Windows VM:
+`--months 2023-06 2025-06 2026-06` and `--all`. The latter read 80 months without errors, identifying asset `AAO`, 5,843,770 final settlement **events** (3,989,698 flagged actual, 1,854,072 flagged theoretical) and **1,682 distinct final reference dates**; **February 2021** is absent. These are *not* distinct verified option-day prices or eligible independent test dates. Full counts, warnings and remaining work:
+`research/AAO_INVENTORY_RESULTS_2026-10-25.md`.
+
+**Next:** checksum/manifest audit, investigate the excluded month, canonicalize outright definitions and stable instrument keys, deduplicate final settlement events, and Barchart/CL/rates/lagged-IV eligibility reconciliation. Do not rerun the completed inventory unless diagnosing a change; do **not** rerun the paid downloader.
+
 ## Scientific status
 
 Issue #38 is complete in production.
@@ -43,7 +51,7 @@ The option-informed conclusion is supported by both:
 
 ## Immediate next work — October 2026 historical-data phase
 
-1. Run `python -m experiments.wti_databento_aao_inventory --months 2023-06 2025-06 2026-06` **locally on the author's VM**; after checking fields, run `--all`. Compare SHA256 with the manifest, identify the excluded month and degraded dates; do not access Databento's paid API again by default.
+1. **Inventory already ran successfully.** Compare SHA256 with the manifest, investigate the missing February 2021 quote, check degraded dates and instrument master fields; do not access the paid Databento API by default.
 2. Inspect option identity, `stat_type=3` final/theoretical flags, `ts_ref` dating, instrument revisions, expiries, strikes, sides and open interest/volume; generate only license-compliant derived aggregates.
 3. Cross-match Databento and Barchart settlements and construct new unique, eligible valuation dates with proper CL first-nearby fixing schedule, dated Treasury rates and **strictly prior-date** APO/LO volatility information.
 4. Only after that, run the canonical historical extension using `experiments/wti_apo_empirical.py` / `scripts/run_extended_forward_validation.py`; freeze chronological test blocks and compare models on common row support, reporting date-cluster/time-block uncertainty.
