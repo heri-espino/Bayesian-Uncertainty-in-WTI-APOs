@@ -33,6 +33,29 @@ python paper/jcm/build.py
 
 Neither gate 1 nor gate 2 establishes the correct option prices. They identify trustworthy local source files and their settlement-statistics metadata.
 
+## Exploratory instrument identity experiment (strictly offline)
+
+After SHA256 and event-inventory checks, run:
+
+~~~powershell
+python -m experiments.wti_aao_identity_probe --month 2021-02
+python -m experiments.wti_aao_identity_probe --month 2026-06
+~~~
+
+This diagnostic reads only one local month at a time and writes **aggregate**
+counts under results/analysis/wti_aao_history_feasibility/identity_probe/.
+It examines definition asset/class frequencies, how many final settlement
+events reference a same-month outright (`AAO`, class `C` or `P`)
+publisher/instrument ID, how many are unmatched, and how often instrument
+IDs map to multiple raw symbols. It also reports **tentative**, unvalidated
+ID/date keys to identify where event updates or identity reuse require
+attention. No raw symbols or prices are printed. **It is not** a
+timestamp-as-of contract mapping or stable contract-date pricing panel.
+If required fields are missing or unparseable, it explicitly reports a
+blocking error instead of guessing. Use the resulting report to specify
+a correct time-aware normalization algorithm before attempting all
+81 months or any pricing experiment.
+
 ## Required scientific implementation after gates 1–3
 
 **Workstream A — contract/settlement master.** Decode definitions and statistics in bounded monthly batches. Resolve `publisher_id + instrument_id` under time-aware historical definitions; explicitly separate outright call/put (`C`/`P`) from strategy/leg records and instrument ID changes. CME `ts_ref` defines the settlement reference date; apply `update_action` and the final/actual flags. Keep local price-level outputs out of Git. Report counts of unique outright contract × reference-day final settlement prices, theoretical/actual composition, expiries, C/P and liquidity event alignment. Fail closed on ambiguous joins and record it as attrition rather than backfilling guessed matches.
