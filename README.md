@@ -1,5 +1,27 @@
 # Bayesian parameter uncertainty for Asian options
 
+## URGENT — Databento raw history recovery and Git LFS backup (2026-10-26)
+
+The previous **162 compressed AAO DBN files and reconstructed SQLite
+settlement database were lost** on the author's Windows VM following an
+unsafe sparse-checkout instruction. The author explicitly requires
+re-downloading and **backing up the 81-month AAO dataset and rebuilt
+SQLite into this PRIVATE GitHub repo via Git LFS**. The 81-month data
+are **NOT presently in GitHub** merely because `.gitattributes`
+tracks the patterns. Earlier acquisition/analysis paragraphs below
+describe historical results, not currently available local source files.
+
+**Start here:** [AAO replacement, integrity audit, LFS upload and
+full experimental replay](research/AAO_RECOVERY_AND_LFS_BACKUP_2026-10-26.md).
+
+Commands include `git sparse-checkout add data/databento/wti_aao_bulk`
+**before reacquisition**, `python -m scripts.aao_lfs_preflight`,
+quote-first and explicitly budget-confirmed Databento download with a
+**fresh report directory**, SHA256 verification, Git LFS backup of
+the 162 sources, and a manual-only replay of all 11 historical data
+diagnostics. Then push the derived full-history SQLite via Git LFS.
+Do not alter sparse checkout again before confirming remote LFS uploads.
+
 ## Latest source diagnosis (26 October 2026)
 
 For the CME reference date **2024-01-26**, all **7,868** latest

@@ -73,3 +73,36 @@ def test_untracked_file(tmp_path):
     raw, ledgers = fixture(tmp_path)
     (raw / "aao_statistics__2021-01-01__2021-02-01.dbn.zst").write_bytes(b"x")
     assert any("untracked_files" in x for x in check(raw, ledgers)["issues"])
+
+
+
+def test_replacement_single_manifest_cli(tmp_path, monkeypatch, capsys):
+    """A new recovery ledger may contain *all* eligible months."""
+    from scripts.audit_aao_manifests import main
+    raw, ledgers = fixture(tmp_path)
+    # Merge two independent test ledgers into one new replacement manifest.
+    both = [json.loads(p.read_text()) for p in ledgers]
+    combined = dict(both[0])
+    combined["completed"].update(both[1]["completed"])
+    replacement = tmp_path / "reacquisition_manifest.json"
+    replacement.write_text(json.dumps(combined))
+    output = tmp_path / "audit.json"
+    monkeypatch.setattr(
+        "sys.argv", [
+            "audit_aao_manifests", "--data-dir", str(raw),
+            "--manifest", str(replacement), "--output", str(output),
+        ],
+    )
+    # The fixture spans two months, so override the default 81-month range
+    # without affecting the real run's strict completeness check.
+    from scripts import audit_aao_manifests as module
+    original = module.expected_months
+    monkeypatch.setattr(
+        module, "expected_months",
+        lambda start, end: original("2020-01-01", "2020-03-01"),
+    )
+    main()
+    report = json.loads(output.read_text())
+    assert report["success"]
+    assert report["files_verified"] == 4
+    assert report["month_count"] == 2

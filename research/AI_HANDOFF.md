@@ -1,5 +1,36 @@
 # AI handoff
 
+## URGENT: recovered data must be backed up via Git LFS (26 October 2026)
+
+The user's original **162 Databento AAO DBN files and the 5.1m-key private
+SQLite database disappeared** immediately after the assistant recommended a
+sparse-checkout addition that excluded `data/databento`. The Recycle Bin
+did not contain the files. This was an unsafe assistant instruction.
+No reacquisition or upload has yet occurred. The author explicitly
+directed that **the entire 81-month dataset, AND the rebuilt SQLite,
+be stored in their VERIFIED PRIVATE GitHub repository using Git LFS**.
+
+Do not fall back to the previous instruction "keep licensed DBNs only
+on VM". It was the cause of the unrecoverable single-copy failure.
+`.gitattributes` now marks DBNs/SQLite for LFS, `.gitignore`
+un-ignores these exact files, and a tracked data README makes the
+sparse-checkout path visible. The existing quote-first manual downloader
+should write to `data/databento/wti_aao_bulk/raw` and use a **fresh
+reacquisition_20261026 acquisition ledger** to avoid the older manifests
+which reference missing source files.
+
+**Read and follow every gate in**
+`research/AAO_RECOVERY_AND_LFS_BACKUP_2026-10-26.md`.
+The new `scripts.aao_lfs_preflight` must pass **before a paid retrieval**.
+After obtaining **162 verified files**, **Git LFS commit and push them**
+before any expensive replay or sparse-checkout operation. Then run
+`scripts.aao_replay_offline --execute` (all 11 previous diagnostics)
+and upload the rebuilt SQLite via LFS. CI must never acquire billable
+data or generate heavy scientific figures automatically.
+The historical results recorded below document past successful VM runs;
+they do **not** mean the lost binary files are still available.
+
+
 ## Newest resolution: January 26 latest preliminary, Barchart checkout incomplete
 
 The user's `--explain-date 2024-01-26` query found **7,868/7,868**

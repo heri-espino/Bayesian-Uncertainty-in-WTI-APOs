@@ -125,9 +125,12 @@ the research design, tests, and API documentation are updated together.
 
 ## Data and licensing
 
-Do not commit newly acquired proprietary market data until redistribution rights have been
-verified. Preserve source provenance and prefer code, schemas, hashes, diagnostics, and
-permitted derived summaries.
+The author explicitly requires **backup of the reconstructed AAO source dataset and
+reconstructed SQLite state in this VERIFIED PRIVATE GitHub repository using Git LFS**.
+For `data/databento/wti_aao_bulk/`, raw `*.dbn.zst` and completed
+`derived_private/*.sqlite3` are intentionally Git LFS-tracked. Do not
+re-ignore, silently exclude, delete or prevent backing up those files.
+Do not store API keys, passwords, user profile secrets or personal credentials in Git.
 
 The author has committed the Barchart CL source histories under `data/csv/CL` for the current
 private research workflow. Before making the repository or those raw files public, verify
@@ -135,6 +138,27 @@ Barchart redistribution terms. Yahoo continuous-proxy snapshots under `data/wti_
 local Treasury CSVs under `data/rates/treasury/` are workstation caches/source inputs and are
 gitignored by default. Their README files, parsers, query metadata, hashes, and derived
 scientific outputs remain versioned.
+
+## Critical incident and data backup policy (2026-10-26)
+
+Previously, a sparse-checkout instruction was given while 162 licensed AAO
+DBN files and a derived SQLite state were ignored and not uploaded. After the
+checkout change, the entire `data/databento` tree disappeared from the user's
+Windows VM. This assistant-caused incident must be considered before any future
+Git advice. The original data are currently **not available** and have **not**
+been re-downloaded or pushed.
+
+**Required:** Include `data/databento/wti_aao_bulk` in sparse checkout
+**before reacquisition**, verify `scripts.aao_lfs_preflight`, quote and
+explicitly authorize a paid retrieval, reacquire into the tracked raw folder,
+verify all 162 original-like DBNs via a NEW acquisition manifest, commit
+and push as Git LFS, then rerun analyses and commit the resulting SQLite.
+No tool/agent may run sparse-checkout modifications, reset/clean, or prune a
+repository that contains *any* as-yet unpushed local research data.
+Before saying "backed up", confirm the Git LFS push actually succeeded.
+Recovery guide: `research/AAO_RECOVERY_AND_LFS_BACKUP_2026-10-26.md`.
+CI must remain lightweight. Paid downloads and heavy experimental steps are
+manual-only.
 
 ## Current WTI AAO checkpoint and agent handoff (2026-10-25)
 
@@ -146,13 +170,16 @@ portion of earlier 2026 planning notes, without invalidating earlier published o
 - The author's local VM reported a **completed** compressed Databento `AAO.OPT` acquisition:
   **160 chunks = 80 eligible months × `definition`/`statistics`**, 2020-01 through 2026-09,
   quoted **USD 17.33487324**. The amount actually billed and the 81st missing month are unverified.
-  Those files are **not hosted on GitHub**; do not expect CI to read them.
+  [Historical note] Those original files were not hosted on GitHub and were later lost
+  during an unsafe sparse-checkout change. This no longer describes the desired state.
 - The next step is **offline inventory**, then instrument-identity, final/theoretical settlement,
   liquidity, degraded-date and Barchart reconciliation. The number of newly eligible pricing
   dates and all expanded-study results are **unknown**.
-- Do **not rerun** `experiments.wti_databento_aao_bulk --mode download` by default, nor
-  purchase more LO/CL/history without explicit new authorization. Databento's USD 32
-  safety threshold is a *quote-based* guard, not a provider-enforced bill cap.
+- **Current explicit user authorization:** replace all 81 months of lost AAO
+  `definition`/`statistics` data and back them up in this private Git LFS repo.
+  Execute only the manual quote-first, complete-81-month, budget-confirmed
+  procedure in `research/AAO_RECOVERY_AND_LFS_BACKUP_2026-10-26.md`.
+  No automated or additional LO/CL purchases; quoted cost is not a provider bill cap.
 - When filtering `statistics`, verify the actual DBN/DataFrame `stat_type` representation
   before comparing with integer 3; `stat_flags & 1` denotes final settlement and
   `stat_flags & 2` denotes actual (not theoretical), per CME/Databento for GLBX.MDP3.
@@ -167,9 +194,11 @@ portion of earlier 2026 planning notes, without invalidating earlier published o
 - Preserve all previously validated results, source files, packages, experiments and
   manuscript formats. Use short-lived isolated PRs for inventory, reconciliation,
   eligible dates, extended forward runs and editorial work, in that order.
-- Licensed files, locally stored DPAPI credentials, personal Windows paths, raw
-  symbol-level holdings and unapproved data dumps must not be committed or exposed.
-  Only license-permitted aggregate diagnostics, redacted manifests, hashes and code.
+- **Approved exception for private backup:** the author specifically requested
+  that recovered AAO source DBNs and reconstructed price-level SQLite be committed
+  to this private repository via Git LFS. Do NOT commit API keys, credentials,
+  personal Windows paths or unrelated personal data. Do not attach option-level
+  data to public CI logs or PR comments.
 - Heavy data/paper/figure workflows must be **manual-only**. Light automatic CI is fine.
 
 ## New 81-month AAO figure and Elsevier manuscript safeguards

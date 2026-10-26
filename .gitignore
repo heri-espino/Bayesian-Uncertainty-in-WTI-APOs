@@ -47,11 +47,23 @@ paper/remef/build/
 # # Local official Treasury source CSVs. Keep the parser/docs versioned.
 # data/rates/treasury/*.csv
 
-# # Proprietary Databento raw inputs remain local. Version query metadata, hashes,
-# # diagnostics, and permitted derived summaries instead of raw vendor data.
+# Other Databento raw folders remain ignored by default.
 data/databento/**/raw/
-# Additional explicit protection for the expanded licensed AAO dataset
-data/databento/wti_aao_bulk/raw/
+# Explicitly INCLUDE reconstructed 81-month AAO DBNs in this private Git LFS repo.
+!data/databento/wti_aao_bulk/raw/
+data/databento/wti_aao_bulk/raw/*
+!data/databento/wti_aao_bulk/raw/aao_definition__*.dbn.zst
+!data/databento/wti_aao_bulk/raw/aao_statistics__*.dbn.zst
+# Ignore incomplete or partially downloaded transfers.
+data/databento/wti_aao_bulk/raw/*.partial.dbn.zst
+
+# Reconstructed private SQLite and compressed candidate panels are also Git LFS.
+data/databento/wti_aao_bulk/derived_private/*
+!data/databento/wti_aao_bulk/derived_private/aao_cross_month_PROVISIONAL_*.sqlite3
+!data/databento/wti_aao_bulk/derived_private/AAO_CANDIDATES_NOT_VALIDATED_*.csv.gz
+# Never stage mutable SQLite write-ahead log / shared-memory files.
+data/databento/wti_aao_bulk/derived_private/*.sqlite3-wal
+data/databento/wti_aao_bulk/derived_private/*.sqlite3-shm
 
 # # Generated experiment checkpoints and large intermediates
 # # Keep final manifests and summary CSVs; do not version thousands of restart files.
@@ -88,5 +100,4 @@ dist/
 paper/jcm/build/
 figures/extended_aao/
 
-# Private AAO price-level candidate panels generated offline (licensed vendor data)
-data/databento/wti_aao_bulk/derived_private/
+

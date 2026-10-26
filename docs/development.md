@@ -1,5 +1,26 @@
 # Development workflow
 
+## CRITICAL — data-loss prevention and private LFS backup
+
+The 2026-10-26 Databento incident was caused by recommending a
+sparse-checkout change while private ignored data had never been
+uploaded. The author explicitly requires 81-month AAO source DBNs and
+the cross-month SQLite database backed up to this private repository
+using **Git LFS**. Before any Git sparse-checkout change, check for
+uncommitted/unpushed local files even when `git status` is clean;
+ignored files are *not* safeguarded by a clean status.
+
+After safely configuring and including the data path, run
+`python -m scripts.aao_lfs_preflight` **before a paid download**;
+verify 162 chunks with
+`python -m scripts.audit_aao_manifests --manifest <new-ledger>`;
+then stage/push all AAO DBNs as LFS, and only later perform the
+manual all-history analysis/reconstruction. The complete procedure
+is in `research/AAO_RECOVERY_AND_LFS_BACKUP_2026-10-26.md`.
+Never use `git reset --hard` or `git clean` as a generic data
+recovery tool.
+
+
 The repository uses short-lived feature branches and a single long-lived branch: `main`.
 Historical work is preserved by merged or closed pull requests and by files under `archive/`; old feature branches are not part of the archival strategy.
 
