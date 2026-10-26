@@ -74,6 +74,26 @@ reference, publication and preceding publication dates, including
 conflicting contract-fingerprint indicators. It is a *diagnostic*, not a
 validated priced option-date panel or a basis to change the paper yet.
 
+## Newer instrument-mapping experiment and status (2026-10-25)
+
+The latest author's full local outputs are recorded in
+`research/AAO_SYMBOL_MAPPING_NEXT_GATE_2026-10-25.md`.
+Only **55.1%** of February 2021 and **58.3%** of June 2026 final
+settlement events matched one or more tried *definition-snapshot-day*
+conventions. No conflicting contract identities were observed among
+matched alternatives. Missing snapshots do **not** establish missing
+market prices.
+
+The next action is **offline**:
+`python -m experiments.wti_aao_symbol_mapping --months 2021-02 2026-06`.
+Databento's `DBNStore.to_df(map_symbols=True)` can map numeric IDs to
+native symbols using local DBN metadata; the `statistics` tables already
+show a `symbol` field. Verify its completeness and unique outright
+contract fingerprints before implementing the stable contract/day
+price panel. Do not use numeric `instrument_id` alone across dates;
+do not run further paid downloads. Model results and paper figures
+are not yet updated.
+
 Read this file before continuing research work.
 
 ## Canonical current checkpoint

@@ -110,6 +110,30 @@ Read `research/AAO_81_MONTH_SETTLEMENT_MAPPING_FINDINGS.md` before
 implementing daily settlement update deduplication or adding option
 valuation dates to the paper.
 
+## DBN embedded-symbol mapping: next feasibility gate
+
+The user ran the publication/reference/preceding-day definition mapping:
+**30,508 (55.1%)** February 2021 final records and **68,835 (58.3%)**
+June 2026 final records matched at least one candidate day. An arbitrary
+older snapshot must not be assumed correct because ID reuse is possible.
+
+The additional local test `experiments.wti_aao_symbol_mapping`
+explicitly calls `DBNStore.to_df(map_symbols=True)` on the saved DBNs,
+and tests whether the embedded `statistics.symbol` field can be matched
+to unambiguous publisher-scoped `definition.raw_symbol` outright
+contract identities, avoiding day-shifting a numeric instrument ID.
+Run:
+
+```powershell
+python -m pytest tests/test_wti_aao_symbol_mapping.py -q
+python -m experiments.wti_aao_symbol_mapping --months 2021-02 2026-06
+```
+
+Read `research/AAO_SYMBOL_MAPPING_NEXT_GATE_2026-10-25.md`.
+This is still not a finalized contract/day settlement-price panel,
+independent historical holdout, pricing/volatility evaluation or new
+paper/figure data.
+
 ## Required scientific implementation after gates 1–3
 
 **Workstream A — contract/settlement master.** Decode definitions and statistics in bounded monthly batches. Resolve `publisher_id + instrument_id` under time-aware historical definitions; explicitly separate outright call/put (`C`/`P`) from strategy/leg records and instrument ID changes. CME `ts_ref` defines the settlement reference date; apply `update_action` and the final/actual flags. Keep local price-level outputs out of Git. Report counts of unique outright contract × reference-day final settlement prices, theoretical/actual composition, expiries, C/P and liquidity event alignment. Fail closed on ambiguous joins and record it as attrition rather than backfilling guessed matches.

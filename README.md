@@ -140,6 +140,28 @@ This does not yet establish valid multiyear contract-day option prices,
 independent holdout dates, fresh performance figures or a finished
 Journal of Commodity Markets manuscript.
 
+## Result of daily definition mapping and new native-symbol audit
+
+The author's three-rule daily-definition mapping only accounted for
+**30,508/55,326 (55.1%)** February 2021 final settlement events and
+**68,835/118,094 (58.3%)** June 2026 events. Remaining unmatched events
+may have valid instrument identities; these counts do **not** establish
+missing settlement prices. The matched candidate methods showed no
+conflicting identities, but cannot validate unmatched records.
+
+Next offline task: use Databento's locally embedded native `symbol`
+mapping, not further arbitrary date shifts:
+
+```powershell
+python -m experiments.wti_aao_symbol_mapping --months 2021-02 2026-06
+```
+
+The [symbol-mapping checkpoint](research/AAO_SYMBOL_MAPPING_NEXT_GATE_2026-10-25.md)
+records the observed counts, why numeric IDs and trading-session dates
+need special treatment, and safe steps toward a contract/day panel. The
+journal draft and pricing-performance figures still use the earlier
+scientifically validated sample.
+
 ## 81-month AAO inventory totals and timestamp-mapping gate (2026-10-25)
 
 The locally verified historical archive contains **81 months**,
