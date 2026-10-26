@@ -1,0 +1,758 @@
+{
+  "distinct_tentative_symbol_reference_keys": 5157894,
+  "keys_seen_in_multiple_file_months": 71145,
+  "top_rank_ambiguous_keys": 0,
+  "latest_deleted_keys": 0,
+  "latest_preliminary_keys": 52290,
+  "latest_intraday_final_keys": 0,
+  "latest_invalid_price_keys": 1,
+  "selected_final_nonintraday_keys": 5105603,
+  "selected_actual_flagged": 3299087,
+  "distinct_selected_reference_dates": 1700,
+  "latest_update_source_month_differs_from_reference": 190064,
+  "selected_theoretical_flagged": 1806516,
+  "months_processed": 81,
+  "source_months": [
+    "2020-01",
+    "2020-02",
+    "2020-03",
+    "2020-04",
+    "2020-05",
+    "2020-06",
+    "2020-07",
+    "2020-08",
+    "2020-09",
+    "2020-10",
+    "2020-11",
+    "2020-12",
+    "2021-01",
+    "2021-02",
+    "2021-03",
+    "2021-04",
+    "2021-05",
+    "2021-06",
+    "2021-07",
+    "2021-08",
+    "2021-09",
+    "2021-10",
+    "2021-11",
+    "2021-12",
+    "2022-01",
+    "2022-02",
+    "2022-03",
+    "2022-04",
+    "2022-05",
+    "2022-06",
+    "2022-07",
+    "2022-08",
+    "2022-09",
+    "2022-10",
+    "2022-11",
+    "2022-12",
+    "2023-01",
+    "2023-02",
+    "2023-03",
+    "2023-04",
+    "2023-05",
+    "2023-06",
+    "2023-07",
+    "2023-08",
+    "2023-09",
+    "2023-10",
+    "2023-11",
+    "2023-12",
+    "2024-01",
+    "2024-02",
+    "2024-03",
+    "2024-04",
+    "2024-05",
+    "2024-06",
+    "2024-07",
+    "2024-08",
+    "2024-09",
+    "2024-10",
+    "2024-11",
+    "2024-12",
+    "2025-01",
+    "2025-02",
+    "2025-03",
+    "2025-04",
+    "2025-05",
+    "2025-06",
+    "2025-07",
+    "2025-08",
+    "2025-09",
+    "2025-10",
+    "2025-11",
+    "2025-12",
+    "2026-01",
+    "2026-02",
+    "2026-03",
+    "2026-04",
+    "2026-05",
+    "2026-06",
+    "2026-07",
+    "2026-08",
+    "2026-09"
+  ],
+  "symbol_identities_observed": 38926,
+  "symbol_groups_conflicting_across_months": 0,
+  "symbol_groups_not_safe_for_outright": 296,
+  "settlement_events_read": 13412045,
+  "settlement_events_with_safe_identity": 13412045,
+  "no_databento_api_calls": true,
+  "source_data_private": true,
+  "status": "cross_month_provisional_not_validated_settlement_panel",
+  "warning": "All source months were replayed for latest actions, including preliminary and deletions. The DB has proprietary price records. Historical contract/price-scale validation, exchange corrections after the collection cutoff, and strictly lagged market inputs remain unverified.",
+  "private_state_created": true,
+  "within_month_counts": [
+    {
+      "month": "2020-01",
+      "settlement_events": 312477,
+      "events_with_safe_global_symbol": 312477,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 103905,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2020-02",
+      "settlement_events": 263089,
+      "events_with_safe_global_symbol": 263089,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 86392,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2020-03",
+      "settlement_events": 372940,
+      "events_with_safe_global_symbol": 372940,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 106848,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2020-04",
+      "settlement_events": 336344,
+      "events_with_safe_global_symbol": 336344,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 97020,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2020-05",
+      "settlement_events": 289949,
+      "events_with_safe_global_symbol": 289949,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 95047,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2020-06",
+      "settlement_events": 247887,
+      "events_with_safe_global_symbol": 247887,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 89415,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2020-07",
+      "settlement_events": 263304,
+      "events_with_safe_global_symbol": 263304,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 91103,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2020-08",
+      "settlement_events": 254935,
+      "events_with_safe_global_symbol": 254935,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 89369,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2020-09",
+      "settlement_events": 148548,
+      "events_with_safe_global_symbol": 148548,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 55283,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2020-10",
+      "settlement_events": 125975,
+      "events_with_safe_global_symbol": 125975,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 50860,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2020-11",
+      "settlement_events": 139288,
+      "events_with_safe_global_symbol": 139288,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 52911,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2020-12",
+      "settlement_events": 149141,
+      "events_with_safe_global_symbol": 149141,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 54826,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2021-01",
+      "settlement_events": 135453,
+      "events_with_safe_global_symbol": 135453,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 53624,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2021-02",
+      "settlement_events": 127958,
+      "events_with_safe_global_symbol": 127958,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 48831,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2021-03",
+      "settlement_events": 164436,
+      "events_with_safe_global_symbol": 164436,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 57805,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2021-04",
+      "settlement_events": 153190,
+      "events_with_safe_global_symbol": 153190,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 55917,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2021-05",
+      "settlement_events": 151401,
+      "events_with_safe_global_symbol": 151401,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 59151,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2021-06",
+      "settlement_events": 174388,
+      "events_with_safe_global_symbol": 174388,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 59150,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2021-07",
+      "settlement_events": 149957,
+      "events_with_safe_global_symbol": 149957,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 58201,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2021-08",
+      "settlement_events": 161656,
+      "events_with_safe_global_symbol": 161656,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 64929,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2021-09",
+      "settlement_events": 167181,
+      "events_with_safe_global_symbol": 167181,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 54993,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2021-10",
+      "settlement_events": 158329,
+      "events_with_safe_global_symbol": 158329,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 60938,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2021-11",
+      "settlement_events": 141343,
+      "events_with_safe_global_symbol": 141343,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 55025,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2021-12",
+      "settlement_events": 154831,
+      "events_with_safe_global_symbol": 154831,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 57593,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2022-01",
+      "settlement_events": 153968,
+      "events_with_safe_global_symbol": 153968,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 60283,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2022-02",
+      "settlement_events": 131985,
+      "events_with_safe_global_symbol": 131985,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 56793,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2022-03",
+      "settlement_events": 182552,
+      "events_with_safe_global_symbol": 182552,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 70403,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2022-04",
+      "settlement_events": 153624,
+      "events_with_safe_global_symbol": 153624,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 61962,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2022-05",
+      "settlement_events": 171633,
+      "events_with_safe_global_symbol": 171633,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 72221,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2022-06",
+      "settlement_events": 163378,
+      "events_with_safe_global_symbol": 163378,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 68212,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2022-07",
+      "settlement_events": 173966,
+      "events_with_safe_global_symbol": 173966,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 70712,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2022-08",
+      "settlement_events": 182623,
+      "events_with_safe_global_symbol": 182623,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 67446,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2022-09",
+      "settlement_events": 147903,
+      "events_with_safe_global_symbol": 147903,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 62295,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2022-10",
+      "settlement_events": 154157,
+      "events_with_safe_global_symbol": 154157,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 68410,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2022-11",
+      "settlement_events": 144639,
+      "events_with_safe_global_symbol": 144639,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 58479,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2022-12",
+      "settlement_events": 134578,
+      "events_with_safe_global_symbol": 134578,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 57141,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2023-01",
+      "settlement_events": 151778,
+      "events_with_safe_global_symbol": 151778,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 60131,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2023-02",
+      "settlement_events": 132006,
+      "events_with_safe_global_symbol": 132006,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 52257,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2023-03",
+      "settlement_events": 155107,
+      "events_with_safe_global_symbol": 155107,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 56507,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2023-04",
+      "settlement_events": 148956,
+      "events_with_safe_global_symbol": 148956,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 58140,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2023-05",
+      "settlement_events": 142624,
+      "events_with_safe_global_symbol": 142624,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 55459,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2023-06",
+      "settlement_events": 135392,
+      "events_with_safe_global_symbol": 135392,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 54243,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2023-07",
+      "settlement_events": 141736,
+      "events_with_safe_global_symbol": 141736,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 59304,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2023-08",
+      "settlement_events": 162961,
+      "events_with_safe_global_symbol": 162961,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 59841,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2023-09",
+      "settlement_events": 139958,
+      "events_with_safe_global_symbol": 139958,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 56117,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2023-10",
+      "settlement_events": 153609,
+      "events_with_safe_global_symbol": 153609,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 66664,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2023-11",
+      "settlement_events": 140965,
+      "events_with_safe_global_symbol": 140965,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 61270,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2023-12",
+      "settlement_events": 148541,
+      "events_with_safe_global_symbol": 148541,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 65910,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2024-01",
+      "settlement_events": 134761,
+      "events_with_safe_global_symbol": 134761,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 58952,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2024-02",
+      "settlement_events": 133634,
+      "events_with_safe_global_symbol": 133634,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 57068,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2024-03",
+      "settlement_events": 152455,
+      "events_with_safe_global_symbol": 152455,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 62490,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2024-04",
+      "settlement_events": 140692,
+      "events_with_safe_global_symbol": 140692,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 58100,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2024-05",
+      "settlement_events": 146608,
+      "events_with_safe_global_symbol": 146608,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 56593,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2024-06",
+      "settlement_events": 127706,
+      "events_with_safe_global_symbol": 127706,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 57340,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2024-07",
+      "settlement_events": 145400,
+      "events_with_safe_global_symbol": 145400,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 55553,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2024-08",
+      "settlement_events": 128901,
+      "events_with_safe_global_symbol": 128901,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 55216,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2024-09",
+      "settlement_events": 129845,
+      "events_with_safe_global_symbol": 129845,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 61533,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2024-10",
+      "settlement_events": 167298,
+      "events_with_safe_global_symbol": 167298,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 66949,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2024-11",
+      "settlement_events": 135373,
+      "events_with_safe_global_symbol": 135373,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 59025,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2024-12",
+      "settlement_events": 150575,
+      "events_with_safe_global_symbol": 150575,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 67051,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2025-01",
+      "settlement_events": 140409,
+      "events_with_safe_global_symbol": 140409,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 61521,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2025-02",
+      "settlement_events": 130035,
+      "events_with_safe_global_symbol": 130035,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 57106,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2025-03",
+      "settlement_events": 160338,
+      "events_with_safe_global_symbol": 160338,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 65223,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2025-04",
+      "settlement_events": 140985,
+      "events_with_safe_global_symbol": 140985,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 58929,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2025-05",
+      "settlement_events": 139687,
+      "events_with_safe_global_symbol": 139687,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 58655,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2025-06",
+      "settlement_events": 157168,
+      "events_with_safe_global_symbol": 157168,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 64298,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2025-07",
+      "settlement_events": 146221,
+      "events_with_safe_global_symbol": 146221,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 60642,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2025-08",
+      "settlement_events": 145209,
+      "events_with_safe_global_symbol": 145209,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 64121,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2025-09",
+      "settlement_events": 142169,
+      "events_with_safe_global_symbol": 142169,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 58660,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2025-10",
+      "settlement_events": 144406,
+      "events_with_safe_global_symbol": 144406,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 61286,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2025-11",
+      "settlement_events": 154180,
+      "events_with_safe_global_symbol": 154180,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 65502,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2025-12",
+      "settlement_events": 136951,
+      "events_with_safe_global_symbol": 136951,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 57946,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2026-01",
+      "settlement_events": 128480,
+      "events_with_safe_global_symbol": 128480,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 56247,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2026-02",
+      "settlement_events": 132527,
+      "events_with_safe_global_symbol": 132527,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 56308,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2026-03",
+      "settlement_events": 185628,
+      "events_with_safe_global_symbol": 185628,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 73878,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2026-04",
+      "settlement_events": 171828,
+      "events_with_safe_global_symbol": 171828,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 69949,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2026-05",
+      "settlement_events": 186122,
+      "events_with_safe_global_symbol": 186122,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 71270,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2026-06",
+      "settlement_events": 248275,
+      "events_with_safe_global_symbol": 248275,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 101587,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2026-07",
+      "settlement_events": 170873,
+      "events_with_safe_global_symbol": 170873,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 68102,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2026-08",
+      "settlement_events": 178266,
+      "events_with_safe_global_symbol": 178266,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 74825,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2026-09",
+      "settlement_events": 186401,
+      "events_with_safe_global_symbol": 186401,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 67778,
+      "month_top_rank_conflicts": 0
+    }
+  ]
+}

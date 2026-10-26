@@ -1,0 +1,5433 @@
+{
+  "errors": [],
+  "months": [
+    {
+      "definitions": {
+        "distinct_expirations": 52,
+        "distinct_strikes": 162,
+        "records": 137464,
+        "top_asset": {
+          "AAO": 137464
+        },
+        "top_exchange": {
+          "XNYM": 137464
+        },
+        "top_group": {
+          "1N": 108,
+          "LO": 137356
+        },
+        "top_instrument_class": {
+          "C": 68678,
+          "P": 68678,
+          "T": 108
+        },
+        "top_security_type": {
+          "OOF": 137464
+        },
+        "top_underlying": {
+          "CSXF0": 7070,
+          "CSXG0": 7070,
+          "CSXH0": 6962,
+          "CSXJ0": 6800,
+          "CSXK0": 6584,
+          "CSXM0": 6638,
+          "CSXN0": 6588,
+          "CSXQ0": 6588,
+          "CSXU0": 6426,
+          "CSXV0": 5832,
+          "CSXX0": 5508,
+          "CSXZ0": 5256
+        },
+        "unique_symbols": 5417
+      },
+      "month": "2020-01",
+      "statistics": {
+        "cleared_volume_events": 51464,
+        "final_actual_events": 115944,
+        "final_actual_reference_dates": 21,
+        "final_events": 117815,
+        "final_reference_dates": 21,
+        "final_symbol_date_pairs": 99231,
+        "final_theoretical_events": 1871,
+        "first_reference_date": "2019-12-31",
+        "last_reference_date": "2020-01-31",
+        "open_interest_events": 51464,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 1138,
+        "positive_open_interest_events": 51464,
+        "preliminary_events": 194662,
+        "records": 821907,
+        "settlement_events": 312477,
+        "settlement_reference_dates": 22,
+        "stat_type_counts": {
+          "17": 203251,
+          "18": 203251,
+          "3": 312477,
+          "6": 51464,
+          "9": 51464
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 48,
+        "distinct_strikes": 143,
+        "records": 120274,
+        "top_asset": {
+          "AAO": 120274
+        },
+        "top_exchange": {
+          "XNYM": 120274
+        },
+        "top_group": {
+          "LO": 120274
+        },
+        "top_instrument_class": {
+          "C": 60137,
+          "P": 60137
+        },
+        "top_security_type": {
+          "OOF": 120274
+        },
+        "top_underlying": {
+          "CSXF1": 4272,
+          "CSXG0": 6288,
+          "CSXH0": 6192,
+          "CSXJ0": 6048,
+          "CSXK0": 5856,
+          "CSXM0": 5904,
+          "CSXN0": 5856,
+          "CSXQ0": 5856,
+          "CSXU0": 5712,
+          "CSXV0": 5184,
+          "CSXX0": 4896,
+          "CSXZ0": 4704
+        },
+        "unique_symbols": 5022
+      },
+      "month": "2020-02",
+      "statistics": {
+        "cleared_volume_events": 43755,
+        "final_actual_events": 97300,
+        "final_actual_reference_dates": 18,
+        "final_events": 99682,
+        "final_reference_dates": 18,
+        "final_symbol_date_pairs": 81966,
+        "final_theoretical_events": 2382,
+        "first_reference_date": "2020-01-31",
+        "last_reference_date": "2020-02-28",
+        "open_interest_events": 43755,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 671,
+        "positive_open_interest_events": 43754,
+        "preliminary_events": 163407,
+        "records": 689409,
+        "settlement_events": 263089,
+        "settlement_reference_dates": 19,
+        "stat_type_counts": {
+          "17": 169405,
+          "18": 169405,
+          "3": 263089,
+          "6": 43755,
+          "9": 43755
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 50,
+        "distinct_strikes": 186,
+        "records": 162125,
+        "top_asset": {
+          "AAO": 162125
+        },
+        "top_exchange": {
+          "XNYM": 162125
+        },
+        "top_group": {
+          "1N": 23,
+          "LO": 162102
+        },
+        "top_instrument_class": {
+          "C": 81051,
+          "P": 81051,
+          "T": 23
+        },
+        "top_security_type": {
+          "OOF": 162125
+        },
+        "top_underlying": {
+          "CSXF1": 6106,
+          "CSXG1": 6090,
+          "CSXH0": 8014,
+          "CSXJ0": 8286,
+          "CSXK0": 8028,
+          "CSXM0": 8044,
+          "CSXN0": 7898,
+          "CSXQ0": 7856,
+          "CSXU0": 7684,
+          "CSXV0": 7036,
+          "CSXX0": 6686,
+          "CSXZ0": 6588
+        },
+        "unique_symbols": 6746
+      },
+      "month": "2020-03",
+      "statistics": {
+        "cleared_volume_events": 55475,
+        "final_actual_events": 118057,
+        "final_actual_reference_dates": 23,
+        "final_events": 127836,
+        "final_reference_dates": 23,
+        "final_symbol_date_pairs": 106592,
+        "final_theoretical_events": 9779,
+        "first_reference_date": "2020-02-28",
+        "last_reference_date": "2020-03-31",
+        "open_interest_events": 55475,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 2103,
+        "positive_open_interest_events": 55469,
+        "preliminary_events": 245104,
+        "records": 941047,
+        "settlement_events": 372940,
+        "settlement_reference_dates": 23,
+        "stat_type_counts": {
+          "1": 1,
+          "17": 228576,
+          "18": 228576,
+          "3": 372940,
+          "4": 1,
+          "5": 1,
+          "6": 55475,
+          "7": 1,
+          "8": 1,
+          "9": 55475
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 48,
+        "distinct_strikes": 233,
+        "records": 173274,
+        "top_asset": {
+          "AAO": 173274
+        },
+        "top_exchange": {
+          "XNYM": 173274
+        },
+        "top_group": {
+          "1N": 6,
+          "LO": 173268
+        },
+        "top_instrument_class": {
+          "C": 86634,
+          "P": 86634,
+          "T": 6
+        },
+        "top_security_type": {
+          "OOF": 173274
+        },
+        "top_underlying": {
+          "CSXF1": 6548,
+          "CSXG1": 6532,
+          "CSXH1": 6464,
+          "CSXJ0": 9640,
+          "CSXK0": 9344,
+          "CSXM0": 8638,
+          "CSXN0": 8390,
+          "CSXQ0": 8316,
+          "CSXU0": 8108,
+          "CSXV0": 7484,
+          "CSXX0": 7104,
+          "CSXZ0": 7000
+        },
+        "unique_symbols": 7277
+      },
+      "month": "2020-04",
+      "statistics": {
+        "cleared_volume_events": 61544,
+        "final_actual_events": 103169,
+        "final_actual_reference_dates": 20,
+        "final_events": 113617,
+        "final_reference_dates": 21,
+        "final_symbol_date_pairs": 92868,
+        "final_theoretical_events": 10448,
+        "first_reference_date": "2020-04-01",
+        "last_reference_date": "2020-04-30",
+        "open_interest_events": 61544,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 866,
+        "positive_open_interest_events": 61544,
+        "preliminary_events": 222727,
+        "records": 909762,
+        "settlement_events": 336344,
+        "settlement_reference_dates": 21,
+        "stat_type_counts": {
+          "17": 225165,
+          "18": 225165,
+          "3": 336344,
+          "6": 61544,
+          "9": 61544
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 47,
+        "distinct_strikes": 230,
+        "records": 169334,
+        "top_asset": {
+          "AAO": 169334
+        },
+        "top_exchange": {
+          "XNYM": 169334
+        },
+        "top_group": {
+          "1N": 24,
+          "LO": 169310
+        },
+        "top_instrument_class": {
+          "C": 84655,
+          "P": 84655,
+          "T": 24
+        },
+        "top_security_type": {
+          "OOF": 169334
+        },
+        "top_underlying": {
+          "CSXF1": 6656,
+          "CSXG1": 6604,
+          "CSXH1": 6500,
+          "CSXJ1": 6396,
+          "CSXK0": 9900,
+          "CSXM0": 8984,
+          "CSXN0": 8580,
+          "CSXQ0": 8424,
+          "CSXU0": 8216,
+          "CSXV0": 7592,
+          "CSXX0": 7176,
+          "CSXZ0": 7072
+        },
+        "unique_symbols": 7093
+      },
+      "month": "2020-05",
+      "statistics": {
+        "cleared_volume_events": 57990,
+        "final_actual_events": 101139,
+        "final_actual_reference_dates": 21,
+        "final_events": 114096,
+        "final_reference_dates": 21,
+        "final_symbol_date_pairs": 94793,
+        "final_theoretical_events": 12957,
+        "first_reference_date": "2020-04-30",
+        "last_reference_date": "2020-05-29",
+        "open_interest_events": 57990,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 338,
+        "positive_open_interest_events": 57988,
+        "preliminary_events": 175853,
+        "records": 834110,
+        "settlement_events": 289949,
+        "settlement_reference_dates": 21,
+        "stat_type_counts": {
+          "17": 214082,
+          "18": 214082,
+          "3": 289949,
+          "6": 57990,
+          "7": 17,
+          "9": 57990
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 46,
+        "distinct_strikes": 187,
+        "records": 164336,
+        "top_asset": {
+          "AAO": 164336
+        },
+        "top_exchange": {
+          "XNYM": 164336
+        },
+        "top_group": {
+          "1N": 30,
+          "LO": 164306
+        },
+        "top_instrument_class": {
+          "C": 82153,
+          "P": 82153,
+          "T": 30
+        },
+        "top_security_type": {
+          "OOF": 164336
+        },
+        "top_underlying": {
+          "CSXF1": 6714,
+          "CSXG1": 6662,
+          "CSXH1": 6558,
+          "CSXJ1": 6470,
+          "CSXK1": 6314,
+          "CSXM0": 8996,
+          "CSXN0": 8650,
+          "CSXQ0": 8494,
+          "CSXU0": 8286,
+          "CSXV0": 7628,
+          "CSXX0": 7212,
+          "CSXZ0": 7108
+        },
+        "unique_symbols": 6433
+      },
+      "month": "2020-06",
+      "statistics": {
+        "cleared_volume_events": 64435,
+        "final_actual_events": 94311,
+        "final_actual_reference_dates": 21,
+        "final_events": 104676,
+        "final_reference_dates": 21,
+        "final_symbol_date_pairs": 89415,
+        "final_theoretical_events": 10365,
+        "first_reference_date": "2020-06-01",
+        "last_reference_date": "2020-06-29",
+        "open_interest_events": 64435,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 1865,
+        "positive_open_interest_events": 64434,
+        "preliminary_events": 143211,
+        "records": 769858,
+        "settlement_events": 247887,
+        "settlement_reference_dates": 21,
+        "stat_type_counts": {
+          "17": 196547,
+          "18": 196547,
+          "3": 247887,
+          "6": 64435,
+          "8": 7,
+          "9": 64435
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 44,
+        "distinct_strikes": 190,
+        "records": 169364,
+        "top_asset": {
+          "AAO": 169364
+        },
+        "top_exchange": {
+          "XNYM": 169364
+        },
+        "top_group": {
+          "LO": 169364
+        },
+        "top_instrument_class": {
+          "C": 84682,
+          "P": 84682
+        },
+        "top_security_type": {
+          "OOF": 169364
+        },
+        "top_underlying": {
+          "CSXF1": 7048,
+          "CSXG1": 6994,
+          "CSXH1": 6886,
+          "CSXJ1": 6832,
+          "CSXK1": 6670,
+          "CSXM1": 6616,
+          "CSXN0": 9018,
+          "CSXQ0": 8856,
+          "CSXU0": 8640,
+          "CSXV0": 7938,
+          "CSXX0": 7506,
+          "CSXZ0": 7398
+        },
+        "unique_symbols": 6632
+      },
+      "month": "2020-07",
+      "statistics": {
+        "cleared_volume_events": 71985,
+        "final_actual_events": 95305,
+        "final_actual_reference_dates": 21,
+        "final_events": 105720,
+        "final_reference_dates": 21,
+        "final_symbol_date_pairs": 87398,
+        "final_theoretical_events": 10415,
+        "first_reference_date": "2020-07-01",
+        "last_reference_date": "2020-07-31",
+        "open_interest_events": 71985,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 1363,
+        "positive_open_interest_events": 71985,
+        "preliminary_events": 157584,
+        "records": 835254,
+        "settlement_events": 263304,
+        "settlement_reference_dates": 22,
+        "stat_type_counts": {
+          "17": 213990,
+          "18": 213990,
+          "3": 263304,
+          "6": 71985,
+          "9": 71985
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 42,
+        "distinct_strikes": 179,
+        "records": 158386,
+        "top_asset": {
+          "AAO": 158386
+        },
+        "top_exchange": {
+          "XNYM": 158386
+        },
+        "top_group": {
+          "LO": 158386
+        },
+        "top_instrument_class": {
+          "C": 79193,
+          "P": 79193
+        },
+        "top_security_type": {
+          "OOF": 158386
+        },
+        "top_underlying": {
+          "CSXF1": 6888,
+          "CSXG1": 6836,
+          "CSXH1": 6704,
+          "CSXJ1": 6652,
+          "CSXK1": 6496,
+          "CSXM1": 6444,
+          "CSXN1": 6184,
+          "CSXQ0": 8556,
+          "CSXU0": 8348,
+          "CSXV0": 7672,
+          "CSXX0": 7256,
+          "CSXZ0": 7152
+        },
+        "unique_symbols": 6196
+      },
+      "month": "2020-08",
+      "statistics": {
+        "cleared_volume_events": 68556,
+        "final_actual_events": 93140,
+        "final_actual_reference_dates": 22,
+        "final_events": 106408,
+        "final_reference_dates": 22,
+        "final_symbol_date_pairs": 89104,
+        "final_theoretical_events": 13268,
+        "first_reference_date": "2020-07-31",
+        "last_reference_date": "2020-08-31",
+        "open_interest_events": 68556,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 1218,
+        "positive_open_interest_events": 68556,
+        "preliminary_events": 148527,
+        "records": 796921,
+        "settlement_events": 254935,
+        "settlement_reference_dates": 22,
+        "stat_type_counts": {
+          "17": 202437,
+          "18": 202437,
+          "3": 254935,
+          "6": 68556,
+          "9": 68556
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 42,
+        "distinct_strikes": 182,
+        "records": 154668,
+        "top_asset": {
+          "AAO": 154668
+        },
+        "top_exchange": {
+          "XNYM": 154668
+        },
+        "top_group": {
+          "LO": 154668
+        },
+        "top_instrument_class": {
+          "C": 77334,
+          "P": 77334
+        },
+        "top_security_type": {
+          "OOF": 154668
+        },
+        "top_underlying": {
+          "CSXF1": 6940,
+          "CSXG1": 6888,
+          "CSXH1": 6732,
+          "CSXJ1": 6680,
+          "CSXK1": 6524,
+          "CSXM1": 6472,
+          "CSXN1": 6212,
+          "CSXQ1": 6160,
+          "CSXU0": 8372,
+          "CSXV0": 7696,
+          "CSXX0": 7280,
+          "CSXZ0": 7176
+        },
+        "unique_symbols": 6336
+      },
+      "month": "2020-09",
+      "statistics": {
+        "cleared_volume_events": 64136,
+        "final_actual_events": 47300,
+        "final_actual_reference_dates": 21,
+        "final_events": 63105,
+        "final_reference_dates": 21,
+        "final_symbol_date_pairs": 55171,
+        "final_theoretical_events": 15805,
+        "first_reference_date": "2020-09-01",
+        "last_reference_date": "2020-09-30",
+        "open_interest_events": 64136,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 621,
+        "positive_open_interest_events": 64136,
+        "preliminary_events": 85443,
+        "records": 663579,
+        "settlement_events": 148548,
+        "settlement_reference_dates": 21,
+        "stat_type_counts": {
+          "17": 193379,
+          "18": 193379,
+          "3": 148548,
+          "6": 64136,
+          "7": 1,
+          "9": 64136
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 41,
+        "distinct_strikes": 186,
+        "records": 151010,
+        "top_asset": {
+          "AAO": 151010
+        },
+        "top_exchange": {
+          "XNYM": 151010
+        },
+        "top_group": {
+          "1N": 56,
+          "LO": 150954
+        },
+        "top_instrument_class": {
+          "C": 75477,
+          "P": 75477,
+          "T": 56
+        },
+        "top_security_type": {
+          "OOF": 151010
+        },
+        "top_underlying": {
+          "CSXF1": 7054,
+          "CSXG1": 7002,
+          "CSXH1": 6846,
+          "CSXJ1": 6794,
+          "CSXK1": 6638,
+          "CSXM1": 6586,
+          "CSXN1": 6322,
+          "CSXQ1": 6318,
+          "CSXU1": 6266,
+          "CSXV0": 7696,
+          "CSXX0": 7324,
+          "CSXZ0": 7220
+        },
+        "unique_symbols": 6174
+      },
+      "month": "2020-10",
+      "statistics": {
+        "cleared_volume_events": 67406,
+        "final_actual_events": 38348,
+        "final_actual_reference_dates": 21,
+        "final_events": 55479,
+        "final_reference_dates": 21,
+        "final_symbol_date_pairs": 49286,
+        "final_theoretical_events": 17131,
+        "first_reference_date": "2020-10-01",
+        "last_reference_date": "2020-10-30",
+        "open_interest_events": 67406,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 986,
+        "positive_open_interest_events": 67406,
+        "preliminary_events": 70496,
+        "records": 636265,
+        "settlement_events": 125975,
+        "settlement_reference_dates": 22,
+        "stat_type_counts": {
+          "17": 187739,
+          "18": 187739,
+          "3": 125975,
+          "6": 67406,
+          "9": 67406
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 40,
+        "distinct_strikes": 170,
+        "records": 148578,
+        "top_asset": {
+          "AAO": 148578
+        },
+        "top_exchange": {
+          "XNYM": 148578
+        },
+        "top_group": {
+          "1N": 20,
+          "LO": 148558
+        },
+        "top_instrument_class": {
+          "C": 74279,
+          "P": 74279,
+          "T": 20
+        },
+        "top_security_type": {
+          "OOF": 148578
+        },
+        "top_underlying": {
+          "CSXF1": 7166,
+          "CSXG1": 7114,
+          "CSXH1": 6958,
+          "CSXJ1": 6908,
+          "CSXK1": 6752,
+          "CSXM1": 6700,
+          "CSXN1": 6384,
+          "CSXQ1": 6436,
+          "CSXU1": 6384,
+          "CSXX0": 7332,
+          "CSXX1": 6280,
+          "CSXZ0": 7230
+        },
+        "unique_symbols": 5854
+      },
+      "month": "2020-11",
+      "statistics": {
+        "cleared_volume_events": 60425,
+        "final_actual_events": 37786,
+        "final_actual_reference_dates": 20,
+        "final_events": 58929,
+        "final_reference_dates": 21,
+        "final_symbol_date_pairs": 51264,
+        "final_theoretical_events": 21143,
+        "first_reference_date": "2020-10-30",
+        "last_reference_date": "2020-11-30",
+        "open_interest_events": 60425,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 1891,
+        "positive_open_interest_events": 60422,
+        "preliminary_events": 80359,
+        "records": 602791,
+        "settlement_events": 139288,
+        "settlement_reference_dates": 21,
+        "stat_type_counts": {
+          "17": 171326,
+          "18": 171326,
+          "3": 139288,
+          "6": 60425,
+          "7": 1,
+          "9": 60425
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 39,
+        "distinct_strikes": 172,
+        "records": 158036,
+        "top_asset": {
+          "AAO": 158036
+        },
+        "top_exchange": {
+          "XNYM": 158036
+        },
+        "top_group": {
+          "LO": 158036
+        },
+        "top_instrument_class": {
+          "C": 79018,
+          "P": 79018
+        },
+        "top_security_type": {
+          "OOF": 158036
+        },
+        "top_underlying": {
+          "CSXF1": 7652,
+          "CSXG1": 7598,
+          "CSXH1": 7436,
+          "CSXJ1": 7436,
+          "CSXK1": 7274,
+          "CSXM1": 7220,
+          "CSXN1": 6832,
+          "CSXQ1": 6886,
+          "CSXU1": 6832,
+          "CSXV1": 6724,
+          "CSXX1": 6724,
+          "CSXZ0": 7560
+        },
+        "unique_symbols": 6144
+      },
+      "month": "2020-12",
+      "statistics": {
+        "cleared_volume_events": 70921,
+        "final_actual_events": 44651,
+        "final_actual_reference_dates": 22,
+        "final_events": 61553,
+        "final_reference_dates": 22,
+        "final_symbol_date_pairs": 53129,
+        "final_theoretical_events": 16902,
+        "first_reference_date": "2020-11-30",
+        "last_reference_date": "2020-12-31",
+        "open_interest_events": 70921,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 1441,
+        "positive_open_interest_events": 70921,
+        "preliminary_events": 87588,
+        "records": 682695,
+        "settlement_events": 149141,
+        "settlement_reference_dates": 23,
+        "stat_type_counts": {
+          "17": 195856,
+          "18": 195856,
+          "3": 149141,
+          "6": 70921,
+          "9": 70921
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 38,
+        "distinct_strikes": 177,
+        "records": 150814,
+        "top_asset": {
+          "AAO": 150814
+        },
+        "top_exchange": {
+          "XNYM": 150814
+        },
+        "top_group": {
+          "LO": 150814
+        },
+        "top_instrument_class": {
+          "C": 75407,
+          "P": 75407
+        },
+        "top_security_type": {
+          "OOF": 150814
+        },
+        "top_underlying": {
+          "CSXF1": 7144,
+          "CSXG1": 7378,
+          "CSXH1": 7222,
+          "CSXJ1": 7222,
+          "CSXK1": 7078,
+          "CSXM1": 7026,
+          "CSXN1": 6706,
+          "CSXQ1": 6746,
+          "CSXU1": 6694,
+          "CSXV1": 6590,
+          "CSXX1": 6590,
+          "CSXZ1": 6538
+        },
+        "unique_symbols": 6230
+      },
+      "month": "2021-01",
+      "statistics": {
+        "cleared_volume_events": 65473,
+        "final_actual_events": 42425,
+        "final_actual_reference_dates": 20,
+        "final_events": 63350,
+        "final_reference_dates": 20,
+        "final_symbol_date_pairs": 53526,
+        "final_theoretical_events": 20925,
+        "first_reference_date": "2020-12-31",
+        "last_reference_date": "2021-01-29",
+        "open_interest_events": 65473,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 887,
+        "positive_open_interest_events": 65462,
+        "preliminary_events": 72103,
+        "records": 611551,
+        "settlement_events": 135453,
+        "settlement_reference_dates": 20,
+        "stat_type_counts": {
+          "17": 172576,
+          "18": 172576,
+          "3": 135453,
+          "6": 65473,
+          "9": 65473
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 36,
+        "distinct_strikes": 169,
+        "records": 140790,
+        "top_asset": {
+          "AAO": 140790
+        },
+        "top_exchange": {
+          "XNYM": 140790
+        },
+        "top_group": {
+          "1N": 2,
+          "LO": 140788
+        },
+        "top_instrument_class": {
+          "C": 70394,
+          "P": 70394,
+          "T": 2
+        },
+        "top_security_type": {
+          "OOF": 140790
+        },
+        "top_underlying": {
+          "CSXF2": 5444,
+          "CSXG1": 6532,
+          "CSXH1": 6774,
+          "CSXJ1": 6764,
+          "CSXK1": 6754,
+          "CSXM1": 6692,
+          "CSXN1": 6422,
+          "CSXQ1": 6430,
+          "CSXU1": 6354,
+          "CSXV1": 6270,
+          "CSXX1": 6242,
+          "CSXZ1": 6204
+        },
+        "unique_symbols": 6253
+      },
+      "month": "2021-02",
+      "statistics": {
+        "cleared_volume_events": 62749,
+        "final_actual_events": 37998,
+        "final_actual_reference_dates": 19,
+        "final_events": 55326,
+        "final_reference_dates": 19,
+        "final_symbol_date_pairs": 48730,
+        "final_theoretical_events": 17328,
+        "first_reference_date": "2021-02-01",
+        "last_reference_date": "2021-02-26",
+        "open_interest_events": 62749,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 1726,
+        "positive_open_interest_events": 62749,
+        "preliminary_events": 72632,
+        "records": 574328,
+        "settlement_events": 127958,
+        "settlement_reference_dates": 19,
+        "stat_type_counts": {
+          "17": 160436,
+          "18": 160436,
+          "3": 127958,
+          "6": 62749,
+          "9": 62749
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 38,
+        "distinct_strikes": 172,
+        "records": 167330,
+        "top_asset": {
+          "AAO": 167330
+        },
+        "top_exchange": {
+          "XNYM": 167330
+        },
+        "top_group": {
+          "1N": 306,
+          "LO": 167024
+        },
+        "top_instrument_class": {
+          "C": 83512,
+          "P": 83512,
+          "T": 306
+        },
+        "top_security_type": {
+          "OOF": 167330
+        },
+        "top_underlying": {
+          "CSXF2": 6844,
+          "CSXG2": 6790,
+          "CSXH1": 8026,
+          "CSXJ1": 8166,
+          "CSXK1": 8176,
+          "CSXM1": 8068,
+          "CSXN1": 7776,
+          "CSXQ1": 7766,
+          "CSXU1": 7660,
+          "CSXV1": 7552,
+          "CSXX1": 7498,
+          "CSXZ1": 7454
+        },
+        "unique_symbols": 6393
+      },
+      "month": "2021-03",
+      "statistics": {
+        "cleared_volume_events": 77406,
+        "final_actual_events": 46511,
+        "final_actual_reference_dates": 23,
+        "final_events": 64706,
+        "final_reference_dates": 23,
+        "final_symbol_date_pairs": 57703,
+        "final_theoretical_events": 18195,
+        "first_reference_date": "2021-03-01",
+        "last_reference_date": "2021-03-31",
+        "open_interest_events": 77406,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 882,
+        "positive_open_interest_events": 77406,
+        "preliminary_events": 99730,
+        "records": 719280,
+        "settlement_events": 164436,
+        "settlement_reference_dates": 23,
+        "stat_type_counts": {
+          "17": 200016,
+          "18": 200016,
+          "3": 164436,
+          "6": 77406,
+          "9": 77406
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 36,
+        "distinct_strikes": 177,
+        "records": 160256,
+        "top_asset": {
+          "AAO": 160256
+        },
+        "top_exchange": {
+          "XNYM": 160256
+        },
+        "top_group": {
+          "1N": 42,
+          "LO": 160214
+        },
+        "top_instrument_class": {
+          "C": 80107,
+          "P": 80107,
+          "T": 42
+        },
+        "top_security_type": {
+          "OOF": 160256
+        },
+        "top_underlying": {
+          "CSXF2": 6728,
+          "CSXG2": 6680,
+          "CSXH2": 6524,
+          "CSXJ1": 7956,
+          "CSXK1": 7956,
+          "CSXM1": 7852,
+          "CSXN1": 7648,
+          "CSXQ1": 7648,
+          "CSXU1": 7544,
+          "CSXV1": 7440,
+          "CSXX1": 7336,
+          "CSXZ1": 7284
+        },
+        "unique_symbols": 6549
+      },
+      "month": "2021-04",
+      "statistics": {
+        "cleared_volume_events": 76251,
+        "final_actual_events": 43366,
+        "final_actual_reference_dates": 21,
+        "final_events": 61118,
+        "final_reference_dates": 21,
+        "final_symbol_date_pairs": 54146,
+        "final_theoretical_events": 17752,
+        "first_reference_date": "2021-04-01",
+        "last_reference_date": "2021-04-30",
+        "open_interest_events": 76251,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 1667,
+        "positive_open_interest_events": 76248,
+        "preliminary_events": 92072,
+        "records": 665351,
+        "settlement_events": 153190,
+        "settlement_reference_dates": 22,
+        "stat_type_counts": {
+          "17": 179828,
+          "18": 179828,
+          "3": 153190,
+          "6": 76251,
+          "7": 3,
+          "9": 76251
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 33,
+        "distinct_strikes": 181,
+        "records": 161776,
+        "top_asset": {
+          "AAO": 161776
+        },
+        "top_exchange": {
+          "XNYM": 161776
+        },
+        "top_group": {
+          "1N": 30,
+          "LO": 161746
+        },
+        "top_instrument_class": {
+          "C": 80873,
+          "P": 80873,
+          "T": 30
+        },
+        "top_security_type": {
+          "OOF": 161776
+        },
+        "top_underlying": {
+          "CSXF2": 7104,
+          "CSXG2": 7060,
+          "CSXH2": 6996,
+          "CSXJ2": 6832,
+          "CSXK1": 7344,
+          "CSXM1": 8022,
+          "CSXN1": 7852,
+          "CSXQ1": 7866,
+          "CSXU1": 7764,
+          "CSXV1": 7686,
+          "CSXX1": 7616,
+          "CSXZ1": 7576
+        },
+        "unique_symbols": 6396
+      },
+      "month": "2021-05",
+      "statistics": {
+        "cleared_volume_events": 71414,
+        "final_actual_events": 45221,
+        "final_actual_reference_dates": 21,
+        "final_events": 67712,
+        "final_reference_dates": 21,
+        "final_symbol_date_pairs": 59046,
+        "final_theoretical_events": 22491,
+        "first_reference_date": "2021-04-30",
+        "last_reference_date": "2021-05-28",
+        "open_interest_events": 71414,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 1446,
+        "positive_open_interest_events": 71390,
+        "preliminary_events": 83689,
+        "records": 648559,
+        "settlement_events": 151401,
+        "settlement_reference_dates": 21,
+        "stat_type_counts": {
+          "17": 177165,
+          "18": 177165,
+          "3": 151401,
+          "6": 71414,
+          "9": 71414
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 41,
+        "distinct_strikes": 198,
+        "records": 167234,
+        "top_asset": {
+          "AAO": 167234
+        },
+        "top_exchange": {
+          "XNYM": 167234
+        },
+        "top_group": {
+          "1N": 92,
+          "LO": 167142
+        },
+        "top_instrument_class": {
+          "C": 83571,
+          "P": 83571,
+          "T": 92
+        },
+        "top_security_type": {
+          "OOF": 167234
+        },
+        "top_underlying": {
+          "CSXF2": 7582,
+          "CSXG2": 7536,
+          "CSXH2": 7508,
+          "CSXJ2": 7320,
+          "CSXK2": 6866,
+          "CSXM1": 8410,
+          "CSXN1": 8382,
+          "CSXQ1": 8372,
+          "CSXU1": 8240,
+          "CSXV1": 8138,
+          "CSXX1": 8026,
+          "CSXZ1": 7986
+        },
+        "unique_symbols": 6736
+      },
+      "month": "2021-06",
+      "statistics": {
+        "cleared_volume_events": 78360,
+        "final_actual_events": 47464,
+        "final_actual_reference_dates": 22,
+        "final_events": 66428,
+        "final_reference_dates": 22,
+        "final_symbol_date_pairs": 59041,
+        "final_theoretical_events": 18964,
+        "first_reference_date": "2021-06-01",
+        "last_reference_date": "2021-06-30",
+        "open_interest_events": 78360,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 1874,
+        "positive_open_interest_events": 78360,
+        "preliminary_events": 107960,
+        "records": 715568,
+        "settlement_events": 174388,
+        "settlement_reference_dates": 22,
+        "stat_type_counts": {
+          "17": 192230,
+          "18": 192230,
+          "3": 174388,
+          "6": 78360,
+          "9": 78360
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 40,
+        "distinct_strikes": 207,
+        "records": 171080,
+        "top_asset": {
+          "AAO": 171080
+        },
+        "top_exchange": {
+          "XNYM": 171080
+        },
+        "top_group": {
+          "1N": 192,
+          "LO": 170888
+        },
+        "top_instrument_class": {
+          "C": 85444,
+          "P": 85444,
+          "T": 192
+        },
+        "top_security_type": {
+          "OOF": 171080
+        },
+        "top_underlying": {
+          "CSXF2": 8006,
+          "CSXG2": 7954,
+          "CSXH2": 7886,
+          "CSXJ2": 7706,
+          "CSXK2": 7290,
+          "CSXM2": 7110,
+          "CSXN1": 8736,
+          "CSXQ1": 8806,
+          "CSXU1": 8652,
+          "CSXV1": 8576,
+          "CSXX1": 8420,
+          "CSXZ1": 8370
+        },
+        "unique_symbols": 6943
+      },
+      "month": "2021-07",
+      "statistics": {
+        "cleared_volume_events": 78551,
+        "final_actual_events": 44953,
+        "final_actual_reference_dates": 20,
+        "final_events": 63825,
+        "final_reference_dates": 20,
+        "final_symbol_date_pairs": 56284,
+        "final_theoretical_events": 18872,
+        "first_reference_date": "2021-07-01",
+        "last_reference_date": "2021-07-30",
+        "open_interest_events": 78551,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 1073,
+        "positive_open_interest_events": 78542,
+        "preliminary_events": 86132,
+        "records": 707965,
+        "settlement_events": 149957,
+        "settlement_reference_dates": 21,
+        "stat_type_counts": {
+          "17": 200452,
+          "18": 200452,
+          "3": 149957,
+          "6": 78551,
+          "7": 2,
+          "9": 78551
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 36,
+        "distinct_strikes": 200,
+        "records": 172748,
+        "top_asset": {
+          "AAO": 172748
+        },
+        "top_exchange": {
+          "XNYM": 172748
+        },
+        "top_group": {
+          "LO": 172748
+        },
+        "top_instrument_class": {
+          "C": 86374,
+          "P": 86374
+        },
+        "top_security_type": {
+          "OOF": 172748
+        },
+        "top_underlying": {
+          "CSXF2": 8370,
+          "CSXG2": 8316,
+          "CSXH2": 8262,
+          "CSXJ2": 8100,
+          "CSXK2": 7668,
+          "CSXM2": 7506,
+          "CSXN2": 7182,
+          "CSXQ1": 9228,
+          "CSXU1": 9066,
+          "CSXV1": 9012,
+          "CSXX1": 8850,
+          "CSXZ1": 8796
+        },
+        "unique_symbols": 6504
+      },
+      "month": "2021-08",
+      "statistics": {
+        "cleared_volume_events": 80225,
+        "final_actual_events": 50962,
+        "final_actual_reference_dates": 23,
+        "final_events": 73934,
+        "final_reference_dates": 23,
+        "final_symbol_date_pairs": 64814,
+        "final_theoretical_events": 22972,
+        "first_reference_date": "2021-07-30",
+        "last_reference_date": "2021-08-31",
+        "open_interest_events": 80225,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 745,
+        "positive_open_interest_events": 80220,
+        "preliminary_events": 87722,
+        "records": 895975,
+        "settlement_events": 161656,
+        "settlement_reference_dates": 23,
+        "stat_type_counts": {
+          "17": 286934,
+          "18": 286934,
+          "3": 161656,
+          "6": 80225,
+          "8": 1,
+          "9": 80225
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 36,
+        "distinct_strikes": 206,
+        "records": 163276,
+        "top_asset": {
+          "AAO": 163276
+        },
+        "top_exchange": {
+          "XNYM": 163276
+        },
+        "top_group": {
+          "LO": 163276
+        },
+        "top_instrument_class": {
+          "C": 81638,
+          "P": 81638
+        },
+        "top_security_type": {
+          "OOF": 163276
+        },
+        "top_underlying": {
+          "CSXF2": 8140,
+          "CSXG2": 8088,
+          "CSXH2": 8044,
+          "CSXJ2": 7888,
+          "CSXK2": 7446,
+          "CSXM2": 7302,
+          "CSXN2": 7028,
+          "CSXQ2": 6928,
+          "CSXU1": 8736,
+          "CSXV1": 8710,
+          "CSXX1": 8572,
+          "CSXZ1": 8530
+        },
+        "unique_symbols": 6898
+      },
+      "month": "2021-09",
+      "statistics": {
+        "cleared_volume_events": 73401,
+        "final_actual_events": 43643,
+        "final_actual_reference_dates": 21,
+        "final_events": 61880,
+        "final_reference_dates": 21,
+        "final_symbol_date_pairs": 54875,
+        "final_theoretical_events": 18237,
+        "first_reference_date": "2021-09-01",
+        "last_reference_date": "2021-09-30",
+        "open_interest_events": 73401,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 1683,
+        "positive_open_interest_events": 73392,
+        "preliminary_events": 105301,
+        "records": 836369,
+        "settlement_events": 167181,
+        "settlement_reference_dates": 21,
+        "stat_type_counts": {
+          "17": 261193,
+          "18": 261193,
+          "3": 167181,
+          "6": 73401,
+          "9": 73401
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 35,
+        "distinct_strikes": 226,
+        "records": 171998,
+        "top_asset": {
+          "AAO": 171998
+        },
+        "top_exchange": {
+          "XNYM": 171998
+        },
+        "top_group": {
+          "LO": 171998
+        },
+        "top_instrument_class": {
+          "C": 85999,
+          "P": 85999
+        },
+        "top_security_type": {
+          "OOF": 171998
+        },
+        "top_underlying": {
+          "CSXF2": 8864,
+          "CSXG2": 8786,
+          "CSXH2": 8694,
+          "CSXJ2": 8544,
+          "CSXK2": 8054,
+          "CSXM2": 7944,
+          "CSXN2": 7770,
+          "CSXQ2": 7664,
+          "CSXU2": 7612,
+          "CSXV1": 8920,
+          "CSXX1": 9342,
+          "CSXZ1": 9252
+        },
+        "unique_symbols": 7226
+      },
+      "month": "2021-10",
+      "statistics": {
+        "cleared_volume_events": 74055,
+        "final_actual_events": 44712,
+        "final_actual_reference_dates": 21,
+        "final_events": 69380,
+        "final_reference_dates": 21,
+        "final_symbol_date_pairs": 60819,
+        "final_theoretical_events": 24668,
+        "first_reference_date": "2021-10-01",
+        "last_reference_date": "2021-10-29",
+        "open_interest_events": 74055,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 885,
+        "positive_open_interest_events": 74055,
+        "preliminary_events": 88949,
+        "records": 851379,
+        "settlement_events": 158329,
+        "settlement_reference_dates": 21,
+        "stat_type_counts": {
+          "17": 272470,
+          "18": 272470,
+          "3": 158329,
+          "6": 74055,
+          "9": 74055
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 34,
+        "distinct_strikes": 226,
+        "records": 170844,
+        "top_asset": {
+          "AAO": 170844
+        },
+        "top_exchange": {
+          "XNYM": 170844
+        },
+        "top_group": {
+          "1N": 24,
+          "LO": 170820
+        },
+        "top_instrument_class": {
+          "C": 85410,
+          "P": 85410,
+          "T": 24
+        },
+        "top_security_type": {
+          "OOF": 170844
+        },
+        "top_underlying": {
+          "CSXF2": 9186,
+          "CSXG2": 9082,
+          "CSXH2": 8926,
+          "CSXJ2": 8770,
+          "CSXK2": 8250,
+          "CSXM2": 8146,
+          "CSXN2": 7956,
+          "CSXQ2": 7852,
+          "CSXU2": 7852,
+          "CSXV2": 7696,
+          "CSXX1": 9724,
+          "CSXZ1": 9568
+        },
+        "unique_symbols": 6616
+      },
+      "month": "2021-11",
+      "statistics": {
+        "cleared_volume_events": 69129,
+        "final_actual_events": 40512,
+        "final_actual_reference_dates": 20,
+        "final_events": 60100,
+        "final_reference_dates": 20,
+        "final_symbol_date_pairs": 53308,
+        "final_theoretical_events": 19588,
+        "first_reference_date": "2021-11-01",
+        "last_reference_date": "2021-11-30",
+        "open_interest_events": 69129,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 583,
+        "positive_open_interest_events": 69129,
+        "preliminary_events": 81243,
+        "records": 817199,
+        "settlement_events": 141343,
+        "settlement_reference_dates": 21,
+        "stat_type_counts": {
+          "17": 268799,
+          "18": 268799,
+          "3": 141343,
+          "6": 69129,
+          "9": 69129
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 33,
+        "distinct_strikes": 231,
+        "records": 173868,
+        "top_asset": {
+          "AAO": 173868
+        },
+        "top_exchange": {
+          "XNYM": 173868
+        },
+        "top_group": {
+          "LO": 173868
+        },
+        "top_instrument_class": {
+          "C": 86934,
+          "P": 86934
+        },
+        "top_security_type": {
+          "OOF": 173868
+        },
+        "top_underlying": {
+          "CSXF2": 9558,
+          "CSXG2": 9450,
+          "CSXH2": 9288,
+          "CSXJ2": 9126,
+          "CSXK2": 8586,
+          "CSXM2": 8478,
+          "CSXN2": 8316,
+          "CSXQ2": 8208,
+          "CSXU2": 8208,
+          "CSXV2": 8030,
+          "CSXX2": 7760,
+          "CSXZ1": 9936
+        },
+        "unique_symbols": 6818
+      },
+      "month": "2021-12",
+      "statistics": {
+        "cleared_volume_events": 73548,
+        "final_actual_events": 45181,
+        "final_actual_reference_dates": 22,
+        "final_events": 64277,
+        "final_reference_dates": 22,
+        "final_symbol_date_pairs": 55843,
+        "final_theoretical_events": 19096,
+        "first_reference_date": "2021-11-30",
+        "last_reference_date": "2021-12-31",
+        "open_interest_events": 73548,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 1398,
+        "positive_open_interest_events": 73536,
+        "preliminary_events": 90554,
+        "records": 876535,
+        "settlement_events": 154831,
+        "settlement_reference_dates": 23,
+        "stat_type_counts": {
+          "17": 287304,
+          "18": 287304,
+          "3": 154831,
+          "6": 73548,
+          "9": 73548
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 31,
+        "distinct_strikes": 248,
+        "records": 168884,
+        "top_asset": {
+          "AAO": 168884
+        },
+        "top_exchange": {
+          "XNYM": 168884
+        },
+        "top_group": {
+          "LO": 168884
+        },
+        "top_instrument_class": {
+          "C": 84442,
+          "P": 84442
+        },
+        "top_security_type": {
+          "OOF": 168884
+        },
+        "top_underlying": {
+          "CSXF2": 9274,
+          "CSXG2": 9450,
+          "CSXH2": 9340,
+          "CSXJ2": 9658,
+          "CSXK2": 9258,
+          "CSXM2": 9120,
+          "CSXN2": 8404,
+          "CSXQ2": 8280,
+          "CSXU2": 8146,
+          "CSXV2": 8006,
+          "CSXX2": 7724,
+          "CSXZ2": 7438
+        },
+        "unique_symbols": 7012
+      },
+      "month": "2022-01",
+      "statistics": {
+        "cleared_volume_events": 67826,
+        "final_actual_events": 39091,
+        "final_actual_reference_dates": 19,
+        "final_events": 58609,
+        "final_reference_dates": 20,
+        "final_symbol_date_pairs": 51705,
+        "final_theoretical_events": 19518,
+        "first_reference_date": "2021-12-31",
+        "last_reference_date": "2022-01-31",
+        "open_interest_events": 67826,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 1410,
+        "positive_open_interest_events": 67826,
+        "preliminary_events": 95359,
+        "records": 805164,
+        "settlement_events": 153968,
+        "settlement_reference_dates": 21,
+        "stat_type_counts": {
+          "17": 257772,
+          "18": 257772,
+          "3": 153968,
+          "6": 67826,
+          "9": 67826
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 32,
+        "distinct_strikes": 260,
+        "records": 168736,
+        "top_asset": {
+          "AAO": 168736
+        },
+        "top_exchange": {
+          "XNYM": 168736
+        },
+        "top_group": {
+          "LO": 168736
+        },
+        "top_instrument_class": {
+          "C": 84368,
+          "P": 84368
+        },
+        "top_security_type": {
+          "OOF": 168736
+        },
+        "top_underlying": {
+          "CSXF3": 6798,
+          "CSXG2": 9512,
+          "CSXH2": 9494,
+          "CSXJ2": 10358,
+          "CSXK2": 10002,
+          "CSXM2": 9816,
+          "CSXN2": 8486,
+          "CSXQ2": 8368,
+          "CSXU2": 8186,
+          "CSXV2": 8016,
+          "CSXX2": 7762,
+          "CSXZ2": 7504
+        },
+        "unique_symbols": 7522
+      },
+      "month": "2022-02",
+      "statistics": {
+        "cleared_volume_events": 67421,
+        "final_actual_events": 41023,
+        "final_actual_reference_dates": 19,
+        "final_events": 62212,
+        "final_reference_dates": 19,
+        "final_symbol_date_pairs": 54929,
+        "final_theoretical_events": 21189,
+        "first_reference_date": "2022-01-31",
+        "last_reference_date": "2022-02-28",
+        "open_interest_events": 67421,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 1003,
+        "positive_open_interest_events": 67322,
+        "preliminary_events": 69773,
+        "records": 792439,
+        "settlement_events": 131985,
+        "settlement_reference_dates": 20,
+        "stat_type_counts": {
+          "17": 262806,
+          "18": 262806,
+          "3": 131985,
+          "6": 67421,
+          "9": 67421
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 36,
+        "distinct_strikes": 319,
+        "records": 220232,
+        "top_asset": {
+          "AAO": 220232
+        },
+        "top_exchange": {
+          "XNYM": 220232
+        },
+        "top_group": {
+          "1N": 12,
+          "LO": 220220
+        },
+        "top_instrument_class": {
+          "C": 110110,
+          "P": 110110,
+          "T": 12
+        },
+        "top_security_type": {
+          "OOF": 220232
+        },
+        "top_underlying": {
+          "CSXF3": 9064,
+          "CSXG3": 8430,
+          "CSXH2": 13452,
+          "CSXJ2": 14476,
+          "CSXK2": 13838,
+          "CSXM2": 13322,
+          "CSXN2": 11574,
+          "CSXQ2": 11228,
+          "CSXU2": 10886,
+          "CSXV2": 10682,
+          "CSXX2": 10318,
+          "CSXZ2": 9916
+        },
+        "unique_symbols": 8833
+      },
+      "month": "2022-03",
+      "statistics": {
+        "cleared_volume_events": 83750,
+        "final_actual_events": 49630,
+        "final_actual_reference_dates": 23,
+        "final_events": 76250,
+        "final_reference_dates": 24,
+        "final_symbol_date_pairs": 68450,
+        "final_theoretical_events": 26620,
+        "first_reference_date": "2022-02-28",
+        "last_reference_date": "2022-03-31",
+        "open_interest_events": 83750,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 1790,
+        "positive_open_interest_events": 83664,
+        "preliminary_events": 106302,
+        "records": 1090938,
+        "settlement_events": 182552,
+        "settlement_reference_dates": 24,
+        "stat_type_counts": {
+          "17": 370443,
+          "18": 370443,
+          "3": 182552,
+          "6": 83750,
+          "9": 83750
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 34,
+        "distinct_strikes": 325,
+        "records": 203938,
+        "top_asset": {
+          "AAO": 203938
+        },
+        "top_exchange": {
+          "XNYM": 203938
+        },
+        "top_group": {
+          "1N": 46,
+          "LO": 203892
+        },
+        "top_instrument_class": {
+          "C": 101946,
+          "P": 101946,
+          "T": 46
+        },
+        "top_security_type": {
+          "OOF": 203938
+        },
+        "top_underlying": {
+          "CSXF3": 8844,
+          "CSXG3": 8244,
+          "CSXH3": 8144,
+          "CSXJ2": 13750,
+          "CSXK2": 13182,
+          "CSXM2": 12764,
+          "CSXN2": 11250,
+          "CSXQ2": 10900,
+          "CSXU2": 10600,
+          "CSXV2": 10460,
+          "CSXX2": 10138,
+          "CSXZ2": 9798
+        },
+        "unique_symbols": 8816
+      },
+      "month": "2022-04",
+      "statistics": {
+        "cleared_volume_events": 74742,
+        "final_actual_events": 43792,
+        "final_actual_reference_dates": 19,
+        "final_events": 69301,
+        "final_reference_dates": 21,
+        "final_symbol_date_pairs": 60070,
+        "final_theoretical_events": 25509,
+        "first_reference_date": "2022-04-01",
+        "last_reference_date": "2022-04-29",
+        "open_interest_events": 74742,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 768,
+        "positive_open_interest_events": 74742,
+        "preliminary_events": 84323,
+        "records": 952330,
+        "settlement_events": 153624,
+        "settlement_reference_dates": 21,
+        "stat_type_counts": {
+          "17": 324611,
+          "18": 324611,
+          "3": 153624,
+          "6": 74742,
+          "9": 74742
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 35,
+        "distinct_strikes": 313,
+        "records": 217904,
+        "top_asset": {
+          "AAO": 217904
+        },
+        "top_exchange": {
+          "XNYM": 217904
+        },
+        "top_group": {
+          "LO": 217904
+        },
+        "top_instrument_class": {
+          "C": 108952,
+          "P": 108952
+        },
+        "top_security_type": {
+          "OOF": 217904
+        },
+        "top_underlying": {
+          "CSXF3": 9890,
+          "CSXG3": 9236,
+          "CSXH3": 9118,
+          "CSXJ3": 8656,
+          "CSXK2": 14304,
+          "CSXM2": 14000,
+          "CSXN2": 12554,
+          "CSXQ2": 12262,
+          "CSXU2": 11856,
+          "CSXV2": 11720,
+          "CSXX2": 11300,
+          "CSXZ2": 10932
+        },
+        "unique_symbols": 8416
+      },
+      "month": "2022-05",
+      "statistics": {
+        "cleared_volume_events": 78096,
+        "final_actual_events": 50136,
+        "final_actual_reference_dates": 22,
+        "final_events": 81606,
+        "final_reference_dates": 23,
+        "final_symbol_date_pairs": 72081,
+        "final_theoretical_events": 31470,
+        "first_reference_date": "2022-04-29",
+        "last_reference_date": "2022-06-01",
+        "open_interest_events": 78096,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 856,
+        "positive_open_interest_events": 78096,
+        "preliminary_events": 90027,
+        "records": 1018005,
+        "settlement_events": 171633,
+        "settlement_reference_dates": 23,
+        "stat_type_counts": {
+          "17": 345090,
+          "18": 345090,
+          "3": 171633,
+          "6": 78096,
+          "9": 78096
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 37,
+        "distinct_strikes": 338,
+        "records": 223380,
+        "top_asset": {
+          "AAO": 223380
+        },
+        "top_exchange": {
+          "XNYM": 223380
+        },
+        "top_group": {
+          "1N": 106,
+          "LO": 223274
+        },
+        "top_instrument_class": {
+          "C": 111637,
+          "P": 111637,
+          "T": 106
+        },
+        "top_security_type": {
+          "OOF": 223380
+        },
+        "top_underlying": {
+          "CSXF3": 10392,
+          "CSXG3": 9680,
+          "CSXH3": 9568,
+          "CSXJ3": 9146,
+          "CSXK3": 8946,
+          "CSXM2": 14364,
+          "CSXN2": 13278,
+          "CSXQ2": 12984,
+          "CSXU2": 12606,
+          "CSXV2": 12464,
+          "CSXX2": 12158,
+          "CSXZ2": 11686
+        },
+        "unique_symbols": 9336
+      },
+      "month": "2022-06",
+      "statistics": {
+        "cleared_volume_events": 82271,
+        "final_actual_events": 49138,
+        "final_actual_reference_dates": 21,
+        "final_events": 76200,
+        "final_reference_dates": 22,
+        "final_symbol_date_pairs": 68075,
+        "final_theoretical_events": 27062,
+        "first_reference_date": "2022-06-01",
+        "last_reference_date": "2022-07-01",
+        "open_interest_events": 82271,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 1415,
+        "positive_open_interest_events": 82252,
+        "preliminary_events": 87178,
+        "records": 1041110,
+        "settlement_events": 163378,
+        "settlement_reference_dates": 22,
+        "stat_type_counts": {
+          "17": 356595,
+          "18": 356595,
+          "3": 163378,
+          "6": 82271,
+          "9": 82271
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 44,
+        "distinct_strikes": 336,
+        "records": 216448,
+        "top_asset": {
+          "AAO": 216448
+        },
+        "top_exchange": {
+          "XNYM": 216448
+        },
+        "top_group": {
+          "1N": 180,
+          "LO": 216268
+        },
+        "top_instrument_class": {
+          "C": 108134,
+          "P": 108134,
+          "T": 180
+        },
+        "top_security_type": {
+          "OOF": 216448
+        },
+        "top_underlying": {
+          "CSXF3": 10556,
+          "CSXG3": 9828,
+          "CSXH3": 9724,
+          "CSXJ3": 9360,
+          "CSXK3": 9152,
+          "CSXM3": 9100,
+          "CSXN2": 12900,
+          "CSXQ2": 13104,
+          "CSXU2": 12740,
+          "CSXV2": 12584,
+          "CSXX2": 12324,
+          "CSXZ2": 11856
+        },
+        "unique_symbols": 9036
+      },
+      "month": "2022-07",
+      "statistics": {
+        "cleared_volume_events": 79589,
+        "final_actual_events": 48491,
+        "final_actual_reference_dates": 20,
+        "final_events": 80164,
+        "final_reference_dates": 21,
+        "final_symbol_date_pairs": 70569,
+        "final_theoretical_events": 31673,
+        "first_reference_date": "2022-07-01",
+        "last_reference_date": "2022-07-29",
+        "open_interest_events": 79589,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 895,
+        "positive_open_interest_events": 79529,
+        "preliminary_events": 93802,
+        "records": 996212,
+        "settlement_events": 173966,
+        "settlement_reference_dates": 21,
+        "stat_type_counts": {
+          "17": 331534,
+          "18": 331534,
+          "3": 173966,
+          "6": 79589,
+          "9": 79589
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 43,
+        "distinct_strikes": 297,
+        "records": 215982,
+        "top_asset": {
+          "AAO": 215982
+        },
+        "top_exchange": {
+          "XNYM": 215982
+        },
+        "top_group": {
+          "1N": 12,
+          "LO": 215970
+        },
+        "top_instrument_class": {
+          "C": 107985,
+          "P": 107985,
+          "T": 12
+        },
+        "top_security_type": {
+          "OOF": 215982
+        },
+        "top_underlying": {
+          "CSXF3": 10962,
+          "CSXG3": 10206,
+          "CSXH3": 10098,
+          "CSXJ3": 9720,
+          "CSXK3": 9504,
+          "CSXM3": 9450,
+          "CSXN3": 9072,
+          "CSXQ2": 13608,
+          "CSXU2": 13230,
+          "CSXV2": 13068,
+          "CSXX2": 12798,
+          "CSXZ2": 12312
+        },
+        "unique_symbols": 8224
+      },
+      "month": "2022-08",
+      "statistics": {
+        "cleared_volume_events": 83320,
+        "final_actual_events": 49997,
+        "final_actual_reference_dates": 23,
+        "final_events": 74801,
+        "final_reference_dates": 23,
+        "final_symbol_date_pairs": 67303,
+        "final_theoretical_events": 24804,
+        "first_reference_date": "2022-08-01",
+        "last_reference_date": "2022-08-31",
+        "open_interest_events": 83320,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 978,
+        "positive_open_interest_events": 83295,
+        "preliminary_events": 107822,
+        "records": 1082797,
+        "settlement_events": 182623,
+        "settlement_reference_dates": 23,
+        "stat_type_counts": {
+          "17": 366767,
+          "18": 366767,
+          "3": 182623,
+          "6": 83320,
+          "9": 83320
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 43,
+        "distinct_strikes": 298,
+        "records": 204207,
+        "top_asset": {
+          "AAO": 204207
+        },
+        "top_exchange": {
+          "XNYM": 204207
+        },
+        "top_group": {
+          "1N": 15,
+          "LO": 204192
+        },
+        "top_instrument_class": {
+          "C": 102096,
+          "P": 102096,
+          "T": 15
+        },
+        "top_security_type": {
+          "OOF": 204207
+        },
+        "top_underlying": {
+          "CSXF3": 10556,
+          "CSXG3": 9828,
+          "CSXH3": 9724,
+          "CSXJ3": 9360,
+          "CSXK3": 9152,
+          "CSXM3": 9100,
+          "CSXN3": 8736,
+          "CSXQ3": 8268,
+          "CSXU2": 12740,
+          "CSXV2": 12584,
+          "CSXX2": 12324,
+          "CSXZ2": 11856
+        },
+        "unique_symbols": 8466
+      },
+      "month": "2022-09",
+      "statistics": {
+        "cleared_volume_events": 76222,
+        "final_actual_events": 43598,
+        "final_actual_reference_dates": 20,
+        "final_events": 67722,
+        "final_reference_dates": 21,
+        "final_symbol_date_pairs": 60469,
+        "final_theoretical_events": 24124,
+        "first_reference_date": "2022-09-01",
+        "last_reference_date": "2022-09-30",
+        "open_interest_events": 76222,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 650,
+        "positive_open_interest_events": 76194,
+        "preliminary_events": 80181,
+        "records": 940181,
+        "settlement_events": 147903,
+        "settlement_reference_dates": 21,
+        "stat_type_counts": {
+          "17": 319917,
+          "18": 319917,
+          "3": 147903,
+          "6": 76222,
+          "9": 76222
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 39,
+        "distinct_strikes": 286,
+        "records": 200178,
+        "top_asset": {
+          "AAO": 200178
+        },
+        "top_exchange": {
+          "XNYM": 200178
+        },
+        "top_group": {
+          "LO": 200178
+        },
+        "top_instrument_class": {
+          "C": 100089,
+          "P": 100089
+        },
+        "top_security_type": {
+          "OOF": 200178
+        },
+        "top_underlying": {
+          "CSXF3": 10566,
+          "CSXG3": 9838,
+          "CSXH3": 9734,
+          "CSXJ3": 9370,
+          "CSXK3": 9162,
+          "CSXM3": 9110,
+          "CSXN3": 8746,
+          "CSXQ3": 8278,
+          "CSXU3": 8174,
+          "CSXV2": 12584,
+          "CSXX2": 12324,
+          "CSXZ2": 11856
+        },
+        "unique_symbols": 7834
+      },
+      "month": "2022-10",
+      "statistics": {
+        "cleared_volume_events": 73502,
+        "final_actual_events": 47159,
+        "final_actual_reference_dates": 22,
+        "final_events": 77080,
+        "final_reference_dates": 23,
+        "final_symbol_date_pairs": 68271,
+        "final_theoretical_events": 29921,
+        "first_reference_date": "2022-09-30",
+        "last_reference_date": "2022-11-01",
+        "open_interest_events": 73502,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 1068,
+        "positive_open_interest_events": 73502,
+        "preliminary_events": 77077,
+        "records": 960811,
+        "settlement_events": 154157,
+        "settlement_reference_dates": 23,
+        "stat_type_counts": {
+          "17": 329825,
+          "18": 329825,
+          "3": 154157,
+          "6": 73502,
+          "9": 73502
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 42,
+        "distinct_strikes": 291,
+        "records": 195176,
+        "top_asset": {
+          "AAO": 195176
+        },
+        "top_exchange": {
+          "XNYM": 195176
+        },
+        "top_group": {
+          "1N": 34,
+          "LO": 195142
+        },
+        "top_instrument_class": {
+          "C": 97571,
+          "P": 97571,
+          "T": 34
+        },
+        "top_security_type": {
+          "OOF": 195176
+        },
+        "top_underlying": {
+          "CSXF3": 10672,
+          "CSXG3": 9944,
+          "CSXH3": 9840,
+          "CSXJ3": 9504,
+          "CSXK3": 9296,
+          "CSXM3": 9244,
+          "CSXN3": 8834,
+          "CSXQ3": 8366,
+          "CSXU3": 8262,
+          "CSXX2": 12368,
+          "CSXX3": 7898,
+          "CSXZ2": 11878
+        },
+        "unique_symbols": 7940
+      },
+      "month": "2022-11",
+      "statistics": {
+        "cleared_volume_events": 70852,
+        "final_actual_events": 40576,
+        "final_actual_reference_dates": 20,
+        "final_events": 63632,
+        "final_reference_dates": 20,
+        "final_symbol_date_pairs": 56792,
+        "final_theoretical_events": 23056,
+        "first_reference_date": "2022-11-01",
+        "last_reference_date": "2022-11-30",
+        "open_interest_events": 70852,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 598,
+        "positive_open_interest_events": 70822,
+        "preliminary_events": 81007,
+        "records": 894477,
+        "settlement_events": 144639,
+        "settlement_reference_dates": 21,
+        "stat_type_counts": {
+          "17": 304067,
+          "18": 304067,
+          "3": 144639,
+          "6": 70852,
+          "9": 70852
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 39,
+        "distinct_strikes": 288,
+        "records": 185808,
+        "top_asset": {
+          "AAO": 185808
+        },
+        "top_exchange": {
+          "XNYM": 185808
+        },
+        "top_group": {
+          "1N": 6,
+          "LO": 185802
+        },
+        "top_instrument_class": {
+          "C": 92901,
+          "P": 92901,
+          "T": 6
+        },
+        "top_security_type": {
+          "OOF": 185808
+        },
+        "top_underlying": {
+          "CSXF3": 10712,
+          "CSXG3": 9984,
+          "CSXH3": 9880,
+          "CSXJ3": 9516,
+          "CSXK3": 9308,
+          "CSXM3": 9256,
+          "CSXN3": 8860,
+          "CSXQ3": 8392,
+          "CSXU3": 8288,
+          "CSXV3": 7924,
+          "CSXX3": 7924,
+          "CSXZ2": 11908
+        },
+        "unique_symbols": 7617
+      },
+      "month": "2022-12",
+      "statistics": {
+        "cleared_volume_events": 66396,
+        "final_actual_events": 39504,
+        "final_actual_reference_dates": 21,
+        "final_events": 61788,
+        "final_reference_dates": 21,
+        "final_symbol_date_pairs": 55454,
+        "final_theoretical_events": 22284,
+        "first_reference_date": "2022-11-30",
+        "last_reference_date": "2022-12-30",
+        "open_interest_events": 66396,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 792,
+        "positive_open_interest_events": 66396,
+        "preliminary_events": 72790,
+        "records": 863504,
+        "settlement_events": 134578,
+        "settlement_reference_dates": 22,
+        "stat_type_counts": {
+          "17": 298067,
+          "18": 298067,
+          "3": 134578,
+          "6": 66396,
+          "9": 66396
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 36,
+        "distinct_strikes": 244,
+        "records": 184440,
+        "top_asset": {
+          "AAO": 184440
+        },
+        "top_exchange": {
+          "XNYM": 184440
+        },
+        "top_group": {
+          "LO": 184440
+        },
+        "top_instrument_class": {
+          "C": 92220,
+          "P": 92220
+        },
+        "top_security_type": {
+          "OOF": 184440
+        },
+        "top_underlying": {
+          "CSXF3": 11124,
+          "CSXG3": 10412,
+          "CSXH3": 10304,
+          "CSXJ3": 9926,
+          "CSXK3": 9710,
+          "CSXM3": 9656,
+          "CSXN3": 9278,
+          "CSXQ3": 8792,
+          "CSXU3": 8684,
+          "CSXV3": 8306,
+          "CSXX3": 8306,
+          "CSXZ3": 7820
+        },
+        "unique_symbols": 6888
+      },
+      "month": "2023-01",
+      "statistics": {
+        "cleared_volume_events": 64532,
+        "final_actual_events": 41089,
+        "final_actual_reference_dates": 20,
+        "final_events": 67288,
+        "final_reference_dates": 20,
+        "final_symbol_date_pairs": 58440,
+        "final_theoretical_events": 26199,
+        "first_reference_date": "2022-12-30",
+        "last_reference_date": "2023-01-31",
+        "open_interest_events": 64532,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 1088,
+        "positive_open_interest_events": 64532,
+        "preliminary_events": 84490,
+        "records": 833118,
+        "settlement_events": 151778,
+        "settlement_reference_dates": 21,
+        "stat_type_counts": {
+          "17": 276138,
+          "18": 276138,
+          "3": 151778,
+          "6": 64532,
+          "9": 64532
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 36,
+        "distinct_strikes": 245,
+        "records": 159994,
+        "top_asset": {
+          "AAO": 159994
+        },
+        "top_exchange": {
+          "XNYM": 159994
+        },
+        "top_group": {
+          "LO": 159994
+        },
+        "top_instrument_class": {
+          "C": 79997,
+          "P": 79997
+        },
+        "top_security_type": {
+          "OOF": 159994
+        },
+        "top_underlying": {
+          "CSXF4": 6000,
+          "CSXG3": 9312,
+          "CSXH3": 9216,
+          "CSXJ3": 8880,
+          "CSXK3": 8688,
+          "CSXM3": 8640,
+          "CSXN3": 8304,
+          "CSXQ3": 7872,
+          "CSXU3": 7776,
+          "CSXV3": 7440,
+          "CSXX3": 7440,
+          "CSXZ3": 7008
+        },
+        "unique_symbols": 7142
+      },
+      "month": "2023-02",
+      "statistics": {
+        "cleared_volume_events": 60694,
+        "final_actual_events": 38258,
+        "final_actual_reference_dates": 20,
+        "final_events": 58551,
+        "final_reference_dates": 21,
+        "final_symbol_date_pairs": 52148,
+        "final_theoretical_events": 20293,
+        "first_reference_date": "2023-01-31",
+        "last_reference_date": "2023-03-01",
+        "open_interest_events": 60694,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 578,
+        "positive_open_interest_events": 60694,
+        "preliminary_events": 73455,
+        "records": 767586,
+        "settlement_events": 132006,
+        "settlement_reference_dates": 21,
+        "stat_type_counts": {
+          "17": 257096,
+          "18": 257096,
+          "3": 132006,
+          "6": 60694,
+          "9": 60694
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 38,
+        "distinct_strikes": 243,
+        "records": 177288,
+        "top_asset": {
+          "AAO": 177288
+        },
+        "top_exchange": {
+          "XNYM": 177288
+        },
+        "top_group": {
+          "1N": 96,
+          "LO": 177192
+        },
+        "top_instrument_class": {
+          "C": 88596,
+          "P": 88596,
+          "T": 96
+        },
+        "top_security_type": {
+          "OOF": 177288
+        },
+        "top_underlying": {
+          "CSXF4": 6930,
+          "CSXH3": 10418,
+          "CSXH4": 6768,
+          "CSXJ3": 10146,
+          "CSXK3": 9930,
+          "CSXM3": 9876,
+          "CSXN3": 9562,
+          "CSXQ3": 9068,
+          "CSXU3": 8960,
+          "CSXV3": 8526,
+          "CSXX3": 8526,
+          "CSXZ3": 8040
+        },
+        "unique_symbols": 7058
+      },
+      "month": "2023-03",
+      "statistics": {
+        "cleared_volume_events": 72868,
+        "final_actual_events": 41223,
+        "final_actual_reference_dates": 22,
+        "final_events": 61234,
+        "final_reference_dates": 22,
+        "final_symbol_date_pairs": 54825,
+        "final_theoretical_events": 20011,
+        "first_reference_date": "2023-03-01",
+        "last_reference_date": "2023-03-31",
+        "open_interest_events": 72868,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 1158,
+        "positive_open_interest_events": 72868,
+        "preliminary_events": 93873,
+        "records": 886425,
+        "settlement_events": 155107,
+        "settlement_reference_dates": 23,
+        "stat_type_counts": {
+          "17": 292791,
+          "18": 292791,
+          "3": 155107,
+          "6": 72868,
+          "9": 72868
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 34,
+        "distinct_strikes": 230,
+        "records": 160848,
+        "top_asset": {
+          "AAO": 160848
+        },
+        "top_exchange": {
+          "XNYM": 160848
+        },
+        "top_group": {
+          "1N": 12,
+          "LO": 160836
+        },
+        "top_instrument_class": {
+          "C": 80418,
+          "P": 80418,
+          "T": 12
+        },
+        "top_security_type": {
+          "OOF": 160848
+        },
+        "top_underlying": {
+          "CSXF4": 6614,
+          "CSXG4": 6414,
+          "CSXH4": 6464,
+          "CSXJ3": 9072,
+          "CSXK3": 9250,
+          "CSXM3": 9200,
+          "CSXN3": 9098,
+          "CSXQ3": 8598,
+          "CSXU3": 8498,
+          "CSXV3": 8048,
+          "CSXX3": 8048,
+          "CSXZ3": 7598
+        },
+        "unique_symbols": 6581
+      },
+      "month": "2023-04",
+      "statistics": {
+        "cleared_volume_events": 66562,
+        "final_actual_events": 42055,
+        "final_actual_reference_dates": 21,
+        "final_events": 66067,
+        "final_reference_dates": 21,
+        "final_symbol_date_pairs": 58026,
+        "final_theoretical_events": 24012,
+        "first_reference_date": "2023-03-31",
+        "last_reference_date": "2023-04-28",
+        "open_interest_events": 66562,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 965,
+        "positive_open_interest_events": 66562,
+        "preliminary_events": 82889,
+        "records": 795862,
+        "settlement_events": 148956,
+        "settlement_reference_dates": 21,
+        "stat_type_counts": {
+          "17": 256891,
+          "18": 256891,
+          "3": 148956,
+          "6": 66562,
+          "9": 66562
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 33,
+        "distinct_strikes": 235,
+        "records": 172936,
+        "top_asset": {
+          "AAO": 172936
+        },
+        "top_exchange": {
+          "XNYM": 172936
+        },
+        "top_group": {
+          "1N": 60,
+          "LO": 172876
+        },
+        "top_instrument_class": {
+          "C": 86438,
+          "P": 86438,
+          "T": 60
+        },
+        "top_security_type": {
+          "OOF": 172936
+        },
+        "top_underlying": {
+          "CSXF4": 7404,
+          "CSXG4": 7188,
+          "CSXH4": 7242,
+          "CSXJ4": 7134,
+          "CSXK3": 10040,
+          "CSXM3": 10022,
+          "CSXN3": 10010,
+          "CSXQ3": 9470,
+          "CSXU3": 9362,
+          "CSXV3": 8876,
+          "CSXX3": 8876,
+          "CSXZ3": 8390
+        },
+        "unique_symbols": 6544
+      },
+      "month": "2023-05",
+      "statistics": {
+        "cleared_volume_events": 70561,
+        "final_actual_events": 42706,
+        "final_actual_reference_dates": 22,
+        "final_events": 62082,
+        "final_reference_dates": 23,
+        "final_symbol_date_pairs": 55342,
+        "final_theoretical_events": 19376,
+        "first_reference_date": "2023-05-01",
+        "last_reference_date": "2023-06-01",
+        "open_interest_events": 70561,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 778,
+        "positive_open_interest_events": 70558,
+        "preliminary_events": 80542,
+        "records": 844878,
+        "settlement_events": 142624,
+        "settlement_reference_dates": 23,
+        "stat_type_counts": {
+          "17": 280566,
+          "18": 280566,
+          "3": 142624,
+          "6": 70561,
+          "9": 70561
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 34,
+        "distinct_strikes": 245,
+        "records": 172378,
+        "top_asset": {
+          "AAO": 172378
+        },
+        "top_exchange": {
+          "XNYM": 172378
+        },
+        "top_group": {
+          "1N": 842,
+          "LO": 171536
+        },
+        "top_instrument_class": {
+          "C": 85768,
+          "P": 85768,
+          "T": 842
+        },
+        "top_security_type": {
+          "OOF": 172378
+        },
+        "top_underlying": {
+          "CSXF4": 7226,
+          "CSXG4": 7018,
+          "CSXH4": 7070,
+          "CSXJ4": 6978,
+          "CSXK4": 6874,
+          "CSXM3": 9672,
+          "CSXN3": 9690,
+          "CSXQ3": 9170,
+          "CSXU3": 9066,
+          "CSXV3": 8614,
+          "CSXX3": 8614,
+          "CSXZ3": 8146
+        },
+        "unique_symbols": 7096
+      },
+      "month": "2023-06",
+      "statistics": {
+        "cleared_volume_events": 67995,
+        "final_actual_events": 38900,
+        "final_actual_reference_dates": 20,
+        "final_events": 59106,
+        "final_reference_dates": 20,
+        "final_symbol_date_pairs": 52570,
+        "final_theoretical_events": 20206,
+        "first_reference_date": "2023-06-01",
+        "last_reference_date": "2023-06-30",
+        "open_interest_events": 67995,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 1133,
+        "positive_open_interest_events": 67982,
+        "preliminary_events": 76286,
+        "records": 809188,
+        "settlement_events": 135392,
+        "settlement_reference_dates": 21,
+        "stat_type_counts": {
+          "17": 268903,
+          "18": 268903,
+          "3": 135392,
+          "6": 67995,
+          "9": 67995
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 32,
+        "distinct_strikes": 247,
+        "records": 170343,
+        "top_asset": {
+          "AAO": 170343
+        },
+        "top_exchange": {
+          "XNYM": 170343
+        },
+        "top_group": {
+          "1N": 81,
+          "LO": 170262
+        },
+        "top_instrument_class": {
+          "C": 85131,
+          "P": 85131,
+          "T": 81
+        },
+        "top_security_type": {
+          "OOF": 170343
+        },
+        "top_underlying": {
+          "CSXF4": 7494,
+          "CSXG4": 7286,
+          "CSXH4": 7338,
+          "CSXJ4": 7356,
+          "CSXK4": 7252,
+          "CSXM4": 6682,
+          "CSXN3": 9724,
+          "CSXQ3": 9204,
+          "CSXU3": 9100,
+          "CSXV3": 8684,
+          "CSXX3": 8694,
+          "CSXZ3": 8226
+        },
+        "unique_symbols": 6877
+      },
+      "month": "2023-07",
+      "statistics": {
+        "cleared_volume_events": 65596,
+        "final_actual_events": 42626,
+        "final_actual_reference_dates": 21,
+        "final_events": 67582,
+        "final_reference_dates": 22,
+        "final_symbol_date_pairs": 59181,
+        "final_theoretical_events": 24956,
+        "first_reference_date": "2023-06-30",
+        "last_reference_date": "2023-08-01",
+        "open_interest_events": 65596,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 1372,
+        "positive_open_interest_events": 65596,
+        "preliminary_events": 74154,
+        "records": 808024,
+        "settlement_events": 141736,
+        "settlement_reference_dates": 22,
+        "stat_type_counts": {
+          "17": 267548,
+          "18": 267548,
+          "3": 141736,
+          "6": 65596,
+          "9": 65596
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 32,
+        "distinct_strikes": 254,
+        "records": 188276,
+        "top_asset": {
+          "AAO": 188276
+        },
+        "top_exchange": {
+          "XNYM": 188276
+        },
+        "top_group": {
+          "1N": 624,
+          "LO": 187652
+        },
+        "top_instrument_class": {
+          "C": 93826,
+          "P": 93826,
+          "T": 624
+        },
+        "top_security_type": {
+          "OOF": 188276
+        },
+        "top_underlying": {
+          "CSXF4": 7932,
+          "CSXG4": 7716,
+          "CSXH4": 7770,
+          "CSXJ4": 7776,
+          "CSXK4": 7668,
+          "CSXM4": 7130,
+          "CSXN4": 6798,
+          "CSXQ3": 9558,
+          "CSXU3": 9498,
+          "CSXV3": 9018,
+          "CSXX3": 9072,
+          "CSXZ3": 8586
+        },
+        "unique_symbols": 7530
+      },
+      "month": "2023-08",
+      "statistics": {
+        "cleared_volume_events": 76310,
+        "final_actual_events": 44802,
+        "final_actual_reference_dates": 23,
+        "final_events": 66430,
+        "final_reference_dates": 24,
+        "final_symbol_date_pairs": 59722,
+        "final_theoretical_events": 21628,
+        "first_reference_date": "2023-08-01",
+        "last_reference_date": "2023-09-01",
+        "open_interest_events": 76310,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 1708,
+        "positive_open_interest_events": 76304,
+        "preliminary_events": 96531,
+        "records": 947877,
+        "settlement_events": 162961,
+        "settlement_reference_dates": 24,
+        "stat_type_counts": {
+          "17": 316148,
+          "18": 316148,
+          "3": 162961,
+          "6": 76310,
+          "9": 76310
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 57,
+        "distinct_strikes": 256,
+        "records": 176890,
+        "top_asset": {
+          "AAO": 176890
+        },
+        "top_exchange": {
+          "XNYM": 176890
+        },
+        "top_group": {
+          "1N": 312,
+          "LO": 176578
+        },
+        "top_instrument_class": {
+          "C": 88289,
+          "P": 88289,
+          "T": 312
+        },
+        "top_security_type": {
+          "OOF": 176890
+        },
+        "top_underlying": {
+          "CSXF4": 7458,
+          "CSXG4": 7258,
+          "CSXH4": 7308,
+          "CSXJ4": 7244,
+          "CSXK4": 7144,
+          "CSXM4": 6910,
+          "CSXN4": 6530,
+          "CSXQ4": 6434,
+          "CSXU3": 8800,
+          "CSXV3": 8400,
+          "CSXX3": 8450,
+          "CSXZ3": 8000
+        },
+        "unique_symbols": 7813
+      },
+      "month": "2023-09",
+      "statistics": {
+        "cleared_volume_events": 69095,
+        "final_actual_events": 39846,
+        "final_actual_reference_dates": 19,
+        "final_events": 61701,
+        "final_reference_dates": 19,
+        "final_symbol_date_pairs": 54310,
+        "final_theoretical_events": 21855,
+        "first_reference_date": "2023-09-01",
+        "last_reference_date": "2023-09-29",
+        "open_interest_events": 69095,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 2003,
+        "positive_open_interest_events": 69084,
+        "preliminary_events": 78257,
+        "records": 827644,
+        "settlement_events": 139958,
+        "settlement_reference_dates": 20,
+        "stat_type_counts": {
+          "17": 274748,
+          "18": 274748,
+          "3": 139958,
+          "6": 69095,
+          "9": 69095
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 51,
+        "distinct_strikes": 249,
+        "records": 193930,
+        "top_asset": {
+          "AAO": 193930
+        },
+        "top_exchange": {
+          "XNYM": 193930
+        },
+        "top_group": {
+          "LO": 193930
+        },
+        "top_instrument_class": {
+          "C": 96965,
+          "P": 96965
+        },
+        "top_security_type": {
+          "OOF": 193930
+        },
+        "top_underlying": {
+          "CSXF4": 8192,
+          "CSXG4": 7942,
+          "CSXH4": 7996,
+          "CSXJ4": 7834,
+          "CSXK4": 7726,
+          "CSXM4": 7510,
+          "CSXN4": 7236,
+          "CSXQ4": 7128,
+          "CSXU4": 7074,
+          "CSXV3": 9072,
+          "CSXX3": 9160,
+          "CSXZ3": 8674
+        },
+        "unique_symbols": 7276
+      },
+      "month": "2023-10",
+      "statistics": {
+        "cleared_volume_events": 74900,
+        "final_actual_events": 47581,
+        "final_actual_reference_dates": 23,
+        "final_events": 75081,
+        "final_reference_dates": 24,
+        "final_symbol_date_pairs": 66548,
+        "final_theoretical_events": 27500,
+        "first_reference_date": "2023-09-29",
+        "last_reference_date": "2023-11-01",
+        "open_interest_events": 74900,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 970,
+        "positive_open_interest_events": 74900,
+        "preliminary_events": 78528,
+        "records": 950923,
+        "settlement_events": 153609,
+        "settlement_reference_dates": 24,
+        "stat_type_counts": {
+          "17": 323757,
+          "18": 323757,
+          "3": 153609,
+          "6": 74900,
+          "9": 74900
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 55,
+        "distinct_strikes": 283,
+        "records": 208340,
+        "top_asset": {
+          "AAO": 208340
+        },
+        "top_exchange": {
+          "XNYM": 208340
+        },
+        "top_group": {
+          "1N": 2930,
+          "LO": 205410
+        },
+        "top_instrument_class": {
+          "C": 102705,
+          "P": 102705,
+          "T": 2930
+        },
+        "top_security_type": {
+          "OOF": 208340
+        },
+        "top_underlying": {
+          "CSXF4": 9390,
+          "CSXG4": 9130,
+          "CSXH4": 9214,
+          "CSXJ4": 9202,
+          "CSXK4": 9202,
+          "CSXM4": 9254,
+          "CSXN4": 9070,
+          "CSXQ4": 8998,
+          "CSXU4": 8966,
+          "CSXV4": 8862,
+          "CSXX4": 8862,
+          "CSXZ4": 8882
+        },
+        "unique_symbols": 8636
+      },
+      "month": "2023-11",
+      "statistics": {
+        "cleared_volume_events": 70881,
+        "final_actual_events": 40694,
+        "final_actual_reference_dates": 20,
+        "final_events": 66396,
+        "final_reference_dates": 21,
+        "final_symbol_date_pairs": 59561,
+        "final_theoretical_events": 25702,
+        "first_reference_date": "2023-11-01",
+        "last_reference_date": "2023-12-01",
+        "open_interest_events": 70881,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 1471,
+        "positive_open_interest_events": 70810,
+        "preliminary_events": 74569,
+        "records": 922801,
+        "settlement_events": 140965,
+        "settlement_reference_dates": 22,
+        "stat_type_counts": {
+          "17": 320037,
+          "18": 320037,
+          "3": 140965,
+          "6": 70881,
+          "9": 70881
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 52,
+        "distinct_strikes": 287,
+        "records": 208408,
+        "top_asset": {
+          "AAO": 208408
+        },
+        "top_exchange": {
+          "XNYM": 208408
+        },
+        "top_group": {
+          "1N": 78,
+          "LO": 208330
+        },
+        "top_instrument_class": {
+          "C": 104165,
+          "P": 104165,
+          "T": 78
+        },
+        "top_security_type": {
+          "OOF": 208408
+        },
+        "top_underlying": {
+          "CSXF4": 10112,
+          "CSXG4": 9852,
+          "CSXH4": 9904,
+          "CSXJ4": 9956,
+          "CSXK4": 9956,
+          "CSXM4": 10008,
+          "CSXN4": 9882,
+          "CSXQ4": 9778,
+          "CSXU4": 9778,
+          "CSXV4": 9754,
+          "CSXX4": 9754,
+          "CSXZ4": 9806
+        },
+        "unique_symbols": 8462
+      },
+      "month": "2023-12",
+      "statistics": {
+        "cleared_volume_events": 67936,
+        "final_actual_events": 41967,
+        "final_actual_reference_dates": 21,
+        "final_events": 73858,
+        "final_reference_dates": 21,
+        "final_symbol_date_pairs": 65795,
+        "final_theoretical_events": 31891,
+        "first_reference_date": "2023-11-30",
+        "last_reference_date": "2023-12-29",
+        "open_interest_events": 67936,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 1054,
+        "positive_open_interest_events": 67912,
+        "preliminary_events": 74683,
+        "records": 939479,
+        "settlement_events": 148541,
+        "settlement_reference_dates": 21,
+        "stat_type_counts": {
+          "17": 327533,
+          "18": 327533,
+          "3": 148541,
+          "6": 67936,
+          "9": 67936
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 49,
+        "distinct_strikes": 257,
+        "records": 211880,
+        "top_asset": {
+          "AAO": 211880
+        },
+        "top_exchange": {
+          "XNYM": 211880
+        },
+        "top_group": {
+          "1N": 24,
+          "LO": 211856
+        },
+        "top_instrument_class": {
+          "C": 105928,
+          "P": 105928,
+          "T": 24
+        },
+        "top_security_type": {
+          "OOF": 211880
+        },
+        "top_underlying": {
+          "CSXF4": 10570,
+          "CSXG4": 10300,
+          "CSXH4": 10354,
+          "CSXJ4": 10408,
+          "CSXK4": 10408,
+          "CSXM4": 10462,
+          "CSXN4": 10354,
+          "CSXQ4": 10246,
+          "CSXU4": 10246,
+          "CSXV4": 10300,
+          "CSXX4": 10300,
+          "CSXZ4": 10354
+        },
+        "unique_symbols": 7957
+      },
+      "month": "2024-01",
+      "statistics": {
+        "cleared_volume_events": 69320,
+        "final_actual_events": 35489,
+        "final_actual_reference_dates": 19,
+        "final_events": 54325,
+        "final_reference_dates": 21,
+        "final_symbol_date_pairs": 49436,
+        "final_theoretical_events": 18836,
+        "first_reference_date": "2024-01-02",
+        "last_reference_date": "2024-02-01",
+        "open_interest_events": 69320,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 1202,
+        "positive_open_interest_events": 69320,
+        "preliminary_events": 80436,
+        "records": 931467,
+        "settlement_events": 134761,
+        "settlement_reference_dates": 22,
+        "stat_type_counts": {
+          "17": 329033,
+          "18": 329033,
+          "3": 134761,
+          "6": 69320,
+          "9": 69320
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 49,
+        "distinct_strikes": 262,
+        "records": 190714,
+        "top_asset": {
+          "AAO": 190714
+        },
+        "top_exchange": {
+          "XNYM": 190714
+        },
+        "top_group": {
+          "1N": 24,
+          "LO": 190690
+        },
+        "top_instrument_class": {
+          "C": 95345,
+          "P": 95345,
+          "T": 24
+        },
+        "top_security_type": {
+          "OOF": 190714
+        },
+        "top_underlying": {
+          "CSXF5": 6584,
+          "CSXG4": 9550,
+          "CSXH4": 9630,
+          "CSXJ4": 9686,
+          "CSXK4": 9686,
+          "CSXM4": 9736,
+          "CSXN4": 9636,
+          "CSXQ4": 9536,
+          "CSXU4": 9536,
+          "CSXV4": 9592,
+          "CSXX4": 9592,
+          "CSXZ4": 9642
+        },
+        "unique_symbols": 8117
+      },
+      "month": "2024-02",
+      "statistics": {
+        "cleared_volume_events": 63998,
+        "final_actual_events": 37464,
+        "final_actual_reference_dates": 20,
+        "final_events": 61733,
+        "final_reference_dates": 21,
+        "final_symbol_date_pairs": 55462,
+        "final_theoretical_events": 24269,
+        "first_reference_date": "2024-01-31",
+        "last_reference_date": "2024-03-01",
+        "open_interest_events": 63998,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 815,
+        "positive_open_interest_events": 63998,
+        "preliminary_events": 71901,
+        "records": 868126,
+        "settlement_events": 133634,
+        "settlement_reference_dates": 22,
+        "stat_type_counts": {
+          "17": 303248,
+          "18": 303248,
+          "3": 133634,
+          "6": 63998,
+          "9": 63998
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 49,
+        "distinct_strikes": 262,
+        "records": 194220,
+        "top_asset": {
+          "AAO": 194220
+        },
+        "top_exchange": {
+          "XNYM": 194220
+        },
+        "top_group": {
+          "1N": 56,
+          "LO": 194164
+        },
+        "top_instrument_class": {
+          "C": 97082,
+          "P": 97082,
+          "T": 56
+        },
+        "top_security_type": {
+          "OOF": 194220
+        },
+        "top_underlying": {
+          "CSXF5": 7078,
+          "CSXG5": 7026,
+          "CSXH4": 9694,
+          "CSXJ4": 10232,
+          "CSXK4": 10232,
+          "CSXM4": 10306,
+          "CSXN4": 10174,
+          "CSXQ4": 10070,
+          "CSXU4": 10070,
+          "CSXV4": 10226,
+          "CSXX4": 10226,
+          "CSXZ4": 10278
+        },
+        "unique_symbols": 7996
+      },
+      "month": "2024-03",
+      "statistics": {
+        "cleared_volume_events": 66072,
+        "final_actual_events": 42371,
+        "final_actual_reference_dates": 21,
+        "final_events": 71805,
+        "final_reference_dates": 22,
+        "final_symbol_date_pairs": 62381,
+        "final_theoretical_events": 29434,
+        "first_reference_date": "2024-02-29",
+        "last_reference_date": "2024-03-29",
+        "open_interest_events": 66072,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 2058,
+        "positive_open_interest_events": 66072,
+        "preliminary_events": 80650,
+        "records": 908225,
+        "settlement_events": 152455,
+        "settlement_reference_dates": 22,
+        "stat_type_counts": {
+          "17": 311813,
+          "18": 311813,
+          "3": 152455,
+          "6": 66072,
+          "9": 66072
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 46,
+        "distinct_strikes": 265,
+        "records": 190554,
+        "top_asset": {
+          "AAO": 190554
+        },
+        "top_exchange": {
+          "XNYM": 190554
+        },
+        "top_group": {
+          "1N": 10,
+          "LO": 190544
+        },
+        "top_instrument_class": {
+          "C": 95272,
+          "P": 95272,
+          "T": 10
+        },
+        "top_security_type": {
+          "OOF": 190554
+        },
+        "top_underlying": {
+          "CSXF5": 7258,
+          "CSXG5": 7178,
+          "CSXH5": 7178,
+          "CSXJ4": 10296,
+          "CSXK4": 10298,
+          "CSXM4": 10410,
+          "CSXN4": 10322,
+          "CSXQ4": 10218,
+          "CSXU4": 10218,
+          "CSXV4": 10328,
+          "CSXX4": 10328,
+          "CSXZ4": 10380
+        },
+        "unique_symbols": 7496
+      },
+      "month": "2024-04",
+      "statistics": {
+        "cleared_volume_events": 68227,
+        "final_actual_events": 41299,
+        "final_actual_reference_dates": 22,
+        "final_events": 64492,
+        "final_reference_dates": 23,
+        "final_symbol_date_pairs": 57992,
+        "final_theoretical_events": 23193,
+        "first_reference_date": "2024-04-01",
+        "last_reference_date": "2024-05-01",
+        "open_interest_events": 68227,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 1322,
+        "positive_open_interest_events": 68227,
+        "preliminary_events": 76200,
+        "records": 920039,
+        "settlement_events": 140692,
+        "settlement_reference_dates": 23,
+        "stat_type_counts": {
+          "17": 321440,
+          "18": 321440,
+          "3": 140692,
+          "6": 68227,
+          "7": 3,
+          "8": 10,
+          "9": 68227
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 46,
+        "distinct_strikes": 269,
+        "records": 194058,
+        "top_asset": {
+          "AAO": 194058
+        },
+        "top_exchange": {
+          "XNYM": 194058
+        },
+        "top_group": {
+          "1N": 4,
+          "LO": 194054
+        },
+        "top_instrument_class": {
+          "C": 97027,
+          "P": 97027,
+          "T": 4
+        },
+        "top_security_type": {
+          "OOF": 194058
+        },
+        "top_underlying": {
+          "CSXF5": 7668,
+          "CSXG5": 7560,
+          "CSXH5": 7560,
+          "CSXK4": 10746,
+          "CSXK5": 6966,
+          "CSXM4": 10908,
+          "CSXN4": 10916,
+          "CSXQ4": 10808,
+          "CSXU4": 10808,
+          "CSXV4": 10862,
+          "CSXX4": 10862,
+          "CSXZ4": 10916
+        },
+        "unique_symbols": 7572
+      },
+      "month": "2024-05",
+      "statistics": {
+        "cleared_volume_events": 66745,
+        "final_actual_events": 38851,
+        "final_actual_reference_dates": 21,
+        "final_events": 61269,
+        "final_reference_dates": 21,
+        "final_symbol_date_pairs": 55023,
+        "final_theoretical_events": 22418,
+        "first_reference_date": "2024-05-01",
+        "last_reference_date": "2024-05-31",
+        "open_interest_events": 66745,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 826,
+        "positive_open_interest_events": 66729,
+        "preliminary_events": 85339,
+        "records": 893491,
+        "settlement_events": 146608,
+        "settlement_reference_dates": 22,
+        "stat_type_counts": {
+          "17": 306695,
+          "18": 306695,
+          "3": 146608,
+          "6": 66745,
+          "7": 1,
+          "8": 2,
+          "9": 66745
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 44,
+        "distinct_strikes": 277,
+        "records": 174236,
+        "top_asset": {
+          "AAO": 174236
+        },
+        "top_exchange": {
+          "XNYM": 174236
+        },
+        "top_group": {
+          "1N": 186,
+          "LO": 174050
+        },
+        "top_instrument_class": {
+          "C": 87025,
+          "P": 87025,
+          "T": 186
+        },
+        "top_security_type": {
+          "OOF": 174236
+        },
+        "top_underlying": {
+          "CSXF5": 7168,
+          "CSXG5": 7068,
+          "CSXH5": 7100,
+          "CSXJ5": 6550,
+          "CSXK5": 6550,
+          "CSXM4": 9696,
+          "CSXN4": 10210,
+          "CSXQ4": 10110,
+          "CSXU4": 10110,
+          "CSXV4": 10160,
+          "CSXX4": 10160,
+          "CSXZ4": 10210
+        },
+        "unique_symbols": 7174
+      },
+      "month": "2024-06",
+      "statistics": {
+        "cleared_volume_events": 58600,
+        "final_actual_events": 37493,
+        "final_actual_reference_dates": 20,
+        "final_events": 64791,
+        "final_reference_dates": 20,
+        "final_symbol_date_pairs": 57227,
+        "final_theoretical_events": 27298,
+        "first_reference_date": "2024-05-31",
+        "last_reference_date": "2024-06-28",
+        "open_interest_events": 58600,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 1342,
+        "positive_open_interest_events": 58596,
+        "preliminary_events": 62915,
+        "records": 786792,
+        "settlement_events": 127706,
+        "settlement_reference_dates": 20,
+        "stat_type_counts": {
+          "17": 270942,
+          "18": 270942,
+          "3": 127706,
+          "6": 58600,
+          "8": 2,
+          "9": 58600
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 43,
+        "distinct_strikes": 269,
+        "records": 192506,
+        "top_asset": {
+          "AAO": 192506
+        },
+        "top_exchange": {
+          "XNYM": 192506
+        },
+        "top_group": {
+          "1N": 108,
+          "LO": 192398
+        },
+        "top_instrument_class": {
+          "C": 96199,
+          "P": 96199,
+          "T": 108
+        },
+        "top_security_type": {
+          "OOF": 192506
+        },
+        "top_underlying": {
+          "CSXF5": 8158,
+          "CSXG5": 8100,
+          "CSXH5": 8156,
+          "CSXJ5": 7592,
+          "CSXK5": 7500,
+          "CSXM5": 7328,
+          "CSXN4": 11522,
+          "CSXQ4": 11410,
+          "CSXU4": 11410,
+          "CSXV4": 11464,
+          "CSXX4": 11464,
+          "CSXZ4": 11520
+        },
+        "unique_symbols": 6995
+      },
+      "month": "2024-07",
+      "statistics": {
+        "cleared_volume_events": 66408,
+        "final_actual_events": 41778,
+        "final_actual_reference_dates": 22,
+        "final_events": 68600,
+        "final_reference_dates": 23,
+        "final_symbol_date_pairs": 55441,
+        "final_theoretical_events": 26822,
+        "first_reference_date": "2024-07-01",
+        "last_reference_date": "2024-08-01",
+        "open_interest_events": 66408,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 1350,
+        "positive_open_interest_events": 66408,
+        "preliminary_events": 76800,
+        "records": 880944,
+        "settlement_events": 145400,
+        "settlement_reference_dates": 23,
+        "stat_type_counts": {
+          "17": 301364,
+          "18": 301364,
+          "3": 145400,
+          "6": 66408,
+          "9": 66408
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 43,
+        "distinct_strikes": 287,
+        "records": 177009,
+        "top_asset": {
+          "AAO": 177009
+        },
+        "top_exchange": {
+          "XNYM": 177009
+        },
+        "top_group": {
+          "1N": 1383,
+          "LO": 175626
+        },
+        "top_instrument_class": {
+          "C": 87813,
+          "P": 87813,
+          "T": 1383
+        },
+        "top_security_type": {
+          "OOF": 177009
+        },
+        "top_underlying": {
+          "CSXF5": 7664,
+          "CSXG5": 7612,
+          "CSXH5": 7664,
+          "CSXJ5": 7168,
+          "CSXK5": 7064,
+          "CSXM5": 6908,
+          "CSXQ4": 10608,
+          "CSXU4": 10608,
+          "CSXU5": 6478,
+          "CSXV4": 10660,
+          "CSXX4": 10660,
+          "CSXZ4": 10712
+        },
+        "unique_symbols": 8250
+      },
+      "month": "2024-08",
+      "statistics": {
+        "cleared_volume_events": 67002,
+        "final_actual_events": 38098,
+        "final_actual_reference_dates": 21,
+        "final_events": 59762,
+        "final_reference_dates": 21,
+        "final_symbol_date_pairs": 53652,
+        "final_theoretical_events": 21664,
+        "first_reference_date": "2024-08-01",
+        "last_reference_date": "2024-08-30",
+        "open_interest_events": 67002,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 798,
+        "positive_open_interest_events": 67002,
+        "preliminary_events": 69139,
+        "records": 839570,
+        "settlement_events": 128901,
+        "settlement_reference_dates": 22,
+        "stat_type_counts": {
+          "17": 288332,
+          "18": 288332,
+          "3": 128901,
+          "6": 67002,
+          "7": 1,
+          "9": 67002
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 43,
+        "distinct_strikes": 291,
+        "records": 197170,
+        "top_asset": {
+          "AAO": 197170
+        },
+        "top_exchange": {
+          "XNYM": 197170
+        },
+        "top_group": {
+          "1N": 102,
+          "LO": 197068
+        },
+        "top_instrument_class": {
+          "C": 98534,
+          "P": 98534,
+          "T": 102
+        },
+        "top_security_type": {
+          "OOF": 197170
+        },
+        "top_underlying": {
+          "CSXF5": 7748,
+          "CSXF6": 6762,
+          "CSXG5": 7696,
+          "CSXG6": 6758,
+          "CSXH5": 7748,
+          "CSXJ5": 7252,
+          "CSXK5": 7148,
+          "CSXM5": 6992,
+          "CSXU4": 10608,
+          "CSXV4": 10660,
+          "CSXX4": 10660,
+          "CSXZ4": 10712
+        },
+        "unique_symbols": 7689
+      },
+      "month": "2024-09",
+      "statistics": {
+        "cleared_volume_events": 58715,
+        "final_actual_events": 38085,
+        "final_actual_reference_dates": 21,
+        "final_events": 68774,
+        "final_reference_dates": 22,
+        "final_symbol_date_pairs": 61422,
+        "final_theoretical_events": 30689,
+        "first_reference_date": "2024-08-30",
+        "last_reference_date": "2024-10-01",
+        "open_interest_events": 58715,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 685,
+        "positive_open_interest_events": 58712,
+        "preliminary_events": 61071,
+        "records": 867063,
+        "settlement_events": 129845,
+        "settlement_reference_dates": 22,
+        "stat_type_counts": {
+          "17": 309892,
+          "18": 309892,
+          "3": 129845,
+          "6": 58715,
+          "8": 4,
+          "9": 58715
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 42,
+        "distinct_strikes": 310,
+        "records": 221908,
+        "top_asset": {
+          "AAO": 221908
+        },
+        "top_exchange": {
+          "XNYM": 221908
+        },
+        "top_group": {
+          "1N": 12,
+          "LO": 221896
+        },
+        "top_instrument_class": {
+          "C": 110948,
+          "P": 110948,
+          "T": 12
+        },
+        "top_security_type": {
+          "OOF": 221908
+        },
+        "top_underlying": {
+          "CSXF5": 8762,
+          "CSXF6": 7996,
+          "CSXG5": 8704,
+          "CSXG6": 7996,
+          "CSXH5": 8818,
+          "CSXJ5": 8592,
+          "CSXK5": 8456,
+          "CSXM5": 8282,
+          "CSXU5": 7976,
+          "CSXV4": 11930,
+          "CSXX4": 11970,
+          "CSXZ4": 12028
+        },
+        "unique_symbols": 8223
+      },
+      "month": "2024-10",
+      "statistics": {
+        "cleared_volume_events": 72938,
+        "final_actual_events": 46275,
+        "final_actual_reference_dates": 23,
+        "final_events": 82757,
+        "final_reference_dates": 24,
+        "final_symbol_date_pairs": 66837,
+        "final_theoretical_events": 36482,
+        "first_reference_date": "2024-10-01",
+        "last_reference_date": "2024-11-01",
+        "open_interest_events": 72938,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 2086,
+        "positive_open_interest_events": 72938,
+        "preliminary_events": 84541,
+        "records": 1010112,
+        "settlement_events": 167298,
+        "settlement_reference_dates": 24,
+        "stat_type_counts": {
+          "17": 348464,
+          "18": 348464,
+          "3": 167298,
+          "6": 72938,
+          "8": 10,
+          "9": 72938
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 39,
+        "distinct_strikes": 315,
+        "records": 192596,
+        "top_asset": {
+          "AAO": 192596
+        },
+        "top_exchange": {
+          "XNYM": 192596
+        },
+        "top_group": {
+          "LO": 192596
+        },
+        "top_instrument_class": {
+          "C": 96298,
+          "P": 96298
+        },
+        "top_security_type": {
+          "OOF": 192596
+        },
+        "top_underlying": {
+          "CSXF5": 7798,
+          "CSXF6": 7326,
+          "CSXG5": 7748,
+          "CSXG6": 7326,
+          "CSXH5": 7848,
+          "CSXH6": 7276,
+          "CSXJ5": 7740,
+          "CSXK5": 7590,
+          "CSXM5": 7440,
+          "CSXU5": 7158,
+          "CSXX4": 10446,
+          "CSXZ4": 10516
+        },
+        "unique_symbols": 8198
+      },
+      "month": "2024-11",
+      "statistics": {
+        "cleared_volume_events": 69915,
+        "final_actual_events": 37700,
+        "final_actual_reference_dates": 18,
+        "final_events": 61693,
+        "final_reference_dates": 18,
+        "final_symbol_date_pairs": 54520,
+        "final_theoretical_events": 23993,
+        "first_reference_date": "2024-11-01",
+        "last_reference_date": "2024-11-29",
+        "open_interest_events": 69915,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 1881,
+        "positive_open_interest_events": 69856,
+        "preliminary_events": 73680,
+        "records": 850605,
+        "settlement_events": 135373,
+        "settlement_reference_dates": 20,
+        "stat_type_counts": {
+          "17": 287701,
+          "18": 287701,
+          "3": 135373,
+          "6": 69915,
+          "9": 69915
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 38,
+        "distinct_strikes": 322,
+        "records": 202372,
+        "top_asset": {
+          "AAO": 202372
+        },
+        "top_exchange": {
+          "XNYM": 202372
+        },
+        "top_group": {
+          "1N": 96,
+          "LO": 202276
+        },
+        "top_instrument_class": {
+          "C": 101138,
+          "P": 101138,
+          "T": 96
+        },
+        "top_security_type": {
+          "OOF": 202372
+        },
+        "top_underlying": {
+          "CSXF5": 8524,
+          "CSXF6": 8116,
+          "CSXG5": 8470,
+          "CSXG6": 8116,
+          "CSXH5": 8578,
+          "CSXH6": 8088,
+          "CSXJ5": 8492,
+          "CSXJ6": 7904,
+          "CSXK5": 8330,
+          "CSXM5": 8168,
+          "CSXU5": 7898,
+          "CSXZ4": 11394
+        },
+        "unique_symbols": 7517
+      },
+      "month": "2024-12",
+      "statistics": {
+        "cleared_volume_events": 72816,
+        "final_actual_events": 43339,
+        "final_actual_reference_dates": 21,
+        "final_events": 66410,
+        "final_reference_dates": 21,
+        "final_symbol_date_pairs": 59400,
+        "final_theoretical_events": 23071,
+        "first_reference_date": "2024-11-29",
+        "last_reference_date": "2024-12-31",
+        "open_interest_events": 72816,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 1182,
+        "positive_open_interest_events": 72816,
+        "preliminary_events": 84165,
+        "records": 938487,
+        "settlement_events": 150575,
+        "settlement_reference_dates": 22,
+        "stat_type_counts": {
+          "17": 321140,
+          "18": 321140,
+          "3": 150575,
+          "6": 72816,
+          "9": 72816
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 38,
+        "distinct_strikes": 338,
+        "records": 198388,
+        "top_asset": {
+          "AAO": 198388
+        },
+        "top_exchange": {
+          "XNYM": 198388
+        },
+        "top_group": {
+          "1N": 102,
+          "LO": 198286
+        },
+        "top_instrument_class": {
+          "C": 99143,
+          "P": 99143,
+          "T": 102
+        },
+        "top_security_type": {
+          "OOF": 198388
+        },
+        "top_underlying": {
+          "CSXF5": 8616,
+          "CSXF6": 8198,
+          "CSXG5": 8606,
+          "CSXG6": 8198,
+          "CSXH5": 8714,
+          "CSXH6": 8198,
+          "CSXJ5": 8706,
+          "CSXJ6": 7978,
+          "CSXK5": 8544,
+          "CSXM5": 8382,
+          "CSXQ5": 7996,
+          "CSXU5": 8050
+        },
+        "unique_symbols": 7807
+      },
+      "month": "2025-01",
+      "statistics": {
+        "cleared_volume_events": 74844,
+        "final_actual_events": 41639,
+        "final_actual_reference_dates": 21,
+        "final_events": 63813,
+        "final_reference_dates": 21,
+        "final_symbol_date_pairs": 56653,
+        "final_theoretical_events": 22174,
+        "first_reference_date": "2024-12-31",
+        "last_reference_date": "2025-01-31",
+        "open_interest_events": 74844,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 1814,
+        "positive_open_interest_events": 74838,
+        "preliminary_events": 76596,
+        "records": 878853,
+        "settlement_events": 140409,
+        "settlement_reference_dates": 22,
+        "stat_type_counts": {
+          "17": 294378,
+          "18": 294378,
+          "3": 140409,
+          "6": 74844,
+          "9": 74844
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 35,
+        "distinct_strikes": 272,
+        "records": 172234,
+        "top_asset": {
+          "AAO": 172234
+        },
+        "top_exchange": {
+          "XNYM": 172234
+        },
+        "top_group": {
+          "LO": 172234
+        },
+        "top_instrument_class": {
+          "C": 86117,
+          "P": 86117
+        },
+        "top_security_type": {
+          "OOF": 172234
+        },
+        "top_underlying": {
+          "CSXF6": 7314,
+          "CSXG5": 7728,
+          "CSXG6": 7314,
+          "CSXH5": 7824,
+          "CSXH6": 7314,
+          "CSXJ5": 7776,
+          "CSXJ6": 7122,
+          "CSXK5": 7632,
+          "CSXM5": 7488,
+          "CSXN5": 7152,
+          "CSXQ5": 7200,
+          "CSXU5": 7248
+        },
+        "unique_symbols": 7202
+      },
+      "month": "2025-02",
+      "statistics": {
+        "cleared_volume_events": 67258,
+        "final_actual_events": 40911,
+        "final_actual_reference_dates": 21,
+        "final_events": 62479,
+        "final_reference_dates": 21,
+        "final_symbol_date_pairs": 55308,
+        "final_theoretical_events": 21568,
+        "first_reference_date": "2025-01-23",
+        "last_reference_date": "2025-02-28",
+        "open_interest_events": 67258,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 722,
+        "positive_open_interest_events": 67258,
+        "preliminary_events": 67556,
+        "records": 809283,
+        "settlement_events": 130035,
+        "settlement_reference_dates": 23,
+        "stat_type_counts": {
+          "17": 272366,
+          "18": 272366,
+          "3": 130035,
+          "6": 67258,
+          "9": 67258
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 80,
+        "distinct_strikes": 283,
+        "records": 185416,
+        "top_asset": {
+          "AAO": 185416
+        },
+        "top_exchange": {
+          "XNYM": 185416
+        },
+        "top_group": {
+          "1N": 42,
+          "LO": 185374
+        },
+        "top_instrument_class": {
+          "C": 92687,
+          "P": 92687,
+          "T": 42
+        },
+        "top_security_type": {
+          "OOF": 185416
+        },
+        "top_underlying": {
+          "CSXF6": 8084,
+          "CSXG6": 8084,
+          "CSXH5": 8524,
+          "CSXH6": 8084,
+          "CSXJ5": 8518,
+          "CSXJ6": 7844,
+          "CSXK5": 8362,
+          "CSXM5": 8206,
+          "CSXN5": 7876,
+          "CSXQ5": 7928,
+          "CSXU5": 7980,
+          "CSXX5": 7748
+        },
+        "unique_symbols": 7394
+      },
+      "month": "2025-03",
+      "statistics": {
+        "cleared_volume_events": 72304,
+        "final_actual_events": 46515,
+        "final_actual_reference_dates": 22,
+        "final_events": 73898,
+        "final_reference_dates": 23,
+        "final_symbol_date_pairs": 65102,
+        "final_theoretical_events": 27383,
+        "first_reference_date": "2025-02-28",
+        "last_reference_date": "2025-04-01",
+        "open_interest_events": 72304,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 930,
+        "positive_open_interest_events": 72298,
+        "preliminary_events": 86440,
+        "records": 914886,
+        "settlement_events": 160338,
+        "settlement_reference_dates": 23,
+        "stat_type_counts": {
+          "17": 304970,
+          "18": 304970,
+          "3": 160338,
+          "6": 72304,
+          "9": 72304
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 81,
+        "distinct_strikes": 290,
+        "records": 192658,
+        "top_asset": {
+          "AAO": 192658
+        },
+        "top_exchange": {
+          "XNYM": 192658
+        },
+        "top_group": {
+          "1N": 108,
+          "LO": 192550
+        },
+        "top_instrument_class": {
+          "C": 96275,
+          "P": 96275,
+          "T": 108
+        },
+        "top_security_type": {
+          "OOF": 192658
+        },
+        "top_underlying": {
+          "CSXF6": 8550,
+          "CSXG6": 8548,
+          "CSXH6": 8548,
+          "CSXJ5": 8650,
+          "CSXJ6": 8288,
+          "CSXK5": 8584,
+          "CSXM5": 8558,
+          "CSXN5": 8288,
+          "CSXQ5": 8298,
+          "CSXU5": 8352,
+          "CSXX5": 8234,
+          "CSXZ5": 8184
+        },
+        "unique_symbols": 7906
+      },
+      "month": "2025-04",
+      "statistics": {
+        "cleared_volume_events": 73480,
+        "final_actual_events": 44447,
+        "final_actual_reference_dates": 21,
+        "final_events": 67423,
+        "final_reference_dates": 23,
+        "final_symbol_date_pairs": 58815,
+        "final_theoretical_events": 22976,
+        "first_reference_date": "2025-04-01",
+        "last_reference_date": "2025-05-01",
+        "open_interest_events": 73480,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 1236,
+        "positive_open_interest_events": 73478,
+        "preliminary_events": 73562,
+        "records": 914677,
+        "settlement_events": 140985,
+        "settlement_reference_dates": 23,
+        "stat_type_counts": {
+          "17": 313366,
+          "18": 313366,
+          "3": 140985,
+          "6": 73480,
+          "9": 73480
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 79,
+        "distinct_strikes": 285,
+        "records": 194538,
+        "top_asset": {
+          "AAO": 194538
+        },
+        "top_exchange": {
+          "XNYM": 194538
+        },
+        "top_group": {
+          "1N": 226,
+          "LO": 194312
+        },
+        "top_instrument_class": {
+          "C": 97156,
+          "P": 97156,
+          "T": 226
+        },
+        "top_security_type": {
+          "OOF": 194538
+        },
+        "top_underlying": {
+          "CSXF6": 8742,
+          "CSXG6": 8736,
+          "CSXH6": 8690,
+          "CSXJ6": 8478,
+          "CSXK5": 8878,
+          "CSXM5": 8878,
+          "CSXN5": 8604,
+          "CSXQ5": 8650,
+          "CSXU5": 8708,
+          "CSXV5": 8364,
+          "CSXX5": 8474,
+          "CSXZ5": 8422
+        },
+        "unique_symbols": 7892
+      },
+      "month": "2025-05",
+      "statistics": {
+        "cleared_volume_events": 70586,
+        "final_actual_events": 40413,
+        "final_actual_reference_dates": 20,
+        "final_events": 63734,
+        "final_reference_dates": 20,
+        "final_symbol_date_pairs": 56941,
+        "final_theoretical_events": 23321,
+        "first_reference_date": "2025-05-01",
+        "last_reference_date": "2025-05-30",
+        "open_interest_events": 70586,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 1280,
+        "positive_open_interest_events": 70586,
+        "preliminary_events": 75953,
+        "records": 883085,
+        "settlement_events": 139687,
+        "settlement_reference_dates": 21,
+        "stat_type_counts": {
+          "17": 301112,
+          "18": 301112,
+          "3": 139687,
+          "6": 70586,
+          "7": 1,
+          "8": 1,
+          "9": 70586
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 80,
+        "distinct_strikes": 294,
+        "records": 201198,
+        "top_asset": {
+          "AAO": 201198
+        },
+        "top_exchange": {
+          "XNYM": 201198
+        },
+        "top_group": {
+          "1N": 50,
+          "LO": 201148
+        },
+        "top_instrument_class": {
+          "C": 100574,
+          "P": 100574,
+          "T": 50
+        },
+        "top_security_type": {
+          "OOF": 201198
+        },
+        "top_underlying": {
+          "CSXF6": 9278,
+          "CSXG6": 9278,
+          "CSXH6": 9224,
+          "CSXJ6": 9030,
+          "CSXM5": 9234,
+          "CSXM6": 8760,
+          "CSXN5": 9018,
+          "CSXQ5": 9144,
+          "CSXU5": 9180,
+          "CSXV5": 8848,
+          "CSXX5": 8956,
+          "CSXZ5": 8872
+        },
+        "unique_symbols": 7682
+      },
+      "month": "2025-06",
+      "statistics": {
+        "cleared_volume_events": 73727,
+        "final_actual_events": 41562,
+        "final_actual_reference_dates": 20,
+        "final_events": 70841,
+        "final_reference_dates": 22,
+        "final_symbol_date_pairs": 55128,
+        "final_theoretical_events": 29279,
+        "first_reference_date": "2025-05-23",
+        "last_reference_date": "2025-07-01",
+        "open_interest_events": 73727,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 1669,
+        "positive_open_interest_events": 73591,
+        "preliminary_events": 86327,
+        "records": 911470,
+        "settlement_events": 157168,
+        "settlement_reference_dates": 23,
+        "stat_type_counts": {
+          "17": 303424,
+          "18": 303424,
+          "3": 157168,
+          "6": 73727,
+          "9": 73727
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 87,
+        "distinct_strikes": 304,
+        "records": 202890,
+        "top_asset": {
+          "AAO": 202890
+        },
+        "top_exchange": {
+          "XNYM": 202890
+        },
+        "top_group": {
+          "1N": 276,
+          "LO": 202614
+        },
+        "top_instrument_class": {
+          "C": 101307,
+          "P": 101307,
+          "T": 276
+        },
+        "top_security_type": {
+          "OOF": 202890
+        },
+        "top_underlying": {
+          "CSXF6": 9448,
+          "CSXG6": 9442,
+          "CSXH6": 9388,
+          "CSXJ6": 9260,
+          "CSXK6": 8990,
+          "CSXM6": 8990,
+          "CSXN5": 9072,
+          "CSXQ5": 9288,
+          "CSXU5": 9348,
+          "CSXV5": 9092,
+          "CSXX5": 9200,
+          "CSXZ5": 9092
+        },
+        "unique_symbols": 8094
+      },
+      "month": "2025-07",
+      "statistics": {
+        "cleared_volume_events": 79913,
+        "final_actual_events": 45650,
+        "final_actual_reference_dates": 22,
+        "final_events": 69025,
+        "final_reference_dates": 24,
+        "final_symbol_date_pairs": 60535,
+        "final_theoretical_events": 23375,
+        "first_reference_date": "2025-07-01",
+        "last_reference_date": "2025-08-01",
+        "open_interest_events": 79913,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 1019,
+        "positive_open_interest_events": 79484,
+        "preliminary_events": 77196,
+        "records": 967651,
+        "settlement_events": 146221,
+        "settlement_reference_dates": 24,
+        "stat_type_counts": {
+          "17": 330802,
+          "18": 330802,
+          "3": 146221,
+          "6": 79913,
+          "9": 79913
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 93,
+        "distinct_strikes": 289,
+        "records": 194210,
+        "top_asset": {
+          "AAO": 194210
+        },
+        "top_exchange": {
+          "XNYM": 194210
+        },
+        "top_group": {
+          "1N": 148,
+          "LO": 194062
+        },
+        "top_instrument_class": {
+          "C": 97031,
+          "P": 97031,
+          "T": 148
+        },
+        "top_security_type": {
+          "OOF": 194210
+        },
+        "top_underlying": {
+          "CSXF6": 9216,
+          "CSXG6": 9164,
+          "CSXH6": 9112,
+          "CSXJ6": 9060,
+          "CSXK6": 8800,
+          "CSXM6": 8800,
+          "CSXN6": 8436,
+          "CSXQ5": 8600,
+          "CSXU5": 9060,
+          "CSXV5": 8852,
+          "CSXX5": 8956,
+          "CSXZ5": 8852
+        },
+        "unique_symbols": 7938
+      },
+      "month": "2025-08",
+      "statistics": {
+        "cleared_volume_events": 75851,
+        "final_actual_events": 41429,
+        "final_actual_reference_dates": 21,
+        "final_events": 66746,
+        "final_reference_dates": 22,
+        "final_symbol_date_pairs": 59471,
+        "final_theoretical_events": 25317,
+        "first_reference_date": "2025-07-31",
+        "last_reference_date": "2025-08-29",
+        "open_interest_events": 75851,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 434,
+        "positive_open_interest_events": 75502,
+        "preliminary_events": 78463,
+        "records": 914347,
+        "settlement_events": 145209,
+        "settlement_reference_dates": 22,
+        "stat_type_counts": {
+          "17": 308714,
+          "18": 308714,
+          "3": 145209,
+          "6": 75851,
+          "7": 4,
+          "8": 4,
+          "9": 75851
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 92,
+        "distinct_strikes": 302,
+        "records": 192877,
+        "top_asset": {
+          "AAO": 192877
+        },
+        "top_exchange": {
+          "XNYM": 192877
+        },
+        "top_group": {
+          "1N": 233,
+          "LO": 192644
+        },
+        "top_instrument_class": {
+          "C": 96322,
+          "P": 96322,
+          "T": 233
+        },
+        "top_security_type": {
+          "OOF": 192877
+        },
+        "top_underlying": {
+          "CSXF6": 9332,
+          "CSXG6": 9280,
+          "CSXH6": 9228,
+          "CSXJ6": 9164,
+          "CSXK6": 8904,
+          "CSXM6": 8904,
+          "CSXN6": 8720,
+          "CSXQ6": 8564,
+          "CSXU5": 9140,
+          "CSXV5": 8982,
+          "CSXX5": 9086,
+          "CSXZ5": 8982
+        },
+        "unique_symbols": 7616
+      },
+      "month": "2025-09",
+      "statistics": {
+        "cleared_volume_events": 70899,
+        "final_actual_events": 43929,
+        "final_actual_reference_dates": 21,
+        "final_events": 67157,
+        "final_reference_dates": 22,
+        "final_symbol_date_pairs": 58536,
+        "final_theoretical_events": 23228,
+        "first_reference_date": "2025-09-02",
+        "last_reference_date": "2025-10-01",
+        "open_interest_events": 70899,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 1179,
+        "positive_open_interest_events": 70739,
+        "preliminary_events": 75012,
+        "records": 913135,
+        "settlement_events": 142169,
+        "settlement_reference_dates": 22,
+        "stat_type_counts": {
+          "17": 314584,
+          "18": 314584,
+          "3": 142169,
+          "6": 70899,
+          "9": 70899
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 90,
+        "distinct_strikes": 305,
+        "records": 198316,
+        "top_asset": {
+          "AAO": 198316
+        },
+        "top_exchange": {
+          "XNYM": 198316
+        },
+        "top_group": {
+          "1N": 150,
+          "LO": 198166
+        },
+        "top_instrument_class": {
+          "C": 99083,
+          "P": 99083,
+          "T": 150
+        },
+        "top_security_type": {
+          "OOF": 198316
+        },
+        "top_underlying": {
+          "CSXF6": 9828,
+          "CSXG6": 9774,
+          "CSXH6": 9720,
+          "CSXJ6": 9612,
+          "CSXK6": 9342,
+          "CSXM6": 9342,
+          "CSXN6": 9234,
+          "CSXQ6": 9088,
+          "CSXU6": 9062,
+          "CSXV5": 9342,
+          "CSXX5": 9450,
+          "CSXZ5": 9342
+        },
+        "unique_symbols": 7702
+      },
+      "month": "2025-10",
+      "statistics": {
+        "cleared_volume_events": 77876,
+        "final_actual_events": 43813,
+        "final_actual_reference_dates": 22,
+        "final_events": 66336,
+        "final_reference_dates": 22,
+        "final_symbol_date_pairs": 59561,
+        "final_theoretical_events": 22523,
+        "first_reference_date": "2025-10-01",
+        "last_reference_date": "2025-10-31",
+        "open_interest_events": 77876,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 797,
+        "positive_open_interest_events": 77406,
+        "preliminary_events": 78070,
+        "records": 949140,
+        "settlement_events": 144406,
+        "settlement_reference_dates": 23,
+        "stat_type_counts": {
+          "17": 324491,
+          "18": 324491,
+          "3": 144406,
+          "6": 77876,
+          "9": 77876
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 87,
+        "distinct_strikes": 288,
+        "records": 199512,
+        "top_asset": {
+          "AAO": 199512
+        },
+        "top_exchange": {
+          "XNYM": 199512
+        },
+        "top_group": {
+          "1N": 174,
+          "LO": 199338
+        },
+        "top_instrument_class": {
+          "C": 99669,
+          "P": 99669,
+          "T": 174
+        },
+        "top_security_type": {
+          "OOF": 199512
+        },
+        "top_underlying": {
+          "CSXF6": 10202,
+          "CSXG6": 10146,
+          "CSXH6": 10090,
+          "CSXJ6": 9978,
+          "CSXK6": 9698,
+          "CSXM6": 9698,
+          "CSXN6": 9586,
+          "CSXQ6": 9474,
+          "CSXU6": 9474,
+          "CSXV6": 8986,
+          "CSXX5": 9450,
+          "CSXZ5": 9688
+        },
+        "unique_symbols": 7340
+      },
+      "month": "2025-11",
+      "statistics": {
+        "cleared_volume_events": 63588,
+        "final_actual_events": 45649,
+        "final_actual_reference_dates": 20,
+        "final_events": 89603,
+        "final_reference_dates": 20,
+        "final_symbol_date_pairs": 65377,
+        "final_theoretical_events": 43954,
+        "first_reference_date": "2025-10-31",
+        "last_reference_date": "2025-11-28",
+        "open_interest_events": 63588,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 668,
+        "positive_open_interest_events": 63471,
+        "preliminary_events": 64577,
+        "records": 831093,
+        "settlement_events": 154180,
+        "settlement_reference_dates": 20,
+        "stat_type_counts": {
+          "17": 274868,
+          "18": 274868,
+          "3": 154180,
+          "6": 63588,
+          "8": 1,
+          "9": 63588
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 87,
+        "distinct_strikes": 290,
+        "records": 191481,
+        "top_asset": {
+          "AAO": 191481
+        },
+        "top_exchange": {
+          "XNYM": 191481
+        },
+        "top_group": {
+          "1N": 114,
+          "LO": 191367
+        },
+        "top_instrument_class": {
+          "C": 95683,
+          "P": 95684,
+          "T": 114
+        },
+        "top_security_type": {
+          "OOF": 191481
+        },
+        "top_underlying": {
+          "CSXF6": 9974,
+          "CSXG6": 9920,
+          "CSXH6": 9896,
+          "CSXJ6": 9788,
+          "CSXK6": 9490,
+          "CSXM6": 9488,
+          "CSXN6": 9380,
+          "CSXQ6": 9272,
+          "CSXU6": 9272,
+          "CSXV6": 8840,
+          "CSXX6": 8380,
+          "CSXZ5": 9342
+        },
+        "unique_symbols": 7198
+      },
+      "month": "2025-12",
+      "statistics": {
+        "cleared_volume_events": 70247,
+        "final_actual_events": 40846,
+        "final_actual_reference_dates": 21,
+        "final_events": 62863,
+        "final_reference_dates": 22,
+        "final_symbol_date_pairs": 56257,
+        "final_theoretical_events": 22017,
+        "first_reference_date": "2025-12-01",
+        "last_reference_date": "2026-01-02",
+        "open_interest_events": 70247,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 1196,
+        "positive_open_interest_events": 70107,
+        "preliminary_events": 74088,
+        "records": 880149,
+        "settlement_events": 136951,
+        "settlement_reference_dates": 23,
+        "stat_type_counts": {
+          "17": 301352,
+          "18": 301352,
+          "3": 136951,
+          "6": 70247,
+          "9": 70247
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 87,
+        "distinct_strikes": 295,
+        "records": 182386,
+        "top_asset": {
+          "AAO": 182386
+        },
+        "top_exchange": {
+          "XNYM": 182386
+        },
+        "top_group": {
+          "1N": 234,
+          "LO": 182152
+        },
+        "top_instrument_class": {
+          "C": 91076,
+          "P": 91076,
+          "T": 234
+        },
+        "top_security_type": {
+          "OOF": 182386
+        },
+        "top_underlying": {
+          "CSXF6": 9672,
+          "CSXG6": 9628,
+          "CSXH6": 9628,
+          "CSXJ6": 9524,
+          "CSXK6": 9212,
+          "CSXM6": 9212,
+          "CSXN6": 9108,
+          "CSXQ6": 9004,
+          "CSXU6": 9004,
+          "CSXV6": 8592,
+          "CSXX6": 8124,
+          "CSXZ6": 8072
+        },
+        "unique_symbols": 7493
+      },
+      "month": "2026-01",
+      "statistics": {
+        "cleared_volume_events": 66262,
+        "final_actual_events": 39549,
+        "final_actual_reference_dates": 20,
+        "final_events": 61146,
+        "final_reference_dates": 21,
+        "final_symbol_date_pairs": 54403,
+        "final_theoretical_events": 21597,
+        "first_reference_date": "2025-12-31",
+        "last_reference_date": "2026-01-30",
+        "open_interest_events": 66262,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 2532,
+        "positive_open_interest_events": 65894,
+        "preliminary_events": 67334,
+        "records": 813920,
+        "settlement_events": 128480,
+        "settlement_reference_dates": 21,
+        "stat_type_counts": {
+          "17": 276458,
+          "18": 276458,
+          "3": 128480,
+          "6": 66262,
+          "9": 66262
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 84,
+        "distinct_strikes": 262,
+        "records": 165992,
+        "top_asset": {
+          "AAO": 165992
+        },
+        "top_exchange": {
+          "XNYM": 165992
+        },
+        "top_group": {
+          "1N": 2,
+          "LO": 165990
+        },
+        "top_instrument_class": {
+          "C": 82995,
+          "P": 82995,
+          "T": 2
+        },
+        "top_security_type": {
+          "OOF": 165992
+        },
+        "top_underlying": {
+          "CSXF7": 5264,
+          "CSXG6": 8976,
+          "CSXH6": 8990,
+          "CSXJ6": 8894,
+          "CSXK6": 8606,
+          "CSXM6": 8606,
+          "CSXN6": 8514,
+          "CSXQ6": 8418,
+          "CSXU6": 8410,
+          "CSXV6": 8074,
+          "CSXX6": 7642,
+          "CSXZ6": 7590
+        },
+        "unique_symbols": 7039
+      },
+      "month": "2026-02",
+      "statistics": {
+        "cleared_volume_events": 67648,
+        "final_actual_events": 40871,
+        "final_actual_reference_dates": 19,
+        "final_events": 61560,
+        "final_reference_dates": 20,
+        "final_symbol_date_pairs": 54443,
+        "final_theoretical_events": 20689,
+        "first_reference_date": "2026-01-30",
+        "last_reference_date": "2026-02-27",
+        "open_interest_events": 67648,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 2178,
+        "positive_open_interest_events": 67572,
+        "preliminary_events": 70967,
+        "records": 789127,
+        "settlement_events": 132527,
+        "settlement_reference_dates": 20,
+        "stat_type_counts": {
+          "17": 260652,
+          "18": 260652,
+          "3": 132527,
+          "6": 67648,
+          "9": 67648
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 86,
+        "distinct_strikes": 306,
+        "records": 210083,
+        "top_asset": {
+          "AAO": 210083
+        },
+        "top_exchange": {
+          "XNYM": 210083
+        },
+        "top_group": {
+          "1N": 81,
+          "LO": 210002
+        },
+        "top_instrument_class": {
+          "C": 105001,
+          "P": 105001,
+          "T": 81
+        },
+        "top_security_type": {
+          "OOF": 210083
+        },
+        "top_underlying": {
+          "CSXF7": 7116,
+          "CSXG7": 6970,
+          "CSXH6": 11420,
+          "CSXJ6": 11696,
+          "CSXK6": 11232,
+          "CSXM6": 11112,
+          "CSXN6": 10978,
+          "CSXQ6": 10674,
+          "CSXU6": 10558,
+          "CSXV6": 10246,
+          "CSXX6": 9698,
+          "CSXZ6": 9518
+        },
+        "unique_symbols": 8135
+      },
+      "month": "2026-03",
+      "statistics": {
+        "cleared_volume_events": 86940,
+        "final_actual_events": 55341,
+        "final_actual_reference_dates": 22,
+        "final_events": 89416,
+        "final_reference_dates": 24,
+        "final_symbol_date_pairs": 71696,
+        "final_theoretical_events": 34075,
+        "first_reference_date": "2026-02-27",
+        "last_reference_date": "2026-03-31",
+        "open_interest_events": 86940,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 3836,
+        "positive_open_interest_events": 86896,
+        "preliminary_events": 96212,
+        "records": 1019924,
+        "settlement_events": 185628,
+        "settlement_reference_dates": 24,
+        "stat_type_counts": {
+          "17": 330207,
+          "18": 330207,
+          "3": 185628,
+          "6": 86940,
+          "7": 1,
+          "8": 1,
+          "9": 86940
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 84,
+        "distinct_strikes": 322,
+        "records": 205668,
+        "top_asset": {
+          "AAO": 205668
+        },
+        "top_exchange": {
+          "XNYM": 205668
+        },
+        "top_group": {
+          "1N": 110,
+          "LO": 205558
+        },
+        "top_instrument_class": {
+          "C": 102779,
+          "P": 102779,
+          "T": 110
+        },
+        "top_security_type": {
+          "OOF": 205668
+        },
+        "top_underlying": {
+          "CSXF7": 7264,
+          "CSXG7": 7160,
+          "CSXH7": 7056,
+          "CSXJ6": 12028,
+          "CSXK6": 11098,
+          "CSXM6": 10808,
+          "CSXN6": 10740,
+          "CSXQ6": 10370,
+          "CSXU6": 10262,
+          "CSXV6": 9988,
+          "CSXX6": 9464,
+          "CSXZ6": 9254
+        },
+        "unique_symbols": 8507
+      },
+      "month": "2026-04",
+      "statistics": {
+        "cleared_volume_events": 93652,
+        "final_actual_events": 57238,
+        "final_actual_reference_dates": 22,
+        "final_events": 80497,
+        "final_reference_dates": 24,
+        "final_symbol_date_pairs": 69808,
+        "final_theoretical_events": 23259,
+        "first_reference_date": "2026-03-31",
+        "last_reference_date": "2026-05-01",
+        "open_interest_events": 93652,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 1276,
+        "positive_open_interest_events": 93354,
+        "preliminary_events": 91331,
+        "records": 1043788,
+        "settlement_events": 171828,
+        "settlement_reference_dates": 24,
+        "stat_type_counts": {
+          "17": 342328,
+          "18": 342328,
+          "3": 171828,
+          "6": 93652,
+          "9": 93652
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 82,
+        "distinct_strikes": 320,
+        "records": 213372,
+        "top_asset": {
+          "AAO": 213372
+        },
+        "top_exchange": {
+          "XNYM": 213372
+        },
+        "top_group": {
+          "1N": 4,
+          "LO": 213368
+        },
+        "top_instrument_class": {
+          "C": 106684,
+          "P": 106684,
+          "T": 4
+        },
+        "top_security_type": {
+          "OOF": 213372
+        },
+        "top_underlying": {
+          "CSXF7": 7974,
+          "CSXG7": 7842,
+          "CSXH7": 7744,
+          "CSXJ7": 7300,
+          "CSXK6": 11700,
+          "CSXM6": 11886,
+          "CSXN6": 11824,
+          "CSXQ6": 11392,
+          "CSXU6": 11148,
+          "CSXV6": 10778,
+          "CSXX6": 10210,
+          "CSXZ6": 9966
+        },
+        "unique_symbols": 8537
+      },
+      "month": "2026-05",
+      "statistics": {
+        "cleared_volume_events": 86982,
+        "final_actual_events": 56398,
+        "final_actual_reference_dates": 20,
+        "final_events": 96574,
+        "final_reference_dates": 20,
+        "final_symbol_date_pairs": 71128,
+        "final_theoretical_events": 40176,
+        "first_reference_date": "2026-05-01",
+        "last_reference_date": "2026-05-29",
+        "open_interest_events": 86982,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 709,
+        "positive_open_interest_events": 86700,
+        "preliminary_events": 89548,
+        "records": 994252,
+        "settlement_events": 186122,
+        "settlement_reference_dates": 20,
+        "stat_type_counts": {
+          "17": 317083,
+          "18": 317083,
+          "3": 186122,
+          "6": 86982,
+          "9": 86982
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 82,
+        "distinct_strikes": 311,
+        "records": 206136,
+        "top_asset": {
+          "AAO": 206136
+        },
+        "top_exchange": {
+          "XNYM": 206136
+        },
+        "top_group": {
+          "1N": 180,
+          "LO": 205956
+        },
+        "top_instrument_class": {
+          "C": 102978,
+          "P": 102978,
+          "T": 180
+        },
+        "top_security_type": {
+          "OOF": 206136
+        },
+        "top_underlying": {
+          "CSXF7": 8208,
+          "CSXG7": 8052,
+          "CSXH7": 8028,
+          "CSXJ7": 7612,
+          "CSXK7": 7492,
+          "CSXM6": 11544,
+          "CSXN6": 11688,
+          "CSXQ6": 11272,
+          "CSXU6": 11012,
+          "CSXV6": 10648,
+          "CSXX6": 10076,
+          "CSXZ6": 9816
+        },
+        "unique_symbols": 8086
+      },
+      "month": "2026-06",
+      "statistics": {
+        "cleared_volume_events": 86360,
+        "final_actual_events": 53377,
+        "final_actual_reference_dates": 21,
+        "final_events": 118094,
+        "final_reference_dates": 23,
+        "final_symbol_date_pairs": 101397,
+        "final_theoretical_events": 64717,
+        "first_reference_date": "2026-05-29",
+        "last_reference_date": "2026-07-01",
+        "open_interest_events": 86360,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 693,
+        "positive_open_interest_events": 86356,
+        "preliminary_events": 130181,
+        "records": 1099983,
+        "settlement_events": 248275,
+        "settlement_reference_dates": 23,
+        "stat_type_counts": {
+          "17": 339494,
+          "18": 339494,
+          "3": 248275,
+          "6": 86360,
+          "9": 86360
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 82,
+        "distinct_strikes": 332,
+        "records": 210970,
+        "top_asset": {
+          "AAO": 210970
+        },
+        "top_exchange": {
+          "XNYM": 210970
+        },
+        "top_group": {
+          "1N": 112,
+          "LO": 210858
+        },
+        "top_instrument_class": {
+          "C": 105429,
+          "P": 105429,
+          "T": 112
+        },
+        "top_security_type": {
+          "OOF": 210970
+        },
+        "top_underlying": {
+          "CSXF7": 8718,
+          "CSXG7": 8582,
+          "CSXH7": 8582,
+          "CSXJ7": 8084,
+          "CSXK7": 7976,
+          "CSXM7": 7922,
+          "CSXN6": 12166,
+          "CSXQ6": 11752,
+          "CSXU6": 11482,
+          "CSXV6": 11224,
+          "CSXX6": 10630,
+          "CSXZ6": 10390
+        },
+        "unique_symbols": 8408
+      },
+      "month": "2026-07",
+      "statistics": {
+        "cleared_volume_events": 91925,
+        "final_actual_events": 52944,
+        "final_actual_reference_dates": 21,
+        "final_events": 76123,
+        "final_reference_dates": 21,
+        "final_symbol_date_pairs": 65859,
+        "final_theoretical_events": 23179,
+        "first_reference_date": "2026-07-01",
+        "last_reference_date": "2026-07-31",
+        "open_interest_events": 91925,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 1720,
+        "positive_open_interest_events": 91575,
+        "preliminary_events": 94750,
+        "records": 1031499,
+        "settlement_events": 170873,
+        "settlement_reference_dates": 22,
+        "stat_type_counts": {
+          "17": 338388,
+          "18": 338388,
+          "3": 170873,
+          "6": 91925,
+          "9": 91925
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 81,
+        "distinct_strikes": 313,
+        "records": 199506,
+        "top_asset": {
+          "AAO": 199506
+        },
+        "top_exchange": {
+          "XNYM": 199506
+        },
+        "top_group": {
+          "1N": 104,
+          "LO": 199402
+        },
+        "top_instrument_class": {
+          "C": 99701,
+          "P": 99701,
+          "T": 104
+        },
+        "top_security_type": {
+          "OOF": 199506
+        },
+        "top_underlying": {
+          "CSXF7": 8772,
+          "CSXG7": 8646,
+          "CSXH7": 8646,
+          "CSXJ7": 8072,
+          "CSXK7": 7968,
+          "CSXM7": 7916,
+          "CSXN7": 7400,
+          "CSXQ6": 11388,
+          "CSXU6": 11170,
+          "CSXV6": 11098,
+          "CSXX6": 10526,
+          "CSXZ6": 10318
+        },
+        "unique_symbols": 7852
+      },
+      "month": "2026-08",
+      "statistics": {
+        "cleared_volume_events": 89664,
+        "final_actual_events": 57567,
+        "final_actual_reference_dates": 22,
+        "final_events": 85440,
+        "final_reference_dates": 22,
+        "final_symbol_date_pairs": 74674,
+        "final_theoretical_events": 27873,
+        "first_reference_date": "2026-07-31",
+        "last_reference_date": "2026-08-31",
+        "open_interest_events": 89664,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 934,
+        "positive_open_interest_events": 89664,
+        "preliminary_events": 92826,
+        "records": 1010418,
+        "settlement_events": 178266,
+        "settlement_reference_dates": 22,
+        "stat_type_counts": {
+          "17": 326412,
+          "18": 326412,
+          "3": 178266,
+          "6": 89664,
+          "9": 89664
+        }
+      }
+    },
+    {
+      "definitions": {
+        "distinct_expirations": 79,
+        "distinct_strikes": 340,
+        "records": 208752,
+        "top_asset": {
+          "AAO": 208752
+        },
+        "top_exchange": {
+          "XNYM": 208752
+        },
+        "top_group": {
+          "1N": 150,
+          "LO": 208602
+        },
+        "top_instrument_class": {
+          "C": 104301,
+          "P": 104301,
+          "T": 150
+        },
+        "top_security_type": {
+          "OOF": 208752
+        },
+        "top_underlying": {
+          "CSXF7": 10138,
+          "CSXG7": 9896,
+          "CSXH7": 9754,
+          "CSXJ7": 8802,
+          "CSXK7": 8630,
+          "CSXM7": 8558,
+          "CSXN7": 8012,
+          "CSXQ7": 7952,
+          "CSXU6": 12056,
+          "CSXV6": 12052,
+          "CSXX6": 11376,
+          "CSXZ6": 11050
+        },
+        "unique_symbols": 8439
+      },
+      "month": "2026-09",
+      "statistics": {
+        "cleared_volume_events": 94884,
+        "final_actual_events": 56086,
+        "final_actual_reference_dates": 21,
+        "final_events": 84224,
+        "final_reference_dates": 21,
+        "final_symbol_date_pairs": 67622,
+        "final_theoretical_events": 28138,
+        "first_reference_date": "2026-09-01",
+        "last_reference_date": "2026-09-30",
+        "open_interest_events": 94884,
+        "pair_key": "mapped symbol, needs contract validation",
+        "positive_cleared_volume_events": 1658,
+        "positive_open_interest_events": 94500,
+        "preliminary_events": 102177,
+        "records": 1013033,
+        "settlement_events": 186401,
+        "settlement_reference_dates": 21,
+        "stat_type_counts": {
+          "17": 318432,
+          "18": 318432,
+          "3": 186401,
+          "6": 94884,
+          "9": 94884
+        }
+      }
+    }
+  ],
+  "no_network_requests": true,
+  "summary": {
+    "distinct_final_reference_dates": 1701,
+    "final_actual_events": 4027696,
+    "final_events": 5899096,
+    "final_theoretical_events": 1871400,
+    "months_processed": 81,
+    "positive_cleared_volume_events": 99878,
+    "positive_open_interest_events": 5781953,
+    "records": 70154064,
+    "settlement_events": 13412045
+  }
+}

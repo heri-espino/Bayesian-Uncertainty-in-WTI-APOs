@@ -1,0 +1,17 @@
+{
+  "data_contacted_provider": false,
+  "settlement_events": 248275,
+  "without_same_event_day_asof_definition": 201293,
+  "matched_asof_definition_events": 46982,
+  "outright_matched_events": 46982,
+  "excluded_non_outright_or_inactive_events": 0,
+  "tentative_publisher_id_day_reference_keys": 32258,
+  "ambiguous_tied_keys_excluded": 0,
+  "selected_final_active_keys": 32258,
+  "selected_actual_flagged": 8255,
+  "selected_theoretical_flagged": 24003,
+  "selected_published_on_different_utc_date": 31902,
+  "distinct_selected_reference_dates": 15,
+  "warning": "Strict same-event-day as-of diagnostic only. Publication UTC day may differ from CME ts_ref; not stable contract identity, not price-level panel, and not forward-eligible dates.",
+  "month": "2026-06"
+}

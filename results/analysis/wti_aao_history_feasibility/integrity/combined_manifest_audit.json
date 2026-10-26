@@ -1,0 +1,11 @@
+{
+  "success": true,
+  "data_contacted_provider": false,
+  "sha256_verified": true,
+  "files_verified": 162,
+  "files_referenced": 162,
+  "month_count": 81,
+  "expected_month_count": 81,
+  "combined_quoted_usd": 17.49357489,
+  "issues": []
+}

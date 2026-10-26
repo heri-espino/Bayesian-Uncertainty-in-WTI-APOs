@@ -1,0 +1,1635 @@
+{
+  "budget_usd": 40.0,
+  "dataset": "GLBX.MDP3",
+  "eligible_months": 80,
+  "eligible_quote_usd": 17.33487324,
+  "end": "2026-10-01",
+  "note": "Metadata counts and quotes do not verify actual final settlements",
+  "parent": "AAO.OPT",
+  "requests": [
+    {
+      "count": 137464,
+      "eligible": true,
+      "end": "2020-02-01",
+      "id": "definition__2020-01-01__2020-02-01",
+      "quote_usd": 0.113172620535,
+      "schema": "definition",
+      "start": "2020-01-01",
+      "status": "positive"
+    },
+    {
+      "count": 821907,
+      "eligible": true,
+      "end": "2020-02-01",
+      "id": "statistics__2020-01-01__2020-02-01",
+      "quote_usd": 0.061236843467,
+      "schema": "statistics",
+      "start": "2020-01-01",
+      "status": "positive"
+    },
+    {
+      "count": 120274,
+      "eligible": true,
+      "end": "2020-03-01",
+      "id": "definition__2020-02-01__2020-03-01",
+      "quote_usd": 0.099020279944,
+      "schema": "definition",
+      "start": "2020-02-01",
+      "status": "positive"
+    },
+    {
+      "count": 689409,
+      "eligible": true,
+      "end": "2020-03-01",
+      "id": "statistics__2020-02-01__2020-03-01",
+      "quote_usd": 0.051364973187,
+      "schema": "statistics",
+      "start": "2020-02-01",
+      "status": "positive"
+    },
+    {
+      "count": 162125,
+      "eligible": true,
+      "end": "2020-04-01",
+      "id": "definition__2020-03-01__2020-04-01",
+      "quote_usd": 0.13347575441,
+      "schema": "definition",
+      "start": "2020-03-01",
+      "status": "positive"
+    },
+    {
+      "count": 941047,
+      "eligible": true,
+      "end": "2020-04-01",
+      "id": "statistics__2020-03-01__2020-04-01",
+      "quote_usd": 0.07011346519,
+      "schema": "statistics",
+      "start": "2020-03-01",
+      "status": "positive"
+    },
+    {
+      "count": 173274,
+      "eligible": true,
+      "end": "2020-05-01",
+      "id": "definition__2020-04-01__2020-05-01",
+      "quote_usd": 0.14265460521,
+      "schema": "definition",
+      "start": "2020-04-01",
+      "status": "positive"
+    },
+    {
+      "count": 909762,
+      "eligible": true,
+      "end": "2020-05-01",
+      "id": "statistics__2020-04-01__2020-05-01",
+      "quote_usd": 0.06778255105,
+      "schema": "statistics",
+      "start": "2020-04-01",
+      "status": "positive"
+    },
+    {
+      "count": 169334,
+      "eligible": true,
+      "end": "2020-06-01",
+      "id": "definition__2020-05-01__2020-06-01",
+      "quote_usd": 0.139410845935,
+      "schema": "definition",
+      "start": "2020-05-01",
+      "status": "positive"
+    },
+    {
+      "count": 834110,
+      "eligible": true,
+      "end": "2020-06-01",
+      "id": "statistics__2020-05-01__2020-06-01",
+      "quote_usd": 0.062146037817,
+      "schema": "statistics",
+      "start": "2020-05-01",
+      "status": "positive"
+    },
+    {
+      "count": 164336,
+      "eligible": true,
+      "end": "2020-07-01",
+      "id": "definition__2020-06-01__2020-07-01",
+      "quote_usd": 0.135296046734,
+      "schema": "definition",
+      "start": "2020-06-01",
+      "status": "positive"
+    },
+    {
+      "count": 769858,
+      "eligible": true,
+      "end": "2020-07-01",
+      "id": "statistics__2020-06-01__2020-07-01",
+      "quote_usd": 0.057358890772,
+      "schema": "statistics",
+      "start": "2020-06-01",
+      "status": "positive"
+    },
+    {
+      "count": 169364,
+      "eligible": true,
+      "end": "2020-08-01",
+      "id": "definition__2020-07-01__2020-08-01",
+      "quote_usd": 0.13943554461,
+      "schema": "definition",
+      "start": "2020-07-01",
+      "status": "positive"
+    },
+    {
+      "count": 835254,
+      "eligible": true,
+      "end": "2020-08-01",
+      "id": "statistics__2020-07-01__2020-08-01",
+      "quote_usd": 0.062231272459,
+      "schema": "statistics",
+      "start": "2020-07-01",
+      "status": "positive"
+    },
+    {
+      "count": 158386,
+      "eligible": true,
+      "end": "2020-09-01",
+      "id": "definition__2020-08-01__2020-09-01",
+      "quote_usd": 0.130397476256,
+      "schema": "definition",
+      "start": "2020-08-01",
+      "status": "positive"
+    },
+    {
+      "count": 796921,
+      "eligible": true,
+      "end": "2020-09-01",
+      "id": "statistics__2020-08-01__2020-09-01",
+      "quote_usd": 0.059375241399,
+      "schema": "statistics",
+      "start": "2020-08-01",
+      "status": "positive"
+    },
+    {
+      "count": 154668,
+      "eligible": true,
+      "end": "2020-10-01",
+      "id": "definition__2020-09-01__2020-10-01",
+      "quote_usd": 0.127336487174,
+      "schema": "definition",
+      "start": "2020-09-01",
+      "status": "positive"
+    },
+    {
+      "count": 663579,
+      "eligible": true,
+      "end": "2020-10-01",
+      "id": "statistics__2020-09-01__2020-10-01",
+      "quote_usd": 0.049440488219,
+      "schema": "statistics",
+      "start": "2020-09-01",
+      "status": "positive"
+    },
+    {
+      "count": 151010,
+      "eligible": true,
+      "end": "2020-11-01",
+      "id": "definition__2020-10-01__2020-11-01",
+      "quote_usd": 0.124324895442,
+      "schema": "definition",
+      "start": "2020-10-01",
+      "status": "positive"
+    },
+    {
+      "count": 636265,
+      "eligible": true,
+      "end": "2020-11-01",
+      "id": "statistics__2020-10-01__2020-11-01",
+      "quote_usd": 0.047405436635,
+      "schema": "statistics",
+      "start": "2020-10-01",
+      "status": "positive"
+    },
+    {
+      "count": 148578,
+      "eligible": true,
+      "end": "2020-12-01",
+      "id": "definition__2020-11-01__2020-12-01",
+      "quote_usd": 0.122322656214,
+      "schema": "definition",
+      "start": "2020-11-01",
+      "status": "positive"
+    },
+    {
+      "count": 602791,
+      "eligible": true,
+      "end": "2020-12-01",
+      "id": "statistics__2020-11-01__2020-12-01",
+      "quote_usd": 0.044911429286,
+      "schema": "statistics",
+      "start": "2020-11-01",
+      "status": "positive"
+    },
+    {
+      "count": 158036,
+      "eligible": true,
+      "end": "2021-01-01",
+      "id": "definition__2020-12-01__2021-01-01",
+      "quote_usd": 0.130109325051,
+      "schema": "definition",
+      "start": "2020-12-01",
+      "status": "positive"
+    },
+    {
+      "count": 682695,
+      "eligible": true,
+      "end": "2021-01-01",
+      "id": "statistics__2020-12-01__2021-01-01",
+      "quote_usd": 0.050864741206,
+      "schema": "statistics",
+      "start": "2020-12-01",
+      "status": "positive"
+    },
+    {
+      "count": 150814,
+      "eligible": true,
+      "end": "2021-02-01",
+      "id": "definition__2021-01-01__2021-02-01",
+      "quote_usd": 0.124163530767,
+      "schema": "definition",
+      "start": "2021-01-01",
+      "status": "positive"
+    },
+    {
+      "count": 611551,
+      "eligible": true,
+      "end": "2021-02-01",
+      "id": "statistics__2021-01-01__2021-02-01",
+      "quote_usd": 0.045564100146,
+      "schema": "statistics",
+      "start": "2021-01-01",
+      "status": "positive"
+    },
+    {
+      "count": 140790,
+      "eligible": false,
+      "end": "2021-03-01",
+      "error": "BentoServerError: 504 The remote gateway timed out.",
+      "id": "definition__2021-02-01__2021-03-01",
+      "quote_usd": null,
+      "schema": "definition",
+      "start": "2021-02-01",
+      "status": "error"
+    },
+    {
+      "count": 574328,
+      "eligible": false,
+      "end": "2021-03-01",
+      "id": "statistics__2021-02-01__2021-03-01",
+      "quote_usd": 0.042790770531,
+      "schema": "statistics",
+      "start": "2021-02-01",
+      "status": "positive"
+    },
+    {
+      "count": 167330,
+      "eligible": true,
+      "end": "2021-04-01",
+      "id": "definition__2021-03-01__2021-04-01",
+      "quote_usd": 0.137760974467,
+      "schema": "definition",
+      "start": "2021-03-01",
+      "status": "positive"
+    },
+    {
+      "count": 719280,
+      "eligible": true,
+      "end": "2021-04-01",
+      "id": "statistics__2021-03-01__2021-04-01",
+      "quote_usd": 0.053590536118,
+      "schema": "statistics",
+      "start": "2021-03-01",
+      "status": "positive"
+    },
+    {
+      "count": 160256,
+      "eligible": true,
+      "end": "2021-05-01",
+      "id": "definition__2021-04-01__2021-05-01",
+      "quote_usd": 0.131937026978,
+      "schema": "definition",
+      "start": "2021-04-01",
+      "status": "positive"
+    },
+    {
+      "count": 665351,
+      "eligible": true,
+      "end": "2021-05-01",
+      "id": "statistics__2021-04-01__2021-05-01",
+      "quote_usd": 0.049572512507,
+      "schema": "statistics",
+      "start": "2021-04-01",
+      "status": "positive"
+    },
+    {
+      "count": 161776,
+      "eligible": true,
+      "end": "2021-06-01",
+      "id": "definition__2021-05-01__2021-06-01",
+      "quote_usd": 0.133188426495,
+      "schema": "definition",
+      "start": "2021-05-01",
+      "status": "positive"
+    },
+    {
+      "count": 648559,
+      "eligible": true,
+      "end": "2021-06-01",
+      "id": "statistics__2021-05-01__2021-06-01",
+      "quote_usd": 0.048321411014,
+      "schema": "statistics",
+      "start": "2021-05-01",
+      "status": "positive"
+    },
+    {
+      "count": 167234,
+      "eligible": true,
+      "end": "2021-07-01",
+      "id": "definition__2021-06-01__2021-07-01",
+      "quote_usd": 0.137681938708,
+      "schema": "definition",
+      "start": "2021-06-01",
+      "status": "positive"
+    },
+    {
+      "count": 715568,
+      "eligible": true,
+      "end": "2021-07-01",
+      "id": "statistics__2021-06-01__2021-07-01",
+      "quote_usd": 0.053313970566,
+      "schema": "statistics",
+      "start": "2021-06-01",
+      "status": "positive"
+    },
+    {
+      "count": 171080,
+      "eligible": true,
+      "end": "2021-08-01",
+      "id": "definition__2021-07-01__2021-08-01",
+      "quote_usd": 0.140848308802,
+      "schema": "definition",
+      "start": "2021-07-01",
+      "status": "positive"
+    },
+    {
+      "count": 707965,
+      "eligible": true,
+      "end": "2021-08-01",
+      "id": "statistics__2021-07-01__2021-08-01",
+      "quote_usd": 0.052747502923,
+      "schema": "statistics",
+      "start": "2021-07-01",
+      "status": "positive"
+    },
+    {
+      "count": 172748,
+      "eligible": true,
+      "end": "2021-09-01",
+      "id": "definition__2021-08-01__2021-09-01",
+      "quote_usd": 0.142221555114,
+      "schema": "definition",
+      "start": "2021-08-01",
+      "status": "positive"
+    },
+    {
+      "count": 895975,
+      "eligible": true,
+      "end": "2021-09-01",
+      "id": "statistics__2021-08-01__2021-09-01",
+      "quote_usd": 0.066755339503,
+      "schema": "statistics",
+      "start": "2021-08-01",
+      "status": "positive"
+    },
+    {
+      "count": 163276,
+      "eligible": true,
+      "end": "2021-10-01",
+      "id": "definition__2021-09-01__2021-10-01",
+      "quote_usd": 0.134423360229,
+      "schema": "definition",
+      "start": "2021-09-01",
+      "status": "positive"
+    },
+    {
+      "count": 836369,
+      "eligible": true,
+      "end": "2021-10-01",
+      "id": "statistics__2021-09-01__2021-10-01",
+      "quote_usd": 0.062314346433,
+      "schema": "statistics",
+      "start": "2021-09-01",
+      "status": "positive"
+    },
+    {
+      "count": 171998,
+      "eligible": true,
+      "end": "2021-11-01",
+      "id": "definition__2021-10-01__2021-11-01",
+      "quote_usd": 0.141604088247,
+      "schema": "definition",
+      "start": "2021-10-01",
+      "status": "positive"
+    },
+    {
+      "count": 851379,
+      "eligible": true,
+      "end": "2021-11-01",
+      "id": "statistics__2021-10-01__2021-11-01",
+      "quote_usd": 0.06343267858,
+      "schema": "statistics",
+      "start": "2021-10-01",
+      "status": "positive"
+    },
+    {
+      "count": 170844,
+      "eligible": true,
+      "end": "2021-12-01",
+      "id": "definition__2021-11-01__2021-12-01",
+      "quote_usd": 0.140654012561,
+      "schema": "definition",
+      "start": "2021-11-01",
+      "status": "positive"
+    },
+    {
+      "count": 817199,
+      "eligible": true,
+      "end": "2021-12-01",
+      "id": "statistics__2021-11-01__2021-12-01",
+      "quote_usd": 0.060886070132,
+      "schema": "statistics",
+      "start": "2021-11-01",
+      "status": "positive"
+    },
+    {
+      "count": 173868,
+      "eligible": true,
+      "end": "2022-01-01",
+      "id": "definition__2021-12-01__2022-01-01",
+      "quote_usd": 0.143143638968,
+      "schema": "definition",
+      "start": "2021-12-01",
+      "status": "positive"
+    },
+    {
+      "count": 876535,
+      "eligible": true,
+      "end": "2022-01-01",
+      "id": "statistics__2021-12-01__2022-01-01",
+      "quote_usd": 0.065306946635,
+      "schema": "statistics",
+      "start": "2021-12-01",
+      "status": "positive"
+    },
+    {
+      "count": 168884,
+      "eligible": true,
+      "end": "2022-02-01",
+      "id": "definition__2022-01-01__2022-02-01",
+      "quote_usd": 0.139040365815,
+      "schema": "definition",
+      "start": "2022-01-01",
+      "status": "positive"
+    },
+    {
+      "count": 805164,
+      "eligible": true,
+      "end": "2022-02-01",
+      "id": "statistics__2022-01-01__2022-02-01",
+      "quote_usd": 0.059989392757,
+      "schema": "statistics",
+      "start": "2022-01-01",
+      "status": "positive"
+    },
+    {
+      "count": 168736,
+      "eligible": true,
+      "end": "2022-03-01",
+      "id": "definition__2022-02-01__2022-03-01",
+      "quote_usd": 0.13891851902,
+      "schema": "definition",
+      "start": "2022-02-01",
+      "status": "positive"
+    },
+    {
+      "count": 792439,
+      "eligible": true,
+      "end": "2022-03-01",
+      "id": "statistics__2022-02-01__2022-03-01",
+      "quote_usd": 0.059041306376,
+      "schema": "statistics",
+      "start": "2022-02-01",
+      "status": "positive"
+    },
+    {
+      "count": 220232,
+      "eligible": true,
+      "end": "2022-04-01",
+      "id": "definition__2022-03-01__2022-04-01",
+      "quote_usd": 0.181314617395,
+      "schema": "definition",
+      "start": "2022-03-01",
+      "status": "positive"
+    },
+    {
+      "count": 1090938,
+      "eligible": true,
+      "end": "2022-04-01",
+      "id": "statistics__2022-03-01__2022-04-01",
+      "quote_usd": 0.081281214952,
+      "schema": "statistics",
+      "start": "2022-03-01",
+      "status": "positive"
+    },
+    {
+      "count": 203938,
+      "eligible": true,
+      "end": "2022-05-01",
+      "id": "definition__2022-04-01__2022-05-01",
+      "quote_usd": 0.167899943888,
+      "schema": "definition",
+      "start": "2022-04-01",
+      "status": "positive"
+    },
+    {
+      "count": 952330,
+      "eligible": true,
+      "end": "2022-05-01",
+      "id": "statistics__2022-04-01__2022-05-01",
+      "quote_usd": 0.070954114199,
+      "schema": "statistics",
+      "start": "2022-04-01",
+      "status": "positive"
+    },
+    {
+      "count": 217904,
+      "eligible": true,
+      "end": "2022-06-01",
+      "id": "definition__2022-05-01__2022-06-01",
+      "quote_usd": 0.17939800024,
+      "schema": "definition",
+      "start": "2022-05-01",
+      "status": "positive"
+    },
+    {
+      "count": 1018005,
+      "eligible": true,
+      "end": "2022-06-01",
+      "id": "statistics__2022-05-01__2022-06-01",
+      "quote_usd": 0.075847283006,
+      "schema": "statistics",
+      "start": "2022-05-01",
+      "status": "positive"
+    },
+    {
+      "count": 223380,
+      "eligible": true,
+      "end": "2022-07-01",
+      "id": "definition__2022-06-01__2022-07-01",
+      "quote_usd": 0.183906331658,
+      "schema": "definition",
+      "start": "2022-06-01",
+      "status": "positive"
+    },
+    {
+      "count": 1041110,
+      "eligible": true,
+      "end": "2022-07-01",
+      "id": "statistics__2022-06-01__2022-07-01",
+      "quote_usd": 0.077568739653,
+      "schema": "statistics",
+      "start": "2022-06-01",
+      "status": "positive"
+    },
+    {
+      "count": 216448,
+      "eligible": true,
+      "end": "2022-08-01",
+      "id": "definition__2022-07-01__2022-08-01",
+      "quote_usd": 0.178199291229,
+      "schema": "definition",
+      "start": "2022-07-01",
+      "status": "positive"
+    },
+    {
+      "count": 996212,
+      "eligible": true,
+      "end": "2022-08-01",
+      "id": "statistics__2022-07-01__2022-08-01",
+      "quote_usd": 0.074223577976,
+      "schema": "statistics",
+      "start": "2022-07-01",
+      "status": "positive"
+    },
+    {
+      "count": 215982,
+      "eligible": true,
+      "end": "2022-09-01",
+      "id": "definition__2022-08-01__2022-09-01",
+      "quote_usd": 0.177815638483,
+      "schema": "definition",
+      "start": "2022-08-01",
+      "status": "positive"
+    },
+    {
+      "count": 1082797,
+      "eligible": true,
+      "end": "2022-09-01",
+      "id": "statistics__2022-08-01__2022-09-01",
+      "quote_usd": 0.080674663186,
+      "schema": "statistics",
+      "start": "2022-08-01",
+      "status": "positive"
+    },
+    {
+      "count": 204207,
+      "eligible": true,
+      "end": "2022-10-01",
+      "id": "definition__2022-09-01__2022-10-01",
+      "quote_usd": 0.168121408671,
+      "schema": "definition",
+      "start": "2022-09-01",
+      "status": "positive"
+    },
+    {
+      "count": 940181,
+      "eligible": true,
+      "end": "2022-10-01",
+      "id": "statistics__2022-09-01__2022-10-01",
+      "quote_usd": 0.070048943162,
+      "schema": "statistics",
+      "start": "2022-09-01",
+      "status": "positive"
+    },
+    {
+      "count": 200178,
+      "eligible": true,
+      "end": "2022-11-01",
+      "id": "definition__2022-10-01__2022-11-01",
+      "quote_usd": 0.164804376662,
+      "schema": "definition",
+      "start": "2022-10-01",
+      "status": "positive"
+    },
+    {
+      "count": 960811,
+      "eligible": true,
+      "end": "2022-11-01",
+      "id": "statistics__2022-10-01__2022-11-01",
+      "quote_usd": 0.071585997939,
+      "schema": "statistics",
+      "start": "2022-10-01",
+      "status": "positive"
+    },
+    {
+      "count": 195176,
+      "eligible": true,
+      "end": "2022-12-01",
+      "id": "definition__2022-11-01__2022-12-01",
+      "quote_usd": 0.160686284304,
+      "schema": "definition",
+      "start": "2022-11-01",
+      "status": "positive"
+    },
+    {
+      "count": 894477,
+      "eligible": true,
+      "end": "2022-12-01",
+      "id": "statistics__2022-11-01__2022-12-01",
+      "quote_usd": 0.066643729806,
+      "schema": "statistics",
+      "start": "2022-11-01",
+      "status": "positive"
+    },
+    {
+      "count": 185808,
+      "eligible": true,
+      "end": "2023-01-01",
+      "id": "definition__2022-12-01__2023-01-01",
+      "quote_usd": 0.152973711491,
+      "schema": "definition",
+      "start": "2022-12-01",
+      "status": "positive"
+    },
+    {
+      "count": 863504,
+      "eligible": true,
+      "end": "2023-01-01",
+      "id": "statistics__2022-12-01__2023-01-01",
+      "quote_usd": 0.064336061478,
+      "schema": "statistics",
+      "start": "2022-12-01",
+      "status": "positive"
+    },
+    {
+      "count": 184440,
+      "eligible": true,
+      "end": "2023-02-01",
+      "id": "definition__2023-01-01__2023-02-01",
+      "quote_usd": 0.151847451925,
+      "schema": "definition",
+      "start": "2023-01-01",
+      "status": "positive"
+    },
+    {
+      "count": 833118,
+      "eligible": true,
+      "end": "2023-02-01",
+      "id": "statistics__2023-01-01__2023-02-01",
+      "quote_usd": 0.062072128057,
+      "schema": "statistics",
+      "start": "2023-01-01",
+      "status": "positive"
+    },
+    {
+      "count": 159994,
+      "eligible": true,
+      "end": "2023-03-01",
+      "id": "definition__2023-02-01__2023-03-01",
+      "quote_usd": 0.131721325219,
+      "schema": "definition",
+      "start": "2023-02-01",
+      "status": "positive"
+    },
+    {
+      "count": 767586,
+      "eligible": true,
+      "end": "2023-03-01",
+      "id": "statistics__2023-02-01__2023-03-01",
+      "quote_usd": 0.057189613581,
+      "schema": "statistics",
+      "start": "2023-02-01",
+      "status": "positive"
+    },
+    {
+      "count": 177288,
+      "eligible": true,
+      "end": "2023-04-01",
+      "id": "definition__2023-03-01__2023-04-01",
+      "quote_usd": 0.145959287882,
+      "schema": "definition",
+      "start": "2023-03-01",
+      "status": "positive"
+    },
+    {
+      "count": 886425,
+      "eligible": true,
+      "end": "2023-04-01",
+      "id": "statistics__2023-03-01__2023-04-01",
+      "quote_usd": 0.066043809056,
+      "schema": "statistics",
+      "start": "2023-03-01",
+      "status": "positive"
+    },
+    {
+      "count": 160848,
+      "eligible": true,
+      "end": "2023-05-01",
+      "id": "definition__2023-04-01__2023-05-01",
+      "quote_usd": 0.132424414158,
+      "schema": "definition",
+      "start": "2023-04-01",
+      "status": "positive"
+    },
+    {
+      "count": 795862,
+      "eligible": true,
+      "end": "2023-05-01",
+      "id": "statistics__2023-04-01__2023-05-01",
+      "quote_usd": 0.05929633975,
+      "schema": "statistics",
+      "start": "2023-04-01",
+      "status": "positive"
+    },
+    {
+      "count": 172936,
+      "eligible": true,
+      "end": "2023-06-01",
+      "id": "definition__2023-05-01__2023-06-01",
+      "quote_usd": 0.142376333475,
+      "schema": "definition",
+      "start": "2023-05-01",
+      "status": "positive"
+    },
+    {
+      "count": 844878,
+      "eligible": true,
+      "end": "2023-06-01",
+      "id": "statistics__2023-05-01__2023-06-01",
+      "quote_usd": 0.062948316336,
+      "schema": "statistics",
+      "start": "2023-05-01",
+      "status": "positive"
+    },
+    {
+      "count": 172378,
+      "eligible": true,
+      "end": "2023-07-01",
+      "id": "definition__2023-06-01__2023-07-01",
+      "quote_usd": 0.141916938126,
+      "schema": "definition",
+      "start": "2023-06-01",
+      "status": "positive"
+    },
+    {
+      "count": 809188,
+      "eligible": true,
+      "end": "2023-07-01",
+      "id": "statistics__2023-06-01__2023-07-01",
+      "quote_usd": 0.060289204121,
+      "schema": "statistics",
+      "start": "2023-06-01",
+      "status": "positive"
+    },
+    {
+      "count": 170343,
+      "eligible": true,
+      "end": "2023-08-01",
+      "id": "definition__2023-07-01__2023-08-01",
+      "quote_usd": 0.140241544694,
+      "schema": "definition",
+      "start": "2023-07-01",
+      "status": "positive"
+    },
+    {
+      "count": 808024,
+      "eligible": true,
+      "end": "2023-08-01",
+      "id": "statistics__2023-07-01__2023-08-01",
+      "quote_usd": 0.060202479362,
+      "schema": "statistics",
+      "start": "2023-07-01",
+      "status": "positive"
+    },
+    {
+      "count": 188276,
+      "eligible": true,
+      "end": "2023-09-01",
+      "id": "definition__2023-08-01__2023-09-01",
+      "quote_usd": 0.155005589128,
+      "schema": "definition",
+      "start": "2023-08-01",
+      "status": "positive"
+    },
+    {
+      "count": 947877,
+      "eligible": true,
+      "end": "2023-09-01",
+      "id": "statistics__2023-08-01__2023-09-01",
+      "quote_usd": 0.070622339845,
+      "schema": "statistics",
+      "start": "2023-08-01",
+      "status": "positive"
+    },
+    {
+      "count": 176890,
+      "eligible": true,
+      "end": "2023-10-01",
+      "id": "definition__2023-09-01__2023-10-01",
+      "quote_usd": 0.145631618798,
+      "schema": "definition",
+      "start": "2023-09-01",
+      "status": "positive"
+    },
+    {
+      "count": 827644,
+      "eligible": true,
+      "end": "2023-10-01",
+      "id": "statistics__2023-09-01__2023-10-01",
+      "quote_usd": 0.061664283276,
+      "schema": "statistics",
+      "start": "2023-09-01",
+      "status": "positive"
+    },
+    {
+      "count": 193930,
+      "eligible": true,
+      "end": "2023-11-01",
+      "id": "definition__2023-10-01__2023-11-01",
+      "quote_usd": 0.159660466015,
+      "schema": "definition",
+      "start": "2023-10-01",
+      "status": "positive"
+    },
+    {
+      "count": 950923,
+      "eligible": true,
+      "end": "2023-11-01",
+      "id": "statistics__2023-10-01__2023-11-01",
+      "quote_usd": 0.07084928453,
+      "schema": "statistics",
+      "start": "2023-10-01",
+      "status": "positive"
+    },
+    {
+      "count": 208340,
+      "eligible": true,
+      "end": "2023-12-01",
+      "id": "definition__2023-11-01__2023-12-01",
+      "quote_usd": 0.171524062753,
+      "schema": "definition",
+      "start": "2023-11-01",
+      "status": "positive"
+    },
+    {
+      "count": 922801,
+      "eligible": true,
+      "end": "2023-12-01",
+      "id": "statistics__2023-11-01__2023-12-01",
+      "quote_usd": 0.068754032254,
+      "schema": "statistics",
+      "start": "2023-11-01",
+      "status": "positive"
+    },
+    {
+      "count": 208408,
+      "eligible": true,
+      "end": "2024-01-01",
+      "id": "definition__2023-12-01__2024-01-01",
+      "quote_usd": 0.171580046415,
+      "schema": "definition",
+      "start": "2023-12-01",
+      "status": "positive"
+    },
+    {
+      "count": 939479,
+      "eligible": true,
+      "end": "2024-01-01",
+      "id": "statistics__2023-12-01__2024-01-01",
+      "quote_usd": 0.069996640086,
+      "schema": "statistics",
+      "start": "2023-12-01",
+      "status": "positive"
+    },
+    {
+      "count": 211880,
+      "eligible": true,
+      "end": "2024-02-01",
+      "id": "definition__2024-01-01__2024-02-01",
+      "quote_usd": 0.174438506365,
+      "schema": "definition",
+      "start": "2024-01-01",
+      "status": "positive"
+    },
+    {
+      "count": 931467,
+      "eligible": true,
+      "end": "2024-02-01",
+      "id": "statistics__2024-01-01__2024-02-01",
+      "quote_usd": 0.069399699569,
+      "schema": "statistics",
+      "start": "2024-01-01",
+      "status": "positive"
+    },
+    {
+      "count": 190714,
+      "eligible": true,
+      "end": "2024-03-01",
+      "id": "definition__2024-02-01__2024-03-01",
+      "quote_usd": 0.15701276809,
+      "schema": "definition",
+      "start": "2024-02-01",
+      "status": "positive"
+    },
+    {
+      "count": 868126,
+      "eligible": true,
+      "end": "2024-03-01",
+      "id": "statistics__2024-02-01__2024-03-01",
+      "quote_usd": 0.064680427313,
+      "schema": "statistics",
+      "start": "2024-02-01",
+      "status": "positive"
+    },
+    {
+      "count": 194220,
+      "eligible": true,
+      "end": "2024-04-01",
+      "id": "definition__2024-03-01__2024-04-01",
+      "quote_usd": 0.159899219871,
+      "schema": "definition",
+      "start": "2024-03-01",
+      "status": "positive"
+    },
+    {
+      "count": 908225,
+      "eligible": true,
+      "end": "2024-04-01",
+      "id": "statistics__2024-03-01__2024-04-01",
+      "quote_usd": 0.067668035626,
+      "schema": "statistics",
+      "start": "2024-03-01",
+      "status": "positive"
+    },
+    {
+      "count": 190554,
+      "eligible": true,
+      "end": "2024-05-01",
+      "id": "definition__2024-04-01__2024-05-01",
+      "quote_usd": 0.156881041825,
+      "schema": "definition",
+      "start": "2024-04-01",
+      "status": "positive"
+    },
+    {
+      "count": 920039,
+      "eligible": true,
+      "end": "2024-05-01",
+      "id": "statistics__2024-04-01__2024-05-01",
+      "quote_usd": 0.068548247218,
+      "schema": "statistics",
+      "start": "2024-04-01",
+      "status": "positive"
+    },
+    {
+      "count": 194058,
+      "eligible": true,
+      "end": "2024-06-01",
+      "id": "definition__2024-05-01__2024-06-01",
+      "quote_usd": 0.159765847027,
+      "schema": "definition",
+      "start": "2024-05-01",
+      "status": "positive"
+    },
+    {
+      "count": 893491,
+      "eligible": true,
+      "end": "2024-06-01",
+      "id": "statistics__2024-05-01__2024-06-01",
+      "quote_usd": 0.066570267081,
+      "schema": "statistics",
+      "start": "2024-05-01",
+      "status": "positive"
+    },
+    {
+      "count": 174236,
+      "eligible": true,
+      "end": "2024-07-01",
+      "id": "definition__2024-06-01__2024-07-01",
+      "quote_usd": 0.143446609378,
+      "schema": "definition",
+      "start": "2024-06-01",
+      "status": "positive"
+    },
+    {
+      "count": 786792,
+      "eligible": true,
+      "end": "2024-07-01",
+      "id": "statistics__2024-06-01__2024-07-01",
+      "quote_usd": 0.05862057209,
+      "schema": "statistics",
+      "start": "2024-06-01",
+      "status": "positive"
+    },
+    {
+      "count": 192506,
+      "eligible": true,
+      "end": "2024-08-01",
+      "id": "definition__2024-07-01__2024-08-01",
+      "quote_usd": 0.158488102257,
+      "schema": "definition",
+      "start": "2024-07-01",
+      "status": "positive"
+    },
+    {
+      "count": 880944,
+      "eligible": true,
+      "end": "2024-08-01",
+      "id": "statistics__2024-07-01__2024-08-01",
+      "quote_usd": 0.065635442734,
+      "schema": "statistics",
+      "start": "2024-07-01",
+      "status": "positive"
+    },
+    {
+      "count": 177009,
+      "eligible": true,
+      "end": "2024-09-01",
+      "id": "definition__2024-08-01__2024-09-01",
+      "quote_usd": 0.145729590207,
+      "schema": "definition",
+      "start": "2024-08-01",
+      "status": "positive"
+    },
+    {
+      "count": 839570,
+      "eligible": true,
+      "end": "2024-09-01",
+      "id": "statistics__2024-08-01__2024-09-01",
+      "quote_usd": 0.062552839518,
+      "schema": "statistics",
+      "start": "2024-08-01",
+      "status": "positive"
+    },
+    {
+      "count": 197170,
+      "eligible": true,
+      "end": "2024-10-01",
+      "id": "definition__2024-09-01__2024-10-01",
+      "quote_usd": 0.162327922881,
+      "schema": "definition",
+      "start": "2024-09-01",
+      "status": "positive"
+    },
+    {
+      "count": 867063,
+      "eligible": true,
+      "end": "2024-10-01",
+      "id": "statistics__2024-09-01__2024-10-01",
+      "quote_usd": 0.064601227641,
+      "schema": "statistics",
+      "start": "2024-09-01",
+      "status": "positive"
+    },
+    {
+      "count": 221908,
+      "eligible": true,
+      "end": "2024-11-01",
+      "id": "definition__2024-10-01__2024-11-01",
+      "quote_usd": 0.182694450021,
+      "schema": "definition",
+      "start": "2024-10-01",
+      "status": "positive"
+    },
+    {
+      "count": 1010112,
+      "eligible": true,
+      "end": "2024-11-01",
+      "id": "statistics__2024-10-01__2024-11-01",
+      "quote_usd": 0.075259208679,
+      "schema": "statistics",
+      "start": "2024-10-01",
+      "status": "positive"
+    },
+    {
+      "count": 192596,
+      "eligible": true,
+      "end": "2024-12-01",
+      "id": "definition__2024-11-01__2024-12-01",
+      "quote_usd": 0.158562198281,
+      "schema": "definition",
+      "start": "2024-11-01",
+      "status": "positive"
+    },
+    {
+      "count": 850605,
+      "eligible": true,
+      "end": "2024-12-01",
+      "id": "statistics__2024-11-01__2024-12-01",
+      "quote_usd": 0.063375011086,
+      "schema": "statistics",
+      "start": "2024-11-01",
+      "status": "positive"
+    },
+    {
+      "count": 202372,
+      "eligible": true,
+      "end": "2025-01-01",
+      "id": "definition__2024-12-01__2025-01-01",
+      "quote_usd": 0.16661067307,
+      "schema": "definition",
+      "start": "2024-12-01",
+      "status": "positive"
+    },
+    {
+      "count": 938487,
+      "eligible": true,
+      "end": "2025-01-01",
+      "id": "statistics__2024-12-01__2025-01-01",
+      "quote_usd": 0.069922730327,
+      "schema": "statistics",
+      "start": "2024-12-01",
+      "status": "positive"
+    },
+    {
+      "count": 198388,
+      "eligible": true,
+      "end": "2025-02-01",
+      "id": "definition__2025-01-01__2025-02-01",
+      "quote_usd": 0.163330689073,
+      "schema": "definition",
+      "start": "2025-01-01",
+      "status": "positive"
+    },
+    {
+      "count": 878853,
+      "eligible": true,
+      "end": "2025-02-01",
+      "id": "statistics__2025-01-01__2025-02-01",
+      "quote_usd": 0.065479651093,
+      "schema": "statistics",
+      "start": "2025-01-01",
+      "status": "positive"
+    },
+    {
+      "count": 172234,
+      "eligible": true,
+      "end": "2025-03-01",
+      "id": "definition__2025-02-01__2025-03-01",
+      "quote_usd": 0.141798384488,
+      "schema": "definition",
+      "start": "2025-02-01",
+      "status": "positive"
+    },
+    {
+      "count": 809283,
+      "eligible": true,
+      "end": "2025-03-01",
+      "id": "statistics__2025-02-01__2025-03-01",
+      "quote_usd": 0.060296282172,
+      "schema": "statistics",
+      "start": "2025-02-01",
+      "status": "positive"
+    },
+    {
+      "count": 185416,
+      "eligible": true,
+      "end": "2025-04-01",
+      "id": "definition__2025-03-01__2025-04-01",
+      "quote_usd": 0.152650982141,
+      "schema": "definition",
+      "start": "2025-03-01",
+      "status": "positive"
+    },
+    {
+      "count": 914886,
+      "eligible": true,
+      "end": "2025-04-01",
+      "id": "statistics__2025-03-01__2025-04-01",
+      "quote_usd": 0.0681643188,
+      "schema": "statistics",
+      "start": "2025-03-01",
+      "status": "positive"
+    },
+    {
+      "count": 192658,
+      "eligible": true,
+      "end": "2025-05-01",
+      "id": "definition__2025-04-01__2025-05-01",
+      "quote_usd": 0.158613242209,
+      "schema": "definition",
+      "start": "2025-04-01",
+      "status": "positive"
+    },
+    {
+      "count": 914677,
+      "eligible": true,
+      "end": "2025-05-01",
+      "id": "statistics__2025-04-01__2025-05-01",
+      "quote_usd": 0.068148747087,
+      "schema": "statistics",
+      "start": "2025-04-01",
+      "status": "positive"
+    },
+    {
+      "count": 194538,
+      "eligible": true,
+      "end": "2025-06-01",
+      "id": "definition__2025-05-01__2025-06-01",
+      "quote_usd": 0.160161025822,
+      "schema": "definition",
+      "start": "2025-05-01",
+      "status": "positive"
+    },
+    {
+      "count": 883085,
+      "eligible": true,
+      "end": "2025-06-01",
+      "id": "statistics__2025-05-01__2025-06-01",
+      "quote_usd": 0.065794959664,
+      "schema": "statistics",
+      "start": "2025-05-01",
+      "status": "positive"
+    },
+    {
+      "count": 201198,
+      "eligible": true,
+      "end": "2025-07-01",
+      "id": "definition__2025-06-01__2025-07-01",
+      "quote_usd": 0.165644131601,
+      "schema": "definition",
+      "start": "2025-06-01",
+      "status": "positive"
+    },
+    {
+      "count": 911470,
+      "eligible": true,
+      "end": "2025-07-01",
+      "id": "statistics__2025-06-01__2025-07-01",
+      "quote_usd": 0.067909806967,
+      "schema": "statistics",
+      "start": "2025-06-01",
+      "status": "positive"
+    },
+    {
+      "count": 202890,
+      "eligible": true,
+      "end": "2025-08-01",
+      "id": "definition__2025-07-01__2025-08-01",
+      "quote_usd": 0.167037136853,
+      "schema": "definition",
+      "start": "2025-07-01",
+      "status": "positive"
+    },
+    {
+      "count": 967651,
+      "eligible": true,
+      "end": "2025-08-01",
+      "id": "statistics__2025-07-01__2025-08-01",
+      "quote_usd": 0.072095617652,
+      "schema": "statistics",
+      "start": "2025-07-01",
+      "status": "positive"
+    },
+    {
+      "count": 194210,
+      "eligible": true,
+      "end": "2025-09-01",
+      "id": "definition__2025-08-01__2025-09-01",
+      "quote_usd": 0.159890986979,
+      "schema": "definition",
+      "start": "2025-08-01",
+      "status": "positive"
+    },
+    {
+      "count": 914347,
+      "eligible": true,
+      "end": "2025-09-01",
+      "id": "statistics__2025-08-01__2025-09-01",
+      "quote_usd": 0.068124160171,
+      "schema": "statistics",
+      "start": "2025-08-01",
+      "status": "positive"
+    },
+    {
+      "count": 192877,
+      "eligible": true,
+      "end": "2025-10-01",
+      "id": "definition__2025-09-01__2025-10-01",
+      "quote_usd": 0.158793542534,
+      "schema": "definition",
+      "start": "2025-09-01",
+      "status": "positive"
+    },
+    {
+      "count": 913135,
+      "eligible": true,
+      "end": "2025-10-01",
+      "id": "statistics__2025-09-01__2025-10-01",
+      "quote_usd": 0.068033859134,
+      "schema": "statistics",
+      "start": "2025-09-01",
+      "status": "positive"
+    },
+    {
+      "count": 198316,
+      "eligible": true,
+      "end": "2025-11-01",
+      "id": "definition__2025-10-01__2025-11-01",
+      "quote_usd": 0.163271412253,
+      "schema": "definition",
+      "start": "2025-10-01",
+      "status": "positive"
+    },
+    {
+      "count": 949140,
+      "eligible": true,
+      "end": "2025-11-01",
+      "id": "statistics__2025-10-01__2025-11-01",
+      "quote_usd": 0.070716440678,
+      "schema": "statistics",
+      "start": "2025-10-01",
+      "status": "positive"
+    },
+    {
+      "count": 199512,
+      "eligible": true,
+      "end": "2025-12-01",
+      "id": "definition__2025-11-01__2025-12-01",
+      "quote_usd": 0.164256066084,
+      "schema": "definition",
+      "start": "2025-11-01",
+      "status": "positive"
+    },
+    {
+      "count": 831093,
+      "eligible": true,
+      "end": "2025-12-01",
+      "id": "statistics__2025-11-01__2025-12-01",
+      "quote_usd": 0.0619212538,
+      "schema": "statistics",
+      "start": "2025-11-01",
+      "status": "positive"
+    },
+    {
+      "count": 191481,
+      "eligible": true,
+      "end": "2026-01-01",
+      "id": "definition__2025-12-01__2026-01-01",
+      "quote_usd": 0.157644230872,
+      "schema": "definition",
+      "start": "2025-12-01",
+      "status": "positive"
+    },
+    {
+      "count": 880149,
+      "eligible": true,
+      "end": "2026-01-01",
+      "id": "statistics__2025-12-01__2026-01-01",
+      "quote_usd": 0.065576210618,
+      "schema": "statistics",
+      "start": "2025-12-01",
+      "status": "positive"
+    },
+    {
+      "count": 182386,
+      "eligible": true,
+      "end": "2026-02-01",
+      "id": "definition__2026-01-01__2026-02-01",
+      "quote_usd": 0.150156415999,
+      "schema": "definition",
+      "start": "2026-01-01",
+      "status": "positive"
+    },
+    {
+      "count": 813920,
+      "eligible": true,
+      "end": "2026-02-01",
+      "id": "statistics__2026-01-01__2026-02-01",
+      "quote_usd": 0.060641765594,
+      "schema": "statistics",
+      "start": "2026-01-01",
+      "status": "positive"
+    },
+    {
+      "count": 165992,
+      "eligible": true,
+      "end": "2026-03-01",
+      "id": "definition__2026-02-01__2026-03-01",
+      "quote_usd": 0.136659413576,
+      "schema": "definition",
+      "start": "2026-02-01",
+      "status": "positive"
+    },
+    {
+      "count": 789127,
+      "eligible": true,
+      "end": "2026-03-01",
+      "id": "statistics__2026-02-01__2026-03-01",
+      "quote_usd": 0.058794543147,
+      "schema": "statistics",
+      "start": "2026-02-01",
+      "status": "positive"
+    },
+    {
+      "count": 210083,
+      "eligible": true,
+      "end": "2026-04-01",
+      "id": "definition__2026-03-01__2026-04-01",
+      "quote_usd": 0.172959055752,
+      "schema": "definition",
+      "start": "2026-03-01",
+      "status": "positive"
+    },
+    {
+      "count": 1019924,
+      "eligible": true,
+      "end": "2026-04-01",
+      "id": "statistics__2026-03-01__2026-04-01",
+      "quote_usd": 0.075990259647,
+      "schema": "statistics",
+      "start": "2026-03-01",
+      "status": "positive"
+    },
+    {
+      "count": 205668,
+      "eligible": true,
+      "end": "2026-05-01",
+      "id": "definition__2026-04-01__2026-05-01",
+      "quote_usd": 0.169324234128,
+      "schema": "definition",
+      "start": "2026-04-01",
+      "status": "positive"
+    },
+    {
+      "count": 1043788,
+      "eligible": true,
+      "end": "2026-05-01",
+      "id": "statistics__2026-04-01__2026-05-01",
+      "quote_usd": 0.077768266201,
+      "schema": "statistics",
+      "start": "2026-04-01",
+      "status": "positive"
+    },
+    {
+      "count": 213372,
+      "eligible": true,
+      "end": "2026-06-01",
+      "id": "definition__2026-05-01__2026-06-01",
+      "quote_usd": 0.175666853786,
+      "schema": "definition",
+      "start": "2026-05-01",
+      "status": "positive"
+    },
+    {
+      "count": 994252,
+      "eligible": true,
+      "end": "2026-06-01",
+      "id": "statistics__2026-05-01__2026-06-01",
+      "quote_usd": 0.074077546597,
+      "schema": "statistics",
+      "start": "2026-05-01",
+      "status": "positive"
+    },
+    {
+      "count": 206136,
+      "eligible": true,
+      "end": "2026-07-01",
+      "id": "definition__2026-06-01__2026-07-01",
+      "quote_usd": 0.169709533453,
+      "schema": "definition",
+      "start": "2026-06-01",
+      "status": "positive"
+    },
+    {
+      "count": 1099983,
+      "eligible": true,
+      "end": "2026-07-01",
+      "id": "statistics__2026-06-01__2026-07-01",
+      "quote_usd": 0.081955119967,
+      "schema": "statistics",
+      "start": "2026-06-01",
+      "status": "positive"
+    },
+    {
+      "count": 210970,
+      "eligible": true,
+      "end": "2026-08-01",
+      "id": "definition__2026-07-01__2026-08-01",
+      "quote_usd": 0.173689313233,
+      "schema": "definition",
+      "start": "2026-07-01",
+      "status": "positive"
+    },
+    {
+      "count": 1031499,
+      "eligible": true,
+      "end": "2026-08-01",
+      "id": "statistics__2026-07-01__2026-08-01",
+      "quote_usd": 0.076852664351,
+      "schema": "statistics",
+      "start": "2026-07-01",
+      "status": "positive"
+    },
+    {
+      "count": 199506,
+      "eligible": true,
+      "end": "2026-09-01",
+      "id": "definition__2026-08-01__2026-09-01",
+      "quote_usd": 0.164251126349,
+      "schema": "definition",
+      "start": "2026-08-01",
+      "status": "positive"
+    },
+    {
+      "count": 1010418,
+      "eligible": true,
+      "end": "2026-09-01",
+      "id": "statistics__2026-08-01__2026-09-01",
+      "quote_usd": 0.075282007456,
+      "schema": "statistics",
+      "start": "2026-08-01",
+      "status": "positive"
+    },
+    {
+      "count": 208752,
+      "eligible": true,
+      "end": "2026-10-01",
+      "id": "definition__2026-09-01__2026-10-01",
+      "quote_usd": 0.171863257885,
+      "schema": "definition",
+      "start": "2026-09-01",
+      "status": "positive"
+    },
+    {
+      "count": 1013033,
+      "eligible": true,
+      "end": "2026-10-01",
+      "id": "statistics__2026-09-01__2026-10-01",
+      "quote_usd": 0.075476840138,
+      "schema": "statistics",
+      "start": "2026-09-01",
+      "status": "positive"
+    }
+  ],
+  "safety_ceiling_usd": 32.0,
+  "start": "2020-01-01",
+  "total_months": 81
+}

@@ -1,0 +1,28 @@
+{
+  "no_api_requests": true,
+  "status": "within_month_candidates_not_validated_prices",
+  "settlement_events": 248275,
+  "definition_publisher_symbol_groups": 8086,
+  "ambiguous_or_non_outright_definition_groups": 4,
+  "definition_groups_containing_delete_events": 0,
+  "events_with_unambiguous_outright_mapping": 248275,
+  "events_without_safe_outright_mapping": 0,
+  "distinct_publisher_symbol_reference_keys": 101587,
+  "conflicting_latest_rank_keys_rejected": 0,
+  "latest_deleted_keys": 0,
+  "latest_not_final_keys": 190,
+  "latest_intraday_final_keys": 0,
+  "latest_invalid_price_keys": 0,
+  "selected_final_nonintraday_keys": 101397,
+  "selected_actual_flagged": 43067,
+  "selected_theoretical_flagged": 58330,
+  "distinct_candidate_reference_dates": 23,
+  "candidate_updates_reduced": 146688,
+  "requires_cross_month_amendment_reconciliation": true,
+  "month": "2026-06",
+  "source_hashes": {
+    "definition_sha256": "f60805fdd488b918036932ac367c4efaf77df702a0fe8b8bda4c5cd0b0ace8b1",
+    "statistics_sha256": "5ec81cbe1f113ec35d2962d3157db818c78f2e94e5293d1590c86ee446c41f2b"
+  },
+  "private_panel_created": false
+}

@@ -1,0 +1,35 @@
+{
+  "final_events": 118094,
+  "definition_id_days": 39884,
+  "ambiguous_definition_id_days": 0,
+  "publication_reference_date_disagreement": 46430,
+  "source": "local DBN, no historical API request",
+  "counts_are": "candidate daily links, NOT valid prices or backtest dates",
+  "reference_date": {
+    "found_day_definition": 653,
+    "definition_available_before_publication": 653,
+    "unambiguous_active_outright_match": 653,
+    "missing_day_definition": 117441,
+    "ambiguous_or_inactive_day_definition": 0
+  },
+  "publication_utc_day": {
+    "found_day_definition": 46673,
+    "definition_available_before_publication": 46673,
+    "unambiguous_active_outright_match": 46673,
+    "missing_day_definition": 71421,
+    "ambiguous_or_inactive_day_definition": 0
+  },
+  "preceding_publication_day": {
+    "found_day_definition": 22162,
+    "definition_available_before_publication": 22162,
+    "unambiguous_active_outright_match": 22162,
+    "missing_day_definition": 95932,
+    "ambiguous_or_inactive_day_definition": 0
+  },
+  "events_with_at_least_one_candidate_mapping": 68835,
+  "events_with_conflicting_candidate_contracts": 0,
+  "events_with_at_least_one_consistent_candidate": 68835,
+  "events_with_no_candidate_mapping": 49259,
+  "warning": "Reference-day, publication-day and preceding-day snapshots are ALTERNATIVE hypotheses. Neither their union nor their agreeing subset is a validated as-of price panel: daily ID reuse, settlement amendments, venue session boundaries and cross-month contract identity remain unresolved.",
+  "month": "2026-06"
+}

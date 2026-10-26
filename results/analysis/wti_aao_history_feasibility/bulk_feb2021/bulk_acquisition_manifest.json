@@ -1,0 +1,32 @@
+{
+  "completed": {
+    "definition__2021-02-01__2021-03-01": {
+      "count": 140790,
+      "end": "2021-03-01",
+      "file": "aao_definition__2021-02-01__2021-03-01.dbn.zst",
+      "quote_usd": 0.115910880268,
+      "schema": "definition",
+      "sha256": "10cbbe00cc8e4ae167c7ddac184e68a8ee10066135d309c7d2551349a38122a7",
+      "size_bytes": 3546290,
+      "start": "2021-02-01"
+    },
+    "statistics__2021-02-01__2021-03-01": {
+      "count": 574328,
+      "end": "2021-03-01",
+      "file": "aao_statistics__2021-02-01__2021-03-01.dbn.zst",
+      "quote_usd": 0.042790770531,
+      "schema": "statistics",
+      "sha256": "03d5832b3ad23e5c6bfa7f851ed6865f8aa4021de10106cbc08d169bd4b9c5c9",
+      "size_bytes": 4871719,
+      "start": "2021-02-01"
+    }
+  },
+  "completed_all_eligible": true,
+  "dataset": "GLBX.MDP3",
+  "end": "2021-03-01",
+  "max_budget_usd": 1.0,
+  "note": "Quoted estimates, not final charges",
+  "parent": "AAO.OPT",
+  "start": "2021-02-01",
+  "total_quoted_usd": 0.15870165
+}
