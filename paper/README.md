@@ -1,11 +1,16 @@
-# Journal of Futures Markets manuscript
+# Internal Wiley/JFM manuscript — retained while the journal target is reassessed
 
-> **Submission strategy update (October 2026):** The REMEF adaptation is now
+> **2026-10-25 update:** The provisional ambitious future journal target is *Journal of
+> Commodity Markets* **only if the new 2020–2026 AAO dataset yields substantially
+> stronger verified independent-date evidence**. The ready REMEF Word draft is the
+> fallback; the existing Wiley/JFM LaTeX source below is intentionally preserved,
+> not automatically the next journal for submission. See [journal strategy](../docs/journal_strategy.md).
+> **Previous October 2026 adaptation:** The REMEF manuscript is
 > maintained separately under [`paper/remef/`](remef/README.md), with its own
 > introduction, bilingual metadata, Word builder, source bibliography supplement,
 > scientific-audit checklist, and manual-only GitHub Actions workflow.
 > The JFM full and concise Wiley manuscripts remain intact for a later
-> alternative submission, **never simultaneous** with REMEF.
+> alternative submission, **never simultaneous** with REMEF or JCM.
 
 
 ## Language and literature terminology
@@ -20,7 +25,7 @@ comparison; this preference does not replace the source selected for the full-pa
 
 
 
-`paper/` contains the active internal manuscript for the Journal of Futures Markets target.
+`paper/` contains the preserved internal Wiley/JFM manuscript source. Do not reformat it for JCM absent a dedicated author-approved manuscript PR.
 The old REMEF-oriented drafts are preserved under `archive/paper_remef/` and are not active
 manuscript sources.
 
