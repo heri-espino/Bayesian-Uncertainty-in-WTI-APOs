@@ -73,10 +73,15 @@ def inspect(root: Path = ROOT, *, require_complete: bool = False) -> dict:
         attr = git(root, "check-attr", "filter", "--", text_path)
         if attr.returncode or not attr.stdout.strip().endswith(": filter: lfs"):
             errors.append(f"missing_lfs_filter:{text_path}")
-        ignored = git(root, "check-ignore", "--no-index", "--quiet",
+        # IMPORTANT: check-ignore -q RETURNS 0 for negation (!pattern)
+        # with --no-index. Parse the verbose matching rule instead.
+        ignored = git(root, "check-ignore", "--no-index", "-v",
                       "--", text_path)
         if ignored.returncode == 0:
-            errors.append(f"source_file_still_ignored:{text_path}")
+            fields = ignored.stdout.strip().split("\t", 1)
+            matching_rule = fields[0].rsplit(":", 1)[-1].strip()
+            if not matching_rule.startswith("!"):
+                errors.append(f"source_file_still_ignored:{text_path}")
         elif ignored.returncode != 1:
             errors.append(f"unable_to_verify_ignore_rules:{text_path}")
 
