@@ -138,6 +138,28 @@ further pricing gates are documented in
 No Databento charges, new model-performance claims or manuscript
 reformatting are warranted now.
 
+## Latest checkpoint: full 81-month cross-file reconciliation (2026-10-26)
+
+The user's **four-month** and **full 81-month** offline SQLite
+reconciliation commands succeeded. Full results: **5,157,894** tentative
+publisher/symbol/reference-day keys; 71,145 seen in more than one
+file month; 52,290 latest preliminary, **1** latest invalid price,
+and **5,105,603 selected final nonintraday candidates**, split into
+3,299,087 actual-flagged and 1,806,516 theoretical-flagged.
+There are **1,700 selected CME reference dates**, not the raw-event
+inventory's **1,701**. No tied latest updates, deletions or
+cross-month symbol-fingerprint conflicts appeared in these logs.
+
+The next task is an **offline quality/date-gap/source overlap audit**:
+`python -m experiments.wti_aao_panel_quality`, then
+`python -m experiments.wti_aao_panel_quality --scan-final-dates`
+if the date discrepancy remains. See
+`research/AAO_FULL_HISTORY_RECONCILIATION_2026-10-26.md`.
+Do NOT treat millions of correlated candidates as 1,700 independent
+backtests or revise Bayesian comparison figures yet. Then establish
+actual contract/price-unit Barchart parity, CL/rates/prior-IV inputs
+and frozen chronological holdouts.
+
 Read this file before continuing research work.
 
 ## Canonical current checkpoint
