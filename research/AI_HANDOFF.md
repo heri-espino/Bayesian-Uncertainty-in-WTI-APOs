@@ -118,6 +118,26 @@ reconciliation, contract-spec/price-scale audit, CL/fixing/rates/lagged-IV
 eligibility, and only then actual new Bayesian backtests, performance
 figures and manuscript updates. Never rerun paid Databento downloads.
 
+## Cross-month settlement reconciliation ready to run (2026-10-26)
+
+The user successfully ran `wti_aao_contract_day_candidates`
+on 2021-02 and 2026-06: **48,730** and **101,397**
+final nonintraday native-symbol/reference-day candidates, with
+**101** and **190** latest preliminary keys, respectively. They
+found no ambiguous last updates, deletions, intraday candidate flags
+or invalid prices in the sampled months. These are *within-source-file-
+month candidates* and cannot yet be the study's unique observed prices.
+
+The next **strictly offline** tool
+`experiments.wti_aao_cross_month` uses a two-pass global contract
+identity audit and on-disk SQLite replay across source months to
+account for late corrections and symbol reuse. Run four sampled source
+months before `--all`. The complete procedure, privacy rules and
+further pricing gates are documented in
+`research/AAO_CROSS_MONTH_SETTLEMENT_RECONCILIATION_2026-10-26.md`.
+No Databento charges, new model-performance claims or manuscript
+reformatting are warranted now.
+
 Read this file before continuing research work.
 
 ## Canonical current checkpoint
