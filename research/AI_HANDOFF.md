@@ -1,5 +1,14 @@
 # AI handoff
 
+
+> **Start with the new canonical handoff:** [master plan](PAPER_COMPLETION_MASTER_PLAN_2026-10-26.md),
+> [evidence ledger](AAO_EVIDENCE_LEDGER_2026-10-26.md),
+> [next experiments](AAO_EXPERIMENT_REGISTER_2026-10-26.md),
+> [independent verification](AAO_AGENT_VERIFICATION_PROTOCOL_2026-10-26.md), and
+> [recovery procedure](AAO_RECOVERY_AND_LFS_BACKUP_2026-10-26.md).
+> This file retains a chronological history, including stale interim 80-month and Barchart-unavailable states.
+> **Present status:** no uploaded replacement AAO binary files/SQLite and no finished expanded market tests.
+
 ## URGENT: recovered data must be backed up via Git LFS (26 October 2026)
 
 The user's original **162 Databento AAO DBN files and the 5.1m-key private
