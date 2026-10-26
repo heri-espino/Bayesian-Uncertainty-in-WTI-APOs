@@ -185,7 +185,27 @@ parity, units, causal volatility inputs or new model results. See
 No additional paid downloads, GitHub raw-data sharing or early
 manuscript/figure changes.
 
-## Coordinating invariants
+## Targeted quality audit after full-history run — 2026-10-26
+
+The full 81-month settlement normalizer selected **5,105,603**
+provisional final nonintraday keys and 1,700 reference dates, one of
+which is **2019-12-31**. Thus **1,699** selected reference dates
+fall from January 2020 onward. The raw inventory's additional
+reference date is **2024-01-26**, with just **two raw final
+settlement events**. Its failure to survive last-update selection
+is **not explained yet**.
+
+Existing Barchart APO histories are tracked on GitHub under
+`data/csv`, but the author's VM quality audit returned
+`available:false`: investigate checkout/folder, not liquidity.
+Use `python -m experiments.wti_aao_panel_quality
+--explain-date 2024-01-26` and the optional
+`--barchart-root` to diagnose; **do not** rescan 81 DBN
+files again just to obtain the already-known missing date.
+See `research/AAO_PANEL_QUALITY_FINDINGS_2026-10-26.md`.
+No extended Bayesian results or new pricing-performance figures
+are validated yet.
+
 
 - PR #95 was merged with the quote-first downloader and offline inventory; all 160 author-reported DBN files live **only on the author's Windows VM**, not on GitHub. Do not use GitHub-hosted CI to access those raw files. Do not request the API key, paste it into a chat, or commit secrets or licensed data.
 - The previous 2026 Barchart-based paper and its numerical results are the baseline. Preserve `paper/manuscript/`, `paper/remef/`, `results/analysis/wti_extended_forward/`, the ten-million synthetic study, existing contracts/expiry tables, and previous code paths. New extended-history outputs must be **separately namespaced**.

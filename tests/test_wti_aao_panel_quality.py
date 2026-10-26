@@ -6,6 +6,7 @@ import pytest
 
 from experiments.wti_aao_panel_quality import (
     audit, audit_state, compare_raw_days,
+    reference_date_status, barchart_overlap,
 )
 
 
@@ -90,3 +91,44 @@ def test_reject_old_inventory(tmp_path):
     }))
     with pytest.raises(ValueError, match="81-month"):
         audit(db, summary, include_barchart=False)
+
+
+
+def test_explain_date_latest_nonfinal_or_invalid(tmp_path):
+    conn = sqlite3.connect(sample_db(tmp_path))
+    try:
+        a = reference_date_status(conn, "2025-06-04")
+        b = reference_date_status(conn, "2025-06-02")
+    finally:
+        conn.close()
+    assert a["last_update_keys"] == 2
+    assert a["last_intraday_final"] == 1
+    assert a["last_tied_conflict"] == 1
+    assert a["last_selected_final"] == 0
+    assert b["last_selected_final"] == 2
+    assert b["last_preliminary"] == 0
+
+
+def test_missing_barchart_directory_is_not_zero_market_overlap(tmp_path):
+    report = barchart_overlap({"2025-06-01"}, tmp_path / "missing")
+    assert report["available"] is False
+    assert report["root_exists"] is False
+    assert report["csv_files_found"] == 0
+    assert "NOT zero market overlap" in report["reason"]
+
+
+def test_nonmatching_barchart_filename_diagnostic(tmp_path):
+    (tmp_path / "other.csv").write_text("x\n1\n")
+    report = barchart_overlap({"2025-06-01"}, tmp_path)
+    assert report["root_exists"] is True
+    assert report["csv_files_found"] == 1
+    assert report["filename_matching_apo_history_count"] == 0
+
+
+def test_explain_date_validation(tmp_path):
+    conn = sqlite3.connect(sample_db(tmp_path))
+    try:
+        with pytest.raises(ValueError, match="YYYY-MM-DD"):
+            reference_date_status(conn, "2025-06-02 and 1=1")
+    finally:
+        conn.close()

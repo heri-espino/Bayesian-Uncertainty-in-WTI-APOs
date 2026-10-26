@@ -1,5 +1,29 @@
 # AI handoff
 
+## Most recent source-quality result (2026-10-26)
+
+The full 81-month cross-file reconciliation contains **5,105,603**
+provisional final nonintraday AAO candidate settlement keys on 1,700
+CME reference dates; the count includes **2019-12-31** (4,706 keys).
+Therefore the January 2020–September 2026 date-range subset has
+**1,699 distinct selected reference dates**, not an established
+forward-backtest date count.
+
+The author ran the raw-final-date scan: exactly **2024-01-26** was
+lost, with **two raw final events** and no selected candidate.
+Investigate the latest private SQLite status on that reference date
+with the new `python -m experiments.wti_aao_panel_quality
+--explain-date 2024-01-26`; do not repeat the expensive raw scan.
+Barchart `available: false` is a missing **local file-discovery**
+diagnostic, not no source overlap: GitHub main does track Barchart
+APO history CSVs under `data/csv`. New optional
+`--barchart-root` and path diagnostics help restore discovery.
+
+Read `research/AAO_PANEL_QUALITY_FINDINGS_2026-10-26.md`
+before changing code, pricing figures or Elsevier CAS manuscript.
+No new vendor API calls or price/contract-level uploads.
+
+
 ## Latest handoff: full historical backfill complete (2026-10-25)
 
 The author completed the February 2021 `AAO.OPT` recovery: **two files** for February at **USD 0.15870165 quoted**, saved with a *separate* February acquisition manifest. Combined with the earlier 160 file / USD 17.33487324 acquisition, there are now **162 reported DBN files covering 81 months**, with **USD 17.49357489 total quoted** (not necessarily billed). Earlier notes below saying “February missing” and “80 months” describe the prior 80-month inventory; they must not be treated as current acquisition status.
