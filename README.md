@@ -1,5 +1,24 @@
 # Bayesian parameter uncertainty for Asian options
 
+## Latest source diagnosis (26 October 2026)
+
+For the CME reference date **2024-01-26**, all **7,868** latest
+publisher/symbol/day keys are preliminary; there are **zero**
+selected final marks. This explains why the retained set has
+**1,700** reference dates versus the raw final-event inventory's
+**1,701**, while the two original raw final events' exact update
+sequence has not been traced.
+
+The local VM does **not** have the default Barchart CSV root
+populated, but direct GitHub `main` inspection confirms
+JAO option-history CSVs are versioned under `data/csv/sep2026/`.
+Do not infer zero overlap or purchase missing data. Check the
+local exact tracked path, sparse-checkout settings, and local work
+before restoring any files. See the
+[AAO quality checkpoint](research/AAO_PANEL_QUALITY_FINDINGS_2026-10-26.md).
+Contract-specific price-parity and chronological Bayesian
+backtesting remain open.
+
 ## New source quality checkpoint (26 October 2026)
 
 The verified 81-month AAO data reconciler yielded 5,105,603
