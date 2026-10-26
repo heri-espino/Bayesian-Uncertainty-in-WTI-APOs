@@ -1,6 +1,6 @@
 # Bayesian parameter uncertainty for Asian options
 
-Research library, reproducible experiments, data pipeline, and manuscript for Bayesian parameter uncertainty in arithmetic Asian-option valuation, with an empirical application to CME WTI Average Price Options. The publication strategy targets the **Journal of Futures Markets** first.
+Research library, reproducible experiments, data pipeline, and manuscript for Bayesian parameter uncertainty in arithmetic Asian-option valuation, with an empirical application to CME WTI Average Price Options. The **conditional next ambitious journal target is the Journal of Commodity Markets** after verification of the expanded empirical sample; the ready REMEF candidate is retained as a publication-focused fallback, and the Wiley/Journal of Futures Markets manuscript remains available as an alternative. See [journal strategy](docs/journal_strategy.md).
 
 ## Scientific boundary: P versus Q
 
@@ -35,7 +35,7 @@ tests/                                               automated tests
 scripts/                                             repository/reproducibility utilities
 data/                                                source data and provenance
 results/                                             experiment outputs and checkpoints
-paper/manuscript/                                    active JFM LaTeX manuscript
+paper/manuscript/                                    preserved Wiley/JFM LaTeX manuscripts
 paper/remef/                                         REMEF Word-format alternative and audit
 paper/vendor/wiley_njd_v5/                           frozen Wiley NJDv5 vendor bundle
 paper/build.py                                       canonical manuscript builder
@@ -49,14 +49,9 @@ archive/                                             superseded papers/notebooks
 
 The root `AGENTS.md` is mandatory reading for coding agents and maintainers. It defines the package and manuscript contracts and the scientific guardrails that must be preserved.
 
-## Submission candidates
+## Publication strategy after the new historical dataset
 
-The publication-first adaptation for the **Revista Mexicana de Economía y Finanzas
-(REMEF)** is under [`paper/remef/`](paper/remef/README.md). It reuses the
-concise scientific results and has a separate editable-Word build and
-[reproducibility audit](paper/remef/PRESUBMISSION_AUDIT.md).
-It is a **draft, not a submitted paper**. The JFM manuscript remains available
-as an alternative, but these targets cannot be submitted simultaneously.
+The prospective higher-ambition subject-fit target is the **Journal of Commodity Markets**, **conditional on** verified improvements in distinct forward-eligible dates, settlement-quality checks, temporal robustness and originality. It is **not yet a journal chosen for actual submission**. The prepared [REMEF Word draft](paper/remef/README.md) and [presubmission audit](paper/remef/PRESUBMISSION_AUDIT.md) remain the realistic fallback; the preserved Wiley/JFM LaTeX sources are a demanding alternative. The same paper cannot be considered by two journals simultaneously. See [journal strategy](docs/journal_strategy.md).
 
 ## JFM manuscript
 
@@ -80,17 +75,35 @@ python paper/build.py --check
 
 See `paper/README.md` for the manuscript directory contract. The older REMEF-oriented draft is retained under `archive/paper_remef/` for provenance.
 
-## Proposed Databento AAO history expansion
+## Databento 2020–2026 AAO acquisition: completed transfer, pending scientific validation
 
-The next empirical research decision is **feasibility first**:
-audit why the Barchart archive yields only 15 strict-forward evaluation
-dates, then check whether Databento actually supplies historical WTI
-Average Price Option `AAO`/`AO` definitions and official settlements.
-The active [plan](research/DATABENTO_AAO_EXPANSION_PLAN.md) and
-[Issue #90](https://github.com/heri-espino/Bayesian-Uncertainty-in-WTI-APOs/issues/90)
-define quote-only metadata checks, cross-vendor reconciliation,
-cost-capped pilot gates and the conditional longer-history study. No
-extra market data have been purchased or downloaded by the plan.
+**The author reported a successful local historical download:** 160 compressed `AAO.OPT`
+definition/statistics files across **80 eligible monthly windows** from January 2020 to
+September 2026, quoted at **USD 17.33487324** (not verified actual billing).
+The one excluded month, checksum parity, contract identities, unique final settlements,
+theoretical/actual status, Barchart agreement and new independent forward-test dates have
+**not** yet been audited. The earlier 2,381 holdouts across 15 dates and 253 external-LO
+matches across 10 dates remain the only validated comparisons until new results exist.
+
+**Start here:** [2026-10-25 checkpoint](research/CHECKPOINT_2026-10-25_AAO_EXPANSION.md),
+[agent execution tasks](research/AAO_AGENT_TASKS.md),
+[bulk acquisition guide](research/DATABENTO_AAO_BULK_ACQUISITION.md), and
+[tracking Issue #90](https://github.com/heri-espino/Bayesian-Uncertainty-in-WTI-APOs/issues/90).
+The raw DBN payloads are on the author's VM, not in GitHub. No re-download is needed.
+
+```powershell
+git switch main
+git pull --ff-only origin main
+conda activate asian-options
+python -m pytest tests/test_wti_databento_aao_inventory.py -q
+python -m experiments.wti_databento_aao_inventory --months 2023-06 2025-06 2026-06
+# Inspect sample report and data fields, then:
+python -m experiments.wti_databento_aao_inventory --all
+```
+
+Do **not** run another `--mode download` by default; charges may recur. Keep licensed raw
+market data gitignored and publish only permitted aggregate results. Heavy builds and
+experiments remain manual-only.
 
 ## Research roadmap
 
@@ -99,7 +112,8 @@ The active research roadmap is tracked through GitHub Issues and the project wik
 - `docs/project_wiki.md` — current scientific thesis and navigation;
 - `docs/research_roadmap.md` — milestones M1–M5, issue map, and Project-board design;
 - `docs/literature_strategy.md` — literature screening and novelty workflow;
-- `docs/submission_checklist.md` — Journal of Futures Markets submission gate.
+- `docs/journal_strategy.md` — conditional JCM/REMEF/JFM strategy and evidence gates;
+- `docs/submission_checklist.md` — journal-neutral readiness gate plus preserved JFM package.
 
 Milestone tracker Issues are #43–#47, with concrete research tasks in #33–#42.
 
