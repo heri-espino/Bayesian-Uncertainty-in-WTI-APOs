@@ -35,7 +35,7 @@ def check() -> None:
         r"\documentclass[a4paper,fleqn]{cas-dc}",
         "Databento", "reduced-form", "prior-date",
         r"\bibliography{references}",
-        "have not yet been run",
+        "not yet been run",
     ):
         if fragment not in source:
             raise ValueError(f"Manuscript missing disclosure/section: {fragment}")
