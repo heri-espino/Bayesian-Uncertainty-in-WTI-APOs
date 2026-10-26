@@ -183,6 +183,26 @@ remain unknown until the author executes the local job. Prices,
 performance figures and the provisional Elsevier manuscript are
 **unchanged** pending further scientific validation.
 
+## Full 81-month provisional settlement reconciliation (2026-10-26)
+
+The author's offline full-history run processed **13,412,045 settlement
+events** and produced **5,105,603 final nonintraday provisional
+publisher/symbol/reference-date candidates** (3,299,087 actual-flagged,
+1,806,516 theoretical-flagged) on **1,700 CME reference dates**. It
+identified 71,145 keys in multiple source months and 52,290 latest
+preliminary keys; there were no historical symbol-fingerprint conflicts.
+These are **not** valid out-of-sample test dates or transaction prices.
+
+The older raw inventory had 1,701 final reference dates. One date
+disappeared after candidate selection; its cause is not yet determined.
+See [full history findings](research/AAO_FULL_HISTORY_RECONCILIATION_2026-10-26.md).
+Next entirely offline diagnostic:
+`python -m experiments.wti_aao_panel_quality`, optionally followed
+by `--scan-final-dates` to identify that date. The output provides
+annual aggregate price bins and **date-only** Barchart overlap, not
+instrument-level pricing validation. The journal figures and results
+remain unchanged until genuine chronological experiments are run.
+
 ## Native AAO contract symbology confirmed; candidate-price stage (2026-10-26)
 
 The local DBN native-symbol audit confirmed **100% of final settlement
