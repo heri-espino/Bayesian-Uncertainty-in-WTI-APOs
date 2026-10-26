@@ -125,9 +125,12 @@ the research design, tests, and API documentation are updated together.
 
 ## Data and licensing
 
-Do not commit newly acquired proprietary market data until redistribution rights have been
-verified. Preserve source provenance and prefer code, schemas, hashes, diagnostics, and
-permitted derived summaries.
+The author explicitly requires **backup of the reconstructed AAO source dataset and
+reconstructed SQLite state in this VERIFIED PRIVATE GitHub repository using Git LFS**.
+For `data/databento/wti_aao_bulk/`, raw `*.dbn.zst` and completed
+`derived_private/*.sqlite3` are intentionally Git LFS-tracked. Do not
+re-ignore, silently exclude, delete or prevent backing up those files.
+Do not store API keys, passwords, user profile secrets or personal credentials in Git.
 
 The author has committed the Barchart CL source histories under `data/csv/CL` for the current
 private research workflow. Before making the repository or those raw files public, verify
@@ -135,6 +138,27 @@ Barchart redistribution terms. Yahoo continuous-proxy snapshots under `data/wti_
 local Treasury CSVs under `data/rates/treasury/` are workstation caches/source inputs and are
 gitignored by default. Their README files, parsers, query metadata, hashes, and derived
 scientific outputs remain versioned.
+
+## Critical incident and data backup policy (2026-10-26)
+
+Previously, a sparse-checkout instruction was given while 162 licensed AAO
+DBN files and a derived SQLite state were ignored and not uploaded. After the
+checkout change, the entire `data/databento` tree disappeared from the user's
+Windows VM. This assistant-caused incident must be considered before any future
+Git advice. The original data are currently **not available** and have **not**
+been re-downloaded or pushed.
+
+**Required:** Include `data/databento/wti_aao_bulk` in sparse checkout
+**before reacquisition**, verify `scripts.aao_lfs_preflight`, quote and
+explicitly authorize a paid retrieval, reacquire into the tracked raw folder,
+verify all 162 original-like DBNs via a NEW acquisition manifest, commit
+and push as Git LFS, then rerun analyses and commit the resulting SQLite.
+No tool/agent may run sparse-checkout modifications, reset/clean, or prune a
+repository that contains *any* as-yet unpushed local research data.
+Before saying "backed up", confirm the Git LFS push actually succeeded.
+Recovery guide: `research/AAO_RECOVERY_AND_LFS_BACKUP_2026-10-26.md`.
+CI must remain lightweight. Paid downloads and heavy experimental steps are
+manual-only.
 
 ## Current WTI AAO checkpoint and agent handoff (2026-10-25)
 
@@ -146,7 +170,8 @@ portion of earlier 2026 planning notes, without invalidating earlier published o
 - The author's local VM reported a **completed** compressed Databento `AAO.OPT` acquisition:
   **160 chunks = 80 eligible months × `definition`/`statistics`**, 2020-01 through 2026-09,
   quoted **USD 17.33487324**. The amount actually billed and the 81st missing month are unverified.
-  Those files are **not hosted on GitHub**; do not expect CI to read them.
+  [Historical note] Those original files were not hosted on GitHub and were later lost
+  during an unsafe sparse-checkout change. This no longer describes the desired state.
 - The next step is **offline inventory**, then instrument-identity, final/theoretical settlement,
   liquidity, degraded-date and Barchart reconciliation. The number of newly eligible pricing
   dates and all expanded-study results are **unknown**.
