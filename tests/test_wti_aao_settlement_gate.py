@@ -55,7 +55,8 @@ def test_deleted_definition_is_not_backfilled_from_old_definition():
         "2026-07-01", 70000, 0, "D",
     )
     r = evaluate(d, s)
-    assert r["selected_final_active_keys"] == 1
+    # Earlier final updates remain valid; later reports after deletion do not.
+    assert r["selected_final_active_keys"] == 2
     assert r["excluded_non_outright_or_inactive_events"] >= 2
 
 
