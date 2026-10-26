@@ -1,5 +1,19 @@
 # Bayesian parameter uncertainty for Asian options
 
+## New source quality checkpoint (26 October 2026)
+
+The verified 81-month AAO data reconciler yielded 5,105,603
+provisional final nonintraday candidates on 1,700 reference dates,
+including 2019-12-31 (therefore 1,699 from 2020 onward).
+Two raw final settlement events on 2024-01-26 produced no selected
+candidate; the reason still needs inspection. The local Barchart
+option-history discovery returned unavailable, although source CSVs
+are tracked in this repository. Investigate checkout and paths
+before treating this as zero market overlap. See
+[latest diagnostic instructions](research/AAO_PANEL_QUALITY_FINDINGS_2026-10-26.md).
+Neither the option-price parity nor the full forward backtest is
+established; prior journal results remain unchanged.
+
 ## February 2021 gap resolved (2026-10-25)
 
 The author successfully recovered the formerly omitted February 2021 month in a separate Databento acquisition: **two additional `AAO.OPT` files, USD 0.15870165 quoted**. Together, the two local manifests now report **162 compressed definition/statistics files for all 81 months (January 2020–September 2026), USD 17.49357489 combined quoted** (not verified actual charges). The original February omission was a transient HTTP 504 price-metadata failure. The previous 80-month inventory's **1,682** final reference days and **5,843,770** final settlement events are **not yet updated** to include February.
