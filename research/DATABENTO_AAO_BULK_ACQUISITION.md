@@ -86,3 +86,48 @@ date-cluster/serial-dependence inference.
 
 Databento docs: https://databento.com/docs/api-historical/timeseries/timeseries-get-range?lang=python
 and https://databento.com/docs/faqs/usage-pricing-and-data-credits .
+
+
+## After acquisition: audit the 160 local DBN files
+
+The user-side download report completed 160 chunks from 80 of 81 months in
+2020-01 through 2026-09, with total **quoted** USD 17.33487324. The amount
+actually charged should be checked in Databento billing. Several daily data
+conditions were flagged degraded. The missing month must be read from
+`bulk_quote_plan.json`, not guessed.
+
+First run a small **strictly offline** inventory:
+
+```powershell
+git pull --ff-only origin feature/aao-bulk-budgeted-history-20261023
+conda activate asian-options
+python -m pytest tests/test_wti_databento_aao_inventory.py -q
+python -m experiments.wti_databento_aao_inventory --months 2023-06 2025-06 2026-06
+```
+
+The inventory reads only downloaded `.dbn.zst` files and never uses
+`db.Historical()`, `get_range`, or any paid service. Output:
+`results/analysis/wti_aao_history_feasibility/inventory/aao_inventory_summary.json`.
+
+If sample identity and fields are correct, audit all downloaded months:
+
+```powershell
+python -m experiments.wti_databento_aao_inventory --all
+```
+
+The report summarizes definition asset, instrument class, expiry, raw-symbol
+count and settlement `stat_type=3`; final flag bit 0, actual flag bit 1;
+trading reference dates via `ts_ref`; and volume/open-interest event counts.
+The flags follow Databento's CME Globex conventions:
+https://databento.com/docs/knowledge-base/datasets/glbx-mdp3 .
+
+**Scope limits:** these are event/reference-date counts only. They do NOT
+establish executable transactions, active markets, unique contract IDs across
+rollovers, independent forward-validation dates, correct fixing schedules or
+the accuracy of derived option prices. No licensed raw market data should be
+committed; report only permissible derived aggregate summaries.
+
+Before final scientific conclusions, verify the instrument identities and
+`ts_ref` dates against overlapping Barchart data, identify degraded dates,
+deduplicate preliminary/final updates by trading date and contract, and
+implement a strict earlier-date volatility calibration.
