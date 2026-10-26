@@ -9,6 +9,20 @@ The earlier **80-month** inventory report (`1,682` distinct final reference date
 
 This page describes the implemented research pipeline for the CME WTI Average Price Option application. It is an implementation map, not a substitute for `research/EMPIRICAL_WTI_DESIGN.md`.
 
+## Current full-history checkpoint — 26 October 2026
+
+The acquired 81-month AAO history has now undergone offline SHA256
+verification, native-symbol identity audits and cross-month
+settlement latest-action reconciliation. The author reports
+**5,105,603 provisional final nonintraday option-day candidates**
+on **1,700 reference dates** (3,299,087 actual-flagged and
+1,806,516 theoretical-flagged). This supersedes the historical
+80-month and before-February acquisition text above **as current
+state**. However, Barchart unit/contract parity, exact distinct
+eligible forward-test dates and new pricing-model experiments
+are **NOT** yet validated. See
+`research/AAO_FULL_HISTORY_RECONCILIATION_2026-10-26.md`.
+
 ## Data-source contract
 
 The empirical application deliberately uses different sources for different objects:
