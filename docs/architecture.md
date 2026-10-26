@@ -54,6 +54,20 @@ Per-month candidate rows are **not** validated multi-month settlements;
 cross-month revisions, stable contract master and time-series input
 audits remain required before calling the usual pricing engine.
 
+### Multi-month AAO settlement actions and contract keys
+
+`bayesian_asian_options.aao_cross_month` implements a two-pass,
+symbol-based contract-identity registry plus an on-disk SQLite latest-action
+reconciler across file months. Its CLI in
+`experiments/wti_aao_cross_month.py` reports only aggregate counts;
+its **licensed price-bearing SQLite database** remains locally
+gitignored under `data/databento/wti_aao_bulk/derived_private/`.
+It does not replace the actual pricing engine, does not automatically
+supply observed option targets, and does not establish which settlement
+marks or volatility inputs were available ex ante. The resulting
+contract/reference-day candidates must pass market source parity,
+calendar, price-scale and information-cutoff audits first.
+
 ### CME WTI APO mechanics
 
 `bayesian_asian_options.wti_first_nearby`
