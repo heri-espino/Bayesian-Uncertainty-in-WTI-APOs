@@ -1,3 +1,5 @@
+# API reference
+
 ## Databento-only reduced-form AAO pricing and volatility
 
 ```{automodule} bayesian_asian_options.aao_databento_only
@@ -5,7 +7,6 @@
 :show-inheritance:
 ```
 
-# API reference
 
 This is the canonical inventory of reusable public functions/classes. It is generated from package docstrings at Sphinx build time.
 
