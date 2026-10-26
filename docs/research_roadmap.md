@@ -2,10 +2,10 @@
 
 
 > **Updated canonical execution status (2026-10-26):**
-> [the root handoff](../HANDOFF.md),
-> [complete research plan](../research/PAPER_COMPLETION_MASTER_PLAN_2026-10-26.md),
-> [evidence ledger](../research/AAO_EVIDENCE_LEDGER_2026-10-26.md),
-> and [sequential experiments](../research/AAO_EXPERIMENT_REGISTER_2026-10-26.md).
+> `HANDOFF.md`,
+> `research/PAPER_COMPLETION_MASTER_PLAN_2026-10-26.md`,
+> `research/AAO_EVIDENCE_LEDGER_2026-10-26.md`,
+> and `research/AAO_EXPERIMENT_REGISTER_2026-10-26.md`.
 > The historic acquisition is no longer available locally; the LFS recovery and new experiments
 > are pending. Do not interpret earlier completed-source language below as present remote backup.
 
