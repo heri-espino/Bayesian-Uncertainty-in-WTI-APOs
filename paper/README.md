@@ -1,5 +1,10 @@
 # Internal Wiley/JFM manuscript — retained while the journal target is reassessed
 
+
+> **New global paper handoff:** [complete research plan](../research/PAPER_COMPLETION_MASTER_PLAN_2026-10-26.md)
+> and [evidence ledger](../research/AAO_EVIDENCE_LEDGER_2026-10-26.md).
+> Keep Wiley/JFM, REMEF and JCM sources intact; the long-history model study is not complete.
+
 > **2026-10-25 update:** The provisional ambitious future journal target is *Journal of
 > Commodity Markets* **only if the new 2020–2026 AAO dataset yields substantially
 > stronger verified independent-date evidence**. The ready REMEF Word draft is the
