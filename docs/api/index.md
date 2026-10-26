@@ -79,6 +79,13 @@ This is the canonical inventory of reusable public functions/classes. It is gene
 :show-inheritance:
 ```
 
+## Cross-month AAO settlement reconciliation
+
+```{automodule} bayesian_asian_options.aao_cross_month
+:members: fingerprint_rows, merge_registry, monthly_latest, initialize_db, ingest_latest, summarize
+:show-inheritance:
+```
+
 ## Conservative AAO settlement normalization
 
 ```{automodule} bayesian_asian_options.aao_settlements

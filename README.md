@@ -162,6 +162,27 @@ need special treatment, and safe steps toward a contract/day panel. The
 journal draft and pricing-performance figures still use the earlier
 scientifically validated sample.
 
+## Cross-month correction reconciliation implemented (2026-10-26)
+
+The author's within-month AAO candidate normalizer produced **48,730**
+final nonintraday publisher+symbol+reference-day candidates for
+February 2021 and **101,397** for June 2026 (31,414/43,067
+actual-flagged and 17,316/58,330 theoretical-flagged, respectively).
+The two months had **101** and **190** latest preliminary keys; no
+reported deletions, intraday final marks, nonfinite prices or conflicts.
+These figures are **not** full-history usable option prices.
+
+The [cross-month reconciliation instructions](research/AAO_CROSS_MONTH_SETTLEMENT_RECONCILIATION_2026-10-26.md)
+introduce `python -m experiments.wti_aao_cross_month --months
+2021-02 2021-03 2026-06 2026-07` and, after a sample check, `--all`.
+This offline module creates a complete-history native-symbol identity
+registry, replays settlement latest actions across monthly file
+boundaries and keeps licensed state in a local gitignored SQLite file.
+The counts and the selected candidate statuses for **all 81 months**
+remain unknown until the author executes the local job. Prices,
+performance figures and the provisional Elsevier manuscript are
+**unchanged** pending further scientific validation.
+
 ## Native AAO contract symbology confirmed; candidate-price stage (2026-10-26)
 
 The local DBN native-symbol audit confirmed **100% of final settlement
