@@ -164,6 +164,27 @@ holds licensed option prices and must not be committed. Do not
 regenerate financial-model performance figures or paper tables until
 the further Barchart/CL/fixing/rate/lagged-IV and chronological tests.
 
+## Full-history settlement candidates confirmed by VM (2026-10-26)
+
+81-month reconciliation produced **5,105,603** final nonintraday
+candidate publisher/native-symbol/`ts_ref` keys on **1,700**
+reference days: 3,299,087 actual-flagged and 1,806,516
+theoretical-flagged. It saw 71,145 keys repeated across source months,
+52,290 latest preliminary keys, one invalid-price key, zero
+unresolved latest ties/deletions or cross-month fingerprint conflicts.
+These numbers are still **provisional**, not cleaned out-of-sample
+market valuations.
+
+The raw inventory's 1,701 dates versus the selected 1,700 must be
+reconciled by **offline** `experiments.wti_aao_panel_quality` and
+optional `--scan-final-dates` (reads the 81 DBN files locally).
+The report also gives coarse annual price bins and **date-only**
+Barchart overlap; it does *not* verify instrument-match settlement
+parity, units, causal volatility inputs or new model results. See
+`research/AAO_FULL_HISTORY_RECONCILIATION_2026-10-26.md`.
+No additional paid downloads, GitHub raw-data sharing or early
+manuscript/figure changes.
+
 ## Coordinating invariants
 
 - PR #95 was merged with the quote-first downloader and offline inventory; all 160 author-reported DBN files live **only on the author's Windows VM**, not on GitHub. Do not use GitHub-hosted CI to access those raw files. Do not request the API key, paste it into a chat, or commit secrets or licensed data.
