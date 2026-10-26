@@ -106,6 +106,22 @@ This is **only a diagnostic**, not permission to merge all candidate
 matches. Next agent must validate a stable outright contract master,
 CME trading sessions and revision history before pricing experiments.
 
+## Latest result: daily snapshot matching is insufficient
+
+User-run `experiments.wti_aao_mapping_comparison` matched at least
+one candidate definition for **30,508 / 55,326 (55.1%)** February 2021
+final settlement events and **68,835 / 118,094 (58.3%)** June 2026 events.
+No alternate-identity conflicts were found among these matches, but
+the remaining records are not verified absent or invalid.
+
+**Next no-charge task:** run
+`python -m experiments.wti_aao_symbol_mapping --months 2021-02 2026-06`
+and inspect in-file mapped `statistics.symbol` against publisher-scoped
+`definition.raw_symbol` and full unambiguous contract fingerprints.
+Read `research/AAO_SYMBOL_MAPPING_NEXT_GATE_2026-10-25.md`. This audit
+has no licensed row-level output. Resolve symbol reuse and final update
+chronology before pricing any real option or updating CAS results.
+
 ## Coordinating invariants
 
 - PR #95 was merged with the quote-first downloader and offline inventory; all 160 author-reported DBN files live **only on the author's Windows VM**, not on GitHub. Do not use GitHub-hosted CI to access those raw files. Do not request the API key, paste it into a chat, or commit secrets or licensed data.
