@@ -124,6 +124,22 @@ Do **not** run another `--mode download` by default; charges may recur. Keep lic
 market data gitignored and publish only permitted aggregate results. Heavy builds and
 experiments remain manual-only.
 
+## New completed verification (2026-10-25)
+
+The author's local integrity audit confirmed **all 162 downloaded DBN
+files by SHA256**, with no issues. The full 81-month coverage figure
+was generated (PDF/PNG/SVG) from a refreshed local inventory. In
+2021-02 and 2026-06, all final settlement events found a same-month
+outright instrument ID, but repeated events and predominantly
+theoretical June 2026 marks require detailed normalization.
+
+See `research/AAO_POST_DOWNLOAD_VALIDATION_2026-10-25.md` for exact
+counts and the next experiment:
+`python -m experiments.wti_aao_settlement_gate --months 2021-02 2026-06`.
+This does not yet establish valid multiyear contract-day option prices,
+independent holdout dates, fresh performance figures or a finished
+Journal of Commodity Markets manuscript.
+
 ## 81-month research execution and provisional Elsevier paper
 
 The completed AAO acquisitions cover **all 81 months (2020-01 through
