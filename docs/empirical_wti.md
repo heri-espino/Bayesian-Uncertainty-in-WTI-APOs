@@ -18,23 +18,46 @@ In the Barchart histories used by this project, `Latest` is the CME settlement f
 
 A live workstation test showed that Yahoo can return 404 / `YFTzMissingError` for older delisted individual contracts such as `CLG24.NYM`. Individual Yahoo CL pages are therefore no longer required by the canonical pilot.
 
-## Planned historical APO expansion (quote-only first)
+## Historical AAO expansion — 160 files acquired; quality/identity audit open
 
-**Not implemented/downloaded:** Historical WTI APO `AAO`/`AO`
-instrument definitions and settlement statistics on Databento have not
-yet been verified as available. The current implemented Databento workflow
-(`experiments/wti_databento_external_q.py`) is for **standard LO options
-and CL futures**, and its `--mode quote` should not be used or described
-as an AAO quote. Historical coverage and entitlement must be checked on
-the provider's actual symbols and CME reference dates.
+**Latest author-reported acquisition (25 October 2026):**
+`GLBX.MDP3` `AAO.OPT` with `definition` and `statistics`
+for 80 of 81 monthly windows from January 2020 through September 2026
+(160 downloaded chunks); total **USD 17.33487324 quoted, not billed amount**.
+This is a successful *file acquisition*, not verification that these
+observations all are WTI APO options, final price marks, independent dates or
+forward-test-ready observations. The one missing month must be read from the
+saved latest metadata quote JSON. Multiple degraded-feed warnings require
+contract/date-level diagnostics.
 
-The [feasibility and expansion plan](https://github.com/heri-espino/Bayesian-Uncertainty-in-WTI-APOs/blob/main/research/DATABENTO_AAO_EXPANSION_PLAN.md)
-and [Issue #90](https://github.com/heri-espino/Bayesian-Uncertainty-in-WTI-APOs/issues/90)
-define an ordered audit of existing panel attrition, AAO metadata and
-cost, cross-vendor settlement agreement, distinct evaluation dates,
-strictly earlier volatility inputs, and a go/no-go decision before
-substantial spending. Do not overwrite the Barchart-era panels or alter
-the canonical pricing driver merely because another vendor is available.
+The code is in `experiments/wti_databento_aao_bulk.py` and
+`experiments/wti_databento_aao_inventory.py`; the licensed DBN files
+remain on the author's VM, **not the GitHub repository**. Do not repeat
+`--mode download` by default. The next commands are **offline**:
+
+```powershell
+conda activate asian-options
+python -m pytest tests/test_wti_databento_aao_inventory.py -q
+python -m experiments.wti_databento_aao_inventory --months 2023-06 2025-06 2026-06
+# After validating the data fields on those three months:
+python -m experiments.wti_databento_aao_inventory --all
+```
+
+Audit source `asset`, `group`, `instrument_class`, option identity,
+`stat_type=3` settlement, `stat_flags` final/actual indicators,
+`ts_ref` reference date and historical `definition` revisions;
+count unique contract-date keys after deduplicating update records.
+The next work is Barchart cross-checking, CL first-nearby fixing/rates
+compatibility, eligible prior-date IV and leakage-free forward validation.
+See `research/CHECKPOINT_2026-10-25_AAO_EXPANSION.md`,
+`research/AAO_AGENT_TASKS.md` and Issue #90.
+
+The earlier Barchart-era 2,381 option rows on 15 target dates and 253 LO
+rows on 10 target dates remain the only validated forward comparisons.
+Do not silently substitute Databento marks until an instrument/time/quality
+adapter passes parity checks.
+
+## Historical metadata-only probe documentation (already executed)
 
 ## Implemented: existing-sample attrition and cost-free AAO feasibility quote
 

@@ -1,4 +1,28 @@
-# Journal of Futures Markets submission checklist
+# Submission readiness — conditional JCM / REMEF / JFM
+
+> **2026-10-25 strategy update:** The next ambitious journal to assess is
+> *Journal of Commodity Markets*, only if the newly acquired AAO history supports
+> a substantially stronger independent-date, settlement-quality and inference
+> result. REMEF remains the prepared Word-format fallback; Wiley/JFM source is
+> preserved as a stretch alternative. See [journal strategy](journal_strategy.md).
+> No submission or journal-specific reformatting has been approved.
+
+## Expanded-history scientific gates (currently OPEN)
+
+- [ ] Verify 160 local DBN file hashes and identify the excluded one of 81 months.
+- [ ] Confirm AAO outright product identity, expiry/strike/side and normalization.
+- [ ] Distinguish final, preliminary, actual and theoretical settlement marks and
+      CME `ts_ref` trading days; document degraded-feed warnings.
+- [ ] Reconcile overlapping Barchart and Databento APO marks and liquidity.
+- [ ] Count **independent eligible forward valuation dates**, not just contract rows.
+- [ ] Verify earlier-date APO IV and independent LO IV, CL fixings and dated rates.
+- [ ] Freeze chronological holdout, reproduce common-support PI/PM/IV comparisons,
+      date-cluster/time-block inference and sensitivity to model-generated prices.
+- [ ] Check new contribution against direct Asian/commodity/Bayesian precedents.
+- [ ] Obtain author sign-off on JCM versus REMEF versus JFM and verify current
+      publisher instructions, rights, costs, supplements and submission declarations.
+
+## Preserved Wiley/JFM-specific checklist
 
 > REMEF is the currently prepared alternative route. Its separate Word-format
 > requirements, bilingual metadata and open audit items are documented in

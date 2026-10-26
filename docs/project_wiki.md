@@ -10,18 +10,26 @@ paper.
 - [WTI empirical workflow](empirical_wti.md) — contract/data and empirical implementation.
 - [Architecture](architecture.md) — package and experiment architecture.
 - [Development](development.md) — engineering workflow.
-- [Submission checklist](submission_checklist.md) — final Journal of Futures Markets package.
+- [Journal strategy](journal_strategy.md) — conditional JCM, REMEF fallback, JFM alternative.
+- [Submission checklist](submission_checklist.md) — journal-specific readiness gates.
 
-## Next empirical step (not yet executed)
+## Current empirical extension: historical AAO files acquired, audit pending
 
-[Databento AAO expansion plan](https://github.com/heri-espino/Bayesian-Uncertainty-in-WTI-APOs/blob/main/research/DATABENTO_AAO_EXPANSION_PLAN.md)
-([Issue #90](https://github.com/heri-espino/Bayesian-Uncertainty-in-WTI-APOs/issues/90))
-is the active feasibility investigation: first explain the present
-15-date/10-date limitations, then verify and **quote** historical WTI APO
-data availability before buying any records. AAO access, added dates and
-improved publication prospects are unconfirmed; the REMEF manuscript
-remains a completed candidate and none of its empirical numbers change
-until reproducible new runs exist.
+The author's VM reported **160 downloaded compressed AAO definition/statistics files across
+80 eligible monthly windows (January 2020–September 2026)** at USD 17.33487324 *quoted*.
+Raw proprietary files are local only. Actual billing, excluded month, instrument/settlement
+identity, theoretical/actual mix, liquidity, chronology and newly independent eligible
+dates are **still unverified**.
+
+See [dated checkpoint](https://github.com/heri-espino/Bayesian-Uncertainty-in-WTI-APOs/blob/main/research/CHECKPOINT_2026-10-25_AAO_EXPANSION.md),
+[agent workstreams](https://github.com/heri-espino/Bayesian-Uncertainty-in-WTI-APOs/blob/main/research/AAO_AGENT_TASKS.md),
+and [Issue #90](https://github.com/heri-espino/Bayesian-Uncertainty-in-WTI-APOs/issues/90).
+Run only the **offline** inventory until the dataset passes identity/quality gates.
+The previous 15-date main and 10-date LO comparisons remain the published-draft baseline.
+
+**Conditional journal strategy:** [Journal of Commodity Markets prospect, REMEF fallback,
+preserved JFM](journal_strategy.md). A new journal target or stronger publication
+claim is not automatically established by downloading records.
 
 ## Current scientific thesis
 

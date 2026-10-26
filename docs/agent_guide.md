@@ -3,6 +3,9 @@
 The root `AGENTS.md` is the authoritative operational contract. This page explains how to
 apply it while working with the documented API.
 
+**Current research handoff (2026-10-25):** read `research/CHECKPOINT_2026-10-25_AAO_EXPANSION.md`, `research/AAO_AGENT_TASKS.md` and `docs/journal_strategy.md` before working on the newly acquired Databento AAO history. The 160 reported monthly chunks are local-only; the offline inventory, quality audit and new-date validation have not yet been completed. Do not rerun a billable download or silently change the manuscript target.
+
+
 ## Before changing code
 
 1. Read {doc}`architecture`, {doc}`repository_layout`, and {doc}`development`.

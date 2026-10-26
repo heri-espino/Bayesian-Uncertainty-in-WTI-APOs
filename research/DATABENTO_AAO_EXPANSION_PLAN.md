@@ -1,7 +1,17 @@
 # Databento WTI APO history expansion — feasibility-first research plan
 
-**Status:** Proposed, not executed. **Tracking:** [Issue #90](https://github.com/heri-espino/Bayesian-Uncertainty-in-WTI-APOs/issues/90).
+**Status:** Initial acquisition reported complete on 2026-10-25; this file preserves the historical design stages. Current status: [2026-10-25 checkpoint](CHECKPOINT_2026-10-25_AAO_EXPANSION.md). **Tracking:** [Issue #90](https://github.com/heri-espino/Bayesian-Uncertainty-in-WTI-APOs/issues/90).
 **Decision:** Investigate longer-dated and longer-history CME WTI Average Price Option data *before* finalizing the REMEF submission; keep the completed paper intact as a fallback. Neither AAO availability nor costs are confirmed.
+
+> **Current-state supersession (2026-10-25):** The original feasibility-first plan
+> below was written before the author's VM acquired **160** monthly `AAO.OPT`
+> definition/statistics DBN chunks from **80 of 81** quoted months, Jan 2020–Sep 2026,
+> at **USD 17.33487324 estimated** (not confirmed charges). Do not interpret earlier
+> paragraphs saying “not downloaded” or “buy pilot first” as current instructions.
+> **No more billable downloads are presently needed.** Next work is file integrity,
+> identity, final/theoretical settlement flags, Barchart reconciliation, and
+> independently eligible forward dates. See [agent tasks](AAO_AGENT_TASKS.md)
+> and the [conditional JCM/REMEF/JFM strategy](../docs/journal_strategy.md).
 
 ## Why this is worth considering
 

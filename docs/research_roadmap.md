@@ -5,7 +5,7 @@ be kept aligned with open GitHub Issues and the manuscript's actual scientific s
 
 ## Project objective
 
-Prepare a defensible submission to *Journal of Futures Markets* around the question:
+Prepare a defensible derivatives-pricing submission (conditional *Journal of Commodity Markets* target, REMEF fallback and preserved JFM route) around the question:
 
 > When does Bayesian parameter uncertainty materially affect WTI Average Price Option
 > valuation, and when does volatility/model specification dominate instead?
@@ -14,44 +14,25 @@ The project is considered submission-ready only when the empirical evidence, lit
 positioning, manuscript, reproducibility layer, and journal package all pass their
 respective exit criteria.
 
-## Priority research extension — longer Databento histories (proposed, not yet downloaded)
+## Priority research extension — historical Databento AAO files acquired (2026-10-25)
 
-The finished 2026-based results remain valid as a fallback, but limited independent
-valuation-date coverage merits a **feasibility-first** data extension before selecting
-a higher-ambition journal target. See the full
-[Databento AAO history-expansion plan](https://github.com/heri-espino/Bayesian-Uncertainty-in-WTI-APOs/blob/main/research/DATABENTO_AAO_EXPANSION_PLAN.md)
-and [tracking Issue #90](https://github.com/heri-espino/Bayesian-Uncertainty-in-WTI-APOs/issues/90).
+The author's local CLI **completed 160 compressed AAO.OPT definition/statistics chunks**,
+corresponding to 80 eligible months between January 2020 and September 2026. Quoted
+USD **17.33487324**, not verified final Databento billing. One of 81 months was ineligible
+on the last quote; determine which from the saved JSON (do not guess).
 
-**Order:** (0) reconcile attrition between 11,179 raw APO observations and the
-2,381 strict-forward holdouts across 15 target dates; (1) verify whether
-Databento `GLBX.MDP3` actually contains accessible historical WTI APO
-`AAO`/`AO` definitions and final settlements and obtain an itemized
-quote; (2) obtain the author's permission for a small cost-capped pilot;
-(3) compare overlapping Barchart marks, required CL fixings, LO implied
-volatility and exact valid date counts; (4) only then broaden the longitudinal
-analysis and reassess manuscript/journal placement.
+**No scientifically verified new option-price panel exists yet.** Next: local offline inventory,
+instrument identity and final/theoretical settlement audit, Barchart reconciliation,
+first-nearby CL fixing/rates alignment, strict prior-date IV support, valid date-count
+funnel, then (only if eligible) chronological extended forward tests and journal selection.
 
-**Critical distinction:** adding more standard `LO` option records cannot
-increase the independent APO outcome dates by itself. Unverified `AAO`
-symbology/historical access and hypothetical 100–250-date targets are
-**not findings**. No bulk purchase or numerical manuscript revision is
-authorized by this roadmap update. Existing `scripts/run_extended_forward_validation.py`
-and `experiments/wti_databento_external_q.py` should be reused rather
-than duplicating the pricing/LO engine. Heavy workflows remain manual-only.
-
-### First gate available in code (not yet executed on the research VM)
-
-- `python -m experiments.wti_aao_existing_attrition`: reconcile the
-  existing Barchart history against strict forward observation/date coverage.
-- `python -m experiments.wti_databento_aao_feasibility --mode quote`:
-  check free Databento metadata/AAO candidate parent mappings and
-  quoted one-day definition/statistics costs for 2023–2026, with no
-  historical-data downloads.
-
-The reports, when run, will appear under
-`results/analysis/wti_aao_history_feasibility/`. Never describe
-unexecuted quote checks as verified market coverage. Any data acquisition
-requires a separate explicit approval.
+See `research/CHECKPOINT_2026-10-25_AAO_EXPANSION.md`,
+`research/AAO_AGENT_TASKS.md`, `docs/journal_strategy.md` and
+[Issue #90](https://github.com/heri-espino/Bayesian-Uncertainty-in-WTI-APOs/issues/90).
+**Do not rerun the paid bulk downloader.** The 2026 baseline and its manuscript
+are retained unchanged until robust extended results exist. Historical
+`research/DATABENTO_AAO_EXPANSION_PLAN.md` documents the original feasibility
+stages; acquisition is now complete but *data qualification is not*.
 
 ## Milestone map
 
@@ -61,7 +42,13 @@ requires a separate explicit approval.
 | [**M2 — Empirical validation**](https://github.com/heri-espino/Metropolis-Hastings-for-Asian-Options-Using-Bayesian-Inference-and-Black-Scholes--Article-/issues/44) | Strengthen external validity and data provenance | [#35](https://github.com/heri-espino/Metropolis-Hastings-for-Asian-Options-Using-Bayesian-Inference-and-Black-Scholes--Article-/issues/35), [#36](https://github.com/heri-espino/Metropolis-Hastings-for-Asian-Options-Using-Bayesian-Inference-and-Black-Scholes--Article-/issues/36), [#37](https://github.com/heri-espino/Metropolis-Hastings-for-Asian-Options-Using-Bayesian-Inference-and-Black-Scholes--Article-/issues/37), [#38](https://github.com/heri-espino/Metropolis-Hastings-for-Asian-Options-Using-Bayesian-Inference-and-Black-Scholes--Article-/issues/38) | Forward validation broadened where feasible; settlement/data provenance strengthened; independent-Q-volatility route either implemented or explicitly documented as unavailable |
 | [**M3 — Model robustness & paper integration**](https://github.com/heri-espino/Metropolis-Hastings-for-Asian-Options-Using-Bayesian-Inference-and-Black-Scholes--Article-/issues/45) | Test the central hierarchy and integrate final evidence | [#39](https://github.com/heri-espino/Metropolis-Hastings-for-Asian-Options-Using-Bayesian-Inference-and-Black-Scholes--Article-/issues/39), [#40](https://github.com/heri-espino/Metropolis-Hastings-for-Asian-Options-Using-Bayesian-Inference-and-Black-Scholes--Article-/issues/40) | One targeted richer-model robustness decision completed; final figures/tables are embedded in the manuscript and support the narrative |
 | [**M4 — Reproducibility freeze**](https://github.com/heri-espino/Metropolis-Hastings-for-Asian-Options-Using-Bayesian-Inference-and-Black-Scholes--Article-/issues/46) | Make the submitted result exactly rebuildable | [#41](https://github.com/heri-espino/Metropolis-Hastings-for-Asian-Options-Using-Bayesian-Inference-and-Black-Scholes--Article-/issues/41) | Tests and build-paper workflow green; figures use vendored Wiley typography; submission tag/archive created |
-| [**M5 — JFM submission**](https://github.com/heri-espino/Metropolis-Hastings-for-Asian-Options-Using-Bayesian-Inference-and-Black-Scholes--Article-/issues/47) | Produce the upload-ready journal package | [#42](https://github.com/heri-espino/Metropolis-Hastings-for-Asian-Options-Using-Bayesian-Inference-and-Black-Scholes--Article-/issues/42) | Main paper, supplement, cover letter, metadata, data/code statements, bibliography, and journal-specific checks completed |
+| [**M5 — legacy JFM submission route**](https://github.com/heri-espino/Metropolis-Hastings-for-Asian-Options-Using-Bayesian-Inference-and-Black-Scholes--Article-/issues/47) | Produce the upload-ready journal package | [#42](https://github.com/heri-espino/Metropolis-Hastings-for-Asian-Options-Using-Bayesian-Inference-and-Black-Scholes--Article-/issues/42) | Main paper, supplement, cover letter, metadata, data/code statements, bibliography, and journal-specific checks completed |
+
+**Editorial tracker caveat:** milestone/issue titles such as “JFM submission” reflect
+the older Wiley plan and remain for provenance. The target is now a
+**conditional JCM strategy**, not an instruction to send the paper to JFM or
+rewrite the already prepared REMEF draft. Consult `docs/journal_strategy.md`
+before editing #42/#47 or the manuscript.
 
 ## Workstreams
 
