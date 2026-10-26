@@ -175,9 +175,11 @@ portion of earlier 2026 planning notes, without invalidating earlier published o
 - The next step is **offline inventory**, then instrument-identity, final/theoretical settlement,
   liquidity, degraded-date and Barchart reconciliation. The number of newly eligible pricing
   dates and all expanded-study results are **unknown**.
-- Do **not rerun** `experiments.wti_databento_aao_bulk --mode download` by default, nor
-  purchase more LO/CL/history without explicit new authorization. Databento's USD 32
-  safety threshold is a *quote-based* guard, not a provider-enforced bill cap.
+- **Current explicit user authorization:** replace all 81 months of lost AAO
+  `definition`/`statistics` data and back them up in this private Git LFS repo.
+  Execute only the manual quote-first, complete-81-month, budget-confirmed
+  procedure in `research/AAO_RECOVERY_AND_LFS_BACKUP_2026-10-26.md`.
+  No automated or additional LO/CL purchases; quoted cost is not a provider bill cap.
 - When filtering `statistics`, verify the actual DBN/DataFrame `stat_type` representation
   before comparing with integer 3; `stat_flags & 1` denotes final settlement and
   `stat_flags & 2` denotes actual (not theoretical), per CME/Databento for GLBX.MDP3.
@@ -192,9 +194,11 @@ portion of earlier 2026 planning notes, without invalidating earlier published o
 - Preserve all previously validated results, source files, packages, experiments and
   manuscript formats. Use short-lived isolated PRs for inventory, reconciliation,
   eligible dates, extended forward runs and editorial work, in that order.
-- Licensed files, locally stored DPAPI credentials, personal Windows paths, raw
-  symbol-level holdings and unapproved data dumps must not be committed or exposed.
-  Only license-permitted aggregate diagnostics, redacted manifests, hashes and code.
+- **Approved exception for private backup:** the author specifically requested
+  that recovered AAO source DBNs and reconstructed price-level SQLite be committed
+  to this private repository via Git LFS. Do NOT commit API keys, credentials,
+  personal Windows paths or unrelated personal data. Do not attach option-level
+  data to public CI logs or PR comments.
 - Heavy data/paper/figure workflows must be **manual-only**. Light automatic CI is fine.
 
 ## New 81-month AAO figure and Elsevier manuscript safeguards
