@@ -1,3 +1,31 @@
+## New Databento-only manuscript (separate from the Barchart adaptation)
+
+The author elected to finish the new Elsevier paper using **only the
+purchased AAO exchange definition/statistics archive**. The new paper
+source is `paper/jcm/databento_main.tex` and its independent CAS builder
+is `python paper/jcm/build_databento.py [--check]`. Neither overwrites
+the original `paper/jcm/main.tex`, Wiley, or REMEF manuscript.
+
+**Crucial methodological scope:** the Databento-only article uses a
+lognormal approximation to the *terminal arithmetic average*, whose
+expected forward and discount are inferred from current-date AAO
+call-put parity at **reserved, excluded anchor strikes**. Historical
+volatility is calculated from earlier parity-forward changes (not
+actual CL P-measure returns); prior-date AAO IV and Bayesian PI/PM,
+rolling 21/63 and EWMA are compared on identical non-anchor options.
+The sample is pre-fixing only. These conditional cross-sectional
+valuations are not fully ex-ante first-nearby CL Asian option prices.
+
+The author must execute `python -m experiments.wti_aao_databento_only
+--execute` and `python -m scripts.plot_aao_databento_only`, then return
+the actual manifest, metrics, cluster intervals and figures for
+manuscript revision. The paper **contains no fabricated or copied
+new numerical results**; empirical interpretation and submission
+claim remain pending. Complete runbook:
+`research/AAO_DATABENTO_ONLY_PAPER_RUNBOOK_2026-10-26.md`.
+
+---
+
 # Journal of Commodity Markets — Elsevier CAS working draft
 
 This is a **pre-submission source adaptation**, not a validated 81-month option-pricing paper or an approved journal submission.
