@@ -2,6 +2,12 @@
 
 **Status: historical acquisition reported complete on the author's Windows VM; settlement identity, data quality, and new scientific results NOT yet verified.** This checkpoint supersedes older **acquisition-status** statements in `research/CHECKPOINT_2026-09-29.md`, `research/AI_HANDOFF.md`, `research/DATABENTO_AAO_EXPANSION_PLAN.md`, and archived REMEF planning text. It does **not** supersede the validated earlier empirical results or overwrite their numerical outputs.
 
+## Post-acquisition inventory — author-reported 2026-10-25 results
+
+**Newer than the acquisition-only statements below.** The author ran the three-month sample and then `python -m experiments.wti_databento_aao_inventory --all` on the local VM. The all-month run decoded **80 months with zero errors**, `definition.asset=AAO` for the printed months, **69,579,736 statistics events**, **13,284,087 settlement events**, **5,843,770 final events** (3,989,698 flagged actual; 1,854,072 flagged theoretical) and **1,682 distinct final `ts_ref` reference dates**. Positive cleared-volume events: 98,152; positive-OI events: 5,719,204. The absent downloaded-window month is **February 2021**; reason still unknown.
+
+This is **not yet** a deduplicated, instrument-validated dataset or 1,682 eligible forward-validation dates. No Barchart reconciliation or new inference was run. Actual charge, full raw-file SHA256 parity, and unique contract/date keys remain open. Full interpretation and agent directions: [AAO_INVENTORY_RESULTS_2026-10-25.md](AAO_INVENTORY_RESULTS_2026-10-25.md).
+
 ## Scientific purpose
 
 Question: **How large is the effect of integrating over posterior uncertainty compared with changing volatility information when pricing WTI Asian (average-price) options?**
@@ -19,12 +25,12 @@ The prospective improvement is a *longer series of independently eligible valuat
 5. Author-reported live quote for 2020-01-01 through 2026-10-01 (exclusive): initially 81/81 months, USD **17.49357489** estimated. The subsequently executed download re-quoted **80/81 eligible months** at USD **17.33487324**.
 6. **Author's completed CLI output:** `downloaded_chunks: 160`, `quoted_usd: 17.33487324`, saved manifest `results/analysis/wti_aao_history_feasibility/bulk/bulk_acquisition_manifest.json`. Thus the acquisition routine *reported completion of the 80 eligible months × two schemas*, not that all 160 files have been independently inspected or that the account was actually billed USD 17.33.
 7. Databento emitted degraded-feed warnings on **2021-12-05; 2022-01-02; 2022-11-06; 2024-09-18; 2025-09-17; 2025-09-24; 2025-11-28; 2026-01-31; 2026-03-15; 2026-03-16; 2026-03-21; 2026-04-10; 2026-05-24; 2026-08-29**. These are dataset-level data-quality warnings; do NOT discard whole months or assert specific option marks are corrupted without a date/contract-level audit. Find the one ineligible month in the *latest* `bulk_quote_plan.json`; do not guess which it is.
-8. **PR #95** also provides `experiments/wti_databento_aao_inventory.py` and its synthetic tests to examine locally saved DBN files with no Databento historical API purchase. **No live inventory report has been supplied yet.**
+8. **PR #95** also provides `experiments/wti_databento_aao_inventory.py` and its synthetic tests to examine locally saved DBN files with no Databento historical API purchase. **A live inventory report has since been supplied; see the newer inventory section above.**
 
 ## Important status distinctions
 
 - **Confirmed by reported VM logs:** download program finished and wrote a manifest; 160 chunks; the quote and warnings above.
-- **Still unverified:** file integrity audit on VM, exact month excluded, actual account billing, decoded asset/product identity and metadata, counts of distinct *final* WTI APO settlement days, theoretical/actual mix, liquidity and Barchart agreement, trading reference dates, independent qualifying strict-forward test dates, expanded LO/CL coverage, new PI/PM or IV model results, and journal suitability after expansion.
+- **Still unverified:** file integrity audit on VM, reason for February 2021 exclusion, actual account billing, SHA256 integrity, full contract-level identity/normalization, unique final contract-day prices, settlement-quality and Barchart agreement, trading reference dates, independent qualifying strict-forward test dates, expanded LO/CL coverage, new PI/PM or IV model results, and journal suitability after expansion.
 - **Never assert:** 80 complete months of valid APO settlements; hundreds of independent pricing dates; successful new backtests; USD 17.33 exact charged; stronger journal acceptance odds; user approval for any further data purchases beyond the already executed authorization.
 
 ## Author's VM and data locations
