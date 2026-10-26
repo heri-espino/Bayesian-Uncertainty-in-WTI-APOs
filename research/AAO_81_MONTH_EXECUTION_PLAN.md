@@ -1,5 +1,12 @@
 # Execution plan: 81-month WTI APO historical research and JCM working paper
 
+
+> **Historical research execution note; superseded for present work:** see
+> [the canonical completion plan](PAPER_COMPLETION_MASTER_PLAN_2026-10-26.md)
+> and [evidence ledger](AAO_EVIDENCE_LEDGER_2026-10-26.md).
+> Older instructions prohibiting all private raw DBN commits are no longer applicable to the
+> **explicitly authorized private Git LFS backup**. New baseline tests are NOT complete.
+
 ## Scope and evidence cutoff
 
 The author reports Databento AAO definition/statistics data **acquired for all 81 months** (January 2020–September 2026), **162 DBN files** in two local acquisition ledgers, **USD 17.49357489 combined quoted**. These are *not* 81 months of validated pricing observations. An earlier **80-month** inventory contained 1,682 final settlement reference dates and 5,843,770 final settlement **events**. A refreshed 81-month inventory was reported by the author as processed, but its aggregate counts and file-based report are not available in GitHub; do not reuse the 80-month numbers as if they were updated.

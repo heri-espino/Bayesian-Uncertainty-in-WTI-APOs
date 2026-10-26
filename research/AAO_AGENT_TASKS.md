@@ -1,5 +1,14 @@
 # Agent execution plan — WTI APO 2020–2026 longitudinal study
 
+> **2026-10-26 scope correction:** PR #110 implements the author's **Databento-only** same-day parity-anchored reduced-form paper, not the optional Barchart/CL/LO structural extension. Use [the new runbook](AAO_DATABENTO_ONLY_PAPER_RUNBOOK_2026-10-26.md) after full private LFS data restoration; experiments002–006 in the [register](AAO_EXPERIMENT_REGISTER_2026-10-26.md) are the primary paper tasks.
+
+
+> **Superseding agent priorities:** [master plan](PAPER_COMPLETION_MASTER_PLAN_2026-10-26.md),
+> [experiment001–008 register](AAO_EXPERIMENT_REGISTER_2026-10-26.md), and
+> [verification checklist](AAO_AGENT_VERIFICATION_PROTOCOL_2026-10-26.md).
+> Current blocker is recovery and private LFS upload of all 162 DBNs and the rebuilt SQLite.
+> Older local-file recovery and incomplete-price-gate notes below reflect earlier checkpoints.
+
 ## Latest data-quality resolution and source recovery (2026-10-26)
 
 The author's private `--explain-date 2024-01-26` query showed

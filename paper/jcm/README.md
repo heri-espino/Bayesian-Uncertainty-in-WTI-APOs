@@ -1,5 +1,7 @@
 ## New Databento-only manuscript (separate from the Barchart adaptation)
 
+> **Databento-only paper completion gate:** [master plan](../../research/PAPER_COMPLETION_MASTER_PLAN_2026-10-26.md), [experiment register](../../research/AAO_EXPERIMENT_REGISTER_2026-10-26.md), [PR #110 runbook](../../research/AAO_DATABENTO_ONLY_PAPER_RUNBOOK_2026-10-26.md), [verification protocol](../../research/AAO_AGENT_VERIFICATION_PROTOCOL_2026-10-26.md). `databento_main.tex` is the selected reduced-form paper; results remain pending. `main.tex` is the separate older Barchart/LO CAS adaptation.
+
 The author elected to finish the new Elsevier paper using **only the
 purchased AAO exchange definition/statistics archive**. The new paper
 source is `paper/jcm/databento_main.tex` and its independent CAS builder

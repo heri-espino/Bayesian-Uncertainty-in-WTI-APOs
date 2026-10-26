@@ -1,5 +1,7 @@
 # Repository contract for coding agents and maintainers
 
+> **Canonical Databento-only paper handoff (2026-10-26):** Read [HANDOFF.md](HANDOFF.md), [master plan](research/PAPER_COMPLETION_MASTER_PLAN_2026-10-26.md), [evidence ledger](research/AAO_EVIDENCE_LEDGER_2026-10-26.md), [experiment register](research/AAO_EXPERIMENT_REGISTER_2026-10-26.md), and [agent audit protocol](research/AAO_AGENT_VERIFICATION_PROTOCOL_2026-10-26.md). PR #110 Databento-only reduced-form project is the user's selected article; Barchart/CL/LO structural work is separate. Do not merge without author authorization.
+
 This file is normative. Future coding agents and maintainers must preserve the repository
 architecture unless a deliberate migration is documented and completed atomically.
 

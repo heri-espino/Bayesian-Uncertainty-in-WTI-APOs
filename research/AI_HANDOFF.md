@@ -1,5 +1,7 @@
 ## Latest author decision: prepare Databento-only journal study (2026-10-26)
 
+> **Canonical continuation:** [HANDOFF](../HANDOFF.md), [master plan](PAPER_COMPLETION_MASTER_PLAN_2026-10-26.md), [evidence ledger](AAO_EVIDENCE_LEDGER_2026-10-26.md), [experiment register](AAO_EXPERIMENT_REGISTER_2026-10-26.md), and [agent verification](AAO_AGENT_VERIFICATION_PROTOCOL_2026-10-26.md). The current user-selected paper is **Databento-only PR #110**, not Barchart/LO comparisons; the original DBNs/SQLite have not been verified reuploaded.
+
 The author explicitly abandoned the Barchart-based option-price
 comparisons for the **new Elsevier CAS manuscript** and requests
 Bayesian PI/PM, historical-volatility and lagged AAO IV benchmarking

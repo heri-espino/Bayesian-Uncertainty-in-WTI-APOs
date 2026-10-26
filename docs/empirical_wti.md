@@ -1,5 +1,15 @@
 # Empirical WTI APO workflow
 
+> **Current methodological scope:** The older workflow on this page uses Barchart, CL and sometimes LO; the user-selected 2026 new JCM manuscript is **Databento-only**, with reduced-form terminal-average model and same-day disjoint AAO parity anchors, as specified in `research/AAO_DATABENTO_ONLY_PAPER_RUNBOOK_2026-10-26.md`. Do not insert old structural-market results into this separate article.
+
+
+> **Supersession note (2026-10-26):** This page mixes historically correct 80/81-month
+> acquisition notes and earlier empirical recipes. The authoritative current state
+> is `research/PAPER_COMPLETION_MASTER_PLAN_2026-10-26.md`
+> plus `research/AAO_EVIDENCE_LEDGER_2026-10-26.md`.
+> The AAO raw DBNs and derived SQLite need re-acquisition and private Git LFS upload;
+> no extended 2020–2026 forward-test result is validated.
+
 ## February 2021 backfill: acquisition coverage now 81/81 months
 
 **Latest author-reported VM logs (2026-10-25):** separate February 2021 `definition`/`statistics` download finished with **two new files at USD 0.15870165 quoted**; the former 504 gateway timeout was in metadata pricing. The original 80-month 160-file manifest remains intact, and the February-specific manifest under `results/analysis/wti_aao_history_feasibility/bulk_feb2021/` is separate. Together, the two acquisitions report **162 DBN files / 81 monthly windows / USD 17.49357489 combined quoted**, but actual Databento billing is unverified.

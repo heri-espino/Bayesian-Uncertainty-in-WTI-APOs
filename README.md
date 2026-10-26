@@ -1,5 +1,7 @@
 # Bayesian parameter uncertainty for Asian options
 
+> **Authoritative current handoff:** [HANDOFF.md](HANDOFF.md), [master plan](research/PAPER_COMPLETION_MASTER_PLAN_2026-10-26.md), [evidence ledger](research/AAO_EVIDENCE_LEDGER_2026-10-26.md), [experiments](research/AAO_EXPERIMENT_REGISTER_2026-10-26.md), [independent verification](research/AAO_AGENT_VERIFICATION_PROTOCOL_2026-10-26.md). The **Databento-only** project below is implemented but no real 81-month pricing results have been verified. LFS setup is not proof the lost source files were reuploaded.
+
 ## Current research priority: finish Databento-only Bayesian AAO paper
 
 The author chose a **Databento-only** exchange settlement study, with
