@@ -79,6 +79,13 @@ This is the canonical inventory of reusable public functions/classes. It is gene
 :show-inheritance:
 ```
 
+## Conservative AAO settlement normalization
+
+```{automodule} bayesian_asian_options.aao_settlements
+:members: normalize
+:show-inheritance:
+```
+
 ## Databento WTI market-data utilities
 
 ```{automodule} bayesian_asian_options.databento_wti
