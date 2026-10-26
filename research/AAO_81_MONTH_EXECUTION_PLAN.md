@@ -81,6 +81,35 @@ actual/theoretical counts before deciding how to safely build a
 deduplicated contract-level market panel. See
 `research/AAO_POST_DOWNLOAD_VALIDATION_2026-10-25.md`.
 
+## New verified 81-month totals and mapping-method comparison
+
+The author's refreshed inventory now confirms 81 months, **1,701 distinct
+final CME settlement reference dates**, and 5,899,096 **final settlement
+events**, including 4,027,696 actual-flagged and 1,871,400 theoretical-
+flagged. These are event-level values only. Existing same-publication-day
+as-of matching missed 76.1% of February 2021 and 81.1% of June 2026
+settlement events; nearly all matched selected keys have a different
+`ts_ref` day from their UTC publication date. That is **not** valid
+scientific attrition.
+
+The next script `experiments/wti_aao_mapping_comparison.py` compares
+candidate **CME reference-date**, **publication UTC date** and
+**previous publication UTC date** instrument definition snapshots
+without any network calls. It requires unambiguous daily option identities,
+preceding definitions and recognized update actions, and reports
+conflicts across candidate matching methods. This is a diagnosis
+of the correct normalization design; it is **not** a finalized
+contract/day pricing panel.
+
+```powershell
+python -m pytest tests/test_wti_aao_mapping_comparison.py -q
+python -m experiments.wti_aao_mapping_comparison --months 2021-02 2026-06
+```
+
+Read `research/AAO_81_MONTH_SETTLEMENT_MAPPING_FINDINGS.md` before
+implementing daily settlement update deduplication or adding option
+valuation dates to the paper.
+
 ## Required scientific implementation after gates 1–3
 
 **Workstream A — contract/settlement master.** Decode definitions and statistics in bounded monthly batches. Resolve `publisher_id + instrument_id` under time-aware historical definitions; explicitly separate outright call/put (`C`/`P`) from strategy/leg records and instrument ID changes. CME `ts_ref` defines the settlement reference date; apply `update_action` and the final/actual flags. Keep local price-level outputs out of Git. Report counts of unique outright contract × reference-day final settlement prices, theoretical/actual composition, expiries, C/P and liquidity event alignment. Fail closed on ambiguous joins and record it as attrition rather than backfilling guessed matches.
