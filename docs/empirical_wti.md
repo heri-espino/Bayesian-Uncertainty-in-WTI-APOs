@@ -20,6 +20,21 @@ A live workstation test showed that Yahoo can return 404 / `YFTzMissingError` fo
 
 ## Historical AAO expansion — 160 files acquired; quality/identity audit open
 
+**Later inventory result (2026-10-25):** On the author's VM the existing
+offline script decoded all 80 months with zero errors, reporting 13,284,087
+settlement events, 5,843,770 final settlement events (3,989,698 actual-flagged,
+1,854,072 theoretical-flagged) and 1,682 distinct final `ts_ref` dates.
+`AAO` was the asset in every displayed month; calls and puts were present.
+The missing monthly window is **2021-02**, with its exclusion reason still
+unverified. Events and dates are *not* deduplicated option/date marks and
+do *not* establish additional strictly forward-eligible model test dates.
+See `research/AAO_INVENTORY_RESULTS_2026-10-25.md`; next work is to validate
+the local SHA256 manifest, historical contract identity, `ts_ref`, final
+revision ordering, actual/theoretical mix, Barchart and CL/IV compatibility.
+The inventory commands below are for reproducibility, not instructions to
+start another download.
+
+
 **Latest author-reported acquisition (25 October 2026):**
 `GLBX.MDP3` `AAO.OPT` with `definition` and `statistics`
 for 80 of 81 monthly windows from January 2020 through September 2026
