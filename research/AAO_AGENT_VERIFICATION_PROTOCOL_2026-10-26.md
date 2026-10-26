@@ -1,5 +1,7 @@
 # Independent-agent verification protocol — 2026-10-26
 
+**CURRENT BACKUP REVIEW CORRECTION:** The 162 source DBNs and SQLite now have remote Git LFS pointer references on branch `backup/aao-recovery-20261026` with the manifest; the user passed SHA256 audit for all 162 locally. Verify this **backup branch**, not just `main`, and independently test remote object fetch before concluding end-to-end backup validation. [PR #112](https://github.com/heri-espino/Bayesian-Uncertainty-in-WTI-APOs/pull/112) is open, not merged. More detail: [new recovery checkpoint](AAO_RECOVERY_CONFIRMED_BACKUP_BRANCH_2026-10-26.md). The pre-recovery expected conclusions below are historical, not the current backup state.
+
 An independent agent must verify this handoff **from the repository, not the previous conversation**. This is an audit, not authorization to merge, buy data, change sparse checkout or submit a paper.
 
 ## Read first
