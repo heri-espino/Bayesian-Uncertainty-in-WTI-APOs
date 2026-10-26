@@ -108,7 +108,7 @@ def test_unknown_definition_action_refused():
 
 def test_empty_mapped_symbol_cannot_be_selected():
     d, s = samples()
-    s.loc[4, "symbol"] = None
+    s.loc[[3, 4], "symbol"] = None
     panel, result = normalize(d, s)
     assert len(panel) == 0
     assert result["events_without_safe_outright_mapping"] >= 1
