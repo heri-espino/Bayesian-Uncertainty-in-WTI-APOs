@@ -77,6 +77,18 @@ See `paper/README.md` for the manuscript directory contract. The older REMEF-ori
 
 ## Databento 2020–2026 AAO acquisition: completed transfer, pending scientific validation
 
+**New inventory evidence (2026-10-25):** All 80 downloaded months decoded
+without errors, with **1,682 distinct reference dates containing final settlement events**,
+**5,843,770 final settlement events** (3,989,698 actual-flagged and 1,854,072
+theoretical-flagged). `AAO` asset confirmed in monthly definition summaries.
+**February 2021** is the absent month, pending metadata diagnosis.
+These are *not* 1,682 eligible forward-validation dates or 5.8 million
+independent contract-price observations. See
+[offline inventory findings](research/AAO_INVENTORY_RESULTS_2026-10-25.md)
+and [next agent tasks](research/AAO_AGENT_TASKS.md). No model result or
+publication target has been revised on this basis alone.
+
+
 **The author reported a successful local historical download:** 160 compressed `AAO.OPT`
 definition/statistics files across **80 eligible monthly windows** from January 2020 to
 September 2026, quoted at **USD 17.33487324** (not verified actual billing).
