@@ -122,6 +122,27 @@ Read `research/AAO_SYMBOL_MAPPING_NEXT_GATE_2026-10-25.md`. This audit
 has no licensed row-level output. Resolve symbol reuse and final update
 chronology before pricing any real option or updating CAS results.
 
+## Symbol identity solved in two sampled months: normalize updates next
+
+The author confirmed **55,326/55,326** February 2021 and
+**118,094/118,094** June 2026 final settlement events have native
+`statistics.symbol` mapping to unambiguous `AAO` C/P contract
+definitions by publisher+raw symbol, with no within-month
+fingerprint conflicts. Tentative unique symbol/reference-day pairs:
+**48,730** (February) and **101,397** (June). This is stronger than
+the low-coverage daily numeric ID joins but does not validate a global
+multiyear pricing sample.
+
+New source `experiments/wti_aao_contract_day_candidates.py` and
+synthetic tests implement **per-file-month**, correction-aware latest
+settlement filtering with exchange add/delete and final/actual/intraday
+flags; aggregate-only reports are the default, with private licensed
+row output opt-in and gitignored. See
+`research/AAO_NATIVE_SYMBOL_CANDIDATE_PANEL_2026-10-26.md`.
+Run two months first, **then** handle late cross-month amendments and
+symbol reuse. New PI/PM empirical results, price-performance plots and
+Elsevier CAS paper rewrites are *not yet validated*.
+
 ## Coordinating invariants
 
 - PR #95 was merged with the quote-first downloader and offline inventory; all 160 author-reported DBN files live **only on the author's Windows VM**, not on GitHub. Do not use GitHub-hosted CI to access those raw files. Do not request the API key, paste it into a chat, or commit secrets or licensed data.

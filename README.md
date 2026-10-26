@@ -162,6 +162,25 @@ need special treatment, and safe steps toward a contract/day panel. The
 journal draft and pricing-performance figures still use the earlier
 scientifically validated sample.
 
+## Native AAO contract symbology confirmed; candidate-price stage (2026-10-26)
+
+The local DBN native-symbol audit confirmed **100% of final settlement
+events in February 2021 (55,326)** and **June 2026 (118,094)** map to
+unambiguous outright AAO C/P contract definitions by publisher+symbol,
+with **zero** within-month fingerprint conflicts. The daily numeric
+instrument-ID matching issue no longer blocks local preliminary
+contract identification.
+
+The [candidate normalization checkpoint](research/AAO_NATIVE_SYMBOL_CANDIDATE_PANEL_2026-10-26.md)
+and new offline `python -m experiments.wti_aao_contract_day_candidates
+--months 2021-02 2026-06` implement correction-aware,
+final/non-intraday filtering, with licensed price-level output only
+in an opt-in gitignored local directory. Selected records remain
+**within-month candidates**, not validated cross-month settlement
+prices, actual transactions or eligible chronological option-pricing
+test dates. Existing paper figures and numerical conclusions are
+unchanged until source parity and new out-of-sample experiments pass.
+
 ## 81-month AAO inventory totals and timestamp-mapping gate (2026-10-25)
 
 The locally verified historical archive contains **81 months**,

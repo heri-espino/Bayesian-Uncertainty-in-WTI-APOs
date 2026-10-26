@@ -134,6 +134,25 @@ This is still not a finalized contract/day settlement-price panel,
 independent historical holdout, pricing/volatility evaluation or new
 paper/figure data.
 
+## Native symbol evidence and correction-aware monthly candidates (2026-10-26)
+
+The author confirmed **all 55,326 February 2021** and **all 118,094
+June 2026** final settlements have mapped native DBN symbols and
+match publisher-scoped, unique AAO outright C/P definitions. A
+new offline candidate normalizer:
+`python -m experiments.wti_aao_contract_day_candidates --months 2021-02 2026-06`
+respects the latest settlement event among add/delete/preliminary/final
+updates, excludes final intraday marks and ambiguous symbols, and
+prints only safe aggregate counts by default.
+
+**Do not rerun the obsolete daily ID shifting diagnostics unless
+studying why they failed.** The *next* scientific gate is reconciliation
+of later corrections across monthly file boundaries, stable contract
+fingerprint and price scaling across all 81 months, cross-vendor source
+parity and chronological input coverage. Private per-month candidate
+price files are opt-in with `--export-private` and locally gitignored.
+See `research/AAO_NATIVE_SYMBOL_CANDIDATE_PANEL_2026-10-26.md`.
+
 ## Required scientific implementation after gates 1–3
 
 **Workstream A — contract/settlement master.** Decode definitions and statistics in bounded monthly batches. Resolve `publisher_id + instrument_id` under time-aware historical definitions; explicitly separate outright call/put (`C`/`P`) from strategy/leg records and instrument ID changes. CME `ts_ref` defines the settlement reference date; apply `update_action` and the final/actual flags. Keep local price-level outputs out of Git. Report counts of unique outright contract × reference-day final settlement prices, theoretical/actual composition, expiries, C/P and liquidity event alignment. Fail closed on ambiguous joins and record it as attrition rather than backfilling guessed matches.

@@ -94,6 +94,30 @@ price panel. Do not use numeric `instrument_id` alone across dates;
 do not run further paid downloads. Model results and paper figures
 are not yet updated.
 
+## Native-symbol breakthrough and candidate-panel implementation (2026-10-26)
+
+The author ran `wti_aao_symbol_mapping` locally on 2021-02 and 2026-06:
+**100% of final AAO settlement events in both samples** have nonempty
+native mapped symbols and match one unambiguous publisher-scoped outright
+C/P option fingerprint; **zero** same-symbol conflicting fingerprints in
+either month. There are 48,730 and 101,397 *tentative* unique symbol +
+CME reference-date keys, respectively. This makes native-symbol matching
+a much better starting point than arbitrary daily instrument-ID joins.
+
+The new offline
+`experiments.wti_aao_contract_day_candidates --months 2021-02 2026-06`
+constructs *within-file-month* candidate settlement records using latest
+correction/deletion, final/non-intraday flags, and unambiguous outright
+identities. It prints aggregate reports by default; row-level
+`--export-private` writes only to a **gitignored** local folder, never
+GitHub. See `research/AAO_NATIVE_SYMBOL_CANDIDATE_PANEL_2026-10-26.md`.
+
+**These are not yet validated exchange prices or a chronological test
+panel.** After reviewing candidates, implement cross-month late-update
+reconciliation, contract-spec/price-scale audit, CL/fixing/rates/lagged-IV
+eligibility, and only then actual new Bayesian backtests, performance
+figures and manuscript updates. Never rerun paid Databento downloads.
+
 Read this file before continuing research work.
 
 ## Canonical current checkpoint
