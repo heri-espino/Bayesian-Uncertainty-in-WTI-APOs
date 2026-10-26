@@ -61,6 +61,7 @@ data/databento/wti_aao_bulk/raw/*.partial.dbn.zst
 data/databento/wti_aao_bulk/derived_private/*
 !data/databento/wti_aao_bulk/derived_private/aao_cross_month_PROVISIONAL_*.sqlite3
 !data/databento/wti_aao_bulk/derived_private/AAO_CANDIDATES_NOT_VALIDATED_*.csv.gz
+!data/databento/wti_aao_bulk/derived_private/AAO_DATABENTO_REDUCED_FORM_CONTRACT_PRICING.csv.gz
 # Never stage mutable SQLite write-ahead log / shared-memory files.
 data/databento/wti_aao_bulk/derived_private/*.sqlite3-wal
 data/databento/wti_aao_bulk/derived_private/*.sqlite3-shm
