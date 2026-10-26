@@ -58,12 +58,15 @@ ledger are preserved:
 
 ```powershell
 conda activate asian-options
-python -m experiments.wti_databento_aao_bulk --mode quote --start 2021-02-01 --end 2021-03-01 --max-budget-usd 40 --report-dir results/analysis/wti_aao_history_feasibility/bulk_feb2021
+python -m experiments.wti_databento_aao_bulk --mode quote --start 2021-02-01 --end 2021-03-01 --max-budget-usd 1 --report-dir results/analysis/wti_aao_history_feasibility/bulk_feb2021
 ```
 
 If and only if the output reports `eligible_months=1` and a valid combined
-price, any future *explicitly approved* billable backfill must use **the same
-month window AND the separate `--report-dir`**. The existing downloader's
+price **at or below USD 0.80**, any future *explicitly approved* billable
+backfill should use **the same month window, `--max-budget-usd 1`, and the
+separate `--report-dir`**. The single-month quote-based local safety
+threshold is then USD 0.80, minimizing the chance of consuming the
+remaining research credit allocation. The existing downloader's
 `bulk_acquisition_manifest.json` is tied to its original date range, and
 will reject a different date window when pointed at the old ledger.
 
