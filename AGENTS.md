@@ -172,6 +172,26 @@ portion of earlier 2026 planning notes, without invalidating earlier published o
   Only license-permitted aggregate diagnostics, redacted manifests, hashes and code.
 - Heavy data/paper/figure workflows must be **manual-only**. Light automatic CI is fine.
 
+## New 81-month AAO figure and Elsevier manuscript safeguards
+
+Read `research/AAO_81_MONTH_EXECUTION_PLAN.md`. The acquisition report
+now covers **162 locally stored definition/statistics chunks over 81 months**,
+with two separate manifests and quoted USD 17.49357489, not verified billing.
+The prior 80-month event inventory **must not** be presented as updated
+81-month results. Use `scripts.audit_aao_manifests` to verify both ledgers
+with SHA256 on the author's VM. `scripts.plot_aao_history_coverage` creates
+only a **diagnostic event-coverage figure**, never evidence of unique option
+price or out-of-sample pricing performance.
+
+The author's new Elsevier template is under `paper/els-cas-templates/`;
+the `paper/jcm/` builder is an isolated manual pre-submission working
+draft that reuses earlier verified concise sections. Do not claim the
+expanded paper is written, overwrite old JFM/REMEF source, repurpose
+old figures as the new sample, or select final journal formatting absent
+the contract/date/fixing/IV/backtest/inference gates. Licensed raw data,
+local figures and heavy manuscript builds are never automatically
+committed or triggered on pushes.
+
 ## Enforcement
 
 Run both commands before opening a PR:
