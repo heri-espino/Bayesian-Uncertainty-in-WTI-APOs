@@ -49,7 +49,9 @@ paper/remef/build/
 
 # # Proprietary Databento raw inputs remain local. Version query metadata, hashes,
 # # diagnostics, and permitted derived summaries instead of raw vendor data.
-# data/databento/**/raw/
+data/databento/**/raw/
+# Additional explicit protection for the expanded licensed AAO dataset
+data/databento/wti_aao_bulk/raw/
 
 # # Generated experiment checkpoints and large intermediates
 # # Keep final manifests and summary CSVs; do not version thousands of restart files.
