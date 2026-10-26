@@ -1,5 +1,15 @@
 # Bayesian parameter uncertainty for Asian options
 
+
+> **Canonical current research/paper status (2026-10-26):** Start at [HANDOFF.md](HANDOFF.md),
+> [the completion master plan](research/PAPER_COMPLETION_MASTER_PLAN_2026-10-26.md),
+> [numerical evidence ledger](research/AAO_EVIDENCE_LEDGER_2026-10-26.md),
+> [sequential experiment plan](research/AAO_EXPERIMENT_REGISTER_2026-10-26.md), and
+> [agent verification protocol](research/AAO_AGENT_VERIFICATION_PROTOCOL_2026-10-26.md).
+> The earlier 81-month diagnostic numbers are historical VM results. Replacement AAO source DBNs
+> and full SQLite are **not verified as uploaded**; no expanded chronological pricing comparisons
+> or final JCM paper exist yet. Older paragraphs below are preserved as dated provenance.
+
 ## URGENT — Databento raw history recovery and Git LFS backup (2026-10-26)
 
 The previous **162 compressed AAO DBN files and reconstructed SQLite
