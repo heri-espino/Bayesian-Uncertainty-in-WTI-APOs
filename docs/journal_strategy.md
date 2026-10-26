@@ -1,5 +1,12 @@
 # Journal strategy — October 2026 post-Databento expansion
 
+
+> **Current scope and author decision (2026-10-26):** JCM remains a conditional stretch target,
+> not a submitted or completed 2020–2026 study. REMEF and earlier Wiley/JFM source are preserved.
+> See [the master plan](../research/PAPER_COMPLETION_MASTER_PLAN_2026-10-26.md)
+> and [evidence register](../research/AAO_EVIDENCE_LEDGER_2026-10-26.md).
+> Expanded Databento pricing model comparisons and JCM figure revisions are still unexecuted.
+
 **Planning status, not submission approval.** The author has asked us to reconsider the journal after expanding historical WTI Average Price Option data. The **working ambitious target is *Journal of Commodity Markets* (JCM), conditional on strong *verified* new market evidence**. The prepared realistic fallback is *Revista Mexicana de Economía y Finanzas* (REMEF); *Journal of Futures Markets* (JFM) remains a demanding alternative and the Wiley LaTeX source remains intact. The author has not confirmed a final journal submission or author-approved journal reformatting. **Do not send multiple journals the same paper simultaneously.**
 
 ## Why JCM is a reasonable next target (subject to evidence)
