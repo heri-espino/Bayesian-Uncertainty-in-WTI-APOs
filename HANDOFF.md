@@ -1,5 +1,7 @@
 # WTI APO — start here (2026-10-26)
 
+**RECOVERY STATUS UPDATE (later on 2026-10-26):** The 162 DBNs, new 81-month acquisition manifest, and SQLite are **now verified present on remote backup branch** `backup/aao-recovery-20261026` (Git LFS pointers); the author's 162/162 SHA256 audit passed. They are **not yet merged into `main`**. [PR #112](https://github.com/heri-espino/Bayesian-Uncertainty-in-WTI-APOs/pull/112) is open for safe integration. Independent remote LFS blob retrieval and the new six-method actual pricing tests remain pending. Read [the latest checkpoint](research/AAO_RECOVERY_CONFIRMED_BACKUP_BRANCH_2026-10-26.md). Earlier statements below describing files as absent reflect the pre-recovery checkpoint.
+
 **The paper is NOT finished.** Previous Bayesian WTI Barchart/LO research and manuscript results are stored in this repository; the 81-month Databento AAO extension has only historical source/instrument/settlement diagnostics, **not a validated extended forward pricing study**.
 
 The original 162 AAO DBN files and private historical SQLite disappeared from the Windows VM after an unsafe sparse-checkout instruction. Private Git LFS tracking is configured, but **no 162 replacement files nor rebuilt 81-month SQLite have been verified as pushed to GitHub**.
