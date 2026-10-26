@@ -143,6 +143,27 @@ Run two months first, **then** handle late cross-month amendments and
 symbol reuse. New PI/PM empirical results, price-performance plots and
 Elsevier CAS paper rewrites are *not yet validated*.
 
+## New local cross-month contract settlement stage (2026-10-26)
+
+After native symbology succeeded, within-month candidate normalization
+selected **48,730** final nonintraday AAO symbol/reference-date keys
+in 2021-02 and **101,397** in 2026-06 (including 31,414/43,067
+actual-flagged and 17,316/58,330 theoretical-flagged keys).
+It excluded 101 and 190 keys whose latest month update was not final;
+the author's sample reported zero latest deletions and tied conflicts.
+
+New canonical `bayesian_asian_options.aao_cross_month` plus
+`experiments/wti_aao_cross_month.py` uses a **two-pass** all-selected-
+months symbol fingerprint registry, then SQL-backed last-action
+reconciliation across month boundaries (no paid API, no row exports).
+Run synthetic unit tests, four months, and only then the 81-month
+local full run. See
+`research/AAO_CROSS_MONTH_SETTLEMENT_RECONCILIATION_2026-10-26.md`.
+Public PRs get only aggregate JSON. The **private** SQLite state
+holds licensed option prices and must not be committed. Do not
+regenerate financial-model performance figures or paper tables until
+the further Barchart/CL/fixing/rate/lagged-IV and chronological tests.
+
 ## Coordinating invariants
 
 - PR #95 was merged with the quote-first downloader and offline inventory; all 160 author-reported DBN files live **only on the author's Windows VM**, not on GitHub. Do not use GitHub-hosted CI to access those raw files. Do not request the API key, paste it into a chat, or commit secrets or licensed data.
