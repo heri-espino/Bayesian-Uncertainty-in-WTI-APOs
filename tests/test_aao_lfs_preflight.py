@@ -28,7 +28,7 @@ def test_preflight_missing_lfs_or_anchor_fails_before_download(monkeypatch, tmp_
         if args[:2] == ("check-attr", "filter"):
             return CompletedProcess(args, 0, stdout="path: filter: unspecified")
         if args[:2] == ("check-ignore", "--no-index"):
-            return CompletedProcess(args, 0, stdout="")  # still ignored
+            return CompletedProcess(args, 0, stdout=".gitignore:1:raw/*\tpath")  # ignored
         return CompletedProcess(args, 1, stdout="")
     monkeypatch.setattr("scripts.aao_lfs_preflight.git", mock_git)
     result = inspect(tmp_path)
@@ -53,10 +53,45 @@ def test_preflight_successful_config_and_complete_gate(monkeypatch, tmp_path):
         if args[:2] == ("check-attr", "filter"):
             return CompletedProcess(args, 0, stdout="path: filter: lfs")
         if args[:2] == ("check-ignore", "--no-index"):
-            return CompletedProcess(args, 1, stdout="")
+            return CompletedProcess(args, 0, stdout=".gitignore:1:!raw/aao_*.dbn.zst\tpath")
         return CompletedProcess(args, 1, stdout="")
     monkeypatch.setattr("scripts.aao_lfs_preflight.git", mock_git)
     assert inspect(tmp_path)["ready"]
     result = inspect(tmp_path, require_complete=True)
     assert not result["ready"]
     assert "missing_source_files:162" in result["issues"]
+
+
+
+def test_real_git_negative_ignore_rule_is_not_reported_as_ignored(tmp_path):
+    """Regression: check-ignore -q reports negations as matches."""
+    import shutil
+    import subprocess
+
+    if not shutil.which("git"):
+        return
+    subprocess.run(["git", "init", "-q"], cwd=tmp_path, check=True)
+    anchor = tmp_path / "data/databento/wti_aao_bulk/README.md"
+    anchor.parent.mkdir(parents=True)
+    anchor.write_text("anchor")
+    subprocess.run(["git", "add", str(anchor.relative_to(tmp_path))],
+                   cwd=tmp_path, check=True)
+    (tmp_path / ".gitignore").write_text(
+        "data/databento/**/raw/\n"
+        "!data/databento/wti_aao_bulk/raw/\n"
+        "data/databento/wti_aao_bulk/raw/*\n"
+        "!data/databento/wti_aao_bulk/raw/aao_definition__*.dbn.zst\n"
+        "!data/databento/wti_aao_bulk/raw/aao_statistics__*.dbn.zst\n"
+        "data/databento/wti_aao_bulk/raw/*.partial.dbn.zst\n"
+    )
+    (tmp_path / ".gitattributes").write_text(
+        "data/databento/wti_aao_bulk/raw/*.dbn.zst filter=lfs "
+        "diff=lfs merge=lfs -text\n"
+    )
+    from scripts.aao_lfs_preflight import inspect
+
+    result = inspect(tmp_path)
+    # Git LFS might not be installed in arbitrary test environments;
+    # the critical check is the absence of false "ignored" errors.
+    assert not any("source_file_still_ignored" in issue
+                   for issue in result["issues"])
