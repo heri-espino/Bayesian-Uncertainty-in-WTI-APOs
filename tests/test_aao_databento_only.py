@@ -180,3 +180,55 @@ def test_end_to_end_sqlite_fixture_without_databento_client(tmp_path, monkeypatc
     assert (private/"AAO_DATABENTO_REDUCED_FORM_CONTRACT_PRICING.csv.gz").is_file()
     assert report["no_barchart"] is True
     assert report["no_provider_calls"] is True
+
+
+def test_pilot_eval_end_rejects_backwards_window(tmp_path):
+    """Do not silently run a pilot with no possible evaluation dates."""
+    import sqlite3
+    from experiments import wti_aao_databento_only as driver
+    db = tmp_path / "test.sqlite3"
+    conn = sqlite3.connect(db)
+    conn.execute(
+        "CREATE TABLE states (ref_date TEXT, action INTEGER, flags INTEGER,"
+        "price REAL, tie_conflict INTEGER)"
+    )
+    conn.commit()
+    conn.close()
+    with pytest.raises(ValueError, match="eval_end"):
+        driver.evaluate(
+            sqlite_path=db, raw_dir=tmp_path,
+            output_dir=tmp_path / "output",
+            private_dir=tmp_path / "private",
+            start_date="2022-01-01", eval_start="2023-01-01",
+            eval_end="2022-12-31",
+            date_stride=15, max_dates=0, max_contracts=40,
+        )
+
+
+def test_pilot_no_eligible_marks_preserves_diagnostic(tmp_path):
+    """An unsuccessful market pilot records attrition, never mock scores."""
+    import json
+    import sqlite3
+    from experiments import wti_aao_databento_only as driver
+    db = tmp_path / "test.sqlite3"
+    conn = sqlite3.connect(db)
+    conn.execute(
+        "CREATE TABLE states (ref_date TEXT, action INTEGER, flags INTEGER,"
+        "price REAL, tie_conflict INTEGER)"
+    )
+    conn.commit()
+    conn.close()
+    out = tmp_path / "results"
+    with pytest.raises(RuntimeError, match="eligibility_failure.json"):
+        driver.evaluate(
+            sqlite_path=db, raw_dir=tmp_path,
+            output_dir=out, private_dir=tmp_path / "private",
+            start_date="2022-01-01", eval_start="2023-01-01",
+            eval_end="2023-06-30",
+            date_stride=15, max_dates=0, max_contracts=40,
+        )
+    report = json.loads((out / "eligibility_failure.json").read_text())
+    assert report["selected_source_days"] == 0
+    assert report["status"] == "no_eligible_real_market_targets"
+    assert report["evaluation_end"] == "2023-06-30"
+    assert not (out / "method_metrics.csv").exists()
