@@ -1,4 +1,4 @@
-# Evidence ledger: what can be claimed, source and remaining proof
+# Evidence ledger: Databento-only article, older Barchart evidence and missing proof
 
 **Date:** 2026-10-26. **Rule:** "historically observed on user's VM" is *not* the same as "independently reproduced from data currently present in GitHub". Numerical values below preserve user-reported terminal output from the previous work and identify source files that survive. For current implementation status and future requirements see [master plan](PAPER_COMPLETION_MASTER_PLAN_2026-10-26.md).
 
@@ -120,21 +120,33 @@ Price magnitudes were summarized in coarse bins, but **price units and contract 
 
 Primary historical notes: `research/AAO_FULL_HISTORY_RECONCILIATION_2026-10-26.md`, `research/AAO_PANEL_QUALITY_FINDINGS_2026-10-26.md`, `research/AAO_NATIVE_SYMBOL_CANDIDATE_PANEL_2026-10-26.md`.
 
-## VI. Barchart cross-vendor reconciliation (current class C; **not completed**)
+## VI. Current Databento-only new article implementation (class A code, class C empirical results)
 
-- Barchart APO histories and original pricing sample are tracked in `data/csv`, with known JAO filename. These were restored to the local sparse checkout and the target file produced `Test-Path=True`.
-- Prior `wti_aao_panel_quality` returned `barchart_date_only_overlap.available:false, root_exists:false` only **before** the user restored `data/csv`. Its JSON persisted and was shown after a later audit errored for the **missing SQLite**.
-- **No successful post-restoration Barchart-date overlap run exists**. No verified same-contract/maturity/strike/call-put/data-time match count or Databento-Barchart option price comparison exists. **Do not claim agreement or disagreement between providers.**
-- Existing Barchart/LO original paper results remain valid only for the earlier sample/vintage and maintained model. After reacquisition do an overlap funnel and reproduce previous Barchart metrics on exact matched contracts before extrapolating findings to the new years.
+**PR #110 has now merged into main**, establishing the author's **explicit Databento-only new-paper decision**. The current sources are:
+- `bayesian_asian_options/src/bayesian_asian_options/aao_databento_only.py`: reduced-form Black-style terminal-average model and same-day put/call parity anchors at excluded strikes.
+- `experiments/wti_aao_databento_only.py`: manual dry-run/default vs `--execute` pricing suite with PI, PM, rolling21, rolling63, EWMA63, lagged AAO IV.
+- `tests/test_aao_databento_only.py` and `tests/test_aao_databento_paper.py`: synthetic tests of assumptions and paper staging (review before trusting).
+- `scripts/plot_aao_databento_only.py`: price-error and date-cluster visualizations, only after actual model results.
+- `paper/jcm/databento_main.tex`, `paper/jcm/build_databento.py`: **separate** Elsevier CAS manuscript and builder, with experimental results deliberately pending.
+- `research/AAO_DATABENTO_ONLY_PAPER_RUNBOOK_2026-10-26.md`: operational study design and commands.
 
-## VII. Evidence and research deliverables that do not yet exist
+**Model boundary:** purchased AAO definition/statistics DBNs do not include first-nearby CL futures fixings or curves. This experiment restricts to **pre-fixing** valuation dates; estimates Q terminal-average expected value and discount from **same-day** AAO call/put parity at *disjoint* reserved anchor strikes. Evaluates other non-anchor contracts under a **reduced-form lognormal terminal-average** model. Volatility inputs use earlier AAO parity-forward-average changes or earlier same-family implied volatility, **not physical CL returns**. The experiment is *conditionally cross-sectional*, not an independently sourced fully ex-ante WTI Asian payoff forecast.
 
-As of the remote-tree inspection at this checkpoint:
-- No replacement 162 Databento AAO source DBNs in GitHub's `data/databento/wti_aao_bulk/raw/`, no rebuilt 81-month SQLite in its `derived_private/`, and no `results/analysis/wti_aao_history_feasibility/` replacement acquisition manifest. **PR #109 configures LFS and tools; it does not upload this data.**
-- No accepted strike/expiry/call-put publisher-native-symbol contract match between Barchart and Databento.
-- No validated USD/barrel tick/display factor and multiplier cross-provider comparison.
-- No complete reconstructed 2020–2026 strictly forward-eligible CL schedule, rate curve, historical/LO/APO IV panel.
-- No approved date-block sample split, new market model-comparison MAE/RMSE/uncertainty for AAO 2020–2026, or new pricing-performance figures.
-- No finished new JCM paper or author-approved submission.
+**Status as of this checkpoint:** code and manuscript source exist; **no newly computed method_metrics.csv, daily_metrics.csv, cluster_intervals.csv, experiment_manifest.json, figure06/07/08 or new CAS result tables verified in remote**. The original 162 DBNs and SQLite are absent, so heavy real-data run remains blocked. Do not import old Barchart rankings into the new Databento-only manuscript.
 
-**Label these as missing/unverified in future reports.** An absent source artifact cannot be inferred from filename/path in a historical handoff note. A future agent must add the exact new file path/commit/sha and results to this ledger after each milestone.
+## VII. Barchart/LO/CL prior work (class A), not new-paper dependencies
+
+- Barchart option histories and old strict-forward price comparisons are preserved under `data/csv` and prior output trees; `Test-Path=True` was observed after sparse checkout restoration.
+- The Barchart date-overlap audit returned a stale `available:false` from a prior missing-CSV state. The subsequent audit was blocked by missing private AAO SQLite. There is **no verified Databento-vs-Barchart contract-specific price parity**. This is **optional separate research**, not a prerequisite for the user-selected AAO-only article.
+- Earlier LO implied-volatility cross-instrument validation and CL first-nearby structural pricing remain separate historical evidence; they must not be portrayed as additional data inputs or comparators in the new six-method reduced-form study.
+
+## VIII. Missing remote research deliverables
+
+As of this checkpoint, direct remote-tree inspection showed:
+- no replacement 162 Databento AAO source DBNs in `data/databento/wti_aao_bulk/raw/`, no rebuilt SQLite, and no replacement acquisition manifest. **LFS configuration is not backup completion**;
+- no validated 81-month Databento-only pilot/full real-data experiment report;
+- no confirmed eligible non-anchor **unique reference dates** or actual/theoretical market evaluation totals;
+- no Databento-only six-way MAE/RMSE/date-cluster conclusions or figure manifests/fig06-08;
+- no finished, empirically updated `paper/jcm/databento_main.tex` JCM submission source with verified results and author approval.
+
+Treat code presence and expected file paths as insufficient evidence; record future successful outputs with versioned SHA256, code commit, actual commands, cohort and cutoff definitions. `paper/jcm/main.tex`, previous Barchart/LO paper and figures are intact but **not** the selected new manuscript.
