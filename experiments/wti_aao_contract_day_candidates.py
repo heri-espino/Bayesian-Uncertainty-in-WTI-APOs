@@ -15,6 +15,7 @@ import hashlib
 import json
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -158,7 +159,7 @@ def normalize(definitions: pd.DataFrame,
     final = latest["stat_flags"].mod(2).eq(1)
     not_intraday = (latest["stat_flags"] & 8).eq(0)
     price_valid = (
-        latest["price"].notna() & latest["price"].ge(0)
+        np.isfinite(latest["price"]) & latest["price"].ge(0)
     )
     selected = latest.loc[
         added & final & not_intraday & price_valid
