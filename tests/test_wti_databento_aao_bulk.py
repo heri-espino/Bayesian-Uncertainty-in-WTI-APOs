@@ -134,3 +134,16 @@ def test_hard_user_maximum_rejects_higher_budget(tmp_path):
             client, plan=plan, data_dir=tmp_path / "raw",
             report_dir=tmp_path / "reports", max_budget_usd=41.0,
         )
+
+
+
+def test_reacquisition_refuses_incomplete_months_without_billing(tmp_path):
+    client = Client(missing="definition")
+    plan = quote_plan(client, start="2025-01-01", end="2025-02-01")
+    assert plan["eligible_months"] == 0
+    with pytest.raises(RuntimeError, match="require all 81 months"):
+        acquire(
+            client, plan=plan, data_dir=tmp_path / "raw",
+            report_dir=tmp_path / "reports", max_budget_usd=40.0,
+        )
+    assert not client.timeseries.calls
