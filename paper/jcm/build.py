@@ -30,7 +30,9 @@ SECTIONS = (
 def validate_layout() -> None:
     required = [
         HERE / "main.tex", CAS / "cas-dc.cls", CAS / "cas-common.sty",
-        CAS / "cas-model2-names.bst", MANUSCRIPT / "references.bib",
+        CAS / "cas-model2-names.bst",
+        CAS / "thumbnails" / "cas-email.jpeg",
+        MANUSCRIPT / "references.bib",
         FIGURES / "ten_million" / "fig01_mechanism_map.pdf",
         FIGURES / "fig03_forward_q_cluster_bootstrap.pdf",
     ]
@@ -57,6 +59,7 @@ def prepare_stage() -> None:
     STAGE.mkdir(parents=True)
     for name in ("cas-dc.cls", "cas-common.sty", "cas-model2-names.bst"):
         shutil.copy2(CAS / name, STAGE / name)
+    shutil.copytree(CAS / "thumbnails", STAGE / "thumbnails")
     shutil.copy2(HERE / "main.tex", STAGE / "main.tex")
     shutil.copy2(MANUSCRIPT / "references.bib", STAGE / "references.bib")
     shutil.copytree(MANUSCRIPT / "sections_short", STAGE / "sections_short")
