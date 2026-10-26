@@ -1,0 +1,350 @@
+{
+  "available_schemas": [
+    "mbo",
+    "mbp-1",
+    "mbp-10",
+    "tbbo",
+    "trades",
+    "bbo-1s",
+    "bbo-1m",
+    "ohlcv-1s",
+    "ohlcv-1m",
+    "ohlcv-1h",
+    "ohlcv-1d",
+    "definition",
+    "statistics",
+    "status",
+    "cmbp-1",
+    "cbbo-1s",
+    "cbbo-1m"
+  ],
+  "candidate_parents": [
+    "AAO.OPT",
+    "AO.OPT"
+  ],
+  "dataset": "GLBX.MDP3",
+  "dataset_accessible": true,
+  "historical_aao_settlements_confirmed": false,
+  "interpretation": "Parent resolution, estimated record counts and USD cost quotes are metadata-only. A count>0 does not prove a specific instrument, official final settlement, or continuous historical coverage. A count=0 on one date does not rule out other dates. Always inspect the known LO.OPT 2026-08-24 positive control before concluding anything about AAO availability.",
+  "max_quote_usd": 5.0,
+  "no_timeseries_download": true,
+  "positive_control": {
+    "end_exclusive": "2026-08-25",
+    "historical_final_settlements_verified": false,
+    "mapping_count": 0,
+    "mapping_status": "OK",
+    "metadata_records_reported": true,
+    "parent_candidate": "LO.OPT",
+    "parent_symbology_verified": false,
+    "quotes_usd": {
+      "definition": 0.021743889898,
+      "statistics": 0.025916546583
+    },
+    "record_counts": {
+      "definition": 26411,
+      "statistics": 347846
+    },
+    "start_inclusive": "2026-08-24",
+    "status": "metadata_records_reported_not_final_settlement_proven",
+    "total_one_day_quote_usd": 0.047660436,
+    "within_quote_ceiling": true
+  },
+  "positive_control_expected_source": "Existing local Databento LO definition/statistics acquisition for 2026-08-24, independently documented in results/analysis/wti_databento_external_q/acquisition_manifest.json.",
+  "positive_control_metadata_pass": true,
+  "probes": [
+    {
+      "end_exclusive": "2023-06-15",
+      "historical_final_settlements_verified": false,
+      "mapping_count": 0,
+      "mapping_status": "OK",
+      "metadata_records_reported": true,
+      "parent_candidate": "AAO.OPT",
+      "parent_symbology_verified": false,
+      "quotes_usd": {
+        "definition": 0.005468286574,
+        "statistics": 0.002826601267
+      },
+      "record_counts": {
+        "definition": 6642,
+        "statistics": 37938
+      },
+      "start_inclusive": "2023-06-14",
+      "status": "metadata_records_reported_not_final_settlement_proven",
+      "total_one_day_quote_usd": 0.008294888,
+      "within_quote_ceiling": true,
+      "year": 2023
+    },
+    {
+      "end_exclusive": "2023-06-15",
+      "error": "BentoClientError: 422 symbology_invalid_request\nCould not resolve smart symbols: AO.OPT\ndocumentation: https://databento.com/docs/api-reference-historical/basics/symbology",
+      "historical_final_settlements_verified": false,
+      "mapping_count": 0,
+      "metadata_records_reported": false,
+      "parent_candidate": "AO.OPT",
+      "parent_symbology_verified": false,
+      "quote_errors": {
+        "definition": "BentoClientError: 422 symbology_invalid_request\nNone of the symbols could be resolved\ndocumentation: https://databento.com/docs/api-reference-historical/basics/symbology",
+        "statistics": "BentoClientError: 422 symbology_invalid_request\nNone of the symbols could be resolved\ndocumentation: https://databento.com/docs/api-reference-historical/basics/symbology"
+      },
+      "quotes_usd": {
+        "definition": null,
+        "statistics": null
+      },
+      "record_count_errors": {
+        "definition": "BentoClientError: 422 symbology_invalid_request\nNone of the symbols could be resolved\ndocumentation: https://databento.com/docs/api-reference-historical/basics/symbology",
+        "statistics": "BentoClientError: 422 symbology_invalid_request\nNone of the symbols could be resolved\ndocumentation: https://databento.com/docs/api-reference-historical/basics/symbology"
+      },
+      "record_counts": {
+        "definition": null,
+        "statistics": null
+      },
+      "start_inclusive": "2023-06-14",
+      "status": "inconclusive_metadata_query",
+      "symbology_error": "BentoClientError: 422 symbology_invalid_request\nCould not resolve smart symbols: AO.OPT\ndocumentation: https://databento.com/docs/api-reference-historical/basics/symbology",
+      "total_one_day_quote_usd": null,
+      "within_quote_ceiling": false,
+      "year": 2023
+    },
+    {
+      "end_exclusive": "2024-06-13",
+      "historical_final_settlements_verified": false,
+      "mapping_count": 0,
+      "mapping_status": "OK",
+      "metadata_records_reported": true,
+      "parent_candidate": "AAO.OPT",
+      "parent_symbology_verified": false,
+      "quotes_usd": {
+        "definition": 0.005721859634,
+        "statistics": 0.002843514085
+      },
+      "record_counts": {
+        "definition": 6950,
+        "statistics": 38165
+      },
+      "start_inclusive": "2024-06-12",
+      "status": "metadata_records_reported_not_final_settlement_proven",
+      "total_one_day_quote_usd": 0.008565374,
+      "within_quote_ceiling": true,
+      "year": 2024
+    },
+    {
+      "end_exclusive": "2024-06-13",
+      "error": "BentoClientError: 422 symbology_invalid_request\nCould not resolve smart symbols: AO.OPT\ndocumentation: https://databento.com/docs/api-reference-historical/basics/symbology",
+      "historical_final_settlements_verified": false,
+      "mapping_count": 0,
+      "metadata_records_reported": false,
+      "parent_candidate": "AO.OPT",
+      "parent_symbology_verified": false,
+      "quote_errors": {
+        "definition": "BentoClientError: 422 symbology_invalid_request\nNone of the symbols could be resolved\ndocumentation: https://databento.com/docs/api-reference-historical/basics/symbology",
+        "statistics": "BentoClientError: 422 symbology_invalid_request\nNone of the symbols could be resolved\ndocumentation: https://databento.com/docs/api-reference-historical/basics/symbology"
+      },
+      "quotes_usd": {
+        "definition": null,
+        "statistics": null
+      },
+      "record_count_errors": {
+        "definition": "BentoClientError: 422 symbology_invalid_request\nNone of the symbols could be resolved\ndocumentation: https://databento.com/docs/api-reference-historical/basics/symbology",
+        "statistics": "BentoClientError: 422 symbology_invalid_request\nNone of the symbols could be resolved\ndocumentation: https://databento.com/docs/api-reference-historical/basics/symbology"
+      },
+      "record_counts": {
+        "definition": null,
+        "statistics": null
+      },
+      "start_inclusive": "2024-06-12",
+      "status": "inconclusive_metadata_query",
+      "symbology_error": "BentoClientError: 422 symbology_invalid_request\nCould not resolve smart symbols: AO.OPT\ndocumentation: https://databento.com/docs/api-reference-historical/basics/symbology",
+      "total_one_day_quote_usd": null,
+      "within_quote_ceiling": false,
+      "year": 2024
+    },
+    {
+      "end_exclusive": "2025-06-12",
+      "historical_final_settlements_verified": false,
+      "mapping_count": 0,
+      "mapping_status": "OK",
+      "metadata_records_reported": true,
+      "parent_candidate": "AAO.OPT",
+      "parent_symbology_verified": false,
+      "quotes_usd": {
+        "definition": 0.006064347923,
+        "statistics": 0.003233850002
+      },
+      "record_counts": {
+        "definition": 7366,
+        "statistics": 43404
+      },
+      "start_inclusive": "2025-06-11",
+      "status": "metadata_records_reported_not_final_settlement_proven",
+      "total_one_day_quote_usd": 0.009298198,
+      "within_quote_ceiling": true,
+      "year": 2025
+    },
+    {
+      "end_exclusive": "2025-06-12",
+      "error": "BentoClientError: 422 symbology_invalid_request\nCould not resolve smart symbols: AO.OPT\ndocumentation: https://databento.com/docs/api-reference-historical/basics/symbology",
+      "historical_final_settlements_verified": false,
+      "mapping_count": 0,
+      "metadata_records_reported": false,
+      "parent_candidate": "AO.OPT",
+      "parent_symbology_verified": false,
+      "quote_errors": {
+        "definition": "BentoClientError: 422 symbology_invalid_request\nNone of the symbols could be resolved\ndocumentation: https://databento.com/docs/api-reference-historical/basics/symbology",
+        "statistics": "BentoClientError: 422 symbology_invalid_request\nNone of the symbols could be resolved\ndocumentation: https://databento.com/docs/api-reference-historical/basics/symbology"
+      },
+      "quotes_usd": {
+        "definition": null,
+        "statistics": null
+      },
+      "record_count_errors": {
+        "definition": "BentoClientError: 422 symbology_invalid_request\nNone of the symbols could be resolved\ndocumentation: https://databento.com/docs/api-reference-historical/basics/symbology",
+        "statistics": "BentoClientError: 422 symbology_invalid_request\nNone of the symbols could be resolved\ndocumentation: https://databento.com/docs/api-reference-historical/basics/symbology"
+      },
+      "record_counts": {
+        "definition": null,
+        "statistics": null
+      },
+      "start_inclusive": "2025-06-11",
+      "status": "inconclusive_metadata_query",
+      "symbology_error": "BentoClientError: 422 symbology_invalid_request\nCould not resolve smart symbols: AO.OPT\ndocumentation: https://databento.com/docs/api-reference-historical/basics/symbology",
+      "total_one_day_quote_usd": null,
+      "within_quote_ceiling": false,
+      "year": 2025
+    },
+    {
+      "end_exclusive": "2026-06-11",
+      "historical_final_settlements_verified": false,
+      "mapping_count": 0,
+      "mapping_status": "OK",
+      "metadata_records_reported": true,
+      "parent_candidate": "AAO.OPT",
+      "parent_symbology_verified": false,
+      "quotes_usd": {
+        "definition": 0.006538562477,
+        "statistics": 0.003439188004
+      },
+      "record_counts": {
+        "definition": 7942,
+        "statistics": 46160
+      },
+      "start_inclusive": "2026-06-10",
+      "status": "metadata_records_reported_not_final_settlement_proven",
+      "total_one_day_quote_usd": 0.00997775,
+      "within_quote_ceiling": true,
+      "year": 2026
+    },
+    {
+      "end_exclusive": "2026-06-11",
+      "error": "BentoClientError: 422 symbology_invalid_request\nCould not resolve smart symbols: AO.OPT\ndocumentation: https://databento.com/docs/api-reference-historical/basics/symbology",
+      "historical_final_settlements_verified": false,
+      "mapping_count": 0,
+      "metadata_records_reported": false,
+      "parent_candidate": "AO.OPT",
+      "parent_symbology_verified": false,
+      "quote_errors": {
+        "definition": "BentoClientError: 422 symbology_invalid_request\nNone of the symbols could be resolved\ndocumentation: https://databento.com/docs/api-reference-historical/basics/symbology",
+        "statistics": "BentoClientError: 422 symbology_invalid_request\nNone of the symbols could be resolved\ndocumentation: https://databento.com/docs/api-reference-historical/basics/symbology"
+      },
+      "quotes_usd": {
+        "definition": null,
+        "statistics": null
+      },
+      "record_count_errors": {
+        "definition": "BentoClientError: 422 symbology_invalid_request\nNone of the symbols could be resolved\ndocumentation: https://databento.com/docs/api-reference-historical/basics/symbology",
+        "statistics": "BentoClientError: 422 symbology_invalid_request\nNone of the symbols could be resolved\ndocumentation: https://databento.com/docs/api-reference-historical/basics/symbology"
+      },
+      "record_counts": {
+        "definition": null,
+        "statistics": null
+      },
+      "start_inclusive": "2026-06-10",
+      "status": "inconclusive_metadata_query",
+      "symbology_error": "BentoClientError: 422 symbology_invalid_request\nCould not resolve smart symbols: AO.OPT\ndocumentation: https://databento.com/docs/api-reference-historical/basics/symbology",
+      "total_one_day_quote_usd": null,
+      "within_quote_ceiling": false,
+      "year": 2026
+    }
+  ],
+  "quotes_are_usd_not_incurred_charges": true,
+  "range": {
+    "end": "2026-10-22T21:58:52.207595000Z",
+    "schema": {
+      "bbo-1m": {
+        "end": "2026-10-22T21:58:52.207595000Z",
+        "start": "2010-06-06T00:00:00.000000000Z"
+      },
+      "bbo-1s": {
+        "end": "2026-10-22T21:58:52.207595000Z",
+        "start": "2010-06-06T00:00:00.000000000Z"
+      },
+      "cbbo-1m": {
+        "end": "2026-10-22T21:58:52.207595000Z",
+        "start": "2017-05-21T00:00:00.000000000Z"
+      },
+      "cbbo-1s": {
+        "end": "2026-10-22T21:58:52.207595000Z",
+        "start": "2017-05-21T00:00:00.000000000Z"
+      },
+      "cmbp-1": {
+        "end": "2026-10-22T21:58:52.207595000Z",
+        "start": "2017-05-21T00:00:00.000000000Z"
+      },
+      "definition": {
+        "end": "2026-10-22T21:58:52.207595000Z",
+        "start": "2010-06-06T00:00:00.000000000Z"
+      },
+      "mbo": {
+        "end": "2026-10-22T21:58:52.207595000Z",
+        "start": "2017-05-21T00:00:00.000000000Z"
+      },
+      "mbp-1": {
+        "end": "2026-10-22T21:58:52.207595000Z",
+        "start": "2010-06-06T00:00:00.000000000Z"
+      },
+      "mbp-10": {
+        "end": "2026-10-22T21:58:52.207595000Z",
+        "start": "2010-06-06T00:00:00.000000000Z"
+      },
+      "ohlcv-1d": {
+        "end": "2026-10-22T21:58:52.207595000Z",
+        "start": "2010-06-06T00:00:00.000000000Z"
+      },
+      "ohlcv-1h": {
+        "end": "2026-10-22T21:58:52.207595000Z",
+        "start": "2010-06-06T00:00:00.000000000Z"
+      },
+      "ohlcv-1m": {
+        "end": "2026-10-22T21:58:52.207595000Z",
+        "start": "2010-06-06T00:00:00.000000000Z"
+      },
+      "ohlcv-1s": {
+        "end": "2026-10-22T21:58:52.207595000Z",
+        "start": "2010-06-06T00:00:00.000000000Z"
+      },
+      "statistics": {
+        "end": "2026-10-22T21:58:52.207595000Z",
+        "start": "2010-06-06T00:00:00.000000000Z"
+      },
+      "status": {
+        "end": "2026-10-22T21:58:52.207595000Z",
+        "start": "2010-06-06T00:00:00.000000000Z"
+      },
+      "tbbo": {
+        "end": "2026-10-22T21:58:52.207595000Z",
+        "start": "2010-06-06T00:00:00.000000000Z"
+      },
+      "trades": {
+        "end": "2026-10-22T21:58:52.207595000Z",
+        "start": "2010-06-06T00:00:00.000000000Z"
+      }
+    },
+    "start": "2010-06-06T00:00:00.000000000Z"
+  },
+  "recommendation": "Review record counts, parent mappings, positive control and quoted USD amounts; no download performed. Only if verified promising, explicitly approve a small cost-capped historical definition/statistics pilot.",
+  "years": [
+    2023,
+    2024,
+    2025,
+    2026
+  ]
+}

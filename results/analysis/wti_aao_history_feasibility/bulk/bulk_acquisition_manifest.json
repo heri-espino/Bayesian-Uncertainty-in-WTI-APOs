@@ -1,0 +1,1612 @@
+{
+  "completed": {
+    "definition__2020-01-01__2020-02-01": {
+      "count": 137464,
+      "end": "2020-02-01",
+      "file": "aao_definition__2020-01-01__2020-02-01.dbn.zst",
+      "quote_usd": 0.113172620535,
+      "schema": "definition",
+      "sha256": "67129065cabe9e70a93c5d6c6a57f6771702a80de6fe8fa0e4f0bff31fbc38d7",
+      "size_bytes": 2111296,
+      "start": "2020-01-01"
+    },
+    "definition__2020-02-01__2020-03-01": {
+      "count": 120274,
+      "end": "2020-03-01",
+      "file": "aao_definition__2020-02-01__2020-03-01.dbn.zst",
+      "quote_usd": 0.099020279944,
+      "schema": "definition",
+      "sha256": "75bddfc120a5ae2dcdcc660eb5b75fb211f0a6c4a479b93bf79815e153a81d14",
+      "size_bytes": 2710808,
+      "start": "2020-02-01"
+    },
+    "definition__2020-03-01__2020-04-01": {
+      "count": 162125,
+      "end": "2020-04-01",
+      "file": "aao_definition__2020-03-01__2020-04-01.dbn.zst",
+      "quote_usd": 0.13347575441,
+      "schema": "definition",
+      "sha256": "cb34eef9271b45ee5cef0facdba57c10bbed8633cdd391974712526194f17b1b",
+      "size_bytes": 4034920,
+      "start": "2020-03-01"
+    },
+    "definition__2020-04-01__2020-05-01": {
+      "count": 173274,
+      "end": "2020-05-01",
+      "file": "aao_definition__2020-04-01__2020-05-01.dbn.zst",
+      "quote_usd": 0.14265460521,
+      "schema": "definition",
+      "sha256": "826df2691731865fdcb7a4fad12ea884fb0b35eb5a9883c3d1d6b3293c630a30",
+      "size_bytes": 4279550,
+      "start": "2020-04-01"
+    },
+    "definition__2020-05-01__2020-06-01": {
+      "count": 169334,
+      "end": "2020-06-01",
+      "file": "aao_definition__2020-05-01__2020-06-01.dbn.zst",
+      "quote_usd": 0.139410845935,
+      "schema": "definition",
+      "sha256": "02d0aa7a13ea3a83c6759562527550c5bf581636e6f94584bda13bebbe0969e2",
+      "size_bytes": 4217858,
+      "start": "2020-05-01"
+    },
+    "definition__2020-06-01__2020-07-01": {
+      "count": 164336,
+      "end": "2020-07-01",
+      "file": "aao_definition__2020-06-01__2020-07-01.dbn.zst",
+      "quote_usd": 0.135296046734,
+      "schema": "definition",
+      "sha256": "538264f60f6b160555a10e1b99fcc3ecf999a8af7883c533312d8c9b072658e9",
+      "size_bytes": 4066991,
+      "start": "2020-06-01"
+    },
+    "definition__2020-07-01__2020-08-01": {
+      "count": 169364,
+      "end": "2020-08-01",
+      "file": "aao_definition__2020-07-01__2020-08-01.dbn.zst",
+      "quote_usd": 0.13943554461,
+      "schema": "definition",
+      "sha256": "7c9502cfa0d8e11e0ba3d38a2707f7d76f6ec0970e4f0b97b3402c06151becad",
+      "size_bytes": 4194589,
+      "start": "2020-07-01"
+    },
+    "definition__2020-08-01__2020-09-01": {
+      "count": 158386,
+      "end": "2020-09-01",
+      "file": "aao_definition__2020-08-01__2020-09-01.dbn.zst",
+      "quote_usd": 0.130397476256,
+      "schema": "definition",
+      "sha256": "0462ee6c2f2ed5cb9db266fa936ca34a01c4270c8ba797308530c80181bcb0bc",
+      "size_bytes": 3976453,
+      "start": "2020-08-01"
+    },
+    "definition__2020-09-01__2020-10-01": {
+      "count": 154668,
+      "end": "2020-10-01",
+      "file": "aao_definition__2020-09-01__2020-10-01.dbn.zst",
+      "quote_usd": 0.127336487174,
+      "schema": "definition",
+      "sha256": "b721e04a5f3404aa91af5f35d5a4000b2747b599ba929aaffd5eb3a164be80dd",
+      "size_bytes": 3843465,
+      "start": "2020-09-01"
+    },
+    "definition__2020-10-01__2020-11-01": {
+      "count": 151010,
+      "end": "2020-11-01",
+      "file": "aao_definition__2020-10-01__2020-11-01.dbn.zst",
+      "quote_usd": 0.124324895442,
+      "schema": "definition",
+      "sha256": "c6732ba1b35a8eb0f3d67088f0b4418883c93ca3accc9272992b50ed99668374",
+      "size_bytes": 3757532,
+      "start": "2020-10-01"
+    },
+    "definition__2020-11-01__2020-12-01": {
+      "count": 148578,
+      "end": "2020-12-01",
+      "file": "aao_definition__2020-11-01__2020-12-01.dbn.zst",
+      "quote_usd": 0.122322656214,
+      "schema": "definition",
+      "sha256": "0cfef6d5946ae40eef0ecdc40255884c00d0c7739657bcbeb75272f0d67d31c9",
+      "size_bytes": 3731702,
+      "start": "2020-11-01"
+    },
+    "definition__2020-12-01__2021-01-01": {
+      "count": 158036,
+      "end": "2021-01-01",
+      "file": "aao_definition__2020-12-01__2021-01-01.dbn.zst",
+      "quote_usd": 0.130109325051,
+      "schema": "definition",
+      "sha256": "880159dec5df6ba3f23e117a40ea9f852d5f309dccf9483a1a18f52be51938e8",
+      "size_bytes": 3939052,
+      "start": "2020-12-01"
+    },
+    "definition__2021-01-01__2021-02-01": {
+      "count": 150814,
+      "end": "2021-02-01",
+      "file": "aao_definition__2021-01-01__2021-02-01.dbn.zst",
+      "quote_usd": 0.124163530767,
+      "schema": "definition",
+      "sha256": "8980be1faa92c7de747a85b324fe3386abbe67cb0f104cc45ee63df93ebb58af",
+      "size_bytes": 3793980,
+      "start": "2021-01-01"
+    },
+    "definition__2021-03-01__2021-04-01": {
+      "count": 167330,
+      "end": "2021-04-01",
+      "file": "aao_definition__2021-03-01__2021-04-01.dbn.zst",
+      "quote_usd": 0.137760974467,
+      "schema": "definition",
+      "sha256": "73a6f3a9a75fb992ecc7dc016321e082b49950d4f3b470e50f203a970630097e",
+      "size_bytes": 4205055,
+      "start": "2021-03-01"
+    },
+    "definition__2021-04-01__2021-05-01": {
+      "count": 160256,
+      "end": "2021-05-01",
+      "file": "aao_definition__2021-04-01__2021-05-01.dbn.zst",
+      "quote_usd": 0.131937026978,
+      "schema": "definition",
+      "sha256": "8bc30df4acf87f8609971c597c179fa3061e0557b954192fcb7036a1c8b69e0c",
+      "size_bytes": 4052567,
+      "start": "2021-04-01"
+    },
+    "definition__2021-05-01__2021-06-01": {
+      "count": 161776,
+      "end": "2021-06-01",
+      "file": "aao_definition__2021-05-01__2021-06-01.dbn.zst",
+      "quote_usd": 0.133188426495,
+      "schema": "definition",
+      "sha256": "a7b3bf38f57af047a79d765983f2c47310c0dc50dda329910de6004a02447490",
+      "size_bytes": 4159004,
+      "start": "2021-05-01"
+    },
+    "definition__2021-06-01__2021-07-01": {
+      "count": 167234,
+      "end": "2021-07-01",
+      "file": "aao_definition__2021-06-01__2021-07-01.dbn.zst",
+      "quote_usd": 0.137681938708,
+      "schema": "definition",
+      "sha256": "c61ea495c0f608b869d41c1d94fedb478470a5251d011c14137bd713eadfd74b",
+      "size_bytes": 4312666,
+      "start": "2021-06-01"
+    },
+    "definition__2021-07-01__2021-08-01": {
+      "count": 171080,
+      "end": "2021-08-01",
+      "file": "aao_definition__2021-07-01__2021-08-01.dbn.zst",
+      "quote_usd": 0.140848308802,
+      "schema": "definition",
+      "sha256": "ad2804c1a57fcb4d26e9e24f823c6249dd2b6aaccc2faadec66197f6a0bbcc3b",
+      "size_bytes": 4429190,
+      "start": "2021-07-01"
+    },
+    "definition__2021-08-01__2021-09-01": {
+      "count": 172748,
+      "end": "2021-09-01",
+      "file": "aao_definition__2021-08-01__2021-09-01.dbn.zst",
+      "quote_usd": 0.142221555114,
+      "schema": "definition",
+      "sha256": "ecc361af23939565e6cb9e8aa530263d470e15e9c2ed9e77d4b31e7b5a8e031b",
+      "size_bytes": 4521832,
+      "start": "2021-08-01"
+    },
+    "definition__2021-09-01__2021-10-01": {
+      "count": 163276,
+      "end": "2021-10-01",
+      "file": "aao_definition__2021-09-01__2021-10-01.dbn.zst",
+      "quote_usd": 0.134423360229,
+      "schema": "definition",
+      "sha256": "b97ca0b1369355016053763df8b870e91f89dfe4df18ad427b50fcb413f16322",
+      "size_bytes": 4263128,
+      "start": "2021-09-01"
+    },
+    "definition__2021-10-01__2021-11-01": {
+      "count": 171998,
+      "end": "2021-11-01",
+      "file": "aao_definition__2021-10-01__2021-11-01.dbn.zst",
+      "quote_usd": 0.141604088247,
+      "schema": "definition",
+      "sha256": "b9f50f66528c97329671213bc9318a837ded3044bcfa4367924ef808128650a8",
+      "size_bytes": 4628363,
+      "start": "2021-10-01"
+    },
+    "definition__2021-11-01__2021-12-01": {
+      "count": 170844,
+      "end": "2021-12-01",
+      "file": "aao_definition__2021-11-01__2021-12-01.dbn.zst",
+      "quote_usd": 0.140654012561,
+      "schema": "definition",
+      "sha256": "24919d309a8ed7bfd65d3057125236baa262147b2c2fa313540c9f60023b491b",
+      "size_bytes": 4586720,
+      "start": "2021-11-01"
+    },
+    "definition__2021-12-01__2022-01-01": {
+      "count": 173868,
+      "end": "2022-01-01",
+      "file": "aao_definition__2021-12-01__2022-01-01.dbn.zst",
+      "quote_usd": 0.143143638968,
+      "schema": "definition",
+      "sha256": "bbbcb2e8f20069c1220d3dfc7bde87e52ab90faf4ed76793634d92055b029500",
+      "size_bytes": 4493323,
+      "start": "2021-12-01"
+    },
+    "definition__2022-01-01__2022-02-01": {
+      "count": 168884,
+      "end": "2022-02-01",
+      "file": "aao_definition__2022-01-01__2022-02-01.dbn.zst",
+      "quote_usd": 0.139040365815,
+      "schema": "definition",
+      "sha256": "0be35abc9213fb8505db1acfd12efd3ac54299c0a04da9699bf94a6e2de26cf3",
+      "size_bytes": 4400544,
+      "start": "2022-01-01"
+    },
+    "definition__2022-02-01__2022-03-01": {
+      "count": 168736,
+      "end": "2022-03-01",
+      "file": "aao_definition__2022-02-01__2022-03-01.dbn.zst",
+      "quote_usd": 0.13891851902,
+      "schema": "definition",
+      "sha256": "020db27169a02023429a4776f4458c52f10eb2a6b873695d886b057513ec2fb4",
+      "size_bytes": 4396103,
+      "start": "2022-02-01"
+    },
+    "definition__2022-03-01__2022-04-01": {
+      "count": 220232,
+      "end": "2022-04-01",
+      "file": "aao_definition__2022-03-01__2022-04-01.dbn.zst",
+      "quote_usd": 0.181314617395,
+      "schema": "definition",
+      "sha256": "f3dbbd0aabfedc4c5037126d5e527817c247625c80b30c4d2ed94ea7646f2eb7",
+      "size_bytes": 5719109,
+      "start": "2022-03-01"
+    },
+    "definition__2022-04-01__2022-05-01": {
+      "count": 203938,
+      "end": "2022-05-01",
+      "file": "aao_definition__2022-04-01__2022-05-01.dbn.zst",
+      "quote_usd": 0.167899943888,
+      "schema": "definition",
+      "sha256": "0dca1e000a3f58852719df145f3c6b914d6f0e87974b8d65d9eab5f197d91ad8",
+      "size_bytes": 5306505,
+      "start": "2022-04-01"
+    },
+    "definition__2022-05-01__2022-06-01": {
+      "count": 217904,
+      "end": "2022-06-01",
+      "file": "aao_definition__2022-05-01__2022-06-01.dbn.zst",
+      "quote_usd": 0.17939800024,
+      "schema": "definition",
+      "sha256": "b319bfcb47636e3c44dfc46ab0751cee6a4a3648a11a1de7d89c7965f88c14d0",
+      "size_bytes": 5726318,
+      "start": "2022-05-01"
+    },
+    "definition__2022-06-01__2022-07-01": {
+      "count": 223380,
+      "end": "2022-07-01",
+      "file": "aao_definition__2022-06-01__2022-07-01.dbn.zst",
+      "quote_usd": 0.183906331658,
+      "schema": "definition",
+      "sha256": "7c5d4aab980511cf721d856a7d2c69790fb51225ab545b0f97b3021ce264d802",
+      "size_bytes": 5874489,
+      "start": "2022-06-01"
+    },
+    "definition__2022-07-01__2022-08-01": {
+      "count": 216448,
+      "end": "2022-08-01",
+      "file": "aao_definition__2022-07-01__2022-08-01.dbn.zst",
+      "quote_usd": 0.178199291229,
+      "schema": "definition",
+      "sha256": "c39ded57d16dd6810257f5bfa57f68ebee5fdb9312337d48c4ea810266e4401c",
+      "size_bytes": 5738516,
+      "start": "2022-07-01"
+    },
+    "definition__2022-08-01__2022-09-01": {
+      "count": 215982,
+      "end": "2022-09-01",
+      "file": "aao_definition__2022-08-01__2022-09-01.dbn.zst",
+      "quote_usd": 0.177815638483,
+      "schema": "definition",
+      "sha256": "ae2ac418ed0988ce9cb325c95d5d733a949e347c463bc5ae1e9934e26c6ecd68",
+      "size_bytes": 5673730,
+      "start": "2022-08-01"
+    },
+    "definition__2022-09-01__2022-10-01": {
+      "count": 204207,
+      "end": "2022-10-01",
+      "file": "aao_definition__2022-09-01__2022-10-01.dbn.zst",
+      "quote_usd": 0.168121408671,
+      "schema": "definition",
+      "sha256": "0c9b0fc1265762072b7d652ba331a4b965cfb652c5e503e183ad1d9bfc8db9cc",
+      "size_bytes": 5390412,
+      "start": "2022-09-01"
+    },
+    "definition__2022-10-01__2022-11-01": {
+      "count": 200178,
+      "end": "2022-11-01",
+      "file": "aao_definition__2022-10-01__2022-11-01.dbn.zst",
+      "quote_usd": 0.164804376662,
+      "schema": "definition",
+      "sha256": "d83673b18f00834e6b1e782c394a9db001255bf2281e14a11faaee3e0b9c7903",
+      "size_bytes": 5316765,
+      "start": "2022-10-01"
+    },
+    "definition__2022-11-01__2022-12-01": {
+      "count": 195176,
+      "end": "2022-12-01",
+      "file": "aao_definition__2022-11-01__2022-12-01.dbn.zst",
+      "quote_usd": 0.160686284304,
+      "schema": "definition",
+      "sha256": "793797d006ebbe9103af7fe90976d538fbacf0733f5fa9930b3fd21681db3bfc",
+      "size_bytes": 5138452,
+      "start": "2022-11-01"
+    },
+    "definition__2022-12-01__2023-01-01": {
+      "count": 185808,
+      "end": "2023-01-01",
+      "file": "aao_definition__2022-12-01__2023-01-01.dbn.zst",
+      "quote_usd": 0.152973711491,
+      "schema": "definition",
+      "sha256": "ce8f06c3fab65e0141f336c865b9c44969c2b2949f59a0b587d9fe78347a6474",
+      "size_bytes": 4877574,
+      "start": "2022-12-01"
+    },
+    "definition__2023-01-01__2023-02-01": {
+      "count": 184440,
+      "end": "2023-02-01",
+      "file": "aao_definition__2023-01-01__2023-02-01.dbn.zst",
+      "quote_usd": 0.151847451925,
+      "schema": "definition",
+      "sha256": "3fad2ebe052dafc8dbc233cde827262814ae8af8ef75f5c118f55f177f0f7f14",
+      "size_bytes": 4838013,
+      "start": "2023-01-01"
+    },
+    "definition__2023-02-01__2023-03-01": {
+      "count": 159994,
+      "end": "2023-03-01",
+      "file": "aao_definition__2023-02-01__2023-03-01.dbn.zst",
+      "quote_usd": 0.131721325219,
+      "schema": "definition",
+      "sha256": "558ff25199b94635d378fa0c879cc8f96c707d59be65e1c0933ed2a937428329",
+      "size_bytes": 4190261,
+      "start": "2023-02-01"
+    },
+    "definition__2023-03-01__2023-04-01": {
+      "count": 177288,
+      "end": "2023-04-01",
+      "file": "aao_definition__2023-03-01__2023-04-01.dbn.zst",
+      "quote_usd": 0.145959287882,
+      "schema": "definition",
+      "sha256": "895f32ef4f6f53c12a75ab5dc8bf9100a24e268d09b76d3f7e69dccb53e5da01",
+      "size_bytes": 4605578,
+      "start": "2023-03-01"
+    },
+    "definition__2023-04-01__2023-05-01": {
+      "count": 160848,
+      "end": "2023-05-01",
+      "file": "aao_definition__2023-04-01__2023-05-01.dbn.zst",
+      "quote_usd": 0.132424414158,
+      "schema": "definition",
+      "sha256": "985aec8e3a178482e61b19e36b66a0fe43fce6c3071d9acb969f0b868cf464d3",
+      "size_bytes": 4231084,
+      "start": "2023-04-01"
+    },
+    "definition__2023-05-01__2023-06-01": {
+      "count": 172936,
+      "end": "2023-06-01",
+      "file": "aao_definition__2023-05-01__2023-06-01.dbn.zst",
+      "quote_usd": 0.142376333475,
+      "schema": "definition",
+      "sha256": "36485ed993f736a14c9fcff06d3eef5ded09b5e606a18cda93b0c3b78a0ae249",
+      "size_bytes": 4512517,
+      "start": "2023-05-01"
+    },
+    "definition__2023-06-01__2023-07-01": {
+      "count": 172378,
+      "end": "2023-07-01",
+      "file": "aao_definition__2023-06-01__2023-07-01.dbn.zst",
+      "quote_usd": 0.141916938126,
+      "schema": "definition",
+      "sha256": "36454ffd5ef5aacbccd6b2cec8dca7009598de6821ac713f6164d54298c4f228",
+      "size_bytes": 4512740,
+      "start": "2023-06-01"
+    },
+    "definition__2023-07-01__2023-08-01": {
+      "count": 170343,
+      "end": "2023-08-01",
+      "file": "aao_definition__2023-07-01__2023-08-01.dbn.zst",
+      "quote_usd": 0.140241544694,
+      "schema": "definition",
+      "sha256": "7ceaeb5bf509cf5274a00b745c2699ecd0eec0989e105747c98500962352d5ec",
+      "size_bytes": 4516511,
+      "start": "2023-07-01"
+    },
+    "definition__2023-08-01__2023-09-01": {
+      "count": 188276,
+      "end": "2023-09-01",
+      "file": "aao_definition__2023-08-01__2023-09-01.dbn.zst",
+      "quote_usd": 0.155005589128,
+      "schema": "definition",
+      "sha256": "011c77e729e361df9c8ed7993cc03adf9653623234f646a550ba3f79b8510d47",
+      "size_bytes": 5052518,
+      "start": "2023-08-01"
+    },
+    "definition__2023-09-01__2023-10-01": {
+      "count": 176890,
+      "end": "2023-10-01",
+      "file": "aao_definition__2023-09-01__2023-10-01.dbn.zst",
+      "quote_usd": 0.145631618798,
+      "schema": "definition",
+      "sha256": "e88fd0919fafef4740dfca9d84c7646af47a9496e658ca10d520ac0238a06cfc",
+      "size_bytes": 4836674,
+      "start": "2023-09-01"
+    },
+    "definition__2023-10-01__2023-11-01": {
+      "count": 193930,
+      "end": "2023-11-01",
+      "file": "aao_definition__2023-10-01__2023-11-01.dbn.zst",
+      "quote_usd": 0.159660466015,
+      "schema": "definition",
+      "sha256": "4ce441c3f40586e2136f6ef547f8e93933b92647653908a8ed89c190fee98531",
+      "size_bytes": 5389721,
+      "start": "2023-10-01"
+    },
+    "definition__2023-11-01__2023-12-01": {
+      "count": 208340,
+      "end": "2023-12-01",
+      "file": "aao_definition__2023-11-01__2023-12-01.dbn.zst",
+      "quote_usd": 0.171524062753,
+      "schema": "definition",
+      "sha256": "bcb9e27fd8881c14e91576786d774367b7afab8065cb1a20c2a48f0f0c3af4b4",
+      "size_bytes": 5771006,
+      "start": "2023-11-01"
+    },
+    "definition__2023-12-01__2024-01-01": {
+      "count": 208408,
+      "end": "2024-01-01",
+      "file": "aao_definition__2023-12-01__2024-01-01.dbn.zst",
+      "quote_usd": 0.171580046415,
+      "schema": "definition",
+      "sha256": "770cbe9dec23698abe981707c9c9b281ba4152b683a8c77c552b09720adc0ed8",
+      "size_bytes": 5920391,
+      "start": "2023-12-01"
+    },
+    "definition__2024-01-01__2024-02-01": {
+      "count": 211880,
+      "end": "2024-02-01",
+      "file": "aao_definition__2024-01-01__2024-02-01.dbn.zst",
+      "quote_usd": 0.174438506365,
+      "schema": "definition",
+      "sha256": "0f779b1072dd42afa9a475624a792fb459aef607e19744106c7ed973ab92cdcd",
+      "size_bytes": 5965567,
+      "start": "2024-01-01"
+    },
+    "definition__2024-02-01__2024-03-01": {
+      "count": 190714,
+      "end": "2024-03-01",
+      "file": "aao_definition__2024-02-01__2024-03-01.dbn.zst",
+      "quote_usd": 0.15701276809,
+      "schema": "definition",
+      "sha256": "36611885c16deaf3bf431513638abd257b011702c823310681e987eadd588505",
+      "size_bytes": 5408857,
+      "start": "2024-02-01"
+    },
+    "definition__2024-03-01__2024-04-01": {
+      "count": 194220,
+      "end": "2024-04-01",
+      "file": "aao_definition__2024-03-01__2024-04-01.dbn.zst",
+      "quote_usd": 0.159899219871,
+      "schema": "definition",
+      "sha256": "ef6816fc8a5869a11d372db94c558710e481ff9eb6f33ec19cc6ef6c0a8b72a4",
+      "size_bytes": 5540563,
+      "start": "2024-03-01"
+    },
+    "definition__2024-04-01__2024-05-01": {
+      "count": 190554,
+      "end": "2024-05-01",
+      "file": "aao_definition__2024-04-01__2024-05-01.dbn.zst",
+      "quote_usd": 0.156881041825,
+      "schema": "definition",
+      "sha256": "5bda008bfbbc85d6b2f6c1bb36726848f0fbcfd0dffc1c02e79407ce520a890e",
+      "size_bytes": 5425197,
+      "start": "2024-04-01"
+    },
+    "definition__2024-05-01__2024-06-01": {
+      "count": 194058,
+      "end": "2024-06-01",
+      "file": "aao_definition__2024-05-01__2024-06-01.dbn.zst",
+      "quote_usd": 0.159765847027,
+      "schema": "definition",
+      "sha256": "b3d3932fcb84b7394172161bc9f486f5052978cc085f51ad18f8238c47487844",
+      "size_bytes": 5534048,
+      "start": "2024-05-01"
+    },
+    "definition__2024-06-01__2024-07-01": {
+      "count": 174236,
+      "end": "2024-07-01",
+      "file": "aao_definition__2024-06-01__2024-07-01.dbn.zst",
+      "quote_usd": 0.143446609378,
+      "schema": "definition",
+      "sha256": "74d190a95d71ac8cb7483fd2c8e9796ba2f0a714e0c77d87ecf7b9dd8576bbae",
+      "size_bytes": 5033422,
+      "start": "2024-06-01"
+    },
+    "definition__2024-07-01__2024-08-01": {
+      "count": 192506,
+      "end": "2024-08-01",
+      "file": "aao_definition__2024-07-01__2024-08-01.dbn.zst",
+      "quote_usd": 0.158488102257,
+      "schema": "definition",
+      "sha256": "0208cd494942fa0c1158cb04edf1b211814303522cfae6164fd0f5c56117ea47",
+      "size_bytes": 5554172,
+      "start": "2024-07-01"
+    },
+    "definition__2024-08-01__2024-09-01": {
+      "count": 177009,
+      "end": "2024-09-01",
+      "file": "aao_definition__2024-08-01__2024-09-01.dbn.zst",
+      "quote_usd": 0.145729590207,
+      "schema": "definition",
+      "sha256": "8c432c1e3926e3dd2f56871437afed5dac69f66143dfcecd1f0fd57ecb97e09a",
+      "size_bytes": 5072848,
+      "start": "2024-08-01"
+    },
+    "definition__2024-09-01__2024-10-01": {
+      "count": 197170,
+      "end": "2024-10-01",
+      "file": "aao_definition__2024-09-01__2024-10-01.dbn.zst",
+      "quote_usd": 0.162327922881,
+      "schema": "definition",
+      "sha256": "295eee092c60b97ea346ca9a5c12c92d2701b761e287988ad9f6846e1dc67a31",
+      "size_bytes": 5799832,
+      "start": "2024-09-01"
+    },
+    "definition__2024-10-01__2024-11-01": {
+      "count": 221908,
+      "end": "2024-11-01",
+      "file": "aao_definition__2024-10-01__2024-11-01.dbn.zst",
+      "quote_usd": 0.182694450021,
+      "schema": "definition",
+      "sha256": "8a53f3228219baee89ca9b76851f9f6145f94ba225b58340e6a97e0a5a88914c",
+      "size_bytes": 6571864,
+      "start": "2024-10-01"
+    },
+    "definition__2024-11-01__2024-12-01": {
+      "count": 192596,
+      "end": "2024-12-01",
+      "file": "aao_definition__2024-11-01__2024-12-01.dbn.zst",
+      "quote_usd": 0.158562198281,
+      "schema": "definition",
+      "sha256": "d81d73982a0cb71ba38e8475191be7134fcdf8e992d13616603e8dcf40af1223",
+      "size_bytes": 5689237,
+      "start": "2024-11-01"
+    },
+    "definition__2024-12-01__2025-01-01": {
+      "count": 202372,
+      "end": "2025-01-01",
+      "file": "aao_definition__2024-12-01__2025-01-01.dbn.zst",
+      "quote_usd": 0.16661067307,
+      "schema": "definition",
+      "sha256": "6f6f4d8868d8031798fdbfb4cb435d9701f85770cdccf971bc1e72eb70568933",
+      "size_bytes": 5993422,
+      "start": "2024-12-01"
+    },
+    "definition__2025-01-01__2025-02-01": {
+      "count": 198388,
+      "end": "2025-02-01",
+      "file": "aao_definition__2025-01-01__2025-02-01.dbn.zst",
+      "quote_usd": 0.163330689073,
+      "schema": "definition",
+      "sha256": "31b9f1b2f0f350acb38d2e88aec6fd6003d9c86f5f45fadeacf8b98c763397f3",
+      "size_bytes": 5847509,
+      "start": "2025-01-01"
+    },
+    "definition__2025-02-01__2025-03-01": {
+      "count": 172234,
+      "end": "2025-03-01",
+      "file": "aao_definition__2025-02-01__2025-03-01.dbn.zst",
+      "quote_usd": 0.141798384488,
+      "schema": "definition",
+      "sha256": "e34c074d7568e6baf8c78c31202b4ee6f9e2150d0c942faf3c225f3fae82e269",
+      "size_bytes": 5106441,
+      "start": "2025-02-01"
+    },
+    "definition__2025-03-01__2025-04-01": {
+      "count": 185416,
+      "end": "2025-04-01",
+      "file": "aao_definition__2025-03-01__2025-04-01.dbn.zst",
+      "quote_usd": 0.152650982141,
+      "schema": "definition",
+      "sha256": "7961b701220e539716221cf39d29b29d21f961901ae6b6a5ce0e512a420bc06a",
+      "size_bytes": 5529325,
+      "start": "2025-03-01"
+    },
+    "definition__2025-04-01__2025-05-01": {
+      "count": 192658,
+      "end": "2025-05-01",
+      "file": "aao_definition__2025-04-01__2025-05-01.dbn.zst",
+      "quote_usd": 0.158613242209,
+      "schema": "definition",
+      "sha256": "150ce81113635b0b472a60cb8f640138a80b2350fd74dfcf0e2372794c2ab57b",
+      "size_bytes": 5751139,
+      "start": "2025-04-01"
+    },
+    "definition__2025-05-01__2025-06-01": {
+      "count": 194538,
+      "end": "2025-06-01",
+      "file": "aao_definition__2025-05-01__2025-06-01.dbn.zst",
+      "quote_usd": 0.160161025822,
+      "schema": "definition",
+      "sha256": "1b704a9ded72279f4cd5aaa65aeb64da6a6c6ae2be007c523d03ca2112597dc1",
+      "size_bytes": 5799665,
+      "start": "2025-05-01"
+    },
+    "definition__2025-06-01__2025-07-01": {
+      "count": 201198,
+      "end": "2025-07-01",
+      "file": "aao_definition__2025-06-01__2025-07-01.dbn.zst",
+      "quote_usd": 0.165644131601,
+      "schema": "definition",
+      "sha256": "72fac488178161e6319dc4e9e1805490d60fe4196079db359f860fd8c7cfdbaf",
+      "size_bytes": 6065184,
+      "start": "2025-06-01"
+    },
+    "definition__2025-07-01__2025-08-01": {
+      "count": 202890,
+      "end": "2025-08-01",
+      "file": "aao_definition__2025-07-01__2025-08-01.dbn.zst",
+      "quote_usd": 0.167037136853,
+      "schema": "definition",
+      "sha256": "f8731556d2642289073c233e087a05fa086401812e0df69e701904b1be4396c2",
+      "size_bytes": 6042203,
+      "start": "2025-07-01"
+    },
+    "definition__2025-08-01__2025-09-01": {
+      "count": 194210,
+      "end": "2025-09-01",
+      "file": "aao_definition__2025-08-01__2025-09-01.dbn.zst",
+      "quote_usd": 0.159890986979,
+      "schema": "definition",
+      "sha256": "b5651932ad0707f61a99bd5f88181473288a33174ecfdc0429a35ad8e5594bbd",
+      "size_bytes": 5849625,
+      "start": "2025-08-01"
+    },
+    "definition__2025-09-01__2025-10-01": {
+      "count": 192877,
+      "end": "2025-10-01",
+      "file": "aao_definition__2025-09-01__2025-10-01.dbn.zst",
+      "quote_usd": 0.158793542534,
+      "schema": "definition",
+      "sha256": "a5b1c4ce7c26c5b5eef9cec6f747c2a5ea5966f900e847778f68ba2979c6e576",
+      "size_bytes": 5768224,
+      "start": "2025-09-01"
+    },
+    "definition__2025-10-01__2025-11-01": {
+      "count": 198316,
+      "end": "2025-11-01",
+      "file": "aao_definition__2025-10-01__2025-11-01.dbn.zst",
+      "quote_usd": 0.163271412253,
+      "schema": "definition",
+      "sha256": "845db18695f5dd222e3a5ebf482cd98536189adf625dbfd5bf874fa3718429e3",
+      "size_bytes": 5918758,
+      "start": "2025-10-01"
+    },
+    "definition__2025-11-01__2025-12-01": {
+      "count": 199512,
+      "end": "2025-12-01",
+      "file": "aao_definition__2025-11-01__2025-12-01.dbn.zst",
+      "quote_usd": 0.164256066084,
+      "schema": "definition",
+      "sha256": "4355e2776b2487fdaedba1885e493b86296106a6520060e7a1306ddfd99c3976",
+      "size_bytes": 6044834,
+      "start": "2025-11-01"
+    },
+    "definition__2025-12-01__2026-01-01": {
+      "count": 191481,
+      "end": "2026-01-01",
+      "file": "aao_definition__2025-12-01__2026-01-01.dbn.zst",
+      "quote_usd": 0.157644230872,
+      "schema": "definition",
+      "sha256": "d8de482fbc769b4a7a64c539109d6ad832d97177b695cb108caf26f38fc516bd",
+      "size_bytes": 5556494,
+      "start": "2025-12-01"
+    },
+    "definition__2026-01-01__2026-02-01": {
+      "count": 182386,
+      "end": "2026-02-01",
+      "file": "aao_definition__2026-01-01__2026-02-01.dbn.zst",
+      "quote_usd": 0.150156415999,
+      "schema": "definition",
+      "sha256": "99d180548bedf4f95fcaa4551c027add6fb6f2c65384588aa783fc27ffb8e148",
+      "size_bytes": 5247808,
+      "start": "2026-01-01"
+    },
+    "definition__2026-02-01__2026-03-01": {
+      "count": 165992,
+      "end": "2026-03-01",
+      "file": "aao_definition__2026-02-01__2026-03-01.dbn.zst",
+      "quote_usd": 0.136659413576,
+      "schema": "definition",
+      "sha256": "1c682a39ce8006ebe2c806e23876f04d88f34cdc293eb679f15536c2bb9d899f",
+      "size_bytes": 4815521,
+      "start": "2026-02-01"
+    },
+    "definition__2026-03-01__2026-04-01": {
+      "count": 210083,
+      "end": "2026-04-01",
+      "file": "aao_definition__2026-03-01__2026-04-01.dbn.zst",
+      "quote_usd": 0.172959055752,
+      "schema": "definition",
+      "sha256": "03bc48ad2c5bb57ee6d2b75a35e757800dd2abef06662a2addcf5fcc95817785",
+      "size_bytes": 6232734,
+      "start": "2026-03-01"
+    },
+    "definition__2026-04-01__2026-05-01": {
+      "count": 205668,
+      "end": "2026-05-01",
+      "file": "aao_definition__2026-04-01__2026-05-01.dbn.zst",
+      "quote_usd": 0.169324234128,
+      "schema": "definition",
+      "sha256": "12313788aae0f8da6bd169811a5b9da541da8ab3a499c1fb16bf932ecb4d3941",
+      "size_bytes": 6108007,
+      "start": "2026-04-01"
+    },
+    "definition__2026-05-01__2026-06-01": {
+      "count": 213372,
+      "end": "2026-06-01",
+      "file": "aao_definition__2026-05-01__2026-06-01.dbn.zst",
+      "quote_usd": 0.175666853786,
+      "schema": "definition",
+      "sha256": "b9a39a203a3d931297d59aadbaa524737a26b9a64d1834e0e7813d6247fb2f86",
+      "size_bytes": 6424262,
+      "start": "2026-05-01"
+    },
+    "definition__2026-06-01__2026-07-01": {
+      "count": 206136,
+      "end": "2026-07-01",
+      "file": "aao_definition__2026-06-01__2026-07-01.dbn.zst",
+      "quote_usd": 0.169709533453,
+      "schema": "definition",
+      "sha256": "da89e6eed3509a928dc5bf8009fb008d51a50d6dcf2fc5c58d4dd4c70e10ae29",
+      "size_bytes": 6147032,
+      "start": "2026-06-01"
+    },
+    "definition__2026-07-01__2026-08-01": {
+      "count": 210970,
+      "end": "2026-08-01",
+      "file": "aao_definition__2026-07-01__2026-08-01.dbn.zst",
+      "quote_usd": 0.173689313233,
+      "schema": "definition",
+      "sha256": "30b7b0125c56be016a6d19c2bfe212474c6ed3c885237e82346cb672b65a9978",
+      "size_bytes": 6293229,
+      "start": "2026-07-01"
+    },
+    "definition__2026-08-01__2026-09-01": {
+      "count": 199506,
+      "end": "2026-09-01",
+      "file": "aao_definition__2026-08-01__2026-09-01.dbn.zst",
+      "quote_usd": 0.164251126349,
+      "schema": "definition",
+      "sha256": "026239aafe113bfb3568f3b570f05e48b73ee5b4bba870b8340fa2f4f4262022",
+      "size_bytes": 6009637,
+      "start": "2026-08-01"
+    },
+    "definition__2026-09-01__2026-10-01": {
+      "count": 208752,
+      "end": "2026-10-01",
+      "file": "aao_definition__2026-09-01__2026-10-01.dbn.zst",
+      "quote_usd": 0.171863257885,
+      "schema": "definition",
+      "sha256": "43450698f52c67ae49d69ad65c92fea3aefa4672a1e5e6495e4902d7867380cb",
+      "size_bytes": 5548846,
+      "start": "2026-09-01"
+    },
+    "statistics__2020-01-01__2020-02-01": {
+      "count": 821907,
+      "end": "2020-02-01",
+      "file": "aao_statistics__2020-01-01__2020-02-01.dbn.zst",
+      "quote_usd": 0.061236843467,
+      "schema": "statistics",
+      "sha256": "885a7da8c450f87ceca51c76f18e59597834aadf4fb555ca1b6294afe481a803",
+      "size_bytes": 7582033,
+      "start": "2020-01-01"
+    },
+    "statistics__2020-02-01__2020-03-01": {
+      "count": 689409,
+      "end": "2020-03-01",
+      "file": "aao_statistics__2020-02-01__2020-03-01.dbn.zst",
+      "quote_usd": 0.051364973187,
+      "schema": "statistics",
+      "sha256": "864bb949e031487d77a11d3a4e7518dc726ef5fc52ae27a3d1cc078343b566fe",
+      "size_bytes": 6488943,
+      "start": "2020-02-01"
+    },
+    "statistics__2020-03-01__2020-04-01": {
+      "count": 941047,
+      "end": "2020-04-01",
+      "file": "aao_statistics__2020-03-01__2020-04-01.dbn.zst",
+      "quote_usd": 0.07011346519,
+      "schema": "statistics",
+      "sha256": "0c7f6c79f9970c5be05937e22928dbb2647e565fb91cea1775b67a51277d02e6",
+      "size_bytes": 9086064,
+      "start": "2020-03-01"
+    },
+    "statistics__2020-04-01__2020-05-01": {
+      "count": 909762,
+      "end": "2020-05-01",
+      "file": "aao_statistics__2020-04-01__2020-05-01.dbn.zst",
+      "quote_usd": 0.06778255105,
+      "schema": "statistics",
+      "sha256": "21fad112f65b1fda0857b1f230acbf6f2df41dc53bc0111e483a27d2a9a0eedb",
+      "size_bytes": 8561846,
+      "start": "2020-04-01"
+    },
+    "statistics__2020-05-01__2020-06-01": {
+      "count": 834110,
+      "end": "2020-06-01",
+      "file": "aao_statistics__2020-05-01__2020-06-01.dbn.zst",
+      "quote_usd": 0.062146037817,
+      "schema": "statistics",
+      "sha256": "d62ad71f866caf28fd2953d36d9c93452cb4a0ca177685aff74d64cd502ce289",
+      "size_bytes": 7714846,
+      "start": "2020-05-01"
+    },
+    "statistics__2020-06-01__2020-07-01": {
+      "count": 769858,
+      "end": "2020-07-01",
+      "file": "aao_statistics__2020-06-01__2020-07-01.dbn.zst",
+      "quote_usd": 0.057358890772,
+      "schema": "statistics",
+      "sha256": "7b52846dfd6a92268b770f27e335b385caad611e1a1af3ffb51a2870876486a4",
+      "size_bytes": 6921897,
+      "start": "2020-06-01"
+    },
+    "statistics__2020-07-01__2020-08-01": {
+      "count": 835254,
+      "end": "2020-08-01",
+      "file": "aao_statistics__2020-07-01__2020-08-01.dbn.zst",
+      "quote_usd": 0.062231272459,
+      "schema": "statistics",
+      "sha256": "18b978b3d2b4dccfcff8329b330ec441e25594da9ca2be21f8f70bc4d9d79936",
+      "size_bytes": 7420690,
+      "start": "2020-07-01"
+    },
+    "statistics__2020-08-01__2020-09-01": {
+      "count": 796921,
+      "end": "2020-09-01",
+      "file": "aao_statistics__2020-08-01__2020-09-01.dbn.zst",
+      "quote_usd": 0.059375241399,
+      "schema": "statistics",
+      "sha256": "572d9c8cd29ccf281a7465972b2757f323623434c8bb13b615f981b4e410fade",
+      "size_bytes": 7244016,
+      "start": "2020-08-01"
+    },
+    "statistics__2020-09-01__2020-10-01": {
+      "count": 663579,
+      "end": "2020-10-01",
+      "file": "aao_statistics__2020-09-01__2020-10-01.dbn.zst",
+      "quote_usd": 0.049440488219,
+      "schema": "statistics",
+      "sha256": "a6896efcd613cca8f0d76d053db23baee7ce0cd408ff554a5c730601dd8b8ee4",
+      "size_bytes": 5550097,
+      "start": "2020-09-01"
+    },
+    "statistics__2020-10-01__2020-11-01": {
+      "count": 636265,
+      "end": "2020-11-01",
+      "file": "aao_statistics__2020-10-01__2020-11-01.dbn.zst",
+      "quote_usd": 0.047405436635,
+      "schema": "statistics",
+      "sha256": "bb4b6327c99dcf519b6b5e6bf7dde5b512502bc07b1950136cdf82a20c2f5686",
+      "size_bytes": 5175343,
+      "start": "2020-10-01"
+    },
+    "statistics__2020-11-01__2020-12-01": {
+      "count": 602791,
+      "end": "2020-12-01",
+      "file": "aao_statistics__2020-11-01__2020-12-01.dbn.zst",
+      "quote_usd": 0.044911429286,
+      "schema": "statistics",
+      "sha256": "159dd4c891086b4ab8876bb9ef92f6fd2218af274829829ea75fbc56241da876",
+      "size_bytes": 5150559,
+      "start": "2020-11-01"
+    },
+    "statistics__2020-12-01__2021-01-01": {
+      "count": 682695,
+      "end": "2021-01-01",
+      "file": "aao_statistics__2020-12-01__2021-01-01.dbn.zst",
+      "quote_usd": 0.050864741206,
+      "schema": "statistics",
+      "sha256": "e7a7a1cf0d0fc45c85c24f1f5b0d39ceb999bceae0591f56db5723ca84c61cc5",
+      "size_bytes": 5638246,
+      "start": "2020-12-01"
+    },
+    "statistics__2021-01-01__2021-02-01": {
+      "count": 611551,
+      "end": "2021-02-01",
+      "file": "aao_statistics__2021-01-01__2021-02-01.dbn.zst",
+      "quote_usd": 0.045564100146,
+      "schema": "statistics",
+      "sha256": "1ced01294d53da2ed787994c81f395d8e6b41822f397f002e6f46a7ac88b7766",
+      "size_bytes": 5133203,
+      "start": "2021-01-01"
+    },
+    "statistics__2021-03-01__2021-04-01": {
+      "count": 719280,
+      "end": "2021-04-01",
+      "file": "aao_statistics__2021-03-01__2021-04-01.dbn.zst",
+      "quote_usd": 0.053590536118,
+      "schema": "statistics",
+      "sha256": "9e2d41582b76f5c86781158511ae5a326e55c96ca5caa8b5f22574a40a93d126",
+      "size_bytes": 6095403,
+      "start": "2021-03-01"
+    },
+    "statistics__2021-04-01__2021-05-01": {
+      "count": 665351,
+      "end": "2021-05-01",
+      "file": "aao_statistics__2021-04-01__2021-05-01.dbn.zst",
+      "quote_usd": 0.049572512507,
+      "schema": "statistics",
+      "sha256": "02d113eca9423872edab492c49e19bc14c73717cf5572afba39daa3006c85bf9",
+      "size_bytes": 5634022,
+      "start": "2021-04-01"
+    },
+    "statistics__2021-05-01__2021-06-01": {
+      "count": 648559,
+      "end": "2021-06-01",
+      "file": "aao_statistics__2021-05-01__2021-06-01.dbn.zst",
+      "quote_usd": 0.048321411014,
+      "schema": "statistics",
+      "sha256": "f0c601db6b60f4c053cdbafe445c11f15e561c2fd5df698320d743e5b37af1c0",
+      "size_bytes": 5578545,
+      "start": "2021-05-01"
+    },
+    "statistics__2021-06-01__2021-07-01": {
+      "count": 715568,
+      "end": "2021-07-01",
+      "file": "aao_statistics__2021-06-01__2021-07-01.dbn.zst",
+      "quote_usd": 0.053313970566,
+      "schema": "statistics",
+      "sha256": "a6168b2fa764b8b87838ad9317ec4bdb0145175449e7ab0cf1b702f71a786c92",
+      "size_bytes": 6176334,
+      "start": "2021-06-01"
+    },
+    "statistics__2021-07-01__2021-08-01": {
+      "count": 707965,
+      "end": "2021-08-01",
+      "file": "aao_statistics__2021-07-01__2021-08-01.dbn.zst",
+      "quote_usd": 0.052747502923,
+      "schema": "statistics",
+      "sha256": "cf69ec88bc6ea7b13e78fc9ccce0be205b9384882eb69967fe08f55e9044bfdb",
+      "size_bytes": 5780589,
+      "start": "2021-07-01"
+    },
+    "statistics__2021-08-01__2021-09-01": {
+      "count": 895975,
+      "end": "2021-09-01",
+      "file": "aao_statistics__2021-08-01__2021-09-01.dbn.zst",
+      "quote_usd": 0.066755339503,
+      "schema": "statistics",
+      "sha256": "ec9d37382a144fe35cd9a889ccacb7747cc3bff203d85db2045aa9383ae6be51",
+      "size_bytes": 7098636,
+      "start": "2021-08-01"
+    },
+    "statistics__2021-09-01__2021-10-01": {
+      "count": 836369,
+      "end": "2021-10-01",
+      "file": "aao_statistics__2021-09-01__2021-10-01.dbn.zst",
+      "quote_usd": 0.062314346433,
+      "schema": "statistics",
+      "sha256": "8c914bfaed9bfc085df7b90f76e8eaa7be2577734f65618b0e62833aabb6e9ca",
+      "size_bytes": 6801672,
+      "start": "2021-09-01"
+    },
+    "statistics__2021-10-01__2021-11-01": {
+      "count": 851379,
+      "end": "2021-11-01",
+      "file": "aao_statistics__2021-10-01__2021-11-01.dbn.zst",
+      "quote_usd": 0.06343267858,
+      "schema": "statistics",
+      "sha256": "a78c3bccb4c0b8baa0b7e79f8fec4278091cc796635fc8de8d66b0a450004538",
+      "size_bytes": 6992600,
+      "start": "2021-10-01"
+    },
+    "statistics__2021-11-01__2021-12-01": {
+      "count": 817199,
+      "end": "2021-12-01",
+      "file": "aao_statistics__2021-11-01__2021-12-01.dbn.zst",
+      "quote_usd": 0.060886070132,
+      "schema": "statistics",
+      "sha256": "6afd54b60d1b2653ce99e81beb4eed91366d68627d5ab2422f038b7a19427988",
+      "size_bytes": 6750279,
+      "start": "2021-11-01"
+    },
+    "statistics__2021-12-01__2022-01-01": {
+      "count": 876535,
+      "end": "2022-01-01",
+      "file": "aao_statistics__2021-12-01__2022-01-01.dbn.zst",
+      "quote_usd": 0.065306946635,
+      "schema": "statistics",
+      "sha256": "543e9eba1596755b6c7fc9dc1f0ff7ed0d77cbf77c56d44f55a39a5063befaef",
+      "size_bytes": 6969922,
+      "start": "2021-12-01"
+    },
+    "statistics__2022-01-01__2022-02-01": {
+      "count": 805164,
+      "end": "2022-02-01",
+      "file": "aao_statistics__2022-01-01__2022-02-01.dbn.zst",
+      "quote_usd": 0.059989392757,
+      "schema": "statistics",
+      "sha256": "ff590970da4a82a23ac18312c5a9fa26c429be7549a022e7f36d17c11ead4610",
+      "size_bytes": 6600656,
+      "start": "2022-01-01"
+    },
+    "statistics__2022-02-01__2022-03-01": {
+      "count": 792439,
+      "end": "2022-03-01",
+      "file": "aao_statistics__2022-02-01__2022-03-01.dbn.zst",
+      "quote_usd": 0.059041306376,
+      "schema": "statistics",
+      "sha256": "79a67641dd25264b88c70c96f45f613027e3177263f0699c913eafce74c2fa1d",
+      "size_bytes": 6169186,
+      "start": "2022-02-01"
+    },
+    "statistics__2022-03-01__2022-04-01": {
+      "count": 1090938,
+      "end": "2022-04-01",
+      "file": "aao_statistics__2022-03-01__2022-04-01.dbn.zst",
+      "quote_usd": 0.081281214952,
+      "schema": "statistics",
+      "sha256": "a94d5486b690ef6b97ec14d6b8a9c9f7c6f4524b9c7170da06eeb17948afa6ac",
+      "size_bytes": 8280892,
+      "start": "2022-03-01"
+    },
+    "statistics__2022-04-01__2022-05-01": {
+      "count": 952330,
+      "end": "2022-05-01",
+      "file": "aao_statistics__2022-04-01__2022-05-01.dbn.zst",
+      "quote_usd": 0.070954114199,
+      "schema": "statistics",
+      "sha256": "4fc999067f7000eefff6782f7911d31fbfedf4d290ed01a992870047bd9aea05",
+      "size_bytes": 7124465,
+      "start": "2022-04-01"
+    },
+    "statistics__2022-05-01__2022-06-01": {
+      "count": 1018005,
+      "end": "2022-06-01",
+      "file": "aao_statistics__2022-05-01__2022-06-01.dbn.zst",
+      "quote_usd": 0.075847283006,
+      "schema": "statistics",
+      "sha256": "10e7c6b74187624c73a5b03494c53ceaa94dbd5a5f268b948c3fff055430aff3",
+      "size_bytes": 7738032,
+      "start": "2022-05-01"
+    },
+    "statistics__2022-06-01__2022-07-01": {
+      "count": 1041110,
+      "end": "2022-07-01",
+      "file": "aao_statistics__2022-06-01__2022-07-01.dbn.zst",
+      "quote_usd": 0.077568739653,
+      "schema": "statistics",
+      "sha256": "0456850938fc74bed77facd381902362d11aa41ccfab12f676ef3769ef571780",
+      "size_bytes": 7769040,
+      "start": "2022-06-01"
+    },
+    "statistics__2022-07-01__2022-08-01": {
+      "count": 996212,
+      "end": "2022-08-01",
+      "file": "aao_statistics__2022-07-01__2022-08-01.dbn.zst",
+      "quote_usd": 0.074223577976,
+      "schema": "statistics",
+      "sha256": "6beab99bc6dcd716ecfb7c2d3866d385d459004ff380848da48e4e2f6ddbc74a",
+      "size_bytes": 7678013,
+      "start": "2022-07-01"
+    },
+    "statistics__2022-08-01__2022-09-01": {
+      "count": 1082797,
+      "end": "2022-09-01",
+      "file": "aao_statistics__2022-08-01__2022-09-01.dbn.zst",
+      "quote_usd": 0.080674663186,
+      "schema": "statistics",
+      "sha256": "bcc96f2ed493485204ecd9c304644e72b5c22abcac9303ffaf9acbdf7c105465",
+      "size_bytes": 8232255,
+      "start": "2022-08-01"
+    },
+    "statistics__2022-09-01__2022-10-01": {
+      "count": 940181,
+      "end": "2022-10-01",
+      "file": "aao_statistics__2022-09-01__2022-10-01.dbn.zst",
+      "quote_usd": 0.070048943162,
+      "schema": "statistics",
+      "sha256": "65a4fccea10386ae756a31f502443ac0c19b0e9c3df18c60a9cb4bd3eadb3b8f",
+      "size_bytes": 7074746,
+      "start": "2022-09-01"
+    },
+    "statistics__2022-10-01__2022-11-01": {
+      "count": 960811,
+      "end": "2022-11-01",
+      "file": "aao_statistics__2022-10-01__2022-11-01.dbn.zst",
+      "quote_usd": 0.071585997939,
+      "schema": "statistics",
+      "sha256": "701340c77b54b30746a379168d0eec2de20e52b6136f4ea031933d5429350885",
+      "size_bytes": 7349456,
+      "start": "2022-10-01"
+    },
+    "statistics__2022-11-01__2022-12-01": {
+      "count": 894477,
+      "end": "2022-12-01",
+      "file": "aao_statistics__2022-11-01__2022-12-01.dbn.zst",
+      "quote_usd": 0.066643729806,
+      "schema": "statistics",
+      "sha256": "b858579f8a408bb6d0a646f227dea80285c088cb3d55a854b714cfe6a1a7f852",
+      "size_bytes": 6832862,
+      "start": "2022-11-01"
+    },
+    "statistics__2022-12-01__2023-01-01": {
+      "count": 863504,
+      "end": "2023-01-01",
+      "file": "aao_statistics__2022-12-01__2023-01-01.dbn.zst",
+      "quote_usd": 0.064336061478,
+      "schema": "statistics",
+      "sha256": "17134eae675167617d05981a10a7be6ed9ed4ebe6f74a789858036d223f2c3db",
+      "size_bytes": 6597489,
+      "start": "2022-12-01"
+    },
+    "statistics__2023-01-01__2023-02-01": {
+      "count": 833118,
+      "end": "2023-02-01",
+      "file": "aao_statistics__2023-01-01__2023-02-01.dbn.zst",
+      "quote_usd": 0.062072128057,
+      "schema": "statistics",
+      "sha256": "0baea3ffd27098d4aab9921955d5df491d144278df3f5e1685102491ef559ba8",
+      "size_bytes": 6629501,
+      "start": "2023-01-01"
+    },
+    "statistics__2023-02-01__2023-03-01": {
+      "count": 767586,
+      "end": "2023-03-01",
+      "file": "aao_statistics__2023-02-01__2023-03-01.dbn.zst",
+      "quote_usd": 0.057189613581,
+      "schema": "statistics",
+      "sha256": "e48b16cfc2f340f8daad49318e153b716865b0e9e38285f172d8fb7cfcf18b78",
+      "size_bytes": 6026101,
+      "start": "2023-02-01"
+    },
+    "statistics__2023-03-01__2023-04-01": {
+      "count": 886425,
+      "end": "2023-04-01",
+      "file": "aao_statistics__2023-03-01__2023-04-01.dbn.zst",
+      "quote_usd": 0.066043809056,
+      "schema": "statistics",
+      "sha256": "1dbd61161a9993eae9263bd669b8db1a5dd822b54b614d207e96cc714ad0a7fb",
+      "size_bytes": 6961593,
+      "start": "2023-03-01"
+    },
+    "statistics__2023-04-01__2023-05-01": {
+      "count": 795862,
+      "end": "2023-05-01",
+      "file": "aao_statistics__2023-04-01__2023-05-01.dbn.zst",
+      "quote_usd": 0.05929633975,
+      "schema": "statistics",
+      "sha256": "7491a40a1526a512fc8d55d32285f32b02dc5bf351e8694e1696ffabe7d96055",
+      "size_bytes": 6421312,
+      "start": "2023-04-01"
+    },
+    "statistics__2023-05-01__2023-06-01": {
+      "count": 844878,
+      "end": "2023-06-01",
+      "file": "aao_statistics__2023-05-01__2023-06-01.dbn.zst",
+      "quote_usd": 0.062948316336,
+      "schema": "statistics",
+      "sha256": "e7a16e25b7808eb53332b5adf9023fd70e59b258a4362970ea759a8c0136b22f",
+      "size_bytes": 6623867,
+      "start": "2023-05-01"
+    },
+    "statistics__2023-06-01__2023-07-01": {
+      "count": 809188,
+      "end": "2023-07-01",
+      "file": "aao_statistics__2023-06-01__2023-07-01.dbn.zst",
+      "quote_usd": 0.060289204121,
+      "schema": "statistics",
+      "sha256": "36f389f86235b826dcd6af615402bb7620898b90205ba7563cc8ca3c6cc7eba7",
+      "size_bytes": 6298137,
+      "start": "2023-06-01"
+    },
+    "statistics__2023-07-01__2023-08-01": {
+      "count": 808024,
+      "end": "2023-08-01",
+      "file": "aao_statistics__2023-07-01__2023-08-01.dbn.zst",
+      "quote_usd": 0.060202479362,
+      "schema": "statistics",
+      "sha256": "61e416cdd03f57acb3e5f6bdd708d879438ec5148d501b3b93bf173653eeced8",
+      "size_bytes": 6405454,
+      "start": "2023-07-01"
+    },
+    "statistics__2023-08-01__2023-09-01": {
+      "count": 947877,
+      "end": "2023-09-01",
+      "file": "aao_statistics__2023-08-01__2023-09-01.dbn.zst",
+      "quote_usd": 0.070622339845,
+      "schema": "statistics",
+      "sha256": "3b448b6ab1ba41b7234e665ccc8ab80bae3e4b6c2518b1ca5e884a2bf3c964b2",
+      "size_bytes": 7267414,
+      "start": "2023-08-01"
+    },
+    "statistics__2023-09-01__2023-10-01": {
+      "count": 827644,
+      "end": "2023-10-01",
+      "file": "aao_statistics__2023-09-01__2023-10-01.dbn.zst",
+      "quote_usd": 0.061664283276,
+      "schema": "statistics",
+      "sha256": "9e22c6008db99cd0dd9204cec4848efdce508329fcfeee28d78eab69336cf048",
+      "size_bytes": 6311948,
+      "start": "2023-09-01"
+    },
+    "statistics__2023-10-01__2023-11-01": {
+      "count": 950923,
+      "end": "2023-11-01",
+      "file": "aao_statistics__2023-10-01__2023-11-01.dbn.zst",
+      "quote_usd": 0.07084928453,
+      "schema": "statistics",
+      "sha256": "5b056997d93fe05d937345607bc3867cfc8830ff5e7bbf4a0a200a0d6eacc2f4",
+      "size_bytes": 7112269,
+      "start": "2023-10-01"
+    },
+    "statistics__2023-11-01__2023-12-01": {
+      "count": 922801,
+      "end": "2023-12-01",
+      "file": "aao_statistics__2023-11-01__2023-12-01.dbn.zst",
+      "quote_usd": 0.068754032254,
+      "schema": "statistics",
+      "sha256": "eaf5465275f575aec45f178f037e9c0e479745bd703060231f99e14e6ca6cb51",
+      "size_bytes": 6594575,
+      "start": "2023-11-01"
+    },
+    "statistics__2023-12-01__2024-01-01": {
+      "count": 939479,
+      "end": "2024-01-01",
+      "file": "aao_statistics__2023-12-01__2024-01-01.dbn.zst",
+      "quote_usd": 0.069996640086,
+      "schema": "statistics",
+      "sha256": "bb018155262c27e9091226ef84e96304596fbd8ace9fe711b04cbe7434c0478c",
+      "size_bytes": 6708279,
+      "start": "2023-12-01"
+    },
+    "statistics__2024-01-01__2024-02-01": {
+      "count": 931467,
+      "end": "2024-02-01",
+      "file": "aao_statistics__2024-01-01__2024-02-01.dbn.zst",
+      "quote_usd": 0.069399699569,
+      "schema": "statistics",
+      "sha256": "f01d8b4b4c4735cf486e0f17de645b993d4bc4765ab4af1be150ff6ba3b3484b",
+      "size_bytes": 6447176,
+      "start": "2024-01-01"
+    },
+    "statistics__2024-02-01__2024-03-01": {
+      "count": 868126,
+      "end": "2024-03-01",
+      "file": "aao_statistics__2024-02-01__2024-03-01.dbn.zst",
+      "quote_usd": 0.064680427313,
+      "schema": "statistics",
+      "sha256": "4d64d84488c4bcc67c02a81acb1f375357a8689a26dec2a4870e05abc4a17078",
+      "size_bytes": 6121989,
+      "start": "2024-02-01"
+    },
+    "statistics__2024-03-01__2024-04-01": {
+      "count": 908225,
+      "end": "2024-04-01",
+      "file": "aao_statistics__2024-03-01__2024-04-01.dbn.zst",
+      "quote_usd": 0.067668035626,
+      "schema": "statistics",
+      "sha256": "d2ad13103d751fa5645878704e26a64f3f8928c502434b0a948264681d663be2",
+      "size_bytes": 6537145,
+      "start": "2024-03-01"
+    },
+    "statistics__2024-04-01__2024-05-01": {
+      "count": 920039,
+      "end": "2024-05-01",
+      "file": "aao_statistics__2024-04-01__2024-05-01.dbn.zst",
+      "quote_usd": 0.068548247218,
+      "schema": "statistics",
+      "sha256": "b2ae97cb0d579abe2896b85f13fa3318f9b14ad60caa2f69618d6b91ba3adb83",
+      "size_bytes": 6469879,
+      "start": "2024-04-01"
+    },
+    "statistics__2024-05-01__2024-06-01": {
+      "count": 893491,
+      "end": "2024-06-01",
+      "file": "aao_statistics__2024-05-01__2024-06-01.dbn.zst",
+      "quote_usd": 0.066570267081,
+      "schema": "statistics",
+      "sha256": "5d2dc3af953dcdc73e5cf7eed908f6c5ab3807f007b3b9e1c1126e1d23942c9a",
+      "size_bytes": 6327067,
+      "start": "2024-05-01"
+    },
+    "statistics__2024-06-01__2024-07-01": {
+      "count": 786792,
+      "end": "2024-07-01",
+      "file": "aao_statistics__2024-06-01__2024-07-01.dbn.zst",
+      "quote_usd": 0.05862057209,
+      "schema": "statistics",
+      "sha256": "73f12049d3ea0e1bd7d928678d0b46f2a8ff919310f42ea8743de8de995b6e22",
+      "size_bytes": 5644012,
+      "start": "2024-06-01"
+    },
+    "statistics__2024-07-01__2024-08-01": {
+      "count": 880944,
+      "end": "2024-08-01",
+      "file": "aao_statistics__2024-07-01__2024-08-01.dbn.zst",
+      "quote_usd": 0.065635442734,
+      "schema": "statistics",
+      "sha256": "721100a50b0ddb09fe5414ed40c476afc5d2cf049824942aa05d4ec73f8294a2",
+      "size_bytes": 6295039,
+      "start": "2024-07-01"
+    },
+    "statistics__2024-08-01__2024-09-01": {
+      "count": 839570,
+      "end": "2024-09-01",
+      "file": "aao_statistics__2024-08-01__2024-09-01.dbn.zst",
+      "quote_usd": 0.062552839518,
+      "schema": "statistics",
+      "sha256": "8f2cd41d57eece70a9b1095af3bcf39fbab6448b105f1a6c5660e232e470f267",
+      "size_bytes": 5902634,
+      "start": "2024-08-01"
+    },
+    "statistics__2024-09-01__2024-10-01": {
+      "count": 867063,
+      "end": "2024-10-01",
+      "file": "aao_statistics__2024-09-01__2024-10-01.dbn.zst",
+      "quote_usd": 0.064601227641,
+      "schema": "statistics",
+      "sha256": "63c870e6aa59616c6f785794dbcaf63815ad960719d76914ad92b76aa737033a",
+      "size_bytes": 5914118,
+      "start": "2024-09-01"
+    },
+    "statistics__2024-10-01__2024-11-01": {
+      "count": 1010112,
+      "end": "2024-11-01",
+      "file": "aao_statistics__2024-10-01__2024-11-01.dbn.zst",
+      "quote_usd": 0.075259208679,
+      "schema": "statistics",
+      "sha256": "bd151800197e6eb35528f3362fda88bd82023d7fd2b93a55ef88d90989faf7d5",
+      "size_bytes": 7014951,
+      "start": "2024-10-01"
+    },
+    "statistics__2024-11-01__2024-12-01": {
+      "count": 850605,
+      "end": "2024-12-01",
+      "file": "aao_statistics__2024-11-01__2024-12-01.dbn.zst",
+      "quote_usd": 0.063375011086,
+      "schema": "statistics",
+      "sha256": "f5efc0b1555919db4ace505024fd92d8cd5ca74ccabc8bdb3bff9bde6fe87502",
+      "size_bytes": 5736752,
+      "start": "2024-11-01"
+    },
+    "statistics__2024-12-01__2025-01-01": {
+      "count": 938487,
+      "end": "2025-01-01",
+      "file": "aao_statistics__2024-12-01__2025-01-01.dbn.zst",
+      "quote_usd": 0.069922730327,
+      "schema": "statistics",
+      "sha256": "845eb2ff372bf0cec25f4b36c49febebff28ca97f5ef779846264a2b725f1665",
+      "size_bytes": 6278878,
+      "start": "2024-12-01"
+    },
+    "statistics__2025-01-01__2025-02-01": {
+      "count": 878853,
+      "end": "2025-02-01",
+      "file": "aao_statistics__2025-01-01__2025-02-01.dbn.zst",
+      "quote_usd": 0.065479651093,
+      "schema": "statistics",
+      "sha256": "c4ff5d8ff8242540f4db4928b5ce00803f45c4bb0b232c39589fa1a224c1333b",
+      "size_bytes": 5791689,
+      "start": "2025-01-01"
+    },
+    "statistics__2025-02-01__2025-03-01": {
+      "count": 809283,
+      "end": "2025-03-01",
+      "file": "aao_statistics__2025-02-01__2025-03-01.dbn.zst",
+      "quote_usd": 0.060296282172,
+      "schema": "statistics",
+      "sha256": "cc277337904e29c7dcd60f9773104041021346ff90a84897ef2cc74af86787fb",
+      "size_bytes": 5343155,
+      "start": "2025-02-01"
+    },
+    "statistics__2025-03-01__2025-04-01": {
+      "count": 914886,
+      "end": "2025-04-01",
+      "file": "aao_statistics__2025-03-01__2025-04-01.dbn.zst",
+      "quote_usd": 0.0681643188,
+      "schema": "statistics",
+      "sha256": "744abf082f2d7207e5c05015337300e99e7013390941002afbb50882c3a4da29",
+      "size_bytes": 6163665,
+      "start": "2025-03-01"
+    },
+    "statistics__2025-04-01__2025-05-01": {
+      "count": 914677,
+      "end": "2025-05-01",
+      "file": "aao_statistics__2025-04-01__2025-05-01.dbn.zst",
+      "quote_usd": 0.068148747087,
+      "schema": "statistics",
+      "sha256": "6a308d84fb3ffb49ca7610e1156471bff720f492df59d9da9b10c6c1bda30947",
+      "size_bytes": 5866358,
+      "start": "2025-04-01"
+    },
+    "statistics__2025-05-01__2025-06-01": {
+      "count": 883085,
+      "end": "2025-06-01",
+      "file": "aao_statistics__2025-05-01__2025-06-01.dbn.zst",
+      "quote_usd": 0.065794959664,
+      "schema": "statistics",
+      "sha256": "77f0d543896fedd783a45933d77d6ada180f3204843ff9db446a57db77768a87",
+      "size_bytes": 5675318,
+      "start": "2025-05-01"
+    },
+    "statistics__2025-06-01__2025-07-01": {
+      "count": 911470,
+      "end": "2025-07-01",
+      "file": "aao_statistics__2025-06-01__2025-07-01.dbn.zst",
+      "quote_usd": 0.067909806967,
+      "schema": "statistics",
+      "sha256": "fc587c48ad3b41cbcbf3190d4eb395c3f75573840ecccc3b53aeb187b3f5b4fe",
+      "size_bytes": 6177994,
+      "start": "2025-06-01"
+    },
+    "statistics__2025-07-01__2025-08-01": {
+      "count": 967651,
+      "end": "2025-08-01",
+      "file": "aao_statistics__2025-07-01__2025-08-01.dbn.zst",
+      "quote_usd": 0.072095617652,
+      "schema": "statistics",
+      "sha256": "072473cad11cd47db2888dc0b6bd32ca27de3b803c72a897f32a54c11b9c468e",
+      "size_bytes": 6198891,
+      "start": "2025-07-01"
+    },
+    "statistics__2025-08-01__2025-09-01": {
+      "count": 914347,
+      "end": "2025-09-01",
+      "file": "aao_statistics__2025-08-01__2025-09-01.dbn.zst",
+      "quote_usd": 0.068124160171,
+      "schema": "statistics",
+      "sha256": "af602f94f5a66566a6b7582c51dfa15dcdccf9e1efc93a024044c801288cebd1",
+      "size_bytes": 5982901,
+      "start": "2025-08-01"
+    },
+    "statistics__2025-09-01__2025-10-01": {
+      "count": 913135,
+      "end": "2025-10-01",
+      "file": "aao_statistics__2025-09-01__2025-10-01.dbn.zst",
+      "quote_usd": 0.068033859134,
+      "schema": "statistics",
+      "sha256": "421b5b8c53e7f8cc93b8bb7b1e9215fcbd337f45753dde66ef69f36fb6a51644",
+      "size_bytes": 5890819,
+      "start": "2025-09-01"
+    },
+    "statistics__2025-10-01__2025-11-01": {
+      "count": 949140,
+      "end": "2025-11-01",
+      "file": "aao_statistics__2025-10-01__2025-11-01.dbn.zst",
+      "quote_usd": 0.070716440678,
+      "schema": "statistics",
+      "sha256": "eeb10a334d736778a6e12f11f174f266c5a56c233890bb995540e95abd479cd9",
+      "size_bytes": 6102207,
+      "start": "2025-10-01"
+    },
+    "statistics__2025-11-01__2025-12-01": {
+      "count": 831093,
+      "end": "2025-12-01",
+      "file": "aao_statistics__2025-11-01__2025-12-01.dbn.zst",
+      "quote_usd": 0.0619212538,
+      "schema": "statistics",
+      "sha256": "df96c42df3dd7b07a7ca4e7bc4bbafbc9fe1d75cc3ac7746c6e013851b48bb01",
+      "size_bytes": 5846278,
+      "start": "2025-11-01"
+    },
+    "statistics__2025-12-01__2026-01-01": {
+      "count": 880149,
+      "end": "2026-01-01",
+      "file": "aao_statistics__2025-12-01__2026-01-01.dbn.zst",
+      "quote_usd": 0.065576210618,
+      "schema": "statistics",
+      "sha256": "18c19f31f66cec7c9e80fb1478775482e10e0ab01ee53a3c9edfa92452d4cd55",
+      "size_bytes": 5679791,
+      "start": "2025-12-01"
+    },
+    "statistics__2026-01-01__2026-02-01": {
+      "count": 813920,
+      "end": "2026-02-01",
+      "file": "aao_statistics__2026-01-01__2026-02-01.dbn.zst",
+      "quote_usd": 0.060641765594,
+      "schema": "statistics",
+      "sha256": "44b7b5ca1fdc6fc6ec1504d5d5dea36afc420394a6e26bc932d3df77a41bb6fa",
+      "size_bytes": 5281145,
+      "start": "2026-01-01"
+    },
+    "statistics__2026-02-01__2026-03-01": {
+      "count": 789127,
+      "end": "2026-03-01",
+      "file": "aao_statistics__2026-02-01__2026-03-01.dbn.zst",
+      "quote_usd": 0.058794543147,
+      "schema": "statistics",
+      "sha256": "655bc4f5bcd0a6fb37a5fcc17ee302f6c35b10c42678794973af9b3e54511a99",
+      "size_bytes": 5229242,
+      "start": "2026-02-01"
+    },
+    "statistics__2026-03-01__2026-04-01": {
+      "count": 1019924,
+      "end": "2026-04-01",
+      "file": "aao_statistics__2026-03-01__2026-04-01.dbn.zst",
+      "quote_usd": 0.075990259647,
+      "schema": "statistics",
+      "sha256": "79bbb5b8b71901e1f4d206c1bd5e9a2fa432fca4ead9cd714bf58c2d7b31e99b",
+      "size_bytes": 7048795,
+      "start": "2026-03-01"
+    },
+    "statistics__2026-04-01__2026-05-01": {
+      "count": 1043788,
+      "end": "2026-05-01",
+      "file": "aao_statistics__2026-04-01__2026-05-01.dbn.zst",
+      "quote_usd": 0.077768266201,
+      "schema": "statistics",
+      "sha256": "49b057a9d9f20f3d84316b9ca94cc940cef6031419dbe5941f2ab16dec47a492",
+      "size_bytes": 6971185,
+      "start": "2026-04-01"
+    },
+    "statistics__2026-05-01__2026-06-01": {
+      "count": 994252,
+      "end": "2026-06-01",
+      "file": "aao_statistics__2026-05-01__2026-06-01.dbn.zst",
+      "quote_usd": 0.074077546597,
+      "schema": "statistics",
+      "sha256": "ca8529eb5ff76ae912de0a2fa9c3f5baa99b77d54ae9fb3a3ba098fe5dfaf3c4",
+      "size_bytes": 7019923,
+      "start": "2026-05-01"
+    },
+    "statistics__2026-06-01__2026-07-01": {
+      "count": 1099983,
+      "end": "2026-07-01",
+      "file": "aao_statistics__2026-06-01__2026-07-01.dbn.zst",
+      "quote_usd": 0.081955119967,
+      "schema": "statistics",
+      "sha256": "e0588018828723e8e9d88e84f3fac397abb4fb19d96941aca50c23d3a13e1957",
+      "size_bytes": 7948240,
+      "start": "2026-06-01"
+    },
+    "statistics__2026-07-01__2026-08-01": {
+      "count": 1031499,
+      "end": "2026-08-01",
+      "file": "aao_statistics__2026-07-01__2026-08-01.dbn.zst",
+      "quote_usd": 0.076852664351,
+      "schema": "statistics",
+      "sha256": "89190688e32fe6236ee4b6574f986ed0b598bfbf778c529440ed4069b493dfc9",
+      "size_bytes": 6971917,
+      "start": "2026-07-01"
+    },
+    "statistics__2026-08-01__2026-09-01": {
+      "count": 1010418,
+      "end": "2026-09-01",
+      "file": "aao_statistics__2026-08-01__2026-09-01.dbn.zst",
+      "quote_usd": 0.075282007456,
+      "schema": "statistics",
+      "sha256": "387a96651407a4915531e146c78d90d1fb79578fbd90f8a636293f08ebe59c70",
+      "size_bytes": 7036220,
+      "start": "2026-08-01"
+    },
+    "statistics__2026-09-01__2026-10-01": {
+      "count": 1013033,
+      "end": "2026-10-01",
+      "file": "aao_statistics__2026-09-01__2026-10-01.dbn.zst",
+      "quote_usd": 0.075476840138,
+      "schema": "statistics",
+      "sha256": "eec335cc6dbb057df3a1a6837fd5d750c491e774ffbc6fe40c2c505e8bc485e1",
+      "size_bytes": 7233867,
+      "start": "2026-09-01"
+    }
+  },
+  "completed_all_eligible": true,
+  "dataset": "GLBX.MDP3",
+  "end": "2026-10-01",
+  "max_budget_usd": 40.0,
+  "note": "Quoted estimates, not final charges",
+  "parent": "AAO.OPT",
+  "start": "2020-01-01",
+  "total_quoted_usd": 17.33487324
+}

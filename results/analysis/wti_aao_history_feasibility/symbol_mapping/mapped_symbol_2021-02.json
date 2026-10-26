@@ -1,0 +1,21 @@
+{
+  "source": "local DBNStore.to_df(map_symbols=True)",
+  "no_network_requests": true,
+  "definition_events": 140790,
+  "settlement_events": 127958,
+  "final_settlement_events": 55326,
+  "final_actual_events": 37998,
+  "final_theoretical_events": 17328,
+  "final_events_with_nonempty_mapped_symbol": 55326,
+  "final_events_without_mapped_symbol": 0,
+  "final_mapped_events_with_matching_raw_symbol": 55326,
+  "final_mapped_events_missing_matching_definition": 0,
+  "final_mapped_events_with_unambiguous_outright_identity": 55326,
+  "final_mapped_events_with_ambiguous_or_non_outright_identity": 0,
+  "definition_publisher_symbol_groups": 6253,
+  "definition_symbol_groups_with_multiple_contract_fingerprints": 0,
+  "tentative_unique_out_right_symbol_reference_date_keys": 48730,
+  "matched_reference_dates": 19,
+  "warning": "A mapped symbol is only a candidate historical contract identity. Symbols can be reused, correction/deletion and publication time are not resolved, and this is not a model-validation panel.",
+  "month": "2021-02"
+}

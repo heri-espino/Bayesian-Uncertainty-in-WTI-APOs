@@ -1,0 +1,34 @@
+{
+  "budget_usd": 1.0,
+  "dataset": "GLBX.MDP3",
+  "eligible_months": 1,
+  "eligible_quote_usd": 0.15870165,
+  "end": "2021-03-01",
+  "note": "Metadata counts and quotes do not verify actual final settlements",
+  "parent": "AAO.OPT",
+  "requests": [
+    {
+      "count": 140790,
+      "eligible": true,
+      "end": "2021-03-01",
+      "id": "definition__2021-02-01__2021-03-01",
+      "quote_usd": 0.115910880268,
+      "schema": "definition",
+      "start": "2021-02-01",
+      "status": "positive"
+    },
+    {
+      "count": 574328,
+      "eligible": true,
+      "end": "2021-03-01",
+      "id": "statistics__2021-02-01__2021-03-01",
+      "quote_usd": 0.042790770531,
+      "schema": "statistics",
+      "start": "2021-02-01",
+      "status": "positive"
+    }
+  ],
+  "safety_ceiling_usd": 0.8,
+  "start": "2021-02-01",
+  "total_months": 1
+}

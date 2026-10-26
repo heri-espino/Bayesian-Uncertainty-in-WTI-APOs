@@ -1,0 +1,151 @@
+{
+  "by_year": {
+    "2019": {
+      "candidate_keys": 4706,
+      "reference_dates": 1,
+      "actual_flagged": 4614,
+      "theoretical_flagged": 92,
+      "zero_price_keys": 92,
+      "price_bins": {
+        "positive_below_0_01": 0,
+        "0_01_to_1": 1145,
+        "1_to_10": 2114,
+        "10_to_100": 1355,
+        "100_and_above": 0
+      },
+      "latest_report_source_month_differs": 4706
+    },
+    "2020": {
+      "candidate_keys": 951147,
+      "reference_dates": 251,
+      "actual_flagged": 805424,
+      "theoretical_flagged": 145723,
+      "zero_price_keys": 3218,
+      "price_bins": {
+        "positive_below_0_01": 0,
+        "0_01_to_1": 261371,
+        "1_to_10": 377721,
+        "10_to_100": 308837,
+        "100_and_above": 0
+      },
+      "latest_report_source_month_differs": 32918
+    },
+    "2021": {
+      "candidate_keys": 678637,
+      "reference_dates": 253,
+      "actual_flagged": 439655,
+      "theoretical_flagged": 238982,
+      "zero_price_keys": 3316,
+      "price_bins": {
+        "positive_below_0_01": 0,
+        "0_01_to_1": 122995,
+        "1_to_10": 301572,
+        "10_to_100": 250754,
+        "100_and_above": 0
+      },
+      "latest_report_source_month_differs": 20280
+    },
+    "2022": {
+      "candidate_keys": 754632,
+      "reference_dates": 252,
+      "actual_flagged": 448070,
+      "theoretical_flagged": 306562,
+      "zero_price_keys": 2845,
+      "price_bins": {
+        "positive_below_0_01": 0,
+        "0_01_to_1": 96594,
+        "1_to_10": 269676,
+        "10_to_100": 385048,
+        "100_and_above": 469
+      },
+      "latest_report_source_month_differs": 27583
+    },
+    "2023": {
+      "candidate_keys": 689570,
+      "reference_dates": 251,
+      "actual_flagged": 412639,
+      "theoretical_flagged": 276931,
+      "zero_price_keys": 582,
+      "price_bins": {
+        "positive_below_0_01": 0,
+        "0_01_to_1": 121678,
+        "1_to_10": 365215,
+        "10_to_100": 201567,
+        "100_and_above": 528
+      },
+      "latest_report_source_month_differs": 23496
+    },
+    "2024": {
+      "candidate_keys": 690312,
+      "reference_dates": 251,
+      "actual_flagged": 394737,
+      "theoretical_flagged": 295575,
+      "zero_price_keys": 556,
+      "price_bins": {
+        "positive_below_0_01": 0,
+        "0_01_to_1": 135657,
+        "1_to_10": 403435,
+        "10_to_100": 150342,
+        "100_and_above": 322
+      },
+      "latest_report_source_month_differs": 26793
+    },
+    "2025": {
+      "candidate_keys": 707400,
+      "reference_dates": 252,
+      "actual_flagged": 418150,
+      "theoretical_flagged": 289250,
+      "zero_price_keys": 1666,
+      "price_bins": {
+        "positive_below_0_01": 0,
+        "0_01_to_1": 165900,
+        "1_to_10": 386407,
+        "10_to_100": 153408,
+        "100_and_above": 19
+      },
+      "latest_report_source_month_differs": 30690
+    },
+    "2026": {
+      "candidate_keys": 629199,
+      "reference_dates": 189,
+      "actual_flagged": 375798,
+      "theoretical_flagged": 253401,
+      "zero_price_keys": 2377,
+      "price_bins": {
+        "positive_below_0_01": 0,
+        "0_01_to_1": 78988,
+        "1_to_10": 332560,
+        "10_to_100": 215029,
+        "100_and_above": 245
+      },
+      "latest_report_source_month_differs": 23596
+    }
+  },
+  "total_candidate_keys": 5105603,
+  "distinct_candidate_dates": 1700,
+  "price_units_verified": false,
+  "price_bins_are_diagnostic_only": true,
+  "no_vendor_api_calls": true,
+  "status": "quality_diagnostic_not_model_validation",
+  "inventory_final_reference_dates": 1701,
+  "raw_reference_dates": {
+    "source_final_dates": 1701,
+    "candidate_final_dates": 1700,
+    "source_dates_missing_from_candidates": [
+      "2024-01-26"
+    ],
+    "final_source_events_on_missing_dates": {
+      "2024-01-26": 2
+    },
+    "unexpected_candidate_days": []
+  },
+  "barchart_date_only_overlap": {
+    "available": true,
+    "barchart_contract_files": 214,
+    "barchart_rows": 11179,
+    "barchart_dates": 330,
+    "overlapping_reference_dates": 329,
+    "barchart_rows_on_common_dates": 11178,
+    "price_and_contract_identity_matching_done": false
+  }
+}

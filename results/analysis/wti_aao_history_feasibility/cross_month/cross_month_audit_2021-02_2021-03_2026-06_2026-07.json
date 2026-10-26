@@ -1,0 +1,65 @@
+{
+  "distinct_tentative_symbol_reference_keys": 276325,
+  "keys_seen_in_multiple_file_months": 0,
+  "top_rank_ambiguous_keys": 0,
+  "latest_deleted_keys": 0,
+  "latest_preliminary_keys": 2636,
+  "latest_intraday_final_keys": 0,
+  "latest_invalid_price_keys": 0,
+  "selected_final_nonintraday_keys": 273689,
+  "selected_actual_flagged": 156945,
+  "distinct_selected_reference_dates": 85,
+  "latest_update_source_month_differs_from_reference": 300,
+  "selected_theoretical_flagged": 116744,
+  "months_processed": 4,
+  "source_months": [
+    "2021-02",
+    "2021-03",
+    "2026-06",
+    "2026-07"
+  ],
+  "symbol_identities_observed": 15090,
+  "symbol_groups_conflicting_across_months": 0,
+  "symbol_groups_not_safe_for_outright": 20,
+  "settlement_events_read": 711542,
+  "settlement_events_with_safe_identity": 711542,
+  "no_databento_api_calls": true,
+  "source_data_private": true,
+  "status": "cross_month_provisional_not_validated_settlement_panel",
+  "warning": "All source months were replayed for latest actions, including preliminary and deletions. The DB has proprietary price records. Historical contract/price-scale validation, exchange corrections after the collection cutoff, and strictly lagged market inputs remain unverified.",
+  "private_state_created": true,
+  "within_month_counts": [
+    {
+      "month": "2021-02",
+      "settlement_events": 127958,
+      "events_with_safe_global_symbol": 127958,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 48831,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2021-03",
+      "settlement_events": 164436,
+      "events_with_safe_global_symbol": 164436,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 57805,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2026-06",
+      "settlement_events": 248275,
+      "events_with_safe_global_symbol": 248275,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 101587,
+      "month_top_rank_conflicts": 0
+    },
+    {
+      "month": "2026-07",
+      "settlement_events": 170873,
+      "events_with_safe_global_symbol": 170873,
+      "events_unmapped_or_ambiguous": 0,
+      "month_last_update_keys": 68102,
+      "month_top_rank_conflicts": 0
+    }
+  ]
+}
