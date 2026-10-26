@@ -1,10 +1,10 @@
 # Maintainer and agent guide
 
-> **Current agent handoff (2026-10-26):** Read [HANDOFF](../HANDOFF.md),
-> [master plan](../research/PAPER_COMPLETION_MASTER_PLAN_2026-10-26.md),
-> [evidence ledger](../research/AAO_EVIDENCE_LEDGER_2026-10-26.md),
-> [sequential experiment register](../research/AAO_EXPERIMENT_REGISTER_2026-10-26.md),
-> and [independent verification protocol](../research/AAO_AGENT_VERIFICATION_PROTOCOL_2026-10-26.md).
+> **Current agent handoff (2026-10-26):** Read `HANDOFF.md`,
+> `research/PAPER_COMPLETION_MASTER_PLAN_2026-10-26.md`,
+> `research/AAO_EVIDENCE_LEDGER_2026-10-26.md`,
+> `research/AAO_EXPERIMENT_REGISTER_2026-10-26.md`,
+> and `research/AAO_AGENT_VERIFICATION_PROTOCOL_2026-10-26.md`.
 > Do not merge another agent's PR, buy more data, or change sparse checkout without authorization.
 
 The root `AGENTS.md` is the authoritative operational contract. This page explains how to
