@@ -52,6 +52,28 @@ contract/day pricing panel. See `research/AAO_POST_DOWNLOAD_VALIDATION_2026-10-2
 Scientific pricing experiments, model figures and JCM numerical
 manuscript updates are **not yet completed**. No repeat paid download.
 
+## Latest 81-month inventory and timestamp-mapping investigation (2026-10-25)
+
+**Author's refreshed 81-month inventory:** 70,154,064 statistics events,
+13,412,045 settlement events, **5,899,096 final** (4,027,696 actual-flagged,
+1,871,400 theoretical-flagged), and **1,701 distinct final CME `ts_ref`
+reference dates**. These are not deduplicated option prices or eligible
+out-of-sample dates. All 162 raw files passed the author's SHA256 check.
+
+The conservative `wti_aao_settlement_gate` excluded **76.1%** of February
+2021 and **81.1%** of June 2026 settlement events from a *same-publication-
+UTC-day, preceding-definition* match. This should **not** be treated as
+market-data attrition: many CME settlement reference dates differ from
+the UTC publication day, and venue definition snapshots are time-dependent.
+Latest actionable checkpoint:
+`research/AAO_81_MONTH_SETTLEMENT_MAPPING_FINDINGS.md`.
+
+**Next offline command:** `python -m experiments.wti_aao_mapping_comparison
+--months 2021-02 2026-06`. It tests daily definition mappings against
+reference, publication and preceding publication dates, including
+conflicting contract-fingerprint indicators. It is a *diagnostic*, not a
+validated priced option-date panel or a basis to change the paper yet.
+
 Read this file before continuing research work.
 
 ## Canonical current checkpoint

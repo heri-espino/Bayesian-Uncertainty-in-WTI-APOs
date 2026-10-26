@@ -140,6 +140,27 @@ This does not yet establish valid multiyear contract-day option prices,
 independent holdout dates, fresh performance figures or a finished
 Journal of Commodity Markets manuscript.
 
+## 81-month AAO inventory totals and timestamp-mapping gate (2026-10-25)
+
+The locally verified historical archive contains **81 months**,
+70,154,064 statistics events, **5,899,096 final settlement events**,
+and **1,701 distinct final CME reference dates**. Of final events,
+4,027,696 are actual-flagged and 1,871,400 theoretical-flagged.
+These are *not yet* distinct contract-day option prices or the number of
+strictly forward-eligible backtesting dates.
+
+A strict same-UTC-day, preceding-definition diagnostic missed 76.1%
+of February 2021 and 81.1% of June 2026 settlement events. Since CME's
+settlement reference date can differ from its publication date,
+this is a **diagnostic-rule mismatch**, not a demonstrated data gap.
+See the [settlement mapping checkpoint](research/AAO_81_MONTH_SETTLEMENT_MAPPING_FINDINGS.md).
+
+Next entirely offline test:
+`python -m experiments.wti_aao_mapping_comparison --months 2021-02 2026-06`.
+It compares reference-day/publication-day/preceding-day instrument
+definition mappings and flags contract-identity conflicts. It does not
+produce usable price records, performance figures or new paper results.
+
 ## 81-month research execution and provisional Elsevier paper
 
 The completed AAO acquisitions cover **all 81 months (2020-01 through

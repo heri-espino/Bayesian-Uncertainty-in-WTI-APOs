@@ -80,6 +80,32 @@ multi-month contract identity or market validation. Read
 `research/AAO_POST_DOWNLOAD_VALIDATION_2026-10-25.md`.
 No fees, API requests, inference, large figures or paper rewriting.
 
+## 81-month final inventory and settlement timestamp anomaly
+
+The completed offline inventory contains **1,701 unique final settlement
+reference dates**, **5,899,096 final settlement statistic events** (4,027,696
+actual-flagged; 1,871,400 theoretical-flagged). These numbers supersede the
+old 80-month aggregate figures but do **not** establish eligible forward
+valuation dates or unique contract prices. Hash integrity of all 162
+files has passed.
+
+The conservative same-UTC-publication-day **as-of** definition check
+missed 97,438/127,958 (76.1%) February 2021 settlement events and
+201,293/248,275 (81.1%) June 2026 events. In the limited matched subset,
+23,660/23,900 February and 31,902/32,258 June selected final ID/date
+keys had a different CME `ts_ref` date from the publication UTC date.
+The rule is too restrictive to construct a research sample; **do not**
+discard unmatched events as missing prices.
+
+Read `research/AAO_81_MONTH_SETTLEMENT_MAPPING_FINDINGS.md`.
+New synthetic-tested, strictly offline
+`experiments/wti_aao_mapping_comparison.py` compares day-level
+reference, publication and previous-publication snapshot mapping,
+reports mismatches, and rejects ambiguous instrument-ID fingerprints.
+This is **only a diagnostic**, not permission to merge all candidate
+matches. Next agent must validate a stable outright contract master,
+CME trading sessions and revision history before pricing experiments.
+
 ## Coordinating invariants
 
 - PR #95 was merged with the quote-first downloader and offline inventory; all 160 author-reported DBN files live **only on the author's Windows VM**, not on GitHub. Do not use GitHub-hosted CI to access those raw files. Do not request the API key, paste it into a chat, or commit secrets or licensed data.
