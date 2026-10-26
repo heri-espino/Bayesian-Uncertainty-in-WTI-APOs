@@ -2,7 +2,7 @@
 import pandas as pd
 import pytest
 
-from experiments.wti_aao_contract_day_candidates import normalize
+from bayesian_asian_options.aao_settlements import normalize
 
 
 def samples():
