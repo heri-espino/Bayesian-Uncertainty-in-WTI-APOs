@@ -1,12 +1,12 @@
 # Empirical WTI APO workflow
 
-> **Current methodological scope:** The older workflow on this page uses Barchart, CL and sometimes LO; the user-selected 2026 new JCM manuscript is **Databento-only**, with reduced-form terminal-average model and same-day disjoint AAO parity anchors, as specified in [its new runbook](../research/AAO_DATABENTO_ONLY_PAPER_RUNBOOK_2026-10-26.md). Do not insert old structural-market results into this separate article.
+> **Current methodological scope:** The older workflow on this page uses Barchart, CL and sometimes LO; the user-selected 2026 new JCM manuscript is **Databento-only**, with reduced-form terminal-average model and same-day disjoint AAO parity anchors, as specified in `research/AAO_DATABENTO_ONLY_PAPER_RUNBOOK_2026-10-26.md`. Do not insert old structural-market results into this separate article.
 
 
 > **Supersession note (2026-10-26):** This page mixes historically correct 80/81-month
 > acquisition notes and earlier empirical recipes. The authoritative current state
-> is [the master plan](../research/PAPER_COMPLETION_MASTER_PLAN_2026-10-26.md)
-> plus [evidence ledger](../research/AAO_EVIDENCE_LEDGER_2026-10-26.md).
+> is `research/PAPER_COMPLETION_MASTER_PLAN_2026-10-26.md`
+> plus `research/AAO_EVIDENCE_LEDGER_2026-10-26.md`.
 > The AAO raw DBNs and derived SQLite need re-acquisition and private Git LFS upload;
 > no extended 2020–2026 forward-test result is validated.
 
