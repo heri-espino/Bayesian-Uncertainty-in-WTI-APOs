@@ -2,6 +2,21 @@
 
 Read `AGENTS.md`, `research/AI_HANDOFF.md`, `research/CHECKPOINT_2026-10-25_AAO_EXPANSION.md`, `docs/architecture.md`, `docs/agent_guide.md` and `research/DATABENTO_AAO_EXPANSION_PLAN.md` first. **No Databento charge or scientific result is authorized by this task list.**
 
+## Latest VM evidence — 2026-10-25 (inventory already executed)
+
+The author ran both the small sample and **all-month** offline inventory successfully:
+**80 months processed, zero decode exceptions**, `AAO` asset in the monthly definition reports,
+**1,682 distinct final settlement reference dates** and **5,843,770 final settlement events**
+(3,989,698 flagged actual; 1,854,072 flagged theoretical). The downloaded month
+**2021-02** is missing; reason not yet established. See
+`research/AAO_INVENTORY_RESULTS_2026-10-25.md` for complete counts.
+
+**Agent A is partially done, NOT scientifically closed.** Skip unnecessary reruns.
+Finish manifest SHA256 integrity, actual outright definition/instrument mapping,
+strategy-leg filtering and unique contract/date deduplication. Do not mistake the
+1,682 reference dates for eligible model test dates. Agents B–E still await
+verified data-model joins and forward eligibility.
+
 ## Coordinating invariants
 
 - PR #95 was merged with the quote-first downloader and offline inventory; all 160 author-reported DBN files live **only on the author's Windows VM**, not on GitHub. Do not use GitHub-hosted CI to access those raw files. Do not request the API key, paste it into a chat, or commit secrets or licensed data.
@@ -17,7 +32,7 @@ Read `AGENTS.md`, `research/AI_HANDOFF.md`, `research/CHECKPOINT_2026-10-25_AAO_
 
 **Input:** `data/databento/wti_aao_bulk/raw/`, bulk quote plan and acquisition manifest on the VM. **Output:** local integrity report plus *shareable aggregates only* under `results/analysis/wti_aao_history_feasibility/inventory/`.
 
-- Run current offline `experiments.wti_databento_aao_inventory --months 2023-06 2025-06 2026-06`, then `--all` after smoke-test.
+- The offline sample and full inventory have already run successfully. Re-run only for code/schema changes or to reproduce the local report. Proceed with SHA256, definition joins and deduplicated settlement analysis.
 - Compare 160 expected SHA256s/sizes, identify 80 eligible and the one excluded month, and audit degraded-feed warnings.
 - Inspect whether `definition` records have the expected AAO asset/product and outright `C`/`P` classes, realistic strikes, expiry and CL underlying; exclude complex strategies and duplicated leg-definition snapshots. Verify the mapped symbol/instrument IDs in `statistics`. **Warning:** `stat_type` can be an enum rather than a bare integer in `to_df`; inspect the actual DataFrame schema before classifying flags.
 - Count final and theoretical settlement *events* and unique `ts_ref` days; do not equate event counts with unique option contract/day or independent evaluations.
