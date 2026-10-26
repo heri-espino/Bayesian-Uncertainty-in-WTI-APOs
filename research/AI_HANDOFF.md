@@ -30,6 +30,28 @@ mark normalization, Barchart/CL and strictly lagged-IV eligibility, and then
 reproducible chronological backtests before replacing empirical claims.
 All heavy output generation remains manual-only and local to licensed data.
 
+## Latest VM validation results and next agent action — 2026-10-25
+
+The author reports **all 162 SHA256 checks passed**, with 81/81 monthly
+windows, combined quoted USD 17.49357489 and no missing files. The
+81-month coverage diagnostic generated all three formats from an
+81-month inventory with SHA256
+`4ec3893c8b5b216a5f450ffa40d0a910012bf6b66910b5eb8ad5f0c7f8950c13`.
+The two existing identity probes both matched 100% of **final events to
+some outright ID in the same month**, but that is **not** an event-time
+as-of join: February 2021 has 55,326 final events versus 48,730 tentative
+unique day/ID keys; June 2026 has 118,094 versus 101,397, and more
+theoretical-flagged than actual-flagged final events in June.
+
+**New first task:** run
+`python -m experiments.wti_aao_settlement_gate --months 2021-02 2026-06`
+on the author's VM (offline). It tests strict same-UTC-day definition
+as-of matches, deletions, last updates and differing settlement
+reference/publication days. It prints **aggregate counts only**, not a
+contract/day pricing panel. See `research/AAO_POST_DOWNLOAD_VALIDATION_2026-10-25.md`.
+Scientific pricing experiments, model figures and JCM numerical
+manuscript updates are **not yet completed**. No repeat paid download.
+
 Read this file before continuing research work.
 
 ## Canonical current checkpoint
