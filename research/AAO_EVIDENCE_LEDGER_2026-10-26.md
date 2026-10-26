@@ -1,5 +1,7 @@
 # Evidence ledger: Databento-only article, older Barchart evidence and missing proof
 
+**LATER VERIFIED RECOVERY MILESTONE:** On 2026-10-26, user-reported strict SHA256 audit passed `162/162` files, `81/81` months, `issues=[]`. The private GitHub backup branch `backup/aao-recovery-20261026` now has **162 AAO Git LFS source pointers, one reconstructed SQLite LFS pointer and the fresh 81-month acquisition manifest**. [PR #112](https://github.com/heri-espino/Bayesian-Uncertainty-in-WTI-APOs/pull/112) is open and mergeable; these binaries are not in default `main`. See [recovery update](AAO_RECOVERY_CONFIRMED_BACKUP_BRANCH_2026-10-26.md). Earlier evidence classifications saying remote backups are missing were written **before this recovery**. No fully new six-method Databento-only pricing study has been run.
+
 **Date:** 2026-10-26. **Rule:** "historically observed on user's VM" is *not* the same as "independently reproduced from data currently present in GitHub". Numerical values below preserve user-reported terminal output from the previous work and identify source files that survive. For current implementation status and future requirements see [master plan](PAPER_COMPLETION_MASTER_PLAN_2026-10-26.md).
 
 ## Evidence classes
