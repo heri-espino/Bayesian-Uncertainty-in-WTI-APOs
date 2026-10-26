@@ -57,8 +57,7 @@ Prefer branch names with a clear role such as `feature/`, `fix/`, `paper/`, `dat
 
 ## Manuscript structure is also normative
 
-The active paper targets the **Journal of Futures Markets**. Manuscript source belongs only
-under `paper/manuscript/`; historical paper drafts belong under `archive/`. The Wiley NJDv5
+The preserved **Wiley/JFM internal manuscript source** belongs under `paper/manuscript/`; historical drafts belong under `archive/`. **Current journal planning is conditional**: first consider the *Journal of Commodity Markets* only if the 2020–2026 Databento AAO expansion yields defensible new independent-date evidence; the prepared REMEF Word manuscript is the realistic fallback, with JFM a demanding alternative. See `docs/journal_strategy.md`. Do not change manuscript format or claim a final journal decision without author approval. The Wiley NJDv5
 bundle supplied by the author is frozen under `paper/vendor/wiley_njd_v5/` and must not be
 edited during ordinary manuscript work.
 
@@ -136,6 +135,42 @@ Barchart redistribution terms. Yahoo continuous-proxy snapshots under `data/wti_
 local Treasury CSVs under `data/rates/treasury/` are workstation caches/source inputs and are
 gitignored by default. Their README files, parsers, query metadata, hashes, and derived
 scientific outputs remain versioned.
+
+## Current WTI AAO checkpoint and agent handoff (2026-10-25)
+
+Before touching the historical market data or WTI empirical study, read:
+`research/CHECKPOINT_2026-10-25_AAO_EXPANSION.md`, `research/AAO_AGENT_TASKS.md`,
+`research/AI_HANDOFF.md`, and `docs/journal_strategy.md`. These update the acquisition-status
+portion of earlier 2026 planning notes, without invalidating earlier published or validated numerical experiments.
+
+- The author's local VM reported a **completed** compressed Databento `AAO.OPT` acquisition:
+  **160 chunks = 80 eligible months × `definition`/`statistics`**, 2020-01 through 2026-09,
+  quoted **USD 17.33487324**. The amount actually billed and the 81st missing month are unverified.
+  Those files are **not hosted on GitHub**; do not expect CI to read them.
+- The next step is **offline inventory**, then instrument-identity, final/theoretical settlement,
+  liquidity, degraded-date and Barchart reconciliation. The number of newly eligible pricing
+  dates and all expanded-study results are **unknown**.
+- Do **not rerun** `experiments.wti_databento_aao_bulk --mode download` by default, nor
+  purchase more LO/CL/history without explicit new authorization. Databento's USD 32
+  safety threshold is a *quote-based* guard, not a provider-enforced bill cap.
+- When filtering `statistics`, verify the actual DBN/DataFrame `stat_type` representation
+  before comparing with integer 3; `stat_flags & 1` denotes final settlement and
+  `stat_flags & 2` denotes actual (not theoretical), per CME/Databento for GLBX.MDP3.
+  These flags do **not** establish an exchange trade or an independent market price.
+- Use `ts_ref` as the CME reference trading date; join source instrument definitions
+  and normalize actual contract identities rather than using event count or file month.
+  Contract-linked settlement is model-derived in some cases (Curran settlement valuation);
+  separate actual/theoretical sources and all existing Barchart `Latest` marks.
+- Treat 2,381 option rows / 15 previous target dates and 253 external-LO rows / 10 dates
+  as prior evidence, not as expanded-history results. Do not mix samples, infer new
+  significance from record volume, or use future/same-day IV inputs to fit a forecast.
+- Preserve all previously validated results, source files, packages, experiments and
+  manuscript formats. Use short-lived isolated PRs for inventory, reconciliation,
+  eligible dates, extended forward runs and editorial work, in that order.
+- Licensed files, locally stored DPAPI credentials, personal Windows paths, raw
+  symbol-level holdings and unapproved data dumps must not be committed or exposed.
+  Only license-permitted aggregate diagnostics, redacted manifests, hashes and code.
+- Heavy data/paper/figure workflows must be **manual-only**. Light automatic CI is fine.
 
 ## Enforcement
 
