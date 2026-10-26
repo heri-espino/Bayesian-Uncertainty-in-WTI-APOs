@@ -87,3 +87,6 @@ dist/
 # Expanded AAO diagnostic plots and conditional Elsevier working paper
 paper/jcm/build/
 figures/extended_aao/
+
+# Private AAO price-level candidate panels generated offline (licensed vendor data)
+data/databento/wti_aao_bulk/derived_private/
