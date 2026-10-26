@@ -1,5 +1,28 @@
 # Agent execution plan — WTI APO 2020–2026 longitudinal study
 
+## Latest data-quality resolution and source recovery (2026-10-26)
+
+The author's private `--explain-date 2024-01-26` query showed
+**7,868/7,868** latest contract/date keys preliminary, and
+**zero** surviving final, deleted, invalid, intraday or tied keys.
+Only two historic raw final *events* appeared on that CME reference
+date. The 1,701 raw-event versus 1,700 surviving-final reference
+date discrepancy is therefore explained at the aggregate latest
+status level; tracing the individual messages remains optional.
+
+GitHub `main` contains Barchart JAO option CSVs in
+`data/csv/sep2026`, but the user's VM has
+`root_exists: false` and the specific JAO file is absent.
+`git ls-files ... | Select-Object -First 10` is not a complete
+index search. Check exact file with `git ls-files --error-unmatch`,
+then `git sparse-checkout list` and `git status --short -- data/csv`.
+Use non-destructive sparse inclusion or **targeted, safe** restore,
+not any reset/clean of the full worktree. Confirm local Barchart
+availability before running the price/unit and contract-level
+reconciliation; no change yet to paper metrics or figures.
+See `research/AAO_PANEL_QUALITY_FINDINGS_2026-10-26.md`.
+
+
 ## Latest transfer state: February recovered, no new purchases (2026-10-25)
 
 The author ran a February-only `AAO.OPT` **free metadata quote** followed by an **explicit billable two-file backfill**, both successfully: `eligible_months=1`, **USD 0.15870165 quoted**, `downloaded_chunks=2`. It used `--max-budget-usd 1 --confirm-budget-usd 1` and `--report-dir results/analysis/wti_aao_history_feasibility/bulk_feb2021`. Added to the prior 160 chunks / USD 17.33487324 quote, the acquisition has **162 files over 81/81 months, total USD 17.49357489 quoted**; actual billing remains unverified.

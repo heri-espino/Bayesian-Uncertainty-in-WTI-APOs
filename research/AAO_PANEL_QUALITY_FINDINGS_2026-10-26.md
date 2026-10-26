@@ -1,5 +1,72 @@
 # AAO full-history settlement quality — VM results, 26 October 2026
 
+## Follow-up: latest status and GitHub source verification (2026-10-26)
+
+**The missing reference date is explained at the latest-key status level.**
+On `2024-01-26`, the user's read-only `--explain-date` query found
+**7,868** latest publisher+symbol+reference-day keys, **all 7,868
+preliminary**, and **zero** deleted, intraday, invalid, conflicting
+or selected final keys. The earlier raw DBN scan had detected **two
+final settlement statistic events** that day. These are consistent
+with final messages being superseded by later nonfinal latest states;
+however the aggregate output does not prove the precise update
+sequence of those two event records. Thus **1,700** reference dates
+in the selected provisional panel versus **1,701** dates containing
+at least one original final event is a known consequence of the
+latest-update selection rule, **not a missing Databento file**. Preserve
+this difference as a data-quality and vintage-selection result; do
+not force preliminary marks into a final-price sample.
+
+**Barchart source files exist on GitHub `main`:** a live repository
+lookup confirmed `data/csv/sep2026/jaou6_10000c_price-history-09-12-2026.csv`
+and additional `jao*.csv` histories in `data/csv/sep2026` and
+other expiry folders. The user's Windows VM reports
+`Test-Path ...jaou6_10000c... = False`, and
+`root_exists: false` for `data/csv`. Its
+`git ls-files 'data/csv/*' | Select-Object -First 10` output
+listed **CL contracts** only; because of `-First 10`, it does not
+establish whether the JAOs are tracked in that local commit.
+Check current `main`, sparse checkout, tracked missing paths and
+local status before recovering anything. **Do not use `git reset
+--hard`, `git clean` or any blanket restore that might overwrite
+local work.**
+
+~~~powershell
+git switch main
+git pull --ff-only origin main
+git status --short -- data/csv
+git ls-files --error-unmatch -- 'data/csv/sep2026/jaou6_10000c_price-history-09-12-2026.csv'
+git sparse-checkout list
+git ls-files -v -- 'data/csv/sep2026/jaou6_10000c_price-history-09-12-2026.csv'
+~~~
+
+If sparse checkout is enabled and omits these files, extend it
+without resetting local changes:
+
+~~~powershell
+git sparse-checkout add data/csv
+~~~
+
+If sparse checkout is **disabled** and the file is tracked on local
+`HEAD` but absent in the worktree, first confirm that this path
+has no **wanted** local edits, then restore just that file:
+
+~~~powershell
+git restore --source=HEAD --worktree -- 'data/csv/sep2026/jaou6_10000c_price-history-09-12-2026.csv'
+~~~
+
+Other Barchart folders must also exist before calling
+`python -m experiments.wti_aao_panel_quality` with the default
+root. Do not restore entire folders until local changes are checked;
+the root cause may alternatively be a stale or partial checkout.
+For Barchart CSVs stored elsewhere use the already-supported
+`--barchart-root`. This audit establishes file availability
+and **date-only** overlap, not matching identical contracts, settlement
+units or causal IV calibration.
+
+---
+
+
 ## Completed offline data-quality scan
 
 The author executed

@@ -1,5 +1,32 @@
 # AI handoff
 
+## Newest resolution: January 26 latest preliminary, Barchart checkout incomplete
+
+The user's `--explain-date 2024-01-26` query found **7,868/7,868**
+latest contract/date keys **preliminary** and **no** selected final
+keys (no deleted, invalid, intraday or rank-conflicted keys). Two
+historical raw final *events* on that reference date were reported
+earlier; event-level revision attribution has not been independently
+traced. The 1,701 raw-final versus 1,700 selected-final date
+difference is therefore **explained at the final-status level**,
+not attributable to an incomplete Databento purchase.
+
+Local Barchart CSV discovery returned `root_exists:false` and
+`Test-Path ...sep2026/jaou6_10000c... = False` on the Windows VM.
+Direct GitHub `main` inspection confirms the JAO histories **are
+tracked upstream** in `data/csv/sep2026/`. The user's
+`git ls-files ... | Select-Object -First 10` shows only the first
+ten CL paths, not a complete JAO existence test. First inspect
+the exact JAO path via `git ls-files --error-unmatch -- <path>`,
+`git sparse-checkout list` and `git status --short -- data/csv`.
+Restore individual missing tracked files only when safe or extend
+sparse checkout, **without resetting uncommitted work**.
+
+Full evidence and recovery procedure:
+`research/AAO_PANEL_QUALITY_FINDINGS_2026-10-26.md`.
+No new pricing results, Barchart date overlaps or manuscript changes
+are established.
+
 ## Most recent source-quality result (2026-10-26)
 
 The full 81-month cross-file reconciliation contains **5,105,603**
