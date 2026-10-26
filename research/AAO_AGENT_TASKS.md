@@ -17,6 +17,25 @@ strategy-leg filtering and unique contract/date deduplication. Do not mistake th
 1,682 reference dates for eligible model test dates. Agents B–E still await
 verified data-model joins and forward eligibility.
 
+## February 2021 recovery diagnosis — 2026-10-25
+
+The author's original bulk metadata plan confirms **positive** February
+2021 record counts: `definition=140790`, `statistics=574328`. The
+`definition` **price estimate** (not the count) failed with a remote
+HTTP **504 gateway timeout**, whereas `statistics` quoted
+USD `0.042790770531`. This was a metadata outage, **not absent
+market coverage**. The one-month total cost remains unknown.
+
+Use a **USD 1 separate one-month budget** (USD 0.80 quote-based planning
+threshold), not another USD 40 authorization. Next action is only the
+targeted **free quote** (see
+`research/AAO_INVENTORY_RESULTS_2026-10-25.md`). Use the separate
+`--report-dir results/analysis/wti_aao_history_feasibility/bulk_feb2021`
+to avoid overwriting the original acquisition manifest. Do not rerun
+the paid 80-month acquisition and do not assume that February is
+already downloaded. If backfilled, its separate acquisition ledger
+must be reconciled with the original 160 file hashes.
+
 ## Coordinating invariants
 
 - PR #95 was merged with the quote-first downloader and offline inventory; all 160 author-reported DBN files live **only on the author's Windows VM**, not on GitHub. Do not use GitHub-hosted CI to access those raw files. Do not request the API key, paste it into a chat, or commit secrets or licensed data.
