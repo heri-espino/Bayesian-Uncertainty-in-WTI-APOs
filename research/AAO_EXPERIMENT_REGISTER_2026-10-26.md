@@ -14,7 +14,7 @@ For each experiment create a durable note under `research/experiments/experiment
 
 Use one active branch and PR per task where feasible; preserve others' concurrent work and do not merge without authorization. CI only for light tests/lint/provenance; heavy analyses and PDF/figures are manual-only. Never commit Databento API credentials or confidential DPAPI secrets.
 
-**Baseline vs new:** Previous 2,381-row/15-date Barchart and 253-row/10-date LO study is established, but **all 81-month Databento new-market experiments here are unexecuted pending re-acquisition**. No model-performance statistics are currently warranted for the expanded sample.
+**Baseline vs new:** Previous 2,381-row/15-date Barchart and 253-row/10-date LO study is **preserved for historical context, not used in the selected Databento-only new manuscript**. All new real-data Databento-only 81-month economic results remain unexecuted pending re-acquisition; the new experimental code was implemented by PR #110. No model-performance statistics are currently warranted for the expanded sample.
 
 ## Pre-experiment: RECOVERY (blocking, not a pricing experiment)
 
@@ -34,82 +34,90 @@ Use one active branch and PR per task where feasible; preserve others' concurren
 
 **Exit:** every input file verified, no silent skipped months, as-of snapshots fail closed on ambiguous identity, note complete with costs and full replay logs.
 
-## experiment002 — contract-level Databento/Barchart settlement parity
+## experiment002 — Databento-only parity-anchor feasibility (pre-fixing)
 
-**Question:** Can AAO options from the two vendors be identified and compared on the same contract and settlement reference date, with verified units and publication vintage?
+**Question:** Can one identify an unambiguous set of *pre-fixing* AAO contracts and stable same-day call/put parity anchors from the archived settlement marks? This is NOT a first-nearby CL structural pricing exercise.
 
-**Method:** read `bayesian_asian_options.barchart_apo`, `aao_settlements.py` and `aao_cross_month.py` before coding; normalize publisher/exchange, native symbol, class (C/P), underlying, expiry/maturity, strike-price factor and tick units, contract multiplier and currency; recover as-of definitions and sequence/correction states. Distinguish CME `ts_ref`, publication UTC, local session date and Barchart `Time` conventions; set a time tolerance *before* looking at mismatches. Join on all dimensions, not just date. Examine examples across early 2020, 2021-02, 2024-01-26, September 2026; exclude unmatched, false symbols and later-updated vintages.
+**Already implemented code (PR #110):** `bayesian_asian_options/src/bayesian_asian_options/aao_databento_only.py` and the runner `experiments/wti_aao_databento_only.py`, with synthetic tests `tests/test_aao_databento_only.py`. No claimed actual 81-month pricing results.
 
-**Metrics:** source and matched date count, matched unique contracts, unique contract-dates, rejected ambiguous keys, price difference (raw and normalized), MAE/RMSE of vendor disagreement, distribution of zero/actual/theoretical and volume/OI, mismatch causes, suspect units and as-of cutoffs. Validate known older Barchart records without changing them.
+**Method:** use AAO contract definitions and latest selected settlement values, validate expiry, call/put and strike units, exclude dates on/after start of averaging month. On each same-day expiry/reference cross-section reserve preferred seven, minimum four, matched *actual-flagged* parity anchor strikes. Fit `C(K)-P(K)=a-bK`, discount D=b and expected Q terminal average `a/b`. Require positive plausible values, sufficient K span and low parity residual; exclude **both call and put** on all anchor strikes from target evaluations.
 
-**Exit:** source-level price units and exact key verified; documented consistent prices or clearly bounded differences; **date-only overlap is explicitly insufficient**. If price parity fails, stop further paper-model comparisons until corrected.
+**Exit:** a documented source/contract and anchor attrition funnel, leakage check showing target strikes disjoint from anchor strikes and source-vintage/price-scale cautions. Same-day anchors imply conditional cross-sectional evaluation, **not ex-ante prediction or full CL fixing reconstruction**. Report true unique reference-day eligibility counts, or zero eligible observations if appropriate.
 
-## experiment003 — causal historical pricing eligibility panel
+## experiment003 — AAO-only manual pilot with lagged volatility
 
-**Question:** On which independent valuation dates do we possess all inputs available by the cutoff to price an AAO without look-ahead?
+**Question:** Does the existing six-model reduced-form pipeline produce scientifically valid non-anchor held-out AAO evaluations on real data?
 
-**Method:** reconstruct CME APO daily fixing calendar and the **first-nearby** CL reference futures path, realized portion of average, remaining fixings and dated forward curve; discounting curve; prior CL returns, prior-date APO IV, prior-date independent LO IV (including support/interpolation). Use strictly timestamped data availability. Preserve both a retrospective-final-target variant and a publication-vintage-eligible version; NEVER train on later settlement amendments. Use stable contracts and unique `(cutoff date, target contract)` keys. Freeze chronological fit/selection/test windows before benchmarking.
+**Runbook command (after backed-up DBNs + SQLite):**
 
-**Outputs:** canonical panel schema and column dictionary; per-year and per-expiry count funnel (raw events -> preliminary/final valid -> unique contracts -> price-scale parity -> available futures curve, rates, fixings, volatility support -> **independent eligible pricing dates**); excluded rows with reason codes; leakage checks and cutoff reproducibility tests; no unsupported use of option marks as contemporaneously tradable quotes.
+    python -m experiments.wti_aao_databento_only --execute --source-start 2022-01-01 --eval-start 2023-01-01 --date-stride 15 --max-contracts 40
 
-**Exit:** a model-independent frozen eligible-date panel and versioned data manifest; no invented eligibility counts.
+**Method:** pre-fixing only; same-day parity anchoring as experiment002; volatility from earlier reference-date changes of **parity-implied expected terminal average** (NOT P-measure CL realized volatility), inverse-gamma variance prior alpha0=3/beta0=0.16 with default 128 draws, rolling 21/63, EWMA half-life 63 and prior-date same-family AAO implied volatility. Predict **non-anchor** option values only.
 
-## experiment004 — reproduce and align original Barchart baseline
+**Exit:** actual run log, frozen config/git commit, dates, contract counts, benchmark feasibility, diagnostics for empty sample, bad strike scale, expiry mismatch or anchor failure; commit sufficient private and aggregate outputs. No synthetic substitution for empty/missing panels; no purchases needed.
 
-**Question:** What is the original 2,381-row / 15-date result on the exact Barchart panels, and what subset has direct Databento parity?
+## experiment004 — Full Databento-only six-method benchmark
 
-**Method:** reuse `experiments.wti_apo_empirical`, `experiments.wti_apo_date_panel`, `experiments.wti_apo_implied_volatility`, `scripts/run_extended_forward_validation` and existing checkpoints to recreate the old baseline on its original dates. Compare the replacement Databento values for **same matched contract-dates** without changing the old Barchart CSV or figure. Predeclare whether price target is retrospective vendor settlement or as-of published quote and assess dates not supported by both.
+**Question:** On the same eligible archive-mark subset, how do PI, PM, rolling21, rolling63, EWMA63 and `lagged_IV` compare, after accounting for volatility posterior uncertainty and date dependence?
 
-**Outputs:** old-vs-rerun Barchart metrics, vendor matched-support metrics, strict-cutoff audit, matched and unmatched date counts, dataset differences, error table and hashes. Preserve previous paper results, don't overwrite them.
+**Runbook command (heavy, manual):**
 
-**Exit:** a reproducible bridge between historical small-sample and new long-sample evidence. A different source convention must not be misdescribed as model improvement.
+    python -m experiments.wti_aao_databento_only --execute --source-start 2021-01-01 --eval-start 2023-01-01 --date-stride 5 --max-contracts 80
 
-## experiment005 — full fixed-support pricing-method comparison
+**Method:** the new `AAO.OPT` definitions and statistics only; no Barchart options, LO standard options, CL futures or Treasury external curve. Black-style **lognormal terminal-average** approximation, discount/forward from excluded current-date AAO parity anchors; no actual path-dependent first-nearby futures state. Prior volatility estimators strictly lagged. Compare on identical non-anchor rows. Keep the user-defined default every fifth eligible day, assess alternative stride 1 as sensitivity if resources permit.
 
-**Question:** PI vs PM versus volatility-information choice: which matters more under a frozen common Q pricing engine, and with what uncertainty?
+**Outputs expected, NOT YET GENERATED:** `results/analysis/wti_aao_databento_only/method_metrics.csv`, `daily_metrics.csv`, `cluster_intervals.csv`, `experiment_manifest.json`, and LFS-backed `data/databento/wti_aao_bulk/derived_private/AAO_DATABENTO_REDUCED_FORM_CONTRACT_PRICING.csv.gz`.
 
-**Predeclare estimators:** posterior-integrated historical PI, posterior-mean PM (possibly posterior-RMS sensitivity), expanding-history, rolling 63-return history, EWMA, horizon-matched GARCH(1,1), previous-date APO smile IV, and genuinely independent previous-date LO IV. All option-price predictions for a *given paired comparison* must target exactly identical option/valuation-date rows and use consistent contract/curve/discount conventions. Label Monte Carlo and Curran pricing separately; use high-precision/numerical convergence to disentangle pricing-engine error from volatility-input effects.
+**Exit:** number of unique eligible valuation days, row/expiry counts, actual vs theoretical split, paired bias/MAE/RMSE, paired mean daily MAE improvements, 95% valuation-day-cluster bootstrap intervals, complete source lineage and long-run logs. No claim of independent ex-ante trading forecast.
 
-**Metrics:** matched N rows, N unique valuation dates, N expiry-date groups, bias/MAE/RMSE/USD per barrel, medians/quantiles, paired price differences, date-cluster plus moving/blocked-time-bootstrap confidence intervals and sensitivity to block choice. The main report must show a frozen chronological test and not retune on the test sample.
+## experiment005 — Databento-only diagnostic and robustness review
 
-**Exit:** versioned per-date errors or sufficient secure internal research outputs plus aggregate tables, exact pricing functions, posterior diagnostics, computational seeds/config and source manifest, reproducible model comparison. **No new price-error number is known yet.**
+**Question:** Are six-method rankings stable under actual vs theoretical settlements, zero/nonzero volume, anchor fit quality, number of strikes, near-term maturity and temporal dependence?
 
-## experiment006 — realistic liquidity, regime and settlement robustness
+**Method:** predeclare slices before inspecting winners. Probe sensitivity to strike-span and anchor-count thresholds, correction-vintage ambiguity, date stride and unique-day support, posterior variance prior/horizon and 128-draw Monte Carlo error. Calculate paired metrics and bootstrap intervals with dates as units, consider serial dependence; keep only common support. The engine's `C(K)-P(K)` anchor is **same-day** option information even though tested target strike is disjoint, so language must remain conditional cross-sectional.
 
-**Question:** Do main effects survive difficult states or rely on stale theoretical marks?
+**Exit:** reproducible tests, exclusion funnel, actual/theoretical and liquid subsets, paired date-level error uncertainty and honest uncertainty about archive-vintage availability and zero-volume marks.
 
-**Slices:** liquid actual-flagged and positive-volume marks, positive open interest, theoretical-flagged and zero-volume separately; 2020 turbulence, 2022 market volatility and other predeclared year bands; call/put, expiry, moneyness and IV support, already fixed percentage, near and long horizon, option with zero quoted settlement, extreme strikes and missingness. Never assume annual regime label itself proves exogenous differences.
+## experiment006 — Databento-only figures and CAS results
 
-**Tests:** paired differences on common support; groupwise N unique dates, not only option rows; stable results across exclusion thresholds and block bootstrap; diagnostic sensitivity to published settlement revision-vintage availability.
+**Question:** Do the *executed* full metrics support the proposed paper conclusion and is every graphical number reproducible?
 
-**Exit:** all exclusions justified with counts, confidence intervals and limitations; robust or explicitly nonrobust conclusions.
+**Existing scripts:** `python -m scripts.plot_aao_databento_only`; `python paper/jcm/build_databento.py --check`; `python paper/jcm/build_databento.py` (manual). Do not run plots/build as an apparent substitute for the unfinished economic experiment.
 
-## experiment007 — interpretation, mechanisms and numerical stability
+**Planned figures:** `figures/aao_databento_only/fig06_databento_benchmark_mae`, `fig07_databento_date_cluster_intervals`, `fig08_databento_mae_time_series`, each in PDF/PNG/SVG with figure manifest.
 
-**Question:** Do posterior variance/conditional price curvature explain observed PI–PM, and how large is model-price posterior uncertainty? Is numerical noise adequately controlled?
+**Manuscript:** `paper/jcm/databento_main.tex` is a separate manuscript already authored with **results deliberately pending**, not the Barchart-based adaptation `paper/jcm/main.tex`. Fill sample counts, tables, intervals, discussion, abstract, conclusion and limitations using the executed manifest only; preserve all previous JFM/REMEF/Barchart artifacts. Clearly identify terminal-average Black approximation and same-date anchoring, not the exact CME first-nearby-CL structural payoff model.
 
-**Method:** use the established synthetic mechanisms and old ten-million-path study as references; do not rerun massive simulations without a concrete diagnostic need. Audit PI–PM against curvature approximation, posterior model-price interval, Monte Carlo standard error, randomized QMC/Curran crosschecks and calibration methods. Quantify estimator/engine cross-effects and stress-test high volatility, partial fixings and unusual strike/expiry states.
+**Exit:** accurate independently cross-checked manuscript and figure/table source map, compiled CAS working draft, with no unrun results or transferred old Barchart rankings.
 
-**Exit:** a succinct, theoretically coherent mechanism assessment with identifiable error budgets. Avoid incorrectly treating a high correlation as methodological novelty.
+## experiment007 — Optional independent Barchart/LO/CL research extension (NOT required)
 
-## experiment008 — submission-ready JCM results and full paper audit
+**Scope:** the earlier Barchart APO/CL and LO IV structural research survives in the repository, and deeper cross-vendor or structural work may be valuable **as a separate branch/project or future study**. It is **not required to finish the user-selected Databento-only JCM manuscript** and must not be quietly inserted into it.
 
-**Question:** Is there sufficient robust, *new* independent-date empirical evidence for JCM, and is every sentence/figure reproducible?
+If explicitly pursued: align Databento/Barchart native contract/right/strike/expiry/reference date/vintage/currency and settlement price units; reconstruct true first-nearby CL fixings and forward curves, date-specific rates and earlier-date independent LO IV; run full ex-ante structure as a **separate estimand**. Record independent eligibility dates, liquidity and robustness. Do not falsely compare the old structural pricing losses directly with the new AAO-only reduced-form errors as if instruments, inputs and targets were identical.
 
-**Deliverables:** data-funnel table, vendor contract-specific parity, eligible-day calendar, main paired results, uncertainty/regime panels, actual/theoretical/liquidity sensitivity, numerical PI-vs-PM magnitude and intervals, reproducible figure source/manifest, expanded manuscript abstract/introduction/methods/results/limitations/discussion, clean supplement, consistent references and proper Elsevier CAS build and author guideline check. Preserve `paper/remef`, `paper/manuscript` and historical figures as fallback. JCM is **conditional**: if novelty/generalizability tests fail, retain honest science and decide if REMEF or a shorter Applied Economics Letters form is better. No simultaneous submissions.
+**Exit:** clearly separated external validation/research report if requested; not a paper blocker.
 
-**Exit:** finished JCM candidate PDF/source and reproducibility package with auditor signoff; author approves final submission. **Not yet done.**
+## experiment008 — Final scientific review and author submission decision
+
+**Tests:** verify source/derived LFS completeness and model-output hashes; document all required contracts, source/revision times, good/bad parity, every actual/theoretical and unique-day denominator, previous-date volatility cutoffs, matched benchmark support and cluster bootstrap; reproduce every figure/table; inspect JCM actual guidelines; ensure no unsubstantiated originality, arbitrage or forecasting claims. Compare against the independent [verification protocol](AAO_AGENT_VERIFICATION_PROTOCOL_2026-10-26.md).
+
+**Decision:** send the *Databento-only* JCM article only if the actual results are substantive, correctly presented and author approved; retain REMEF and Wiley/JFM alternatives and all historical data. Never submit identical work simultaneously.
+
+**Exit:** complete paper/source/figures/reproducibility packet and author signoff. **Currently NOT complete.**
 
 ## Execution ordering and handoff
 
-The dependency path is:
+**Primary user-selected path:**
 
-    recovery -> experiment001 -> experiment002 -> experiment003
-                         |-> experiment004 -> experiment005
-                                           -> experiment006
-                                           -> experiment007
-                                           -> experiment008 -> author submission decision
+    recovery + private LFS source backup
+      -> experiment001 source replay
+      -> experiment002 parity-anchor feasibility
+      -> experiment003 smaller AAO-only pilot
+      -> experiment004 full 6-way reduced-form comparison
+      -> experiment005 actual/theoretical, vintage and time-uncertainty robustness
+      -> experiment006 new figures and Databento-only JCM manuscript
+      -> experiment008 independent verification + author's submission decision
 
-The timing and exact script interfaces of **new experiments002–008** are **design requirements, not code already implemented**. Use fresh modules under `experiments/` only after inspecting pre-existing interfaces and tests, and then record actual commands/artifacts under each numbered experiment. Do not claim a result based solely on an outline. A new agent should complete the next unverified gate and push a branch/PR with full reproducibility data, updating the evidence ledger before moving on.
+**experiment007** is optional earlier Barchart/LO/CL cross-provider *separate research*, **not a prerequisite or source in the Databento-only manuscript**. All new heavy experiments remain unexecuted as of this handoff; PR #110 implemented the source code, synthetic tests and manuscript template. Read `research/AAO_DATABENTO_ONLY_PAPER_RUNBOOK_2026-10-26.md` for exact existing commands and outputs. Do not claim a result based solely on existing code.
 
-**Known blocker today:** original 162 AAO DBNs and full 81-month SQLite are not present in the GitHub tree. The replacement invoice, hashes, files and full out-of-sample study remain unverified. Do not run tests that assume private data are materialized until the replacement Git LFS upload is proven complete.
