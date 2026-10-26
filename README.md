@@ -1,6 +1,6 @@
 # Bayesian parameter uncertainty for Asian options
 
-### February 2021 gap resolved (2026-10-25)
+## February 2021 gap resolved (2026-10-25)
 
 The author successfully recovered the formerly omitted February 2021 month in a separate Databento acquisition: **two additional `AAO.OPT` files, USD 0.15870165 quoted**. Together, the two local manifests now report **162 compressed definition/statistics files for all 81 months (January 2020–September 2026), USD 17.49357489 combined quoted** (not verified actual charges). The original February omission was a transient HTTP 504 price-metadata failure. The previous 80-month inventory's **1,682** final reference days and **5,843,770** final settlement events are **not yet updated** to include February.
 
