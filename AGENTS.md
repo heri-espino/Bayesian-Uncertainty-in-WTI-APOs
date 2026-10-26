@@ -139,6 +139,35 @@ local Treasury CSVs under `data/rates/treasury/` are workstation caches/source i
 gitignored by default. Their README files, parsers, query metadata, hashes, and derived
 scientific outputs remain versioned.
 
+## User-selected final paper: AAO-only, no Barchart (2026-10-26)
+
+The author chose to **finish one new Elsevier CAS paper using only the
+purchased Databento AAO definitions/statistics**, without Barchart
+option inputs. Reproducibility and scientific disclosure are in
+`research/AAO_DATABENTO_ONLY_PAPER_RUNBOOK_2026-10-26.md`.
+Prepared code:
+`bayesian_asian_options.aao_databento_only`,
+`experiments.wti_aao_databento_only`,
+`scripts.plot_aao_databento_only`,
+`paper/jcm/databento_main.tex`,
+`paper/jcm/build_databento.py`.
+All economic computations are manual-only. The user will execute,
+share outputs and the assistant will revise the results/abstract/
+figures in that separate manuscript.
+
+**Never conceal the model boundary.** AAO option stats do not
+contain first-nearby CL realized fixings and futures curves: the
+new study is a **reduced-form lognormal terminal-average proxy**
+whose same-day expected average/discount comes from disjoint AAO
+call-put parity strikes. Historical proxy-vol returns use prior
+parity forward-average estimates, NOT physical WTI futures returns.
+Only volatility inputs are lagged; the exercise is NOT a fully
+ex-ante independent valuation forecast or exact Asian structural
+pricing. Retain actual/theoretical mark segmentation, paired dates,
+all excluded targets, and report zeros/missing data without fiction.
+No Barchart/LO baseline performance from the previous manuscript may
+be copied as this new sample's performance.
+
 ## Critical incident and data backup policy (2026-10-26)
 
 Previously, a sparse-checkout instruction was given while 162 licensed AAO
