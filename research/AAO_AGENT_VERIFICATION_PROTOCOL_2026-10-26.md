@@ -20,10 +20,10 @@ Read `AGENTS.md`, `README.md`, `research/PAPER_COMPLETION_MASTER_PLAN_2026-10-26
 | New historical inventory | Check evidence ledger provenance | 70,154,064 records; 13,412,045 settlements; 5,899,096 raw final events and 1,701 raw-final dates; previously run on VM only |
 | Cross-month normalization | Check ledger arithmetic and implementation | 5,105,603 provisional final nonintraday keys over 1,700 dates, **not** eligible tests |
 | Reference-date anomaly | Read quality note | 2024-01-26 has two raw final events but all 7,868 latest keys preliminary |
-| Barchart source | Check tracked `data/csv/` and history of local restoration | CSVs tracked; post-recovery contract-level parity **not computed** |
-| Economic correctness | Check risk-neutral/physical distinction, partial fixing, first-nearby CL rolling, dates and discounting | Any new study must use P for inference and Q for option pricing, correctly timestamped |
-| JCM | Check `paper/jcm/main.tex` and publication figures | Provisional template still uses original Barchart/LO empirical findings, not expanded 2020–2026 results |
-| Future plan | Compare master gates and experiment IDs | experiment001–008 are **proposed**, not executed |
+| Barchart source | Check tracked `data/csv/` and history of local restoration | CSVs tracked; post-recovery contract-level parity **not computed**; optional other study, not Databento-only paper input |
+| Economic correctness | Check exact distinction: AAO-only reduced-form terminal average vs old structural CL Asian pricing | Same-day disjoint parity anchors, **pre-fixing only**, earlier-date volatility proxy/IV; no observed CL P-measure returns or first-nearby fixings; not fully ex-ante |
+| JCM | Check both `paper/jcm/main.tex` and **new** `paper/jcm/databento_main.tex`, the separate `build_databento.py`, `research/AAO_DATABENTO_ONLY_PAPER_RUNBOOK_2026-10-26.md` | The Databento-only CAS article is authored with **results pending**. Old `main.tex` uses the earlier Barchart/LO results and must not be mistaken for the selected new article |
+| Future plan | Compare master gates and experiment IDs | experiment001–008 **experiment task packages** are proposed; Databento-only engine/scripts and CAS draft are already implemented in PR #110, but heavy real-data pricing runs are unexecuted |
 
 ## Read-only / lightweight checks
 
