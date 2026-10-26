@@ -1,5 +1,12 @@
 # Bayesian parameter uncertainty for Asian options
 
+### February 2021 gap resolved (2026-10-25)
+
+The author successfully recovered the formerly omitted February 2021 month in a separate Databento acquisition: **two additional `AAO.OPT` files, USD 0.15870165 quoted**. Together, the two local manifests now report **162 compressed definition/statistics files for all 81 months (January 2020–September 2026), USD 17.49357489 combined quoted** (not verified actual charges). The original February omission was a transient HTTP 504 price-metadata failure. The previous 80-month inventory's **1,682** final reference days and **5,843,770** final settlement events are **not yet updated** to include February.
+
+Next VM command (no paid data): `python -m experiments.wti_databento_aao_inventory --all`. Keep both ledgers and all licensed source files local. See [inventory results](research/AAO_INVENTORY_RESULTS_2026-10-25.md) and [agent tasks](research/AAO_AGENT_TASKS.md).
+
+
 Research library, reproducible experiments, data pipeline, and manuscript for Bayesian parameter uncertainty in arithmetic Asian-option valuation, with an empirical application to CME WTI Average Price Options. The **conditional next ambitious journal target is the Journal of Commodity Markets** after verification of the expanded empirical sample; the ready REMEF candidate is retained as a publication-focused fallback, and the Wiley/Journal of Futures Markets manuscript remains available as an alternative. See [journal strategy](docs/journal_strategy.md).
 
 ## Scientific boundary: P versus Q
