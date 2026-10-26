@@ -1,5 +1,12 @@
 # Empirical WTI APO workflow
 
+## February 2021 backfill: acquisition coverage now 81/81 months
+
+**Latest author-reported VM logs (2026-10-25):** separate February 2021 `definition`/`statistics` download finished with **two new files at USD 0.15870165 quoted**; the former 504 gateway timeout was in metadata pricing. The original 80-month 160-file manifest remains intact, and the February-specific manifest under `results/analysis/wti_aao_history_feasibility/bulk_feb2021/` is separate. Together, the two acquisitions report **162 DBN files / 81 monthly windows / USD 17.49357489 combined quoted**, but actual Databento billing is unverified.
+
+The earlier **80-month** inventory report (`1,682` distinct final reference dates and `5,843,770` final settlement events) **has not been refreshed** with February 2021. Run the existing `python -m experiments.wti_databento_aao_inventory --all` locally, then verify both manifests' file hashes; no purchase or new pricing experiment is required yet. The previous February-missing language below describes the initial run, not the completed recovery. No eligible date count or new manuscript result is established.
+
+
 This page describes the implemented research pipeline for the CME WTI Average Price Option application. It is an implementation map, not a substitute for `research/EMPIRICAL_WTI_DESIGN.md`.
 
 ## Data-source contract

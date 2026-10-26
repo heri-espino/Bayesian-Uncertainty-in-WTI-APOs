@@ -1,5 +1,12 @@
 # Agent execution plan — WTI APO 2020–2026 longitudinal study
 
+## Latest transfer state: February recovered, no new purchases (2026-10-25)
+
+The author ran a February-only `AAO.OPT` **free metadata quote** followed by an **explicit billable two-file backfill**, both successfully: `eligible_months=1`, **USD 0.15870165 quoted**, `downloaded_chunks=2`. It used `--max-budget-usd 1 --confirm-budget-usd 1` and `--report-dir results/analysis/wti_aao_history_feasibility/bulk_feb2021`. Added to the prior 160 chunks / USD 17.33487324 quote, the acquisition has **162 files over 81/81 months, total USD 17.49357489 quoted**; actual billing remains unverified.
+
+**The older “February missing” and “retry February” passages below document past states only. Do not execute a quote or paid recovery again.** Keep separate ledgers (`bulk/` for the original 160, `bulk_feb2021/` for the two new ones). On the VM rerun **only** `python -m experiments.wti_databento_aao_inventory --all` (offline), and reconcile SHA256/size for all 162 files. The previous counts of 80 months, 1,682 final reference dates and 5,843,770 final settlement *events* were obtained *before* the backfill, not after. Contract mapping/uniqueness, source comparisons, strict lagged-IV eligibility and forward-test research remain open. No additional purchases or manuscript claims authorized.
+
+
 Read `AGENTS.md`, `research/AI_HANDOFF.md`, `research/CHECKPOINT_2026-10-25_AAO_EXPANSION.md`, `docs/architecture.md`, `docs/agent_guide.md` and `research/DATABENTO_AAO_EXPANSION_PLAN.md` first. **No Databento charge or scientific result is authorized by this task list.**
 
 ## Latest VM evidence — 2026-10-25 (inventory already executed)

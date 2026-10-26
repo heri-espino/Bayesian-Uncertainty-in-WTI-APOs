@@ -1,5 +1,25 @@
 # Databento AAO offline inventory — author's VM output, 2026-10-25
 
+## Complete 81-month acquisition: February backfilled (author VM, 2026-10-25)
+
+**Supersedes the earlier missing-February statements below, retained as diagnosis history.** The author retried the single-month `AAO.OPT` metadata quote successfully for **2021-02-01 through 2021-03-01 (end exclusive)**: `eligible_months=1`, combined estimated cost **USD 0.15870165**. Then the author ran the **February-only** confirmed `--mode download` with `--max-budget-usd 1 --confirm-budget-usd 1` and a separate `--report-dir`; the downloader returned **`downloaded_chunks: 2`** and **`quoted_usd: 0.15870165`**, writing its separate manifest to `results/analysis/wti_aao_history_feasibility/bulk_feb2021/bulk_acquisition_manifest.json`.
+
+The preceding 80-month download reported 160 chunks and USD 17.33487324 quoted. Thus the two completed acquisition runs **reported 162 files covering all 81 calendar months, January 2020–September 2026**, with combined **USD 17.49357489 quoted**. This equals the original unbroken 81-month metadata estimate. **This is not confirmed actual billing** and both manifests remain separate; do not overwrite either ledger.
+
+The **existing `--all` inventory result below was obtained BEFORE the February backfill**, so its **80 months / 1,682 distinct final reference dates / 5,843,770 final events** are historical, **not** the new 81-month totals. A new local offline inventory must be run to verify both February DBN files decode and to establish the 81-month counts. The 162 file hashes/sizes also need independent audit against the **two** acquisition manifests. No deduplicated option-day price panel, valid chronology, liquidity join, Barchart match or new forward-test dates have yet been verified.
+
+**Only next execution needed now (offline, no Databento billing):**
+
+```powershell
+conda activate asian-options
+python -m experiments.wti_databento_aao_inventory --all
+```
+
+After this, prioritize manifest checksum reconciliation and contract/date/settlement-quality normalization, not additional downloads.
+
+---
+
+
 **Evidence level:** Counts were copied from the author's **local** terminal output for the existing `experiments.wti_databento_aao_inventory` command. The raw Databento files, complete JSON report and file SHA256 checksums are *not* available in GitHub, and were **not** independently examined in this PR. This is an exploratory feed/settlement **event inventory**, NOT a validated contract-date pricing panel and NOT a new backtest.
 
 ## Commands already run successfully on the author's VM

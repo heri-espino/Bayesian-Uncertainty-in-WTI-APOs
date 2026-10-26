@@ -1,5 +1,12 @@
 # AI handoff
 
+## Latest handoff: full historical backfill complete (2026-10-25)
+
+The author completed the February 2021 `AAO.OPT` recovery: **two files** for February at **USD 0.15870165 quoted**, saved with a *separate* February acquisition manifest. Combined with the earlier 160 file / USD 17.33487324 acquisition, there are now **162 reported DBN files covering 81 months**, with **USD 17.49357489 total quoted** (not necessarily billed). Earlier notes below saying “February missing” and “80 months” describe the prior 80-month inventory; they must not be treated as current acquisition status.
+
+**Next agent action:** run *offline* `python -m experiments.wti_databento_aao_inventory --all` on the VM to refresh the old 80-month report, then check all 162 file hashes against both manifests and proceed to definitive contract/settlement-day identity. Do not rerun any billable download. Until that inventory is supplied, **1,682 final reference dates is an old 80-month figure**, not the full history. Journal planning remains conditional JCM / ready REMEF fallback / preserved JFM manuscript.
+
+
 Read this file before continuing research work.
 
 ## Canonical current checkpoint

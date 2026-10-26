@@ -1,5 +1,12 @@
 # Budgeted WTI APO (AAO) historical-data acquisition
 
+## Completed February 2021 recovery — two acquisition ledgers (2026-10-25)
+
+The 2021-02 month was initially excluded only because the `definition` **cost quote** failed with HTTP 504. The author subsequently ran a **single-month** quote for `2021-02-01`–`2021-03-01` reporting **USD 0.15870165** and completed a separate **two-file** download under a confirmed **USD 1** budget (USD 0.80 quote threshold). The original 160 files / USD 17.33487324 plus the two February files / USD 0.15870165 now equal **162 locally acquired chunks for all 81 months, USD 17.49357489 combined estimated**; actual Databento charges are unverified.
+
+**Do not rerun** either billable command. Two manifests must be preserved: `results/analysis/wti_aao_history_feasibility/bulk/bulk_acquisition_manifest.json` for the original 80-month job and `results/analysis/wti_aao_history_feasibility/bulk_feb2021/bulk_acquisition_manifest.json` for February. Both write their actual DBN files into the same local gitignored `data/databento/wti_aao_bulk/raw/` folder. Next command is **offline** inventory: `python -m experiments.wti_databento_aao_inventory --all`; reconcile 162 SHA256 hashes with both ledgers, and continue with instrument identity/settlement deduplication. The historical 80-month commands/notes below are retained for reproducibility, not for execution.
+
+
 > **2026-10-25: ACQUISITION ALREADY EXECUTED.** The author's PowerShell output ended
 > with `downloaded_chunks: 160` and `quoted_usd: 17.33487324`, over 80 eligible
 > monthly windows. The sections below show how the run was performed for reproducibility,

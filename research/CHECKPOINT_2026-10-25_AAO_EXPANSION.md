@@ -1,5 +1,12 @@
 # Research checkpoint — 2026-10-25: historical Databento WTI APO acquisition
 
+## Final acquisition update: 81/81 months transferred (2026-10-25)
+
+**Newer than the initial 80-month and missing-February statements below.** The author's VM successfully quoted February 2021 at **USD 0.15870165** and downloaded its two `AAO.OPT` schema chunks using a separate USD 1 confirmed cap and `bulk_feb2021` manifest. Combined with the previous 160 files / USD 17.33487324 quote, the two completed acquisitions report **162 chunks across 81/81 monthly windows (Jan 2020–Sep 2026), total USD 17.49357489 quoted**; provider charges and independent file/hash verification remain unknown. The original 2021-02 omission was caused by a transient metadata price quote HTTP 504, not missing records.
+
+**Important:** The most recent *observed inventory* was run before February's recovery, and still covers only 80 months (**1,682 final reference dates**). The next local command is `python -m experiments.wti_databento_aao_inventory --all`; do not predict its updated counts. Old valid 2026 paper results remain unchanged, and no additional Databento purchase is warranted. Keep the original 80-month and separate February ledgers; see `research/AAO_INVENTORY_RESULTS_2026-10-25.md`.
+
+
 **Status: historical acquisition reported complete on the author's Windows VM; settlement identity, data quality, and new scientific results NOT yet verified.** This checkpoint supersedes older **acquisition-status** statements in `research/CHECKPOINT_2026-09-29.md`, `research/AI_HANDOFF.md`, `research/DATABENTO_AAO_EXPANSION_PLAN.md`, and archived REMEF planning text. It does **not** supersede the validated earlier empirical results or overwrite their numerical outputs.
 
 ## Post-acquisition inventory — author-reported 2026-10-25 results
