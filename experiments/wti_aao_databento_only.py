@@ -266,7 +266,7 @@ def priced_rows(
 def evaluate(*, sqlite_path: Path, raw_dir: Path, output_dir: Path,
              private_dir: Path, start_date: str, eval_start: str,
              date_stride: int, max_dates: int, max_contracts: int,
-             n_boot: int = 399) -> dict:
+             n_boot: int = 399, eval_end: str | None = None) -> dict:
     if date_stride < 1 or max_dates < 0 or max_contracts < 1:
         raise ValueError("Require stride>=1, max_dates>=0, max_contracts>=1")
     if not sqlite_path.is_file():
@@ -282,6 +282,12 @@ def evaluate(*, sqlite_path: Path, raw_dir: Path, output_dir: Path,
                 "AND ref_date>=? ORDER BY ref_date", (start_date,)
             )
         ]
+        # Bound pilot scope AFTER selecting historic information start.
+        # Unlike --max-dates, --eval-end retains the needed training period.
+        if eval_end is not None:
+            if eval_end < eval_start or eval_end < start_date:
+                raise ValueError("eval_end must be on or after eval_start")
+            dates = [day for day in dates if day <= eval_end]
         if max_dates:
             dates = dates[:max_dates]
         histories: dict[str, list[tuple[str, float, float]]] = defaultdict(list)
@@ -289,6 +295,11 @@ def evaluate(*, sqlite_path: Path, raw_dir: Path, output_dir: Path,
         outputs: list[dict] = []
         audit = {
             "selected_source_days": len(dates),
+            "source_start": start_date,
+            "evaluation_start": eval_start,
+            "evaluation_end": eval_end,
+            "date_stride": date_stride,
+            "max_contracts_per_expiry": max_contracts,
             "groups_seen": 0,
             "groups_with_anchor": 0,
             "groups_with_lagged_history": 0,
@@ -350,9 +361,17 @@ def evaluate(*, sqlite_path: Path, raw_dir: Path, output_dir: Path,
     finally:
         conn.close()
     if not outputs:
+        # Preserve a transparent aggregate attrition diagnostic even when
+        # the real-market pilot fails; do NOT invent scores or row-level marks.
+        output_dir.mkdir(parents=True, exist_ok=True)
+        audit["status"] = "no_eligible_real_market_targets"
+        (output_dir / "eligibility_failure.json").write_text(
+            json.dumps(audit, indent=2) + "\n", encoding="utf-8"
+        )
         raise RuntimeError(
-            "No eligible Databento-only targets. Inspect anchor coverage, "
-            "strike units and lagged volatility; do NOT fabricate scores."
+            "No eligible Databento-only targets; see eligibility_failure.json. "
+            "Inspect anchor coverage, strike units and lagged volatility; "
+            "do NOT fabricate scores."
         )
     full = pd.DataFrame(outputs)
     # Every contract/date is priced by exactly the same method set.
@@ -416,6 +435,8 @@ def main() -> None:
     parser.add_argument("--private-dir", type=Path, default=PRIVATE)
     parser.add_argument("--source-start", default="2021-01-01")
     parser.add_argument("--eval-start", default="2023-01-01")
+    parser.add_argument("--eval-end", default=None,
+                        help="Optional inclusive last date; retains prior training dates")
     parser.add_argument("--date-stride", type=int, default=5)
     parser.add_argument("--max-dates", type=int, default=0)
     parser.add_argument("--max-contracts", type=int, default=80)
@@ -430,6 +451,7 @@ def main() -> None:
             "methodology": "reduced-form terminal-average Black proxy",
             "source_start": args.source_start,
             "evaluation_start": args.eval_start,
+            "evaluation_end": args.eval_end,
             "date_stride": args.date_stride,
             "max_dates": args.max_dates,
             "max_contracts_per_expiry": args.max_contracts,
@@ -442,6 +464,7 @@ def main() -> None:
         start_date=args.source_start, eval_start=args.eval_start,
         date_stride=args.date_stride, max_dates=args.max_dates,
         max_contracts=args.max_contracts, n_boot=args.bootstrap,
+        eval_end=args.eval_end,
     )
     print(json.dumps(result, indent=2))
 

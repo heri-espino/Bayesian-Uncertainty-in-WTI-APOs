@@ -1,0 +1,112 @@
+name: aao-databento-only-manual-study
+
+on:
+  workflow_dispatch:
+    inputs:
+      scope:
+        description: "Pilot first; full only after reviewing its outputs"
+        required: true
+        default: pilot
+        type: choice
+        options:
+          - pilot
+          - full
+
+permissions:
+  contents: read
+
+concurrency:
+  group: aao-databento-${{ github.ref }}-${{ inputs.scope }}
+  cancel-in-progress: false
+
+jobs:
+  empirical:
+    name: "AAO reduced-form ${{ inputs.scope }}"
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+
+    steps:
+      - name: Check out exact selected commit and LFS data
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install official research dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev,market]"
+
+      - name: Verify all 162 Databento chunks and their SHA256 manifest
+        run: |
+          python -m scripts.aao_lfs_preflight --require-complete
+          python -m scripts.audit_aao_manifests --manifest results/analysis/wti_aao_history_feasibility/reacquisition_20261026/bulk_acquisition_manifest.json
+
+      - name: Run Databento-only synthetic regression tests
+        run: python -m pytest tests/test_aao_databento_only.py tests/test_aao_databento_paper.py -q
+
+      - name: Record exact experiment provenance
+        run: |
+          mkdir -p results/analysis/wti_aao_databento_only
+          {
+            echo "commit=${{ github.sha }}"
+            echo "scope=${{ inputs.scope }}"
+            echo "repository=${{ github.repository }}"
+            echo "source=162 SHA256 verified AAO definition/statistics DBNs"
+            echo "private_source=closed read-only 81-month SQLite"
+            echo "no_vendor_api_calls=true"
+            echo "no_automatic_git_push=true"
+          } > results/analysis/wti_aao_databento_only/workflow_provenance.txt
+
+      - name: Manual AAO-only pilot or full real-data study
+        shell: bash
+        run: |
+          set -o pipefail
+          if [ "${{ inputs.scope }}" = "pilot" ]; then
+            python -m experiments.wti_aao_databento_only \
+              --execute \
+              --source-start 2022-01-01 \
+              --eval-start 2023-01-01 \
+              --eval-end 2023-06-30 \
+              --date-stride 15 \
+              --max-contracts 40 \
+              --bootstrap 99 \
+              | tee results/analysis/wti_aao_databento_only/study_stdout.log
+          else
+            python -m experiments.wti_aao_databento_only \
+              --execute \
+              --source-start 2021-01-01 \
+              --eval-start 2023-01-01 \
+              --date-stride 5 \
+              --max-contracts 80 \
+              --bootstrap 399 \
+              | tee results/analysis/wti_aao_databento_only/study_stdout.log
+            python -m scripts.plot_aao_databento_only \
+              | tee results/analysis/wti_aao_databento_only/figure_stdout.log
+          fi
+
+      - name: Upload study diagnostics, tables and figures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wti-aao-databento-${{ inputs.scope }}-${{ github.sha }}
+          path: |
+            results/analysis/wti_aao_databento_only/experiment_manifest.json
+            results/analysis/wti_aao_databento_only/eligibility_failure.json
+            results/analysis/wti_aao_databento_only/method_metrics.csv
+            results/analysis/wti_aao_databento_only/daily_metrics.csv
+            results/analysis/wti_aao_databento_only/cluster_intervals.csv
+            results/analysis/wti_aao_databento_only/workflow_provenance.txt
+            results/analysis/wti_aao_databento_only/study_stdout.log
+            results/analysis/wti_aao_databento_only/figure_stdout.log
+            figures/aao_databento_only/*.pdf
+            figures/aao_databento_only/*.png
+            figures/aao_databento_only/*.svg
+            figures/aao_databento_only/figure_manifest.json
+          if-no-files-found: error
+          retention-days: 30
