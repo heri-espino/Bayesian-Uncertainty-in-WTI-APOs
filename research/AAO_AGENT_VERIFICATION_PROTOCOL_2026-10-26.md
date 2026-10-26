@@ -1,0 +1,42 @@
+# Independent-agent verification protocol — 2026-10-26
+
+An independent agent must verify this handoff **from the repository, not the previous conversation**. This is an audit, not authorization to merge, buy data, change sparse checkout or submit a paper.
+
+## Read first
+
+Read `AGENTS.md`, `README.md`, `research/PAPER_COMPLETION_MASTER_PLAN_2026-10-26.md`, `research/AAO_EVIDENCE_LEDGER_2026-10-26.md`, `research/AAO_EXPERIMENT_REGISTER_2026-10-26.md`, `research/AAO_RECOVERY_AND_LFS_BACKUP_2026-10-26.md`, `research/AI_HANDOFF.md`, `research/AAO_AGENT_TASKS.md`, `docs/journal_strategy.md`, `paper/jcm/README.md`, original JFM and REMEF manuscripts, numerical results and source code. Inspect the real code/test fixtures before trusting prose.
+
+## Review matrix
+
+| Area | Required independent observation | Present expectation |
+| --- | --- | --- |
+| Repository | Verify private visibility, target branch, active PRs | This is a private repository; current handoff is on a review branch |
+| AAO source backup | Inspect remote Git/LFS for 162 compressed DBNs under `data/databento/wti_aao_bulk/raw/` | **Not uploaded at this checkpoint**; LFS configuration alone is not a backup |
+| Derived data | Check remote 81-month SQLite and fresh acquisition manifest | Both absent at this checkpoint |
+| Source completeness | Examine downloader and preflight | 81 windows * 2 schemas = 162, explicit quote-before-paid-download |
+| Offline replay | Examine `scripts/aao_replay_offline.py` | 11 manual-only *diagnostic* stages, not new pricing comparisons |
+| Old main comparison | Verify historical reports and short paper results | 2,381 option rows on 15 dates; seven expiries |
+| Independent LO | Verify manuscript and reports | 253 APO rows on 10 dates, prior LO volatility |
+| New historical inventory | Check evidence ledger provenance | 70,154,064 records; 13,412,045 settlements; 5,899,096 raw final events and 1,701 raw-final dates; previously run on VM only |
+| Cross-month normalization | Check ledger arithmetic and implementation | 5,105,603 provisional final nonintraday keys over 1,700 dates, **not** eligible tests |
+| Reference-date anomaly | Read quality note | 2024-01-26 has two raw final events but all 7,868 latest keys preliminary |
+| Barchart source | Check tracked `data/csv/` and history of local restoration | CSVs tracked; post-recovery contract-level parity **not computed** |
+| Economic correctness | Check risk-neutral/physical distinction, partial fixing, first-nearby CL rolling, dates and discounting | Any new study must use P for inference and Q for option pricing, correctly timestamped |
+| JCM | Check `paper/jcm/main.tex` and publication figures | Provisional template still uses original Barchart/LO empirical findings, not expanded 2020–2026 results |
+| Future plan | Compare master gates and experiment IDs | experiment001–008 are **proposed**, not executed |
+
+## Read-only / lightweight checks
+
+Use `git ls-files` to locate source DBN and SQLite paths, `git lfs ls-files` to inspect tracking, repository metadata to verify actual remote LFS object presence, and existing README/manuscript/figure reports to verify numerical assertions. Git LFS pointer entries do not prove binary availability. Optional lightweight checks: `python -m scripts.aao_replay_offline` (dry run), `python paper/jcm/build.py --check`, and selected pytest modules including `tests/test_aao_lfs_preflight.py`, `tests/test_aao_manifests.py`, `tests/test_aao_cross_month.py`, `tests/test_wti_aao_panel_quality.py`.
+
+Do NOT run the paid downloader, `--execute` heavy 81-month replay, destructive Git commands or snapshot-altering operations merely to audit a documentation change.
+
+## Required reviewer deliverable
+
+Write an independent report in a review branch/PR with: (1) checked Git revision; (2) files read; (3) commands actually executed; (4) **PASS/FAIL/BLOCKED/NOT CHECKED** for every source/science/paper gate; (5) verified evidence, contradictions and stale documents; (6) missing raw files or reports; (7) exact next safe work; (8) checks of date dependence, revisions, contract identities, price scaling, P vs Q, true forward information and uncertainty; (9) confirmation that no API key is exposed and that neither source files nor author work will be lost by sparse checkout; and (10) author-review questions.
+
+Never report 81-month model pricing MAE/RMSE, validated vendor settlement parity, actual invoice amount, new JCM paper or completed remote LFS backup without independently versioned evidence. Preserve prior results and do not merge without authorization.
+
+## Agent review instruction
+
+Audit the WTI APO repository using the master completion plan, evidence ledger, experiment register, existing source, tests, result manifests and manuscript. Independently verify every recorded fact, identify stale documentation and scientifically invalid leaps, document blockers and propose minimal changes in a separate unmerged PR. The repository must be sufficient to complete recovery, Databento/Barchart parity, strictly causal pricing comparisons, new figures and the JCM submission candidate without this conversation.
