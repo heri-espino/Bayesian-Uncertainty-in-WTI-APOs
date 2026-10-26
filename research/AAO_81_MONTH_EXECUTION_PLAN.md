@@ -56,6 +56,31 @@ blocking error instead of guessing. Use the resulting report to specify
 a correct time-aware normalization algorithm before attempting all
 81 months or any pricing experiment.
 
+## Current observed completion and new second-stage gate (2026-10-25)
+
+The author's VM has now **passed the 162-file SHA256 audit** and built the
+81-month diagnostic coverage figure. The existing
+`experiments.wti_aao_identity_probe` successfully found an outright
+same-month ID for 55,326/55,326 final February 2021 events and
+118,094/118,094 June 2026 events, but it does not account for the
+`ts_event` ordering or exchange reference date.
+
+Next **offline** stage, deliberately limited to two months:
+
+```powershell
+python -m pytest tests/test_wti_aao_settlement_gate.py -q
+python -m experiments.wti_aao_settlement_gate --months 2021-02 2026-06
+```
+
+Compare both reports with `identity_probe` results. Strict
+same-publication-UTC-day as-of matching is intentionally conservative
+and may exclude valid Sunday/overnight instruments; it is not the final
+cross-month contract master. Investigate missing as-of mappings,
+repeated/edited final events, `ts_ref` versus `ts_event`, and
+actual/theoretical counts before deciding how to safely build a
+deduplicated contract-level market panel. See
+`research/AAO_POST_DOWNLOAD_VALIDATION_2026-10-25.md`.
+
 ## Required scientific implementation after gates 1–3
 
 **Workstream A — contract/settlement master.** Decode definitions and statistics in bounded monthly batches. Resolve `publisher_id + instrument_id` under time-aware historical definitions; explicitly separate outright call/put (`C`/`P`) from strategy/leg records and instrument ID changes. CME `ts_ref` defines the settlement reference date; apply `update_action` and the final/actual flags. Keep local price-level outputs out of Git. Report counts of unique outright contract × reference-day final settlement prices, theoretical/actual composition, expiries, C/P and liquidity event alignment. Fail closed on ambiguous joins and record it as attrition rather than backfilling guessed matches.
