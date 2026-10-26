@@ -1,5 +1,14 @@
 # Budgeted WTI APO (AAO) historical-data acquisition
 
+> **2026-10-25: ACQUISITION ALREADY EXECUTED.** The author's PowerShell output ended
+> with `downloaded_chunks: 160` and `quoted_usd: 17.33487324`, over 80 eligible
+> monthly windows. The sections below show how the run was performed for reproducibility,
+> **not instructions to rerun the billable command**. Next: run the *offline* inventory
+> described near the bottom and in `research/AAO_AGENT_TASKS.md`; check actual
+> provider billing separately. The missing month and settlement-quality outcomes
+> are still unknown. No additional purchases are approved.
+
+
 **Scope:** GLBX.MDP3, parent `AAO.OPT`, `definition` + `statistics` only.
 **Budget:** Author permits up to **USD 40 of Databento credits** (reported balance USD 120).
 **Safety rule:** Price **all eligible monthly chunks first**, then require an
