@@ -42,6 +42,18 @@ duplicating model implementations.
 `bayesian_asian_options.wti_yahoo_futures`
 : Optional individual-Yahoo-contract utilities retained for validation and auxiliary work. They are not required by the canonical pilot because Yahoo can remove old delisted symbols.
 
+### Offline Databento AAO candidate settlement normalization
+
+`bayesian_asian_options.aao_settlements.normalize` is a pure,
+synthetically-tested candidate selector for publisher-scoped native
+AAO symbols, reference dates, corrected statistics actions and final
+non-intraday prices **within one source-file month**. Experiment
+`experiments/wti_aao_contract_day_candidates.py` performs only local
+DBN I/O, private candidate staging and aggregate provenance reports.
+Per-month candidate rows are **not** validated multi-month settlements;
+cross-month revisions, stable contract master and time-series input
+audits remain required before calling the usual pricing engine.
+
 ### CME WTI APO mechanics
 
 `bayesian_asian_options.wti_first_nearby`
