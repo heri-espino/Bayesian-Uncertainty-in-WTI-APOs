@@ -17,3 +17,12 @@ def test_cas_builder_does_not_run_inference_or_figures():
     assert "copytree(FIGURES" in code
     assert "build_publication_figures" not in code
     assert "timeseries.get_range" not in code
+
+def test_cas_source_layout_check_uses_existing_template():
+    import subprocess
+    import sys
+
+    subprocess.run(
+        [sys.executable, str(ROOT / "paper/jcm/build.py"), "--check"],
+        cwd=ROOT, check=True, capture_output=True, text=True,
+    )
