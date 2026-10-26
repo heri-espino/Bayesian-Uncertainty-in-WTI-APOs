@@ -1,5 +1,7 @@
 # Complete Databento-only WTI APO paper runbook — 26 October 2026
 
+> **Team handoff companion:** [master project plan](PAPER_COMPLETION_MASTER_PLAN_2026-10-26.md), [evidence ledger](AAO_EVIDENCE_LEDGER_2026-10-26.md), [sequential experiment register](AAO_EXPERIMENT_REGISTER_2026-10-26.md), [independent audit protocol](AAO_AGENT_VERIFICATION_PROTOCOL_2026-10-26.md). This runbook is the operational authority for the new **AAO-only reduced-form** model. No results are certified until the full real-data execution succeeds.
+
 ## Scope
 
 The author requested to finish the **Elsevier CAS manuscript from Databento
