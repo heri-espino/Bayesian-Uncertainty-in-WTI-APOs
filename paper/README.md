@@ -1,5 +1,7 @@
 # Internal Wiley/JFM manuscript — retained while the journal target is reassessed
 
+> **2026-10-27 publication decision:** The author plans TWO distinct studies: **Paper A** (Bayesian posterior integration and volatility information) is prioritized for REMEF after evidence/rights/editorial audit; **Paper B** (new path-dependent CL fixing and futures-curve WTI AAO valuation/hedging) is a research proposal for possible future JCM submission. See [two-paper scope/overlap ledger](../docs/two_paper_publication_strategy_2026-10-27.md), [REMEF revision plan](remef/SCIENTIFIC_REVISION_AND_SUBMISSION_GATE_2026-10-27.md), and [JCM feasibility plan](../research/STRUCTURAL_WTI_AAO_PAPER_FEASIBILITY_PLAN_2026-10-27.md). The current Wiley/JFM and CAS builds **reuse old Paper A text**, and are not evidence of an already written Paper B manuscript. The October 25 single-manuscript JCM/REMEF ranking described below is superseded.
+
 > **2026-10-25 update:** The provisional ambitious future journal target is *Journal of
 > Commodity Markets* **only if the new 2020–2026 AAO dataset yields substantially
 > stronger verified independent-date evidence**. The ready REMEF Word draft is the
