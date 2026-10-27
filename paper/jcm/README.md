@@ -1,5 +1,7 @@
 # Journal of Commodity Markets — Elsevier CAS working draft
 
+> **PAPER B TRACK — 2026-10-27:** This is now the *prospective* venue/workspace for a **different original research project**: verified first-nearby CL fixing-path reconstruction, actual partly fixed WTI AAO payoff pricing under the futures term structure, and independent market-price or implementable hedging validation where possible. Read the [two-paper nonoverlap and publication plan](../../docs/two_paper_publication_strategy_2026-10-27.md) and the [separate structural JCM feasibility protocol](../../research/STRUCTURAL_WTI_AAO_PAPER_FEASIBILITY_PLAN_2026-10-27.md). **Current CAS builder still stages the OLD Paper A concise manuscript**; it is **not** a finished draft for this new JCM Paper B. No CL fixing-path research has yet been executed for Paper B and JCM is not selected for a live submission. Work only after auditing missing underlying data, economic targets and permissions.
+
 This is a **pre-submission source adaptation**, not a validated 81-month option-pricing paper or an approved journal submission.
 
 The author added Elsevier CAS v2.4 under paper/els-cas-templates/. This project uses **cas-dc.cls** (double-column) for an internal working draft. The final Journal of Commodity Markets Guide for Authors still needs verification before preparing the actual submission.
