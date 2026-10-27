@@ -1,5 +1,7 @@
 # REMEF submission candidate (separate from JFM)
 
+> **SOURCE-LEVEL LITERATURE REVIEW (2026-10-27):** [Rombouts–Stentoft (2009 working paper vs 2014 published abstract) and Sagor et al. (2026) full-text audit](SOURCE_REVIEW_ROMBOUTS_SAGOR_2026-10-27.md) confirms differences in empirical comparator, observed option marks and underlying payoff. The user-provided 2009 CIRANO working paper **does not replace** the as-yet-unread 2014 journal full text. This audit changes no paper source or empirical estimates.
+
 > **PRIORITIZED PUBLICATION PLAN (2026-10-27):** Read [PUBLICATION_EXECUTION_PLAN.md](PUBLICATION_EXECUTION_PLAN.md) first for novelty, data-as-of, paired robustness, literature, writing and REMEF submission gates. This is a task plan, not permission to submit; scientific and data-rights blockers remain open.
 
 > **PHASE 1 LITERATURE AND WRITING (2026-10-27):** [Literature novelty matrix](LITERATURE_NOVELTY_MATRIX.md) compares the work against published Bayesian option-pricing, WTI, commodity Asian-option and prior REMEF papers; [research argument in Markdown](RESEARCH_POSITIONING_DRAFT.md) drafts the manuscript's constrained introduction and literature discussion. **Critical overlap:** Rombouts–Stentoft (2014) already found minor parameter-uncertainty effects; Sagor et al. (2026) already propagated Bayesian uncertainty into WTI illustrative option prices. These are research drafts, NOT validated novelty or final scientific claims.
