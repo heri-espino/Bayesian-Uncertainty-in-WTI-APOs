@@ -142,9 +142,12 @@ def test_synthetic_end_to_end_local_sqlite_without_provider(tmp_path, monkeypatc
     assert (contract.market_iv_latest_date < contract.date).all()
     assert all(contract.groupby(["date", "expiry", "side", "strike", "actual"])
                .method.nunique() == 8)
-    # All original lagged-IV predictions are preserved without recalibration.
-    assert np.allclose(
-        contract.loc[contract.method=="lagged_IV", "prior_iv_sigma"],
-        contract.loc[contract.method=="lagged_IV", "market_iv_age_business_days"]
-        * 0 + contract.loc[contract.method=="lagged_IV", "prior_iv_sigma"]
-    )
+    # Reconstruct untouched baseline Black prices, not a tautological check.
+    lag = contract[contract.method=="lagged_IV"].head(35)
+    for row in lag.itertuples(index=False):
+        maturity = (pd.Timestamp(row.expiry)-pd.Timestamp(row.date)).days/365.25
+        expected = float(average_black(
+            float(row.expected_average), float(row.strike),
+            float(row.prior_iv_sigma), maturity,
+            float(row.parity_discount_factor), str(row.side)))
+        assert row.predicted == pytest.approx(expected, abs=1e-9)
