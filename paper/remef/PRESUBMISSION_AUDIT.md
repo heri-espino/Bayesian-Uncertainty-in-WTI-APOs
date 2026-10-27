@@ -1,5 +1,7 @@
 # REMEF presubmission evidence audit — 2026-10-17
 
+> **2026-10-27 scientific audit update — PARTIAL CLEARANCE ONLY.** The independent [REMEF numerical and source audit](SCIENTIFIC_AUDIT_FINDINGS_2026-10-27.md) reproduces the 310-row October-2026-**expiry** PI/PM numerical results (12 Aug–Sep valuation dates), 2,381-row historical PI and first-nearby robustness errors (15 dates), and 253-row external LO versus AAO errors (10 dates); checks the completed 10-million simulation report and figure manifest; and identifies source timing/rights/settlement-model concerns. **Other independent price-model and data-vintage checks remain OPEN**: 2,381-row implied-volatility smile **prediction-row** recomputation, 2,366-row same-contract IV, LO CRR tree/prior data timestamps, settlement independence, vendor rights, reproducible original code snapshots, REMEF Word/publisher checks. Do not read this as full audit completion or submission permission. The separate [JCM CL data feasibility audit](../../research/JCM_CL_FUTURES_FEASIBILITY_AUDIT_2026-10-27.md) found a first-nearby CL source but a CL acquisition-manifest versus Git LFS SHA mismatch that must be resolved separately.
+
 > **2026-10-27 two-paper decision:** The current REMEF candidate is **Paper A** on Bayesian posterior integration versus volatility information, not the proposed **Paper B** on structural WTI AAO pricing/hedging for JCM. See [new scientific revision gate](SCIENTIFIC_REVISION_AND_SUBMISSION_GATE_2026-10-27.md) and [publication overlap ledger](../../docs/two_paper_publication_strategy_2026-10-27.md). The earlier manuscript still draws from the original small-date Barchart/LO/Curran evaluation; completed Databento Experiments 003–005 use different reduced-form, contemporaneous disjoint-parity assumptions. **Do not automatically combine cohorts/figures or mark earlier blockers completed.** No REMEF/JCM submission is authorized by these planning documents.
 
 This file records **checks actually performed** versus **checks still open**.
@@ -36,9 +38,11 @@ It is not a certificate that all original experiments were independently rerun.
 
 ## Open scientific/data checks — blockers
 
-- [ ] Independently recompute the October 310-observation PI--PM
-      difference and central posterior-price interval width from versioned
-      contract-date results and compare all four table numbers.
+- [x] Independently recomputed the October **2026-expiry** 310-observation
+      PI--PM difference, both PI/PM RMSEs, and conditional posterior-price
+      interval width from all 12 versioned dated contract_pricing.csv files.
+      **Numerical arithmetic PASS; not market-source-vintage validation.**
+      Full evidence: SCIENTIFIC_AUDIT_FINDINGS_2026-10-27.md.
 - [ ] Independently trace the LO common-support 253-row benchmark,
       external LO-tree settings, time cutoffs, and bootstrap differences.
 - [ ] Reconstruct the 2,381-row forward panel and verify exact information
