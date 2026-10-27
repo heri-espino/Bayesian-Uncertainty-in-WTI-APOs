@@ -6,3 +6,4 @@ data/databento/wti_aao_bulk/derived_private/*.sqlite3 filter=lfs diff=lfs merge=
 data/databento/wti_aao_bulk/derived_private/*.csv.gz filter=lfs diff=lfs merge=lfs -text
 data/databento/wti_aao_bulk/derived_private/pilot_2023h1/*.csv.gz filter=lfs diff=lfs merge=lfs -text
 data/databento/wti_aao_bulk/derived_private/full_2023_2026/*.csv.gz filter=lfs diff=lfs merge=lfs -text
+data/databento/wti_aao_bulk/derived_private/experiment004/*.csv.gz filter=lfs diff=lfs merge=lfs -text
