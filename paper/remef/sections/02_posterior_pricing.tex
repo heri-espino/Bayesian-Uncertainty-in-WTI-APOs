@@ -43,7 +43,7 @@ and the conditional call value is
  \right],
  \label{eq:short_call_value}
 \end{equation}
-where \(B(t,T)\) is the discount factor, \(K\) the strike, and \(\mathcal F_t\) the valuation-date information set. Put values are defined analogously. In Equation~\eqref{eq:short_average}, \(F^{(1)}_{t_j}\) is the first-nearby WTI futures settlement on fixing date \(t_j\). At a valuation date within the averaging period, earlier fixings are known. We simulate only the remaining fixings, using the corresponding contracts in the observed CL futures curve as initial values.
+where \(B(t,T)\) is the discount factor, \(K\) the strike, and \(\mathcal F_t\) the valuation-date information set. Put values are defined analogously. In Equation~\eqref{eq:short_average}, \(F^{(1)}_{t_j}\) is the first-nearby WTI futures settlement on fixing date \(t_j\) under the applicable exchange contract rules \citep{cme_wti_apo_rule}. At a valuation date within the averaging period, earlier fixings are known. We simulate only the remaining fixings, using the corresponding contracts in the observed CL futures curve as initial values.
 
 We price the baseline historical-volatility model by Monte Carlo. For the large out-of-sample comparisons and checks using alternative constant volatilities, we use Curran's deterministic conditioning approximation \citep{curran1994}. We check numerical accuracy separately with high-precision pseudo-random Monte Carlo and scrambled Sobol calculations.
 
