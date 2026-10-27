@@ -177,7 +177,8 @@ def test_actual_pandoc_heading_text_is_supported(tmp_path):
     for required in (
         "1. Introduction", "2. Literature review", "3. Methodology",
         "3.8 Computational implementation", "3.9 AI-assisted manuscript preparation",
-        "4. Results and discussion", "4.5 Robustness, interpretation and limitations",
+        "4. Results and discussion", "4.5 Independent Databento settlement-mark results",
+        "4.6 Robustness, interpretation and limitations",
         "5. Conclusions and recommendations",
     ):
         assert required in headings
