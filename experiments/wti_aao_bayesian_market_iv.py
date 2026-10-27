@@ -183,8 +183,8 @@ def _write_outputs(frame: pd.DataFrame, out: Path, private: Path,
         "n_clipped_predictive_draws": int(
             unique.groupby(["date", "expiry"], observed=True)["market_iv_predictive_clipped_draws"].first().sum()),
         "methods": list(METHODS),
-        "private_contract_file":
-            "data/databento/wti_aao_bulk/derived_private/experiment004/AAO_MARKET_IV_BAYES_CONTRACT_PRICING.csv.gz",
+        "private_contract_file": str(
+            (private/"AAO_MARKET_IV_BAYES_CONTRACT_PRICING.csv.gz").as_posix()),
         "primary_comparison": "bayes_IV_PI vs unchanged lagged_IV on heldout actual marks",
         "disclosure": (
             "Retrospective conditional AAO cross-sectional pricing, using same-date "
