@@ -1,5 +1,7 @@
 # Bayesian parameter uncertainty for Asian options
 
+> **CURRENT COMPLETED AAO-ONLY RESULTS (2026-10-27; THIS RESULTS BRANCH):** The locally executed six-method Databento-only benchmark has **111,585 evaluated AAO contract-date targets across 189 pricing dates** (97,341 actual-flagged), plus 1,689-group retrospective implied-volatility diagnostic and corrected actual-only monthly-block uncertainty. **Lagged AAO IV MAE 0.2184 vs Bayesian PI MAE 0.8040 USD/bbl** on actual-flagged marks; this is reduced-form conditional cross-sectional settlement pricing, not structural/ex-ante valuation. Read the **[authoritative empirical report](research/AAO_DATABENTO_ONLY_EMPIRICAL_REPORT_2026-10-27.md)** and **[proposed next experiment protocol](research/AAO_DATABENTO_ONLY_MARKET_INFORMED_BAYES_PROTOCOL_2026-10-27.md)**. Earlier acquisition-loss and "no pricing study yet" text below is historical and superseded. **This branch diverges from main; do not casually merge/reset/change sparse-checkout.** All heavy work remains manual on the author's PC; never dispatch GitHub Actions.
+
 ## URGENT — Databento raw history recovery and Git LFS backup (2026-10-26)
 
 The previous **162 compressed AAO DBN files and reconstructed SQLite
