@@ -141,6 +141,7 @@ def test_actual_pandoc_heading_text_is_supported(tmp_path):
         "WTI Average Price Options",
         "Out-of-sample volatility comparisons",
         "Cross-instrument validation",
+        "Independent extended Databento settlement-mark benchmark",
         "AI-assisted manuscript preparation",
     ):
         doc.add_paragraph(title, style="Heading 2")
@@ -151,6 +152,7 @@ def test_actual_pandoc_heading_text_is_supported(tmp_path):
         "Posterior integration in the WTI sample",
         "Historical versus option-implied volatility",
         "Cross-instrument validation using vanilla-WTI options",
+        "Extended conditional settlement-mark evidence",
     ):
         doc.add_paragraph(title, style="Heading 2")
         doc.add_paragraph("The results are calculated from saved experiments.")
@@ -174,7 +176,7 @@ def test_actual_pandoc_heading_text_is_supported(tmp_path):
     headings = [p.text for p in result.paragraphs if p.style.name.startswith("Heading")]
     for required in (
         "1. Introduction", "2. Literature review", "3. Methodology",
-        "3.7 Computational implementation", "3.8 AI-assisted manuscript preparation",
+        "3.8 Computational implementation", "3.9 AI-assisted manuscript preparation",
         "4. Results and discussion", "4.5 Robustness, interpretation and limitations",
         "5. Conclusions and recommendations",
     ):
@@ -248,3 +250,21 @@ def test_figure3_vector_title_and_sanitization(tmp_path):
     labels = [el.text for el in root.iter() if el.tag.endswith("}text")]
     assert labels == ["Forward-in-time volatility comparisons across expiries"]
     assert any(el.tag.endswith("}path") for el in root.iter())
+
+
+def test_remef_reconciled_databento_sections():
+    """Journal Word build reads REMEF-only revised sections, never rewrites Wiley source."""
+    b = _build_module()
+    assert all("paper/remef/sections" in p.as_posix() for p in b.BODY_SECTIONS)
+    tex = b.make_latex(with_author=False)
+    assert "Independent extended Databento settlement-mark benchmark" in tex
+    assert "Extended conditional settlement-mark evidence" in tex
+    assert "October 2026 expiry" in tex
+    assert "97,341" in tex and "111,585" in tex
+    assert "0.2089" in tex and "0.2098" in tex
+    assert "2026" in tex
+    assert "Data availability" in tex
+    assert tex.count(r"\noindent\textbf{Table ") >= 5
+    assert "date-balanced" in tex or "date-balanced" in (
+        ROOT / "paper" / "remef" / "sections" / "03_data_design.tex"
+    ).read_text(encoding="utf-8")
