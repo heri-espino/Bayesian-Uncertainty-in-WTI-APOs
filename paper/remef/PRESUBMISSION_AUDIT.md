@@ -1,5 +1,7 @@
 # REMEF presubmission evidence audit — 2026-10-17
 
+> **2026-10-27 two-paper decision:** The current REMEF candidate is **Paper A** on Bayesian posterior integration versus volatility information, not the proposed **Paper B** on structural WTI AAO pricing/hedging for JCM. See [new scientific revision gate](SCIENTIFIC_REVISION_AND_SUBMISSION_GATE_2026-10-27.md) and [publication overlap ledger](../../docs/two_paper_publication_strategy_2026-10-27.md). The earlier manuscript still draws from the original small-date Barchart/LO/Curran evaluation; completed Databento Experiments 003–005 use different reduced-form, contemporaneous disjoint-parity assumptions. **Do not automatically combine cohorts/figures or mark earlier blockers completed.** No REMEF/JCM submission is authorized by these planning documents.
+
 This file records **checks actually performed** versus **checks still open**.
 It is not a certificate that all original experiments were independently rerun.
 
