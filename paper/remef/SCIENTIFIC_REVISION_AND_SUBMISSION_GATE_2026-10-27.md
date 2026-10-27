@@ -1,5 +1,7 @@
 # Paper A (REMEF): scientific revision and submission gate
 
+> **2026-10-27 arithmetic audit update:** Direct recomputation now confirms the older 310-row October-expiry PI/PM price errors, 2,381-row historical PI and first-nearby robustness, and 253-row LO external validation; 10M run metadata also agrees with the paper. See [scientific audit findings](SCIENTIFIC_AUDIT_FINDINGS_2026-10-27.md) and the updated [presubmission checklist](PRESUBMISSION_AUDIT.md). **Not submission-ready:** old 2,381 prior-smile prediction rows, 2,366 same-contract IV, source-vintage/rights checks, original LO inputs and Word/editorial gates remain unresolved. The old and Databento pricing designs must not be pooled.
+
 **Recorded:** 2026-10-27. **Working title:** Posterior Integration and Volatility Information in WTI Asian Option Pricing. **Status:** existing bilingual Word candidate and manuscript material, with significant evidence/audit issues still open. **NOT submitted, NOT submission-ready**. This is the **first-priority paper**, distinct from the NEW structural pricing/hedging JCM project.
 
 Primary two-paper publication decision and overlap ledger:
