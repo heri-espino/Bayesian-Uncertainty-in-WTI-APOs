@@ -1,3 +1,5 @@
+> **FULL REAL-DATA EXPERIMENT COMPLETED (2026-10-27):** Results are saved in the repository and analyzed in [Full Experiment 004 results and holdout review](FULL_RESULTS_AND_HOLDOUT_REVIEW_2026-10-27.md). On the 2025–Sep 2026 actual-mark holdout, Bayesian market-IV PI MAE was 0.209830 USD/bbl, versus 0.208924 for unchanged lagged IV; the paired month-block interval includes zero. **No reliable outperformance is established.** The preregistered plan below is retained as originally written; any remaining statements below saying the real-data experiment has not yet run refer to that earlier frozen planning status.
+
 # Experiment 004 — Bayesian AAO market-IV pricing: preregistration and handoff
 
 Created: 2026-10-27. **Status: code and tests committed, purchased-market-data experiment NOT YET RUN.** All expensive runs are manual and local. No changes to the established Experiment 003 benchmark, figures or paid source data.
