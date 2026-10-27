@@ -3,6 +3,8 @@
 **Date:** 2026-10-27  
 **Purpose:** editable **scientific prose** for Phase 1, not a final manuscript or instructions to submit.  
 **Companion:** [Literature novelty matrix](LITERATURE_NOVELTY_MATRIX.md) and [source-level evidence map](REVISED_MANUSCRIPT_EVIDENCE_MAP_2026-10-27.md).  
+
+> **Source verification addendum:** [2026-10-27 full-text literature audit](SOURCE_REVIEW_ROMBOUTS_SAGOR_2026-10-27.md) confirms that Rombouts–Stentoft's 2009 CIRANO **draft** compared MNGARCH with GARCH, while the 2014 **published abstract** reports Bayesian-vs-ML differences as small; these are different estimands. It also verifies Sagor et al.'s 2026 posterior WTI results price a **hypothetical European call with fixed S0/K/T/r**, not observed market WTI AAO contracts. The 2014 full article and older WTI input timestamps remain unverified.
 **IMPORTANT:** No part of this document has yet been transferred to the journal-specific TeX or final Word file. The opening claim remains conditional on the open original IV-row and as-of data audits.
 
 # Volatility Information versus Posterior Integration in WTI Asian Options
