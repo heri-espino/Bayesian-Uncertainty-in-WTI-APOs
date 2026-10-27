@@ -1,3 +1,5 @@
+> **Experiment 005 completed and verified (2026-10-27):** The author pushed all aggregate evaluation results in commit b6ebffe6ffdf5e1e6b71d1844eeae9eef6b763ac. See [Full results and calibration review](FULL_RESULTS_AND_CALIBRATION_REVIEW_2026-10-27.md). The main result is **no consistent Bayesian interval-score advantage**, together with pronounced 2026 undercoverage for both calibrators. Original methodological preregistration below is preserved as written; past-tense statements about results pending there reflect its earlier drafting time.
+
 # Experiment 005: AAO predictive uncertainty calibration
 
 **Created:** 2026-10-27. **Status:** code authored and synthetic checks performed; real Databento-backed evaluation **not executed in this remote environment** because the 21 MB Experiment 004 private contract file is represented by a Git LFS pointer in connected GitHub. The user runs the experiment locally. Do not report a real-data performance result before that local run.
