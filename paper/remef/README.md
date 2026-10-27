@@ -1,5 +1,7 @@
 # REMEF submission candidate (separate from JFM)
 
+> **PAPER A TRACK — 2026-10-27:** The author chose to prioritize completion of the existing Bayesian posterior-integration and volatility-information manuscript for a possible **REMEF** submission, independently of a separate NEW structural WTI AAO pricing/hedging project that might later target JCM. See [two-paper boundaries](../../docs/two_paper_publication_strategy_2026-10-27.md) and [REMEF scientific revision/submission gate](SCIENTIFIC_REVISION_AND_SUBMISSION_GATE_2026-10-27.md). The manuscript is **NOT submission-ready** and no submission has occurred. Earlier statements below that JCM might be the first journal for this **same** manuscript are now historical and superseded. The completed Experiments 003–005 must be reconciled with the older Barchart/LO/Curran manuscript before inserting results; their conditional terminal-average reduced-form assumptions are distinct. No automatic edits to manuscript sources, experiments or figures have been made by this strategy update.
+
 The REMEF adaptation is based on the **concise** JFM research text, but it has its own
 introduction, bilingual metadata and bibliography supplement. Nothing here replaces
 `paper/manuscript/main.tex`, `paper/manuscript/main_short.tex`, or their Wiley builds.
