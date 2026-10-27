@@ -25,12 +25,14 @@ SHORT = ROOT / "paper" / "manuscript" / "sections_short"
 FIGURES = ROOT / "figures" / "publication"
 BUILD = HERE / "build"
 SVG_DIR = BUILD / "vector_figures"
+# REMEF-specific scientific sections; Wiley/JFM sources stay frozen.
+REMEF_SECTIONS = HERE / "sections"
 BODY_SECTIONS = [
-    SHORT / "02_posterior_pricing.tex",
-    SHORT / "03_data_design.tex",
-    SHORT / "04_results.tex",
-    SHORT / "05_robustness.tex",
-    SHORT / "06_conclusion.tex",
+    REMEF_SECTIONS / "02_posterior_pricing.tex",
+    REMEF_SECTIONS / "03_data_design.tex",
+    REMEF_SECTIONS / "04_results.tex",
+    REMEF_SECTIONS / "05_robustness.tex",
+    REMEF_SECTIONS / "06_conclusion.tex",
 ]
 REFERENCES = [
     ROOT / "paper" / "manuscript" / "references.bib",
@@ -224,9 +226,10 @@ def make_latex(*, with_author: bool) -> str:
     # Place the required disclosure in Methods, not outside the research design.
     disclosure = (
         r"\subsection{AI-assisted manuscript preparation}" + "\n"
-        "OpenAI ChatGPT assisted with language editing, manuscript preparation, "
-        "and research software development. All numerical results reported in this "
-        "paper were obtained from computational experiments executed by the author."
+        "OpenAI ChatGPT assisted with research software development, literature "
+        "organization, language editing, and drafting and revision of the manuscript. "
+        "The author remains responsible for the methods, numerical calculations, "
+        "independent checking and interpretation of the results."
         + (" The corresponding research software is archived on Zenodo.\n"
            if with_author else "\n")
     )
@@ -235,15 +238,19 @@ def make_latex(*, with_author: bool) -> str:
         sections[0] = authorship() + "\n" + sections[0]
     data_note = (
         r"\section*{Data availability}" + "\n"
-        "The empirical analysis uses Barchart WTI Average Price Option "
-        "settlements and individual CL futures histories, and Databento "
-        "standard WTI (LO) option and corresponding CL futures observations. "
-        "The underlying observations are subject "
-        "to vendor and exchange licensing conditions and are not redistributed. "
-        "Researchers who wish to repeat the empirical analyses must obtain the "
-        "necessary data and permissions directly from the providers. The "
-        "public source-only software does not contain raw market data or "
-        "proprietary contract-date price panels.\n"
+        "The primary empirical study draws on Barchart WTI Average Price "
+        "Option end-of-day fields (which can serve as settlement proxies), "
+        "CL futures contract histories, and Databento standard WTI/LO "
+        "option data. A distinct longer-date conditional benchmark uses "
+        "Databento AAO option definitions and settlement statistics; "
+        "its option forward-average and discount inputs are estimated from "
+        "other same-date AAO strikes by put--call parity. These inputs are "
+        "not equivalent to direct contemporaneous CL fixing histories. "
+        "Vendor/exchange original data and private contract-level results "
+        "are subject to licensing and are not redistributed publicly. "
+        "Replication requires independently licensed observations, "
+        "source-vintage verification and the computational workflow "
+        "specified in the supporting research records.\n"
     )
     if with_author:
         code_note = (
