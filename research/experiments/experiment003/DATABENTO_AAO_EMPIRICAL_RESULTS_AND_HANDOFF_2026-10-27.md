@@ -1,3 +1,5 @@
+> **2026-10-27 continuation update:** A separate, strictly lagged Bayesian AAO market-IV **Experiment 004** has now been implemented on this results branch (code plus synthetic tests and preregistered protocol; **no real market Experiment 004 outputs yet**). See [Experiment 004 handoff](../experiment004/README.md), the new model at ../../../bayesian_asian_options/src/bayesian_asian_options/aao_market_iv_bayes.py, and driver ../../../experiments/wti_aao_bayesian_market_iv.py. The section below is the frozen Experiment 003 evidence record; its future-work checklist reflects the status when it was written. Do not claim Experiment 004 has passed local tests until the author runs them, or that Experiment 004 has been run on paid AAO data.
+
 # Experiment 003: WTI AAO Databento-only empirical evidence and research handoff
 
 **Evidence frozen:** 2026-10-27. **Repository branch:** `results/aao-databento-pilot-2023h1-20261026`. **Status:** pilot, full reduced-form benchmark, graphics and diagnostic complete and pushed; future model extensions **not yet implemented or executed**.
