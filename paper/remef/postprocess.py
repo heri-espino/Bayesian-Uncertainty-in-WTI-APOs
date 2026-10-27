@@ -90,13 +90,15 @@ def adapt_sections(doc):
         "WTI Average Price Options": "3.4 WTI Average Price Options and market data",
         "Out-of-sample volatility comparisons": "3.5 Forward-in-time volatility comparisons",
         "Cross-instrument validation": "3.6 Cross-instrument validation",
-        "AI-assisted manuscript preparation": "3.8 AI-assisted manuscript preparation",
+        "Independent extended Databento settlement-mark benchmark": "3.7 Extended conditional AAO settlement-mark study",
+        "AI-assisted manuscript preparation": "3.9 AI-assisted manuscript preparation",
         "Results": "4. Results and discussion",
         "When does posterior integration matter?": "4.1 When does posterior integration matter?",
         "Posterior integration in the WTI sample": "4.2 Posterior integration in the WTI sample",
         "Historical versus option-implied volatility": "4.3 Historical versus option-implied volatility",
         "Cross-instrument validation using vanilla-WTI options": "4.4 Cross-instrument validation using vanilla-WTI options",
-        "Robustness and interpretation": "4.5 Robustness, interpretation and limitations",
+        "Extended conditional settlement-mark evidence": "4.5 Independent Databento settlement-mark results",
+        "Robustness and interpretation": "4.6 Robustness, interpretation and limitations",
         "Conclusion": "5. Conclusions and recommendations",
     }
     for p in doc.paragraphs:
@@ -112,20 +114,21 @@ def adapt_sections(doc):
         "3.2 Posterior integration and price uncertainty",
         "3.3 Synthetic experiment", "3.4 WTI Average Price Options and market data",
         "3.5 Forward-in-time volatility comparisons", "3.6 Cross-instrument validation",
-        "3.8 AI-assisted manuscript preparation", "4. Results and discussion",
+        "3.9 AI-assisted manuscript preparation", "4. Results and discussion",
         "4.1 When does posterior integration matter?",
         "4.2 Posterior integration in the WTI sample",
         "4.3 Historical versus option-implied volatility",
         "4.4 Cross-instrument validation using vanilla-WTI options",
-        "4.5 Robustness, interpretation and limitations",
+        "4.5 Independent Databento settlement-mark results",
+        "4.6 Robustness, interpretation and limitations",
         "5. Conclusions and recommendations",
     ]
     titles = [p.text.strip() for p in doc.paragraphs if p.style.name.startswith("Heading")]
     missing = [title for title in expected if title not in titles]
     if missing:
         raise ValueError(f"REMEF section conversion missed headings: {missing}")
-    ai = find(doc, "3.8 AI-assisted manuscript preparation")
-    insert_before(ai, "3.7 Computational implementation", "Heading 2")
+    ai = find(doc, "3.9 AI-assisted manuscript preparation")
+    insert_before(ai, "3.8 Computational implementation", "Heading 2")
     insert_before(
         ai,
         "The computations are implemented in Python using NumPy, SciPy and pandas "
