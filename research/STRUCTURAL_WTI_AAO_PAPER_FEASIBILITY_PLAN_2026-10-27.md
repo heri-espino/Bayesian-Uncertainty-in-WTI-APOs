@@ -1,5 +1,7 @@
 # Structural WTI Asian-option pricing and hedging — independent Paper B research plan
 
+> **2026-10-27 CL archive inventory update:** The initial proposal below was written before the [independent CL futures assessment](JCM_CL_FUTURES_FEASIBILITY_AUDIT_2026-10-27.md). Existing owned CL futures data DO include a 2024–Sep2026 Databento CL statistics LFS file and reconstructed first-nearby series. This source is PARTIAL, not a complete historical multi-tenor curve or independent AAO quote panel. **Its Git LFS SHA256 differs from the saved acquisition-manifest file SHA256; resolve locally before any structural pricing conclusions.** Use scripts/audit_jcm_cl_feasibility.py for no-purchase local metadata/hash inventory.
+
 **Approved direction:** October 27, 2026. **Status:** proposal and data feasibility audit **not yet executed**. **Provisional target:** Journal of Commodity Markets, subject to sufficient independent new economic evidence, novelty and scientific soundness. Paper A (REMEF) is a separate Bayesian posterior-integration/volatility-input study. See [two-paper boundaries](../docs/two_paper_publication_strategy_2026-10-27.md).
 
 ## 1. Research question and required distinction
