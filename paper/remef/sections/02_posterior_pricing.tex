@@ -1,0 +1,88 @@
+\section{Posterior uncertainty and Asian-option pricing}\label{sec:short_method}
+
+\subsection{Physical inference and risk-neutral valuation}
+
+Historical log returns are modeled under the physical measure as
+\begin{equation}
+ R_i\sim
+ \mathcal N\!\left[
+ \left(\mu-\frac12\sigma^2\right)\Delta t,
+ \sigma^2\Delta t
+ \right],
+ \label{eq:short_returns}
+\end{equation}
+with baseline priors
+\begin{equation}
+ \mu\sim\mathcal N(0,1),
+ \qquad
+ \sigma\sim\operatorname{InvGamma}(2,0.1),
+ \qquad \sigma>0.
+ \label{eq:short_priors}
+\end{equation}
+We sample the empirical posterior in \((\mu,\log\sigma)\) using random-walk Metropolis. For the large synthetic experiment, we integrate out \(\mu\) analytically conditional on \(\sigma\). This leaves a one-dimensional posterior calculation and avoids MCMC error in that experiment.
+
+Pricing is carried out separately under the risk-neutral measure. For futures maturity \(u\), the maintained benchmark is
+\begin{equation}
+ dF_t^u=\sigma F_t^u\,dW_t^Q,
+ \label{eq:short_q}
+\end{equation}
+where \(u\) indexes futures maturity and the same Brownian motion \(W^Q\) drives all maturities. The common factor specifies perfect instantaneous correlation across futures maturities under the maintained model. Physical drift does not enter risk-neutral valuation. Holding these dynamics fixed allows direct comparisons of posterior integration and volatility inputs.
+
+For an arithmetic-average option with fixing dates \(t_1,\ldots,t_M\),
+\begin{equation}
+ A_T=\frac{1}{M}\sum_{j=1}^M F^{(1)}_{t_j},
+ \label{eq:short_average}
+\end{equation}
+and the conditional call value is
+\begin{equation}
+ C_t^Q(\sigma)
+ =
+ B(t,T)\,
+ \mathbb E^Q\!\left[
+ (A_T-K)^+\mid\mathcal F_t;\sigma
+ \right],
+ \label{eq:short_call_value}
+\end{equation}
+where \(B(t,T)\) is the discount factor, \(K\) the strike, and \(\mathcal F_t\) the valuation-date information set. Put values are defined analogously. In Equation~\eqref{eq:short_average}, \(F^{(1)}_{t_j}\) is the first-nearby WTI futures settlement on fixing date \(t_j\). At a valuation date within the averaging period, earlier fixings are known. We simulate only the remaining fixings, using the corresponding contracts in the observed CL futures curve as initial values.
+
+We price the baseline historical-volatility model by Monte Carlo. For the large out-of-sample comparisons and checks using alternative constant volatilities, we use Curran's deterministic conditioning approximation \citep{curran1994}. We check numerical accuracy separately with high-precision pseudo-random Monte Carlo and scrambled Sobol calculations.
+
+\subsection{Posterior integration and price uncertainty}
+
+Let \(\mathcal D\) denote the historical return data, \(C^Q(\sigma)\) the conditional risk-neutral option value, and \(\bar\sigma=\mathbb E[\sigma\mid\mathcal D]\). We compare posterior-integrated (PI) and posterior-mean plug-in (PM) prices:
+\begin{equation}
+ C_{PI}=\mathbb E[C^Q(\sigma)\mid\mathcal D],
+ \qquad
+ C_{PM}=C^Q(\bar\sigma).
+ \label{eq:short_pi_pm}
+\end{equation}
+A second-order expansion around \(\bar\sigma\) gives
+\begin{equation}
+ C_{PI}-C_{PM}
+ \approx
+ \frac12 C^{Q\prime\prime}(\bar\sigma)
+ \operatorname{Var}(\sigma\mid\mathcal D).
+ \label{eq:short_taylor}
+\end{equation}
+The approximation links the PI--PM difference to posterior variance and price curvature. Its sign depends on local curvature, and it is most accurate when higher-order terms are small over the posterior support.
+
+The posterior distribution also induces a distribution of theoretical option values,
+\begin{equation}
+ C^Q(\sigma),\qquad \sigma\sim p(\sigma\mid\mathcal D).
+ \label{eq:short_pushforward}
+\end{equation}
+Its dispersion is approximately
+\begin{equation}
+ \operatorname{SD}\!\left(C^Q(\sigma)\mid\mathcal D\right)
+ \approx
+ \left|C^{Q\prime}(\bar\sigma)\right|
+ \sqrt{\operatorname{Var}(\sigma\mid\mathcal D)}.
+ \label{eq:short_delta}
+\end{equation}
+The two quantities have different local orders in posterior dispersion. The PI--PM difference depends on posterior variance, whereas the standard deviation of conditional model prices depends on the posterior standard deviation of volatility. Neither quantity measures future market-price uncertainty or removes pricing-model misspecification.
+
+\subsection{Synthetic mechanism experiment}
+
+The synthetic experiment is designed to vary the two ingredients in Equation~\eqref{eq:short_taylor}. It contains 10 million simulated return histories, generated with root seed 2468 and distributed over 35 combinations of historical sample size (21 to 1,260 observations) and annual volatility (0.10 to 0.80). We evaluate 168 option states varying maturity, moneyness, and the fraction of the arithmetic average already fixed. For each history and option state, we calculate the PI--PM difference, posterior volatility variance, local price curvature, and the second-order approximation. The volatility posterior is evaluated on a 4,097-point grid; computations are batched without changing the model or pricing grid.
+
+This design isolates the conditions under which posterior integration matters and tests the curvature--variance approximation independently of market pricing errors.
