@@ -1,5 +1,7 @@
 # Repository contract for coding agents and maintainers
 
+> **CURRENT AAO-ONLY STUDY STATUS (2026-10-27, results branch):** Author completed local pilot, 189-date 2023–2026 full Databento-only six-method benchmark, actual-only month-block robustness and 1,689-group IV-gap audit. Read [the empirical report](research/AAO_DATABENTO_ONLY_EMPIRICAL_REPORT_2026-10-27.md) and [proposed follow-up protocol](research/AAO_DATABENTO_ONLY_MARKET_INFORMED_BAYES_PROTOCOL_2026-10-27.md) before changing methods/paper. Previous acquisition-not-completed and new-results-not-run paragraphs here are historical/superseded. **Do not run GitHub Actions experiments; heavy work happens locally.** This results branch diverges from main; do not merge, rebase, force-push or modify sparse checkout without careful source-data preservation and explicit authorization.
+
 This file is normative. Future coding agents and maintainers must preserve the repository
 architecture unless a deliberate migration is documented and completed atomically.
 
