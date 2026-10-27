@@ -1,6 +1,8 @@
 # Literature and novelty matrix — REMEF Paper A
 
 **Research snapshot:** 2026-10-27  
+
+> **Full-text source review added (2026-10-27):** [Read the source-based comparison of Rombouts–Stentoft's supplied **2009 CIRANO working paper**, the **2014 journal abstract**, and Sagor–Boone–Ghanam's supplied **2026 full article**](SOURCE_REVIEW_ROMBOUTS_SAGOR_2026-10-27.md). Important: 2009 tests MNGARCH against GARCH, whereas 2014 explicitly tests Bayesian versus ML inference. Sagor's WTI **European call** is an illustrative hypothetical contract priced using historical returns, not an observed AAO settlement-mark sample. The 2014 full journal article has **not** been independently read; that literature gate remains open.
 **Status:** substantive first-pass literature positioning; **not a systematic/exhaustive review**, no new empirical run, and no submission clearance.  
 **Primary basis:** extracted academic articles under literature/extracted/ and their supplied Markdown copies, the existing REMEF manuscript and [evidence map](REVISED_MANUSCRIPT_EVIDENCE_MAP_2026-10-27.md), plus linked journal/publisher records. Source summaries refer to **specific published articles** when working-paper and final-publication versions differ.
 
