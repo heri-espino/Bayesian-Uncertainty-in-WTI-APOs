@@ -114,6 +114,7 @@ def adapt_sections(doc):
         "3.2 Posterior integration and price uncertainty",
         "3.3 Synthetic experiment", "3.4 WTI Average Price Options and market data",
         "3.5 Forward-in-time volatility comparisons", "3.6 Cross-instrument validation",
+        "3.7 Extended conditional AAO settlement-mark study",
         "3.9 AI-assisted manuscript preparation", "4. Results and discussion",
         "4.1 When does posterior integration matter?",
         "4.2 Posterior integration in the WTI sample",
