@@ -1,5 +1,7 @@
 # Two-paper publication strategy — WTI Average Price Options
 
+> **2026-10-27 audit progress:** [Paper A REMEF arithmetic audit](../paper/remef/SCIENTIFIC_AUDIT_FINDINGS_2026-10-27.md) now independently recalculates the core 310/2,381/253 observation price-error claims and corroborates the 10M run metadata; **original input-vintage/rights, other predictor-row and editorial gates remain open**. [Paper B CL feasibility audit](../research/JCM_CL_FUTURES_FEASIBILITY_AUDIT_2026-10-27.md) identifies partial existing Databento first-nearby CL history, plus a serious *unexplained hash mismatch* between the CL LFS object and its acquisition manifest. Neither paper is submission-ready; no new experiment was run.
+
 **Decision recorded:** 2026-10-27. **Status:** author-approved research/publication direction; neither paper has been submitted, accepted or cleared for submission. **Scope:** two substantially different manuscripts, not simultaneous submissions of the same paper. This document supersedes the older single-manuscript "JCM first, REMEF fallback" *target allocation*, not prior scientific results.
 
 **Decision:** prioritize completing the existing Bayesian volatility-information manuscript for the Revista Mexicana de Economía y Finanzas (REMEF); in parallel, develop an **independent** structural/hedging study for potential submission to the Journal of Commodity Markets (JCM). The Journal of Futures Markets (JFM) Wiley source remains an archived alternative form of the first manuscript, not an additional third publication.
