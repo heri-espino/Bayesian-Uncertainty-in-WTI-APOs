@@ -1,0 +1,17 @@
+{
+  "source_experiment": "results\\analysis\\wti_aao_databento_only\\full_2023_2026",
+  "source_priced_dates": 189,
+  "source_contract_dates": 111585,
+  "figures": [
+    "fig06_databento_benchmark_mae",
+    "fig07_databento_date_cluster_intervals",
+    "fig08_databento_mae_time_series"
+  ],
+  "formats": [
+    "pdf",
+    "png",
+    "svg"
+  ],
+  "no_new_model_computation": true,
+  "pricing_scope": "AAO-only reduced-form terminal-average lognormal"
+}
