@@ -76,6 +76,10 @@ futures pricing model.
   documentation are required for submission.
 - **No simultaneous submission** with JFM or any other journal.
 
+## REMEF-specific reviewer-safe supplement (2026-10-27)
+
+A **separate, internally consistent** [online supplement working draft](ONLINE_SUPPLEMENT_DRAFT.md) has been prepared for Paper A. It records the theoretical PI–PM distinction, the original Barchart/LO evidence, the *separate* Databento Experiments 003–005 and limits on conditional mark comparisons without recycling the legacy heterogeneous archived supplement. It contains no protected market-data rows or author-identifying links. **The journal's acceptance of separate supplementary material has not been verified**, so this is an optional editorial working document, not guaranteed submission content. The supplement currently exists as Markdown; convert and inspect it alongside the Word manuscript only after the editor's current instructions are checked. The source audit, independent input-vintage checks, data rights and release gates remain open.
+
 ## Build Word draft without rerunning experiments
 
 Requires Python 3.11+, [Pandoc](https://pandoc.org/) and `python-docx`.
