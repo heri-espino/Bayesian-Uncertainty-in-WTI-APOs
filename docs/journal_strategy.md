@@ -1,4 +1,17 @@
-# Journal strategy — October 2026 post-Databento expansion
+# Journal strategy — two distinct WTI AAO research papers (2026-10-27)
+
+**CURRENT TWO-PAPER DECISION (2026-10-27):** The author has selected TWO genuinely distinct research projects, superseding the earlier plan to simply send the same manuscript to JCM first and REMEF as fallback. **Paper A:** prioritize revision, scientific audit and possible submission of the current Bayesian posterior-integration/volatility-information manuscript to **REMEF**. **Paper B:** develop an INDEPENDENT structural WTI AAO pricing/hedging project aimed at **Journal of Commodity Markets** only if fixing-path, curve, quote/trade and independent-evaluation feasibility supports a genuinely new contribution. Neither manuscript is submitted or approved for submission. No simultaneous duplicate/substantially overlapping submissions. JFM remains an alternative journal for Paper A, not a third manuscript.
+
+- [Full two-paper research/publication plan, scope and overlap ledger](two_paper_publication_strategy_2026-10-27.md)
+- [REMEF Paper A revision/submission gate](../paper/remef/SCIENTIFIC_REVISION_AND_SUBMISSION_GATE_2026-10-27.md)
+- [Independent structural/JCM Paper B data and modeling feasibility plan](../research/STRUCTURAL_WTI_AAO_PAPER_FEASIBILITY_PLAN_2026-10-27.md)
+- [Completed Experiment 003](../research/experiments/experiment003/DATABENTO_AAO_EMPIRICAL_RESULTS_AND_HANDOFF_2026-10-27.md), [Experiment 004](../research/experiments/experiment004/FULL_RESULTS_AND_HOLDOUT_REVIEW_2026-10-27.md) and [Experiment 005](../research/experiments/experiment005/FULL_RESULTS_AND_CALIBRATION_REVIEW_2026-10-27.md) underpin Paper A, subject to model-information-set boundaries.
+
+**Historical strategy archived below:** the October 25 single-paper target ranking and 160-file interim acquisition statistics have been superseded by completed 162-file/81-month 2026-10-27 results-branch provenance; they are retained as historical decision context, not a current publication mandate. REMEF and JCM are no longer interchangeable targets for the *same manuscript* under the newly agreed research separation.
+
+---
+
+# Historical October 25 single-manuscript journal assessment
 
 **Planning status, not submission approval.** The author has asked us to reconsider the journal after expanding historical WTI Average Price Option data. The **working ambitious target is *Journal of Commodity Markets* (JCM), conditional on strong *verified* new market evidence**. The prepared realistic fallback is *Revista Mexicana de Economía y Finanzas* (REMEF); *Journal of Futures Markets* (JFM) remains a demanding alternative and the Wiley LaTeX source remains intact. The author has not confirmed a final journal submission or author-approved journal reformatting. **Do not send multiple journals the same paper simultaneously.**
 
