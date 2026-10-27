@@ -1,5 +1,18 @@
 # REMEF submission candidate (separate from JFM)
 
+> **2026-10-27 SCIENTIFIC MANUSCRIPT REVISED ON A DEDICATED BRANCH:** The paper now has REMEF-only body sections at [sections/](sections/), an integrated but **strictly separate** older Barchart/LO and newer Databento experimental discussion, updated bilingual abstracts and conclusions, corrected October-**expiry** timing, and stronger settlement-model/data-vintage cautions. The separate Wiley/JFM scientific source is unchanged. The REMEF Word builder now reads these journal-only sections. See [claim-level evidence map and remaining submission gates](REVISED_MANUSCRIPT_EVIDENCE_MAP_2026-10-27.md) and [independent source-output audit](SCIENTIFIC_AUDIT_FINDINGS_2026-10-27.md). **This is a complete revised scientific draft, NOT certified submission-ready:** vendor original-file/timing audits, rights checks, Word rendering/page count and author-signed forms remain outstanding. Nothing has been submitted. The older October 25 single-paper journal-ranking text below is historical.
+
+**Build and verify this revised REMEF-only Word manuscript on a complete private checkout:**
+
+```powershell
+python -m pytest tests/test_remef_build.py -q
+python paper/remef/build.py --check
+python paper/remef/build.py
+python paper/remef/build.py --author-version
+```
+
+The resulting **blinded** and **author-identifying** Word drafts are under paper/remef/build/ and must be visually inspected in Microsoft Word. All figures/Word equations must remain native and editable, both drafts must satisfy the <=25-page journal rule, the reviewer file must not reveal identifying metadata, and no GitHub Actions or experimental reruns are required merely to build the paper.
+
 > **2026-10-27 numerical audit update:** [Independent audit](SCIENTIFIC_AUDIT_FINDINGS_2026-10-27.md) verifies older REMEF core 310-row, 2,381-row historical PI, and 253-row LO prices from source contract-level outputs; confirms 10M report metadata. **Scientific and editorial submission gates remain OPEN.** This is not approval to submit. Run new read-only source arithmetic checker locally with python -m scripts.audit_remef_science (not an expensive simulation).
 
 > **PAPER A TRACK — 2026-10-27:** The author chose to prioritize completion of the existing Bayesian posterior-integration and volatility-information manuscript for a possible **REMEF** submission, independently of a separate NEW structural WTI AAO pricing/hedging project that might later target JCM. See [two-paper boundaries](../../docs/two_paper_publication_strategy_2026-10-27.md) and [REMEF scientific revision/submission gate](SCIENTIFIC_REVISION_AND_SUBMISSION_GATE_2026-10-27.md). The manuscript is **NOT submission-ready** and no submission has occurred. Earlier statements below that JCM might be the first journal for this **same** manuscript are now historical and superseded. The completed Experiments 003–005 must be reconciled with the older Barchart/LO/Curran manuscript before inserting results; their conditional terminal-average reduced-form assumptions are distinct. No automatic edits to manuscript sources, experiments or figures have been made by this strategy update.
