@@ -93,3 +93,16 @@ def test_bootstrap_outputs():
     ans=month_block_ci(d,"bayesian_nig","rolling_empirical",n_boot=199)
     assert ans.iloc[0].mean_daily_interval_score_improvement==pytest.approx(1.)
     assert ans.iloc[0].ci_low==pytest.approx(1.)
+
+def test_residual_sign_is_observed_minus_predicted(tmp_path):
+    """Predictions below observed prices require POSITIVE residual corrections."""
+    d = fixture()
+    d["predicted"] = d["observed"] - 0.5
+    d["error"] = -0.5  # Stored convention is predicted - observed.
+    path = tmp_path / "constant_underpricing.csv.gz"
+    d.to_csv(path, index=False, compression="gzip")
+    _, tables = execute(load_contracts(path), min_dates=5, window_dates=20,
+                        bootstrap=99, test_start="2024-10-01")
+    empirical = tables["summary_by_split"]
+    empirical = empirical[empirical.calibrator == "rolling_empirical"]
+    assert np.allclose(empirical.coverage, 1.0)
