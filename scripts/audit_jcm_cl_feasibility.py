@@ -93,8 +93,12 @@ def inspect(*, verify_large_raw_hash=False) -> dict:
             actual=_hash(RAW)
             declared=manifest.get("raw_file",{}).get("sha256")
             raw_meta["sha256_matches_local_acquisition_manifest"]=(actual==declared)
-            if declared and actual != declared:
-                raise AssertionError("Raw CL source digest mismatch")
+            raw_meta["sha256_local_payload"] = actual
+            raw_meta["sha256_acquisition_manifest"] = declared
+            raw_meta["integrity_blocked"] = bool(declared and actual != declared)
+            # Preserve a machine-readable *failed* integrity result instead of
+            # aborting before --write-json can save the discrepancy. Do NOT
+            # treat this mismatch as validated source input.
     else:
         raw_meta={"tracked_path_present":False, "lfs_binary_materialized":False}
     treasury=[x.name for x in sorted(RATES.glob("*.csv"))]
