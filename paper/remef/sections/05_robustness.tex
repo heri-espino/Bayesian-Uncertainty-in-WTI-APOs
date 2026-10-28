@@ -1,58 +1,60 @@
 \section{Robustness and interpretation}\label{sec:short_robustness}
 
-Alternative physical-return assumptions do not materially change the comparison. A standardized Student-\(t\) model leaves the PI--PM difference small relative to historical-volatility pricing errors. Reconstructing first-nearby CL returns contract by contract gives a similar result: on the 2,381 out-of-sample observations, historical PI has MAE 2.6468 and RMSE 3.4451, compared with 2.6187 and 3.4090 using the continuous/front-month return proxy. Further historical-volatility benchmarks appear in Online Supplement Section S1.
+The findings are similar under alternative assumptions about historical returns. A standardized Student-\(t\) model leaves the PI--PM difference small relative to historical-volatility pricing errors. Reconstructing first-nearby CL returns contract by contract gives a similar result: on the 2,381 date-ordered observations, historical PI has MAE 2.6468 and RMSE 3.4451, compared with 2.6187 and 3.4090 using the continuous/front-month return proxy. Further historical-volatility benchmarks appear in Online Supplement Section S1.
 
-The small empirical PI--PM difference is not attributable to numerical noise. High-precision Monte Carlo, independently scrambled Sobol simulation, and Curran conditioning agree on the difference to a precision well below its observed magnitude. Simulation-based calibration provides a separate check on the posterior implementation. The supplement also reports a posterior-RMS plug-in sensitivity (Section S2), alternative mappings from LO-implied volatilities to one APO volatility, and Cox--Ross--Rubinstein tree-refinement checks (Section S4). These numerical checks do not establish an exact arbitrage-free representation of the volatility surface.
+The small observed PI--PM difference is larger than the numerical approximation error. Monte Carlo with many draws, independently scrambled Sobol simulation, and Curran's approximation agree closely on the price difference. Simulation-based calibration provides a separate check on the posterior implementation. The supplement also examines pricing at the posterior root-mean-square volatility (Section S2), alternative ways to map LO implied volatility to one APO volatility, and the sensitivity to the number of Cox--Ross--Rubinstein tree steps (Section S4). These numerical checks do not establish an exact arbitrage-free representation of the volatility surface.
 
-The market evidence has important limits. In the original 2,381-row date-ordered comparison,
-2,319 option-date rows have zero recorded trading volume.
-The historical-versus-implied ranking remains under
-positive-volume and open-interest restrictions, but
-these subsets are small and some expiry-level samples
-are particularly limited (Online Supplement Section S3).
+The market comparisons have important limitations. In the
+original sample of 2,381 option-date observations, 2,319
+have zero recorded trading volume.
+Earlier option-implied volatility still yields lower errors
+than the tested historical estimates when we restrict the
+sample to positive-volume or open-interest observations,
+but these subsamples are small, especially for some expiries
+(Online Supplement Section S3).
 An exchange settlement proxy should not be interpreted
-as an executable transaction price. Moreover, the main pricing comparison contains only 15 target dates and the external validation only 10. Valuation-date cluster resampling preserves dependence among contracts observed together, but cannot eliminate serial dependence across adjacent dates.
+as an executable transaction price. Moreover, the main pricing comparison contains only 15 target dates and the external validation only 10. Resampling whole valuation dates accounts for dependence among contracts on the same date, but may not fully account for dependence between nearby dates.
 
-Finally, the one-factor constant-volatility model excludes richer futures-curve dynamics, stochastic volatility, jumps, and convenience yields. Its implied volatilities are model-equivalent pricing inputs, not uniquely identified risk-neutral diffusion parameters or direct estimates of a variance risk premium. The out-of-sample results establish a difference in pricing performance for the tested inputs and model, not a structural physical-versus-risk-neutral volatility decomposition.
+Finally, the one-factor constant-volatility model excludes richer futures-curve dynamics, stochastic volatility, jumps, and convenience yields. The implied volatilities are values inferred under the chosen pricing model. They should not be interpreted as uniquely identified risk-neutral diffusion volatilities or as direct estimates of a variance risk premium. The reported pricing-error differences apply to these volatility inputs and this pricing model; they do not separate physical and risk-neutral sources of volatility structurally.
 
-The newer Databento check adds dates but does not remove its
+The Databento analysis covers more dates but has different
 measurement limitations. Forward averages and effective discount
 factors are inferred from other \emph{same-date} option strikes;
 the historical volatility proxy is estimated from earlier
 parity-implied forward-average changes, not first-nearby CL
 realized returns; and the lognormal terminal-average approximation
-does not price the actual partly fixed Asian path. Original Barchart
-end-of-day \texttt{Latest} fields are settlement proxies rather
-than independently certified final exchange transaction prices.
+replaces the path of known and remaining daily fixings
+with a model for the terminal average. We cannot independently confirm that the original Barchart
+end-of-day \texttt{Latest} fields are final exchange
+settlements or executable trade prices.
 CME Clearing switched AAO end-of-day settlement valuations to
 its Curran model effective May 18, 2020
-\citep{cmeclearing2020curran}. Thus, agreement
-with end-of-day marks can partly capture persistence or replication
-of exchange model values, rather than new information about
-tradeable option prices.
+\citep{cmeclearing2020curran}. Agreement with end-of-day settlement prices may therefore
+reflect the stability or reproduction of exchange model
+valuations rather than new information about tradable prices.
 
 A very small price correction need not have economic value.
 For instance, the older October-expiry mean absolute PI--PM
 difference is about \$0.000745/bbl, well below the standard
-\$0.01/bbl quotation increment. For the extended conditional
-holdout, the tiny differences between the market-IV Bayesian
-models and unchanged lagged IV are not robustly distinct in the
-paired monthly resampling analysis. In addition, early-2026
-settlement-mark residual-interval undercoverage warns against
-treating a well-fitted retrospective uncertainty distribution as
-a stable predictive probability model across regimes.
+\$0.01/bbl quotation increment. In the longer conditional comparison, Bayesian modeling of
+implied volatility and simply carrying forward the last
+observation have very similar errors. Resampling by month
+does not establish a consistent advantage for either method. The lower-than-intended coverage of pricing-error intervals
+in early 2026 also cautions against assuming that an uncertainty
+model fitted to past errors remains well calibrated over time.
 
-The older Barchart/LO evaluation and the newer Databento
-benchmark have different economic observables, providers,
-pricing engines, maturity support and information sets. They
+The Barchart/LO and Databento analyses differ in the
+observed prices, data sources, pricing models, available
+expiries, and information used for valuation. They
 are \emph{separate analyses}, not pooled observations for one
-common estimator. None directly validates executable hedge
-profits or the implied-volatility risk premium. Original vendor first-publication times, historical revision
-vintages, Barchart redistribution rights, trade/quote validation,
-and independent end-to-end historical input replay remain open.
-By contrast, stored-row arithmetic for the 2,381 fitted-smile
-and 2,366 same-contract carry comparisons has been independently
-reconciled, including all 4,762 fitted IV forecasts and archived
-prior-date relationships. These numerical checks do not prove
-when the vendor data first became available.
+common estimator. Neither tests executable hedging profits or measures a
+variance risk premium. We still need to verify when the vendors originally published
+their records, whether those records were revised, whether
+Barchart data may be redistributed, and whether the original
+market prices and full input histories can be independently checked.
+The arithmetic behind the 2,381-observation fitted-smile
+comparison and the 2,366-observation same-contract comparison
+has been independently checked, including all 4,762 stored
+implied-volatility estimates and the recorded ordering of dates. These checks do not establish when the source records first
+became available.
 

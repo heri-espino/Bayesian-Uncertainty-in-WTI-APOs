@@ -2,99 +2,105 @@
 
 \subsection{WTI Average Price Options}
 
-The empirical sample is built from individual Barchart histories for WTI Average Price Options. The raw archive contains 213 unique contracts and 11,179 contract-date observations, with expiry months ranging from September 2026 to June 2029. We compare model prices with the Barchart end-of-day \texttt{Latest} field, treated as a settlement-price proxy. It has not been independently certified as an official final exchange settlement or executable transaction quote. Calls and puts are retained as available, and moneyness is recomputed by valuation date rather than assigned once at the contract level.
+We begin with Barchart price histories for individual WTI Average Price Option contracts. The archive covers 213 contracts and 11,179 contract-date observations, with expiries from September 2026 to June 2029. We compare model prices with the Barchart end-of-day \texttt{Latest} field, treated as a settlement-price proxy. It has not been independently certified as an official final exchange settlement or executable transaction quote. We include available calls and puts and calculate moneyness separately for each valuation date.
 
 For every observation, we identify the fixings already known and the futures contracts used for the remaining fixings. We initialize those contracts with the futures prices observed on the valuation date. This matters because the first-nearby contract can change during the averaging month.
 
-Historical volatility is estimated from WTI futures returns available by the valuation date. The baseline uses the labelled continuous/front-month \texttt{CL=F} return series as the physical-measure proxy. A robustness check reconstructs a first-nearby return history contract by contract from CL settlements and excludes returns spanning contract switches.
+We estimate historical volatility from WTI futures returns available by the valuation date. The baseline uses the continuous/front-month \texttt{CL=F} return series. A robustness check reconstructs a first-nearby return history contract by contract from CL settlements and excludes returns spanning contract switches.
 
-\subsection{Out-of-sample volatility comparisons}
+\subsection{Date-ordered conditional pricing comparisons}
 
-We evaluate volatility inputs through date-ordered conditional APO
-repricing errors. The archived implied-volatility estimation inputs
-have observation dates strictly preceding each target date; vendor
-first-publication times and historical revision vintages have not
-been independently certified. Repricing uses the target-date futures curve, realized fixings, and discount factor; the volatility input alone comes from earlier option dates. Historical-volatility estimates follow the specified return-data
-cutoff in the archived calculations. This does not establish when
-every underlying market record first became available. The sample comprises 2,381 contract-date observations across seven expiries and 15 target dates.
+We compare volatility inputs by repricing APOs on later dates.
+The option observations used to estimate implied volatility are
+dated before each valuation date in the archived files. However,
+we cannot independently verify when the vendor first published
+the records or whether they were subsequently revised. Each price
+uses the futures curve, known fixings, and discount factor on the
+valuation date, while implied volatility comes from earlier
+option observations. Historical-volatility estimates use the
+specified return-data cutoff. This is a date-ordered conditional
+pricing comparison, not proof that all records were available
+in real time. The sample contains 2,381 contract-date
+observations across seven expiries and 15 valuation dates.
 
-The baseline integrates conditional prices over a volatility posterior estimated from an expanding return sample available at the stated valuation cutoff. This is an error comparison conditional on that day's observed futures curve and fixing information, not a pre-opening market-price forecast. Historical alternatives use rolling windows of 63, 126, or 252 returns, an exponentially weighted moving average (EWMA) with a 63-business-day half-life, and a horizon-matched Gaussian GARCH(1,1) forecast. For GARCH, parameters are estimated from earlier returns; a valuation-date futures return updates conditional variance, which is then forecast over the remaining fixings. The updated GARCH predictor therefore uses valuation-date end-of-day underlying information, rather than solely information strictly before that date; it remains a conditional same-day repricing comparison. We map these forecasts to the constant annualized volatility that matches the remaining average's variance under the one-factor pricing model. Full comparisons are in Online Supplement Section S1 and Table S1.
+The baseline integrates conditional prices over a volatility posterior estimated from an expanding return sample available at the stated valuation cutoff. The exercise evaluates conditional pricing errors using that day's observed futures curve and fixings, not prices forecast before those inputs became available. Historical alternatives use rolling windows of 63, 126, or 252 returns, an exponentially weighted moving average (EWMA) with a 63-business-day half-life, and a horizon-matched Gaussian GARCH(1,1) forecast. For GARCH, parameters are estimated from earlier returns; a valuation-date futures return updates conditional variance, which is then forecast over the remaining fixings. The GARCH comparison therefore also uses end-of-day information from the valuation date. It is not a forecast using only earlier-day information. We express these forecasts as the constant annualized volatility that gives the same variance for the remaining average under the one-factor pricing model. Full comparisons are in Online Supplement Section S1 and Table S1.
 
-We obtain contract-level APO implied volatilities by inverting the Curran pricing approximation. For each expiry, the previous-day implied-volatility smile is estimated on the latest available earlier date. A second specification fits a smile using all earlier dates, giving more weight to recent observations. Both depend on moneyness and option type. Neither uses the target-date APO settlement to estimate volatility.
+We obtain contract-level APO implied volatilities by inverting the Curran pricing approximation. For each expiry, the previous-day implied-volatility smile is estimated on the latest available earlier date. Another specification estimates a smile from all earlier dates, with greater weight on recent observations. Both depend on moneyness and option type. Neither uses the target-date APO settlement to estimate volatility.
 
 To assess the value of smile fitting, we also carry forward each contract's most recent implied volatility. We reprice with the valuation-date curve, discount factor, and fixing schedule. This same-contract benchmark covers 2,366 observations.
 
-Pricing performance is summarized by mean error, mean absolute error (MAE), and root mean squared error (RMSE). Dependence across contracts observed on the same valuation date is preserved with valuation-date cluster bootstrap resampling.
+Pricing performance is summarized by mean error, mean absolute error (MAE), and root mean squared error (RMSE). We use a cluster bootstrap that resamples valuation dates, keeping observations from the same date together.
 
 \subsection{Cross-instrument validation}
 
-The within-APO comparison draws implied volatility from earlier observations of the same option family. We therefore add a cross-instrument check using standard monthly American WTI futures options (CME product LO) from Databento. We match LO option settlements to the underlying CL futures and invert prices using a Cox--Ross--Rubinstein futures-option tree.
+The first comparison estimates implied volatility using earlier APO observations. We therefore add a cross-instrument check using standard monthly American WTI futures options (CME product LO) from Databento. We match LO option settlements to the underlying CL futures and invert prices using a Cox--Ross--Rubinstein futures-option tree.
 
 For each APO target date, only LO observations from earlier dates are used. Implied-volatility smiles are fitted separately for the underlying CL futures contracts needed by the October-2026 APO fixing schedule. The resulting maturity-specific volatilities are mapped into the maintained scalar-volatility APO pricing model. We compare 253 APO contract-date observations over 10 target dates for which both external specifications can be evaluated within the moneyness range observed in earlier LO data. Online Supplement Section S4 and Table S4 report checks of the constant-volatility mapping and the number of steps in the Cox--Ross--Rubinstein tree.
 
-This comparison tests whether the implied-volatility advantage transfers across WTI option families; it does not identify a variance risk premium.
+This check asks whether the lower pricing errors also hold when implied volatility comes from a different WTI option product. It does not measure a variance risk premium.
 
 
-\subsection{Independent extended Databento settlement-mark benchmark}
+\subsection{Separate Databento settlement-price comparison}
 
-We assess whether the volatility-input ranking is also observed in an
-independently collected AAO settlement-statistics archive. This analysis
-does \emph{not} extend the earlier Curran/CL-fixing panel. Its inputs,
-pricing function, and information set differ. The Databento AAO
+We examine the volatility-input comparison in a second dataset of
+AAO settlement records from Databento. This is \emph{not} an extension
+of the earlier Curran model using CL fixing paths. The datasets,
+pricing methods, and information available for valuation differ. The Databento AAO
 definitions and settlement statistics cover January 2020--September
 2026; admissible evaluation dates run from January 2023 through
-September 2026. A fixed five-source-day sampling stride and common
-contract eligibility filters give 189 valuation dates, 1,689 eligible
-expiry-date groups, and 111,585 contract-date targets. Of these,
+September 2026. We select every fifth available source date and apply the same
+contract eligibility rules throughout, obtaining 189 valuation dates,
+1,689 expiry-date groups, and 111,585 contract-date observations. Of these,
 97,341 are classified by the data provider as actual
 settlements and 14,244 as theoretical. All headline
 error comparisons below use the 97,341 observations
 classified as actual.
 
-A same-date cross-sectional put--call parity regression on a reserved
-set of matched strikes supplies the risk-neutral expected terminal
-average and an effective discount factor. The reserved strikes are
-excluded from evaluation targets. The subsequent price is the
-reduced-form Black price of a \emph{lognormal terminal arithmetic
-average}, not the Curran approximation applied to a simulated path of
-first-nearby CL fixes. This contemporaneous use of other AAO option
-marks makes the exercise conditional on same-date market information;
-it is \emph{not} an independent fully ex-ante pricing forecast.
+We estimate the risk-neutral expected terminal average and an
+effective discount factor by fitting put--call parity to a separate
+set of matched call and put strikes on the valuation date. Those
+strikes are excluded from the options used to evaluate pricing errors. We then apply the Black formula to a \emph{lognormal terminal
+arithmetic average}. This is a reduced-form approximation, not
+the Curran method applied to a path of first-nearby CL fixings. Because the pricing inputs use other AAO settlement prices from
+the same date, this is a conditional comparison, \emph{not} a
+forecast made entirely with earlier information.
 
-The historical-volatility Bayesian input is estimated from lagged
-changes in the parity-implied expected AAO average for the same
-expiry, and thus is not a direct history of CL returns or a
-risk-neutral volatility estimate. Posterior integration (PI) and
+The historical-volatility input is estimated from earlier changes
+in the expected AAO average inferred from put--call parity for
+the same expiry. It is therefore neither a history of CL futures
+returns nor a risk-neutral volatility estimate. Posterior integration (PI) and
 posterior-mean plug-in (PM) use the same return-proxy posterior.
 Rolling and exponentially weighted proxies are evaluated on
-exactly the same option targets. The unchanged lagged-implied-volatility
-benchmark inverts earlier-date near-the-money AAO option marks
-under the \emph{same} terminal-average pricing proxy; no target-date
-implied volatility is used as a forecasting feature. All six
-methods use common contract/date support.
+exactly the same option targets. The simple implied-volatility benchmark carries forward volatility
+inferred from near-the-money AAO option prices on an earlier date,
+using the \emph{same} terminal-average pricing model. No implied
+volatility from the valuation date is used as an input to this
+benchmark. All six methods are evaluated on the same contracts
+and dates.
 
 A second exercise uses only \emph{strictly earlier} near-the-money
-AAO implied volatilities to model same-expiry log-implied-volatility
-innovations. Bayesian normal-inverse-gamma updating yields a
+AAO implied volatilities to model changes in log implied
+volatility for each expiry. Bayesian normal-inverse-gamma updating yields a
 Student-\(t\) posterior predictive log-volatility distribution:
 \texttt{bayes\_IV\_PI} averages option prices over 256 predictive
 volatility draws; \texttt{bayes\_IV\_PM} prices at their mean.
-Both are compared with the unchanged lagged-IV price on identical
-options. The chronological comparison is reported separately
+Both are compared with the price obtained by carrying forward
+the last observed implied volatility for the same options. The chronological comparison is reported separately
 for 2023--2024 development dates and 2025--September 2026;
 the latter dates had already been inspected during initial work and
 are not an untouched confirmatory holdout for every subsequent
 diagnostic.
 
-A final \emph{distinct} calibration exercise constructs 90\% and 95\%
-intervals for observed-minus-predicted \emph{settlement-mark errors},
-using either strictly historical date-balanced Bayesian
-normal-inverse-gamma predictive residuals or rolling empirical
-residual quantiles. It uses a 63-date maximum window, requires
+In a separate analysis, we construct 90\% and 95\% prediction
+intervals for errors between observed settlement prices and model prices,
+using either a Bayesian normal-inverse-gamma model fitted to
+past errors with equal weight across dates or rolling empirical
+quantiles of past errors. It uses a 63-date maximum window, requires
 at least 15 earlier dates per put/call-side and maturity stratum,
-and is scored by empirical coverage, interval width, and the
-proper interval score. These are \emph{not} posterior credible
+and evaluates the intervals using observed coverage, width,
+and the interval score. These are \emph{not} posterior credible
 intervals for an Asian payoff, nor posterior price bands from
 the volatility parameter in the earlier October-expiry study.
-Date- and calendar-month-block resampling is used for paired
-comparisons, not contract-row independence.
+We resample by valuation date or calendar month for paired
+comparisons, rather than treating contracts on the same date
+as independent observations.
