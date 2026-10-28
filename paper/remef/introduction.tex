@@ -18,7 +18,7 @@ published related Asian-option work: \citet{matiasgonzalez2019}
 study a stochastic optimal consumption/investment framework with
 Asian-option valuation, whereas \citet{ortizjimenez2026} apply
 realized volatility and mean reversion to the CEMEXCPO setting.
-Neither addresses our narrower comparison of posterior integration with the choice of volatility information for WTI average-price option settlement marks.
+Neither compares the effect of averaging over a volatility posterior with the effect of using different volatility inputs to price WTI average-price options.
 
 Bayesian option pricing is also well established. \citet{guidolin2003}
 study learning and option-price dynamics, while
@@ -26,12 +26,11 @@ study learning and option-price dynamics, while
 uncertainty on pricing errors in their equity-option setting.
 More recently, \citet{sagorbooneghanam2026} propagate Bayesian
 uncertainty into illustrative European-option prices, including
-a WTI example. Those results do not evaluate observed WTI
-arithmetic-average option marks. We do not claim that integrating
-a parameter posterior, or finding a small integration correction,
-is new. Our narrower contribution is the comparison with
-earlier option-implied volatility signals and a simple persistence
-benchmark for WTI average-price options.
+a WTI example. Those studies do not make the same comparison for WTI
+average-price options. Our contribution is not a new method of
+posterior integration. It is a direct comparison of posterior
+integration, earlier option-implied volatility, and a simple
+benchmark that carries forward the last observed implied volatility.
 
 WTI APOs provide a different test setting. Market-specific
 models may account for stochastic convenience yields, jumps
@@ -39,19 +38,17 @@ or richer futures dynamics \citep{schwartz1997,shirayatakahashi2011,ewaldwu2023}
 We hold the one-factor option-pricing benchmark fixed in
 the original analysis, so the influence of volatility
 information is not conflated with changes in the dynamics
-of the commodity futures curve. This is deliberately a
-controlled comparison, not a search for the most elaborate
-structural commodity-price model.
+of the commodity futures curve. This comparison focuses on the volatility input rather than
+on selecting a more complex model for crude-oil futures.
 
 The distinction between historical and option-implied information
 is important. \citet{gildertsiaras2020} study forecasts of
 \emph{subsequent realized crude-oil volatility} extracted from
 option prices. We study errors in pricing WTI
-\emph{average-price options} at later valuation dates. The
-risk-neutral option-implied dispersion need not equal
-a physical-return volatility estimate, especially if
-the latter uses a proxy for the wrong underlying random
-quantity. Consequently, a large historical-versus-implied
+\emph{average-price options} at later valuation dates. Volatility inferred from option prices need not match
+volatility estimated from historical futures returns,
+particularly when the two estimates describe different
+underlying quantities. Consequently, a large historical-versus-implied
 pricing difference by itself neither identifies a variance
 risk premium nor demonstrates that Bayesian inference fails.
 
@@ -65,23 +62,22 @@ The PI--PM difference, the spread of model prices across
 the posterior, and an interval for settlement-price errors
 are different quantities; none should stand in for another.
 
-We examine those distinctions in a 10-million-history
-synthetic study and in two observational exercises,
-each reported with its own pricing assumptions and
-information cutoffs. The first uses individual Barchart
+We study these questions using 10 million simulated return
+histories and two separate analyses of market data. Each
+analysis has its own pricing model and information cutoff. The first uses individual Barchart
 APO histories, a CL futures-curve-based one-factor
 Asian option approximation, 310 October-expiry
 contract-date observations in August--September 2026,
 2,381 date-ordered conditional repricing observations across 15 dates,
 and a 253-observation cross-instrument check using
 earlier LO vanilla-WTI implied volatilities. The second
-uses a larger Databento AAO settlement archive and a
-\emph{different}, reduced-form lognormal
-terminal-average pricing approximation. The second
-exercise evaluates 97,341 actual-flagged settlement
-marks on 189 dates and includes prior-date
-market-IV Bayesian forecasting and retrospective
-pricing-residual interval calibration.
+uses Databento AAO settlement records and a \emph{different},
+simplified pricing model that treats the terminal arithmetic
+average as lognormal. It compares prices with 97,341
+observations classified by the provider as actual settlements
+across 189 dates. It also examines Bayesian estimates based on
+earlier implied volatility and intervals for subsequent
+settlement-price errors.
 
 The results point to a practical distinction. In the original
 study, integrating over historical volatility uncertainty changes
@@ -91,8 +87,8 @@ much smaller errors relative to settlement-price proxies.
 The separate, longer AAO study finds a similar ranking of
 volatility inputs, but Bayesian updating of earlier implied
 volatility does not reliably outperform carrying forward
-the most recent observation. Its error intervals also
-undercover in parts of 2026. These results are conditional:
+the most recent observation. Its pricing-error intervals also fall below their stated
+coverage levels in parts of 2026. These results are conditional:
 some settlement prices may reflect exchange valuation models,
 and the longer study uses other same-date option strikes to
 estimate its pricing inputs. The two studies use different
@@ -102,6 +98,6 @@ The contribution is an empirical comparison of what changes a
 WTI average-price option valuation: integrating volatility
 uncertainty or changing the volatility input. We also distinguish
 uncertainty in model prices from uncertainty in observed pricing
-errors. These findings offer a benchmark for deciding when more
-elaborate Bayesian estimation is useful, while keeping the
+errors. The comparison provides a practical test of whether additional
+Bayesian modeling improves conditional pricing. We keep the
 limitations of settlement data and model assumptions explicit.
