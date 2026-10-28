@@ -38,6 +38,7 @@ project_wiki
 research_roadmap
 journal_strategy
 two_paper_publication_strategy_2026-10-27
+BRANCH_AND_MANUSCRIPT_POLICY_2026-10-28
 literature_strategy
 submission_checklist
 quickstart
