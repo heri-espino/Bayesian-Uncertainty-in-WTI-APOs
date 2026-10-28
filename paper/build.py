@@ -25,6 +25,7 @@ PAPER_DIR = ROOT / "paper"
 SOURCE_DIR = PAPER_DIR / "manuscript"
 VENDOR_DIR = PAPER_DIR / "vendor" / "wiley_njd_v5"
 PUBLICATION_FIGURES_DIR = ROOT / "figures" / "publication"
+JFM_FIGURES_DIR = ROOT / "figures" / "jfm"
 BUILD_DIR = PAPER_DIR / "build"
 STAGE_DIR = BUILD_DIR / "stage"
 MAIN_TEX = SOURCE_DIR / "main_short.tex"
@@ -100,6 +101,27 @@ def prepare_stage() -> None:
             STAGE_DIR / "figures" / "publication",
             dirs_exist_ok=True,
         )
+
+    # Prefer JFM-specific figures if the author has explicitly rendered them.
+    # Overlay only in the disposable staging tree; shared REMEF figure files
+    # are never modified. Legacy publication PDFs remain an honest fallback.
+    for name in (
+        "fig01_mechanism_map.pdf",
+        "fig02_historical_vs_apo_implied_volatility.pdf",
+        "fig03_forward_q_cluster_bootstrap.pdf",
+        "fig04_numerical_identification.pdf",
+    ):
+        candidate = JFM_FIGURES_DIR / name
+        if candidate.is_file():
+            destination = STAGE_DIR / "figures" / "publication" / name
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(candidate, destination)
+            if name == "fig01_mechanism_map.pdf":
+                ten_million = destination.parent / "ten_million" / name
+                if ten_million.is_file():
+                    shutil.copy2(candidate, ten_million)
+        else:
+            print("JFM figure not yet rendered; using existing committed publication figure:", name)
 
     # LaTeX releases from 2026 no longer expose etex's \reserveinserts
     # command because the extended allocation mechanism is built in.  Patch
