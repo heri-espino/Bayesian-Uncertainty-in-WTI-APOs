@@ -5,6 +5,10 @@
 **Current state:** **DESIGN/PRE-REGISTRATION ONLY; NOT AN EXECUTED EXPERIMENT**. No initial forecasts exist. No API keys, licensed purchases, automated scraping, source copying, or GitHub Actions jobs authorized.  
 **Related audits:** [original 2,381/2,366 row check](../paper/remef/IV_NUMERICAL_AND_ASOF_AUDIT_2026-10-27.md), [REMEF execution plan](../paper/remef/PUBLICATION_EXECUTION_PLAN.md), and [Databento research handoff](AI_HANDOFF.md).
 
+## Provider clarification and purchased archive (2026-10-27)
+
+[Source and backup review](AAO_SETTLEMENT_SOURCE_PURCHASE_AND_BACKUP_REVIEW_2026-10-27.md) confirms **Databento already contains exchange AAO settlement values** in `GLBX.MDP3` `statistics`, `stat_type=3` with final/actual flags and `ts_event`/`ts_recv` timestamps. Our **2020–Sep 2026** historical `AAO.OPT` definition/statistics were already acquired; **do not rebuy them**. The prospectively needed capability is licensed ongoing data access and independently sealed predictions, not recreating prior purchases. The GitHub archive has 162 LFS pointers checked for selected agreement with the **reacquisition_20261026** ledger, but full *remote binary restore* and audit remain open. MDP3 can omit settlements for strikes without volume/open interest; CME DataMine is a paid alternative if truly complete EOD coverage is required. No purchase or live forecast has occurred.
+
 ## Why we need a new study
 
 The prior 'strict forward' experiment used `sigma_Q` inferred from **prior-date** option prices but **repriced it on the target date** with target-day CL futures settlement curves, observed fixings and target-day discounts. It is a legitimate **retrospective date-ordered conditional settlement-mark valuation**, but it cannot establish a forecast that was fully available **before** the option's target-day close.
