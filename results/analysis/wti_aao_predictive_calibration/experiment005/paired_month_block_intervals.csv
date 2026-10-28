@@ -1,0 +1,17 @@
+split,point_method,level,candidate,baseline,mean_daily_interval_score_improvement,ci_low,ci_high,n_dates,n_month_blocks
+development,bayes_IV_PI,0.9,bayesian_nig,rolling_empirical,-0.035655453664937775,-0.06782587278014815,-0.00453695164231075,86,21
+development,bayes_IV_PI,0.95,bayesian_nig,rolling_empirical,-0.052980688968108564,-0.08888052278321591,-0.019385725972222056,86,21
+development,bayes_IV_PM,0.9,bayesian_nig,rolling_empirical,-0.03570793754451106,-0.06786320902656467,-0.004558784419587153,86,21
+development,bayes_IV_PM,0.95,bayesian_nig,rolling_empirical,-0.053132351559622565,-0.08895379099371983,-0.019466751915158013,86,21
+development,lagged_IV,0.9,bayesian_nig,rolling_empirical,-0.041179750120003494,-0.07339915286944433,-0.011514938081124509,86,21
+development,lagged_IV,0.95,bayesian_nig,rolling_empirical,-0.06389538082579621,-0.10016645809386218,-0.03182310902315221,86,21
+holdout_inspected,bayes_IV_PI,0.9,bayesian_nig,rolling_empirical,0.014709579015073053,-0.04131696835641666,0.08477629713715783,88,21
+holdout_inspected,bayes_IV_PI,0.95,bayesian_nig,rolling_empirical,-0.04970249112454745,-0.12471264287072056,0.0044106394663549035,88,21
+holdout_inspected,bayes_IV_PM,0.9,bayesian_nig,rolling_empirical,0.014688808388967411,-0.041383569648767764,0.08478170318362302,88,21
+holdout_inspected,bayes_IV_PM,0.95,bayesian_nig,rolling_empirical,-0.049646613044745776,-0.12322157772737505,0.004082034317449108,88,21
+holdout_inspected,lagged_IV,0.9,bayesian_nig,rolling_empirical,0.010055545072637994,-0.045066974883759305,0.07753865359807385,88,21
+holdout_inspected,lagged_IV,0.95,bayesian_nig,rolling_empirical,-0.05851353158077905,-0.1216000899605791,-0.010357532243258971,88,21
+development,bayes_IV_PI_minus_lagged_IV_same_NIG,0.9,bayes_IV_PI+bayesian_nig,lagged_IV+bayesian_nig,0.0017223049767875179,-0.005034049978911499,0.010276426835916536,86,21
+development,bayes_IV_PI_minus_lagged_IV_same_NIG,0.95,bayes_IV_PI+bayesian_nig,lagged_IV+bayesian_nig,0.00409929009603594,-0.004619156606733765,0.014940094429810718,86,21
+holdout_inspected,bayes_IV_PI_minus_lagged_IV_same_NIG,0.9,bayes_IV_PI+bayesian_nig,lagged_IV+bayesian_nig,-0.011194416274393841,-0.024819814518109072,0.0022757757458332275,88,21
+holdout_inspected,bayes_IV_PI_minus_lagged_IV_same_NIG,0.95,bayes_IV_PI+bayesian_nig,lagged_IV+bayesian_nig,-0.013358108630366657,-0.0344367543066239,0.007709020319395675,88,21

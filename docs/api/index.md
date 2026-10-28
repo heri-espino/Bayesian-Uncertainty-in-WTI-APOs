@@ -1,13 +1,5 @@
 # API reference
 
-## Databento-only reduced-form AAO pricing and volatility
-
-```{automodule} bayesian_asian_options.aao_databento_only
-:members: average_black, reserve_parity_anchors, implied_average_sigma, prior_volatility_features, summarize_errors, date_cluster_ci
-:show-inheritance:
-```
-
-
 This is the canonical inventory of reusable public functions/classes. It is generated from package docstrings at Sphinx build time.
 
 ## Bayesian GBM inference
@@ -139,6 +131,25 @@ This is the canonical inventory of reusable public functions/classes. It is gene
 ## Yahoo continuous/front-month auxiliary utilities
 
 ```{automodule} bayesian_asian_options.wti_yahoo
+:members:
+:show-inheritance:
+```
+
+
+## Databento-only reduced-form AAO valuation
+
+This model prices a lognormal *terminal average* conditionally on same-date disjoint-strike AAO parity anchors; it does not price the actual partly fixed first-nearby CL path.
+
+```{automodule} bayesian_asian_options.aao_databento_only
+:members: average_black, reserve_parity_anchors, implied_average_sigma, prior_volatility_features, summarize_errors, date_cluster_ci
+:show-inheritance:
+```
+
+## Strictly lagged Bayesian market-IV innovations
+
+This is a historical Bayesian model for AAO implied-volatility changes, not underlying CL stochastic volatility.
+
+```{automodule} bayesian_asian_options.aao_market_iv_bayes
 :members:
 :show-inheritance:
 ```

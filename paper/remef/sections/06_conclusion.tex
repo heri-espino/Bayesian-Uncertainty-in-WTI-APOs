@@ -1,0 +1,44 @@
+\section{Conclusion}\label{sec:short_conclusion}
+
+We examine two distinct effects in WTI average-price-option
+valuation: changing a volatility estimate and averaging model
+prices over uncertainty about that estimate. Posterior integration
+affects the conditional \emph{point price} through volatility
+posterior dispersion and option-price curvature; the dispersion
+of conditional prices induced by the posterior is a different
+object. Large synthetic simulations illustrate the mechanism.
+In the original October-2026 \emph{expiry} sample, the posterior
+integrated and plug-in values are nearly identical despite
+appreciably wider posterior distributions of conditional
+model prices.
+
+The original forward-in-time Barchart/LO comparison finds much
+smaller pricing errors when the volatility input comes from
+earlier option prices rather than the tested historical-return
+models. An independent longer Databento AAO settlement-mark
+exercise also favors earlier AAO implied volatility, although
+its pricing function and information set differ. Within
+that reduced-form exercise, introducing a Bayesian model for
+earlier implied-volatility innovations does not reliably improve
+on carrying forward the latest implied volatility. Additional
+Bayesian modeling of historical settlement-mark residuals
+does not maintain nominal interval coverage during early 2026.
+
+The practical recommendation is to compare Bayesian
+posterior-integrated option values with a matched plug-in price,
+benchmark the volatility input against an honestly lagged
+option-implied alternative, and report \emph{model-price posterior
+dispersion} separately from empirical forecast-error coverage.
+These comparisons should be interpreted relative to the
+specific market observations and pricing assumptions, not as
+a general ranking of stochastic-volatility models.
+
+The evidence does not establish that the reduced-form
+terminal-average approximation or the maintained one-factor
+futures dynamics are structurally correct. End-of-day
+settlement fields can be model-generated, and the older
+independent-date market comparisons remain small. Additional
+work with independently time-stamped CL fixing histories,
+market quotes and carefully designed hedging tests is needed
+before attributing pricing differences to tradable market
+inefficiencies or to a variance risk premium.

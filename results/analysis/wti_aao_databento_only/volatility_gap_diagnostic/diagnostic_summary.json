@@ -1,0 +1,52 @@
+{
+  "n_target_contract_dates": 111585,
+  "n_actual_contract_dates": 97341,
+  "n_actual_priced_dates": 189,
+  "n_resampled_calendar_months": 45,
+  "daily_lowest_mae_winner_counts_actual_only": {
+    "PI": 0,
+    "PM": 1,
+    "rolling21": 0,
+    "rolling63": 3,
+    "ewma63": 4,
+    "lagged_IV": 181
+  },
+  "n_actual_dates_PI_beats_PM": 166,
+  "n_actual_dates_lagged_IV_beats_PI": 186,
+  "interval_method": "Paired, resample calendar months as blocks, actual-flagged only",
+  "do_not_construe_as_ex_ante": true,
+  "n_groups_with_at_least_two_invertible_actual_target_marks": 1689,
+  "fraction_groups_target_IV_above_PM_sigma": 0.8099467140319716,
+  "fraction_groups_target_IV_above_lagged_IV_sigma": 0.5020722320899941,
+  "volatility_comparison": {
+    "sigma_current_target_implied": {
+      "mean": 0.30974840229318473,
+      "median": 0.2982161981489294
+    },
+    "sigma_bayesian_PM": {
+      "mean": 0.26678742989054327,
+      "median": 0.26659446858097624
+    },
+    "sigma_bayesian_PI_price_equivalent": {
+      "mean": 0.2667996615395577,
+      "median": 0.26657411406419484
+    },
+    "sigma_lagged_option_implied": {
+      "mean": 0.3088385914872484,
+      "median": 0.2978488642103265
+    },
+    "iv_minus_pm": {
+      "mean": 0.042960972402641434,
+      "median": 0.0388232474744169
+    },
+    "iv_minus_lagged": {
+      "mean": 0.0009098108059363067,
+      "median": 2.6221924657898743e-05
+    },
+    "lagged_minus_pm": {
+      "mean": 0.04205116159670512,
+      "median": 0.03846340193627512
+    }
+  },
+  "WARNING": "Current target-date IV is computed from evaluation prices ONLY as a retrospective diagnostic and is NOT an admissible prospective forecasting input."
+}

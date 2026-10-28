@@ -2,6 +2,8 @@
 
 > **Canonical Databento-only paper handoff (2026-10-26):** Read [HANDOFF.md](HANDOFF.md), [master plan](research/PAPER_COMPLETION_MASTER_PLAN_2026-10-26.md), [evidence ledger](research/AAO_EVIDENCE_LEDGER_2026-10-26.md), [experiment register](research/AAO_EXPERIMENT_REGISTER_2026-10-26.md), and [agent audit protocol](research/AAO_AGENT_VERIFICATION_PROTOCOL_2026-10-26.md). PR #110 Databento-only reduced-form project is the user's selected article; Barchart/CL/LO structural work is separate. Do not merge without author authorization.
 
+> **CURRENT AAO-ONLY STUDY STATUS (2026-10-27, results branch):** Author completed local pilot, 189-date 2023–2026 full Databento-only six-method benchmark, actual-only month-block robustness and 1,689-group IV-gap audit. Read [the empirical report](research/AAO_DATABENTO_ONLY_EMPIRICAL_REPORT_2026-10-27.md) and [proposed follow-up protocol](research/AAO_DATABENTO_ONLY_MARKET_INFORMED_BAYES_PROTOCOL_2026-10-27.md) before changing methods/paper. Previous acquisition-not-completed and new-results-not-run paragraphs here are historical/superseded. **Do not run GitHub Actions experiments; heavy work happens locally.** The separate results branch has been reconciled with current main under integration PR #116 by explicit author request; do not rebase, force-push or change sparse checkout without preserving source data.
+
 This file is normative. Future coding agents and maintainers must preserve the repository
 architecture unless a deliberate migration is documented and completed atomically.
 
