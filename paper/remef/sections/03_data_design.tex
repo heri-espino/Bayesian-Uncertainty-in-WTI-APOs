@@ -2,11 +2,11 @@
 
 \subsection{WTI Average Price Options}
 
-The first empirical dataset contains Barchart price histories for individual WTI Average Price Option contracts. The raw archive contains 213 unique contracts and 11,179 contract-date observations, with expiry months ranging from September 2026 to June 2029. We compare model prices with the Barchart end-of-day \texttt{Latest} field, treated as a settlement-price proxy. It has not been independently certified as an official final exchange settlement or executable transaction quote. We include available calls and puts and calculate moneyness separately for each valuation date.
+We begin with Barchart price histories for individual WTI Average Price Option contracts. The archive covers 213 contracts and 11,179 contract-date observations, with expiries from September 2026 to June 2029. We compare model prices with the Barchart end-of-day \texttt{Latest} field, treated as a settlement-price proxy. It has not been independently certified as an official final exchange settlement or executable transaction quote. We include available calls and puts and calculate moneyness separately for each valuation date.
 
 For every observation, we identify the fixings already known and the futures contracts used for the remaining fixings. We initialize those contracts with the futures prices observed on the valuation date. This matters because the first-nearby contract can change during the averaging month.
 
-Historical volatility is estimated from WTI futures returns available by the valuation date. The baseline estimates historical volatility from the continuous/front-month \texttt{CL=F} return series. A robustness check reconstructs a first-nearby return history contract by contract from CL settlements and excludes returns spanning contract switches.
+We estimate historical volatility from WTI futures returns available by the valuation date. The baseline uses the continuous/front-month \texttt{CL=F} return series. A robustness check reconstructs a first-nearby return history contract by contract from CL settlements and excludes returns spanning contract switches.
 
 \subsection{Date-ordered conditional pricing comparisons}
 
@@ -59,10 +59,9 @@ classified as actual.
 We estimate the risk-neutral expected terminal average and an
 effective discount factor by fitting put--call parity to a separate
 set of matched call and put strikes on the valuation date. Those
-strikes are excluded from the options used to evaluate pricing errors. The subsequent price is the
-reduced-form Black price of a \emph{lognormal terminal arithmetic
-average}, not the Curran approximation applied to a simulated path of
-first-nearby CL fixes. Because the pricing inputs use other AAO settlement prices from
+strikes are excluded from the options used to evaluate pricing errors. We then apply the Black formula to a \emph{lognormal terminal
+arithmetic average}. This is a reduced-form approximation, not
+the Curran method applied to a path of first-nearby CL fixings. Because the pricing inputs use other AAO settlement prices from
 the same date, this is a conditional comparison, \emph{not} a
 forecast made entirely with earlier information.
 
