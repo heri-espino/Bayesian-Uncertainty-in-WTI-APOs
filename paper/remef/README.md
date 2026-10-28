@@ -1,8 +1,37 @@
+> **PROVIDER SOURCE/BACKUP CLARIFICATION (2026-10-27):** [Databento AAO `statistics` contains settlement prices `stat_type=3`; existing 162 reacquired history DBNs and private SQLite are Git LFS-tracked](../../research/AAO_SETTLEMENT_SOURCE_PURCHASE_AND_BACKUP_REVIEW_2026-10-27.md). A read-only [LFS pointer checker](../../scripts/audit_aao_git_lfs_pointers.py) compares all files with the **reacquisition_20261026** manifest. Sampling matched 6/6 Git pointers; **full server payload recovery not yet verified**. Do not repurchase 2020–Sep2026 AAO statistics or claim a live forecast has been run.
 # REMEF submission candidate (separate from JFM)
 
-> **Publication status update (2026-10-26):** Preserve this fallback manuscript while finishing
-> [the canonical Databento/Barchart extension](../../research/PAPER_COMPLETION_MASTER_PLAN_2026-10-26.md).
-> Expanded 2020–2026 pricing tests have **not** yet produced manuscript-ready figures or results.
+> **Historical note (2026-10-26):** The previously prepared Word manuscript was a fallback and the expanded pricing work had not yet been validated at that time. The 2026-10-27 reports and submission blockers below supersede those earlier statements.
+
+> **PROSPECTIVE CONFIRMATORY DESIGN (2026-10-27):** [Pre-registered WTI AAO shadow forecasting protocol](../../research/PROSPECTIVE_WTI_AAO_SHADOW_FORECAST_PROTOCOL_2026-10-27.md) proposes issuance before the option's future settlement mark, using **only genuinely earlier available** CL/fixing/rate/IV inputs, immutable forecast evidence and paired daily scoring. This is a future option, NOT an already-executed live experiment, and cannot retroactively validate historical Barchart original as-of timestamps. Current legacy forward-priced scripts used target-day curves; never label them fully ex-ante. **AAO publication-time and source-license gates remain open.**
+
+
+> **ORIGINAL IV ARITHMETIC VERIFIED; VENDOR-TIME BLOCKER STILL OPEN (2026-10-27):** [Complete source-row IV and date-order report](IV_NUMERICAL_AND_ASOF_AUDIT_2026-10-27.md) and [repeatable audit script](../../scripts/audit_remef_forward_iv.py). The 2,381 prior-smile and 2,366 contract-persistence errors have been independently recomputed; all 4,762 fitted-smile sigmas reproduced from 2,574 historical source-IV values. Matched original prior-contract IV carry beats the fitted smile on MAE. The original Barchart `Time` dates are **not** proof of actual publication timestamps, historically unmodified market marks or vendor rights. This remains a **draft**, not a submission clearance.
+
+
+> **SOURCE-LEVEL LITERATURE REVIEW (2026-10-27):** [Rombouts–Stentoft (2009 working paper vs 2014 published abstract) and Sagor et al. (2026) full-text audit](SOURCE_REVIEW_ROMBOUTS_SAGOR_2026-10-27.md) confirms differences in empirical comparator, observed option marks and underlying payoff. The user-provided 2009 CIRANO working paper **does not replace** the as-yet-unread 2014 journal full text. This audit changes no paper source or empirical estimates.
+
+> **PRIORITIZED PUBLICATION PLAN (2026-10-27):** Read [PUBLICATION_EXECUTION_PLAN.md](PUBLICATION_EXECUTION_PLAN.md) first for novelty, data-as-of, paired robustness, literature, writing and REMEF submission gates. This is a task plan, not permission to submit; scientific and data-rights blockers remain open.
+
+> **PHASE 1 LITERATURE AND WRITING (2026-10-27):** [Literature novelty matrix](LITERATURE_NOVELTY_MATRIX.md) compares the work against published Bayesian option-pricing, WTI, commodity Asian-option and prior REMEF papers; [research argument in Markdown](RESEARCH_POSITIONING_DRAFT.md) drafts the manuscript's constrained introduction and literature discussion. **Critical overlap:** Rombouts–Stentoft (2014) already found minor parameter-uncertainty effects; Sagor et al. (2026) already propagated Bayesian uncertainty into WTI illustrative option prices. These are research drafts, NOT validated novelty or final scientific claims.
+
+
+> **2026-10-27 SCIENTIFIC MANUSCRIPT REVISED ON A DEDICATED BRANCH:** The paper now has REMEF-only body sections at [sections/](sections/), an integrated but **strictly separate** older Barchart/LO and newer Databento experimental discussion, updated bilingual abstracts and conclusions, corrected October-**expiry** timing, and stronger settlement-model/data-vintage cautions. The separate Wiley/JFM scientific source is unchanged. The REMEF Word builder now reads these journal-only sections. See [claim-level evidence map and remaining submission gates](REVISED_MANUSCRIPT_EVIDENCE_MAP_2026-10-27.md) and [independent source-output audit](SCIENTIFIC_AUDIT_FINDINGS_2026-10-27.md). **This is a complete revised scientific draft, NOT certified submission-ready:** vendor original-file/timing audits, rights checks, Word rendering/page count and author-signed forms remain outstanding. Nothing has been submitted. The older October 25 single-paper journal-ranking text below is historical.
+
+**Build and verify this revised REMEF-only Word manuscript on a complete private checkout:**
+
+```powershell
+python -m pytest tests/test_remef_build.py -q
+python paper/remef/build.py --check
+python paper/remef/build.py
+python paper/remef/build.py --author-version
+```
+
+The resulting **blinded** and **author-identifying** Word drafts are under paper/remef/build/ and must be visually inspected in Microsoft Word. All figures/Word equations must remain native and editable, both drafts must satisfy the <=25-page journal rule, the reviewer file must not reveal identifying metadata, and no GitHub Actions or experimental reruns are required merely to build the paper.
+
+> **2026-10-27 numerical audit update:** [Independent audit](SCIENTIFIC_AUDIT_FINDINGS_2026-10-27.md) verifies older REMEF core 310-row, 2,381-row historical PI, and 253-row LO prices from source contract-level outputs; confirms 10M report metadata. **Scientific and editorial submission gates remain OPEN.** This is not approval to submit. Run new read-only source arithmetic checker locally with python -m scripts.audit_remef_science (not an expensive simulation).
+
+> **PAPER A TRACK — 2026-10-27:** The author chose to prioritize completion of the existing Bayesian posterior-integration and volatility-information manuscript for a possible **REMEF** submission, independently of a separate NEW structural WTI AAO pricing/hedging project that might later target JCM. See [two-paper boundaries](../../docs/two_paper_publication_strategy_2026-10-27.md) and [REMEF scientific revision/submission gate](SCIENTIFIC_REVISION_AND_SUBMISSION_GATE_2026-10-27.md). The manuscript is **NOT submission-ready** and no submission has occurred. Earlier statements below that JCM might be the first journal for this **same** manuscript are now historical and superseded. The completed Experiments 003–005 must be reconciled with the older Barchart/LO/Curran manuscript before inserting results; their conditional terminal-average reduced-form assumptions are distinct. No automatic edits to manuscript sources, experiments or figures have been made by this strategy update.
 
 The REMEF adaptation is based on the **concise** JFM research text, but it has its own
 introduction, bilingual metadata and bibliography supplement. Nothing here replaces
@@ -62,6 +91,10 @@ futures pricing model.
 - Author-confirmed ORCID, contact, funding and signed originality/authorship
   documentation are required for submission.
 - **No simultaneous submission** with JFM or any other journal.
+
+## REMEF-specific reviewer-safe supplement (2026-10-27)
+
+A **separate, internally consistent** [online supplement working draft](ONLINE_SUPPLEMENT_DRAFT.md) has been prepared for Paper A. It records the theoretical PI–PM distinction, the original Barchart/LO evidence, the *separate* Databento Experiments 003–005 and limits on conditional mark comparisons without recycling the legacy heterogeneous archived supplement. It contains no protected market-data rows or author-identifying links. **The journal's acceptance of separate supplementary material has not been verified**, so this is an optional editorial working document, not guaranteed submission content. The supplement currently exists as Markdown; convert and inspect it alongside the Word manuscript only after the editor's current instructions are checked. The source audit, independent input-vintage checks, data rights and release gates remain open.
 
 ## Build Word draft without rerunning experiments
 
