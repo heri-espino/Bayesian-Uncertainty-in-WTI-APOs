@@ -61,9 +61,8 @@
       },
       "mechanism_run": "results\\analysis\\massive_mechanism_map\\6e23d5aabc519982",
       "outputs": [
-        "figures\\publication\\fig01_mechanism_map.png",
         "figures\\publication\\fig01_mechanism_map.pdf",
-        "figures\\publication\\fig01_mechanism_map.svg"
+        "figures\\publication\\fig01_mechanism_map.png"
       ],
       "partial_fixing_state": {
         "moneyness": 1.5,
@@ -74,9 +73,8 @@
     },
     "2": {
       "outputs": [
-        "figures\\publication\\fig02_historical_vs_apo_implied_volatility.png",
         "figures\\publication\\fig02_historical_vs_apo_implied_volatility.pdf",
-        "figures\\publication\\fig02_historical_vs_apo_implied_volatility.svg"
+        "figures\\publication\\fig02_historical_vs_apo_implied_volatility.png"
       ],
       "smile_dates": {
         "2026-08-26": {
@@ -107,17 +105,15 @@
         "2028-09"
       ],
       "outputs": [
-        "figures\\publication\\fig03_forward_q_cluster_bootstrap.png",
         "figures\\publication\\fig03_forward_q_cluster_bootstrap.pdf",
-        "figures\\publication\\fig03_forward_q_cluster_bootstrap.svg"
+        "figures\\publication\\fig03_forward_q_cluster_bootstrap.png"
       ]
     },
     "4": {
       "matched_targets": 8,
       "outputs": [
-        "figures\\publication\\fig04_numerical_identification.png",
         "figures\\publication\\fig04_numerical_identification.pdf",
-        "figures\\publication\\fig04_numerical_identification.svg"
+        "figures\\publication\\fig04_numerical_identification.png"
       ],
       "target_labels": [
         "08-26\n$K=102.05$",
@@ -134,9 +130,8 @@
   "font_mode": "times-new-roman",
   "format_target": "REMEF Word, Times New Roman",
   "formats": [
-    "png",
     "pdf",
-    "svg"
+    "png"
   ],
   "hybrid_pdf": true,
   "neutral_palette": {

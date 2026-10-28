@@ -1,0 +1,8 @@
+{
+  "n_obs": 126,
+  "sigma_true": 0.2,
+  "replications": 285714,
+  "posterior_sigma_mean_mean": 0.19950507290499103,
+  "posterior_sigma_mean_bias": -0.000494927095008979,
+  "posterior_sigma_sd_mean": 0.012635770725529741
+}
