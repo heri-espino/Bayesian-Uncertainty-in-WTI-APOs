@@ -2,6 +2,9 @@
 from __future__ import annotations
 
 import importlib.util
+import subprocess
+
+import pytest
 import re
 from pathlib import Path
 
@@ -294,3 +297,78 @@ def test_remef_final_references_and_caveats():
     assert "2,319 option-date rows" in text
     assert "2,366 same-contract" in text
     assert "first-publication" in text
+
+
+
+@pytest.mark.parametrize("version,legacy", [
+    ("Inkscape 0.91 r13725 (Jan 30 2015)", True),
+    ("Inkscape 1.4 (86a8ad7, 2024-10-11)", False),
+])
+def test_conda_inkscape_export_cli_versions(monkeypatch, tmp_path, version, legacy):
+    """Old Inkscape accepts --export-plain-svg=FILE, not --export-filename."""
+    b = _build_module()
+    monkeypatch.setattr(b, "SVG_DIR", tmp_path)
+    monkeypatch.setattr(
+        b.shutil, "which",
+        lambda name: "inkscape.exe" if name == "inkscape" else None,
+    )
+    commands = []
+
+    def fake_run(command, **kwargs):
+        commands.append(command)
+        if "--version" in command:
+            return subprocess.CompletedProcess(command, 0, stdout=version, stderr="")
+        if legacy:
+            assert "--without-gui" in command
+            assert not any(arg == "--export-plain-svg" for arg in command)
+            dest = next(arg.split("=", 1)[1] for arg in command
+                        if arg.startswith("--export-plain-svg="))
+        else:
+            assert "--export-plain-svg" in command
+            dest = next(arg.split("=", 1)[1] for arg in command
+                        if arg.startswith("--export-filename="))
+        Path(dest).write_text(
+            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 230">'
+            + '<path d="M0 0 L5 5"/>' * 40 + '</svg>',
+            encoding="utf-8",
+        )
+        return subprocess.CompletedProcess(command, 0, stdout="", stderr="")
+
+    monkeypatch.setattr(b.subprocess, "run", fake_run)
+    figures = b.prepare_vector_figures()
+    assert len(figures) == 4
+    assert all(fig.is_file() for fig in figures)
+    assert len(commands) == 8
+
+
+def test_word_svg_falls_back_to_conda_poppler_when_old_inkscape_fails(
+    monkeypatch, tmp_path
+):
+    """Legacy Inkscape might exit zero but silently create no SVG."""
+    b = _build_module()
+    monkeypatch.setattr(b, "SVG_DIR", tmp_path)
+    monkeypatch.setattr(
+        b.shutil, "which",
+        lambda name: name + ".exe" if name in ("inkscape", "pdftocairo") else None,
+    )
+    calls = []
+
+    def fake_run(command, **kwargs):
+        calls.append(command)
+        if "--version" in command:
+            return subprocess.CompletedProcess(
+                command, 0, stdout="Inkscape 0.91 r13725", stderr=""
+            )
+        if command[0] == "pdftocairo.exe":
+            assert command[1:6] == ["-svg", "-f", "1", "-l", "1"]
+            Path(command[-1]).write_text(
+                '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 230">'
+                + '<path d="M0 0 L5 5"/>' * 40 + '</svg>',
+                encoding="utf-8",
+            )
+        return subprocess.CompletedProcess(command, 0, stdout="", stderr="")
+
+    monkeypatch.setattr(b.subprocess, "run", fake_run)
+    figures = b.prepare_vector_figures()
+    assert len(figures) == 4
+    assert sum(cmd[0] == "pdftocairo.exe" for cmd in calls) == 4
