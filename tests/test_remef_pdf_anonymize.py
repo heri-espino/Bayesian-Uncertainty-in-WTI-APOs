@@ -20,8 +20,10 @@ def _module():
 
 def test_pdf_anonymizer_rejects_nonblinded_name(tmp_path):
     mod = _module()
+    source = tmp_path / "remef_author_draft.pdf"
+    source.touch()
     with pytest.raises(ValueError, match="Only the blinded"):
-        mod.anonymize(tmp_path / "remef_author_draft.pdf", tmp_path / "out.pdf")
+        mod.anonymize(source, tmp_path / "out.pdf")
 
 
 def test_word_exported_author_metadata_removed(tmp_path):
