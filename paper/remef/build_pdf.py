@@ -15,7 +15,6 @@ Unlike latexmk, this command does not require Perl.
 from __future__ import annotations
 
 import argparse
-import re
 import shutil
 import subprocess
 from pathlib import Path
