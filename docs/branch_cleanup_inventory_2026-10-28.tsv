@@ -1,0 +1,48 @@
+branch	expected_sha	decision	reason
+aao-quality-followup-20261026	e9603fb46c94b8a03e0129648e46a429d4c60485	archive_if_unmerged_then_delete	Older branch; preserve unique tip with archive tag before deletion
+aao-quality-report	b19198f4c54c3657252b9613797c95ef1b355566	archive_if_unmerged_then_delete	Older branch; preserve unique tip with archive tag before deletion
+backup/aao-recovery-20261026	ff4db919c5c3074f60eda656d05d0fb93dda69cb	archive_if_unmerged_then_delete	Older branch; preserve unique tip with archive tag before deletion
+data/aao-attrition-and-metadata-quotes-20261021	316d532b33ae265a8177d084f93e9bbe5414cbc1	archive_if_unmerged_then_delete	Older branch; preserve unique tip with archive tag before deletion
+docs/aao-20240126-preliminary-and-barchart-local-checkout	234b46fcf9f7a21fc5628827f583f4104a2bf3f8	archive_if_unmerged_then_delete	Older branch; preserve unique tip with archive tag before deletion
+docs/aao-databento-loss-incident-and-protection-20261026	fa377ccaf87454311fe94d8d0d10d3a7e19148a8	archive_if_unmerged_then_delete	Older branch; preserve unique tip with archive tag before deletion
+docs/aao-feb2021-504-recovery-20261025	9e5183cec30e0bb3282f97db145784bcee090521	archive_if_unmerged_then_delete	Older branch; preserve unique tip with archive tag before deletion
+docs/aao-feb2021-acquisition-complete-20261025	40e1d797a666bd340a0418fe7d13bc769250e823	archive_if_unmerged_then_delete	Older branch; preserve unique tip with archive tag before deletion
+docs/aao-history-handoff-journal-strategy-20261025	1d2198a68d408c9416333ce06a259404aa5a89f6	archive_if_unmerged_then_delete	Older branch; preserve unique tip with archive tag before deletion
+docs/aao-paper-completion-handoff-20261026	b5e4f535765d12822df1618bc18aefe127193652	archive_if_unmerged_then_delete	Older branch; preserve unique tip with archive tag before deletion
+edit/remef-clear-language-author-imef-pdf-privacy	be4ed51319e26576aa85a8ddd1b26f4742b0bcf5	archive_if_unmerged_then_delete	Older branch; preserve unique tip with archive tag before deletion
+edit/remef-second-terminology-pass-20261028	9d569bc12de53529e46b05bbac2a7e3c8a1fe1d2	archive_if_unmerged_then_delete	Older branch; preserve unique tip with archive tag before deletion
+feature/aao-81-month-analysis-and-cas-draft-20261025	ccd17374674c01ae424d80bc3c7ba67add7524d3	archive_if_unmerged_then_delete	Older branch; preserve unique tip with archive tag before deletion
+feature/aao-bulk-budgeted-history-20261023	049b8ebb51ae89ffd1cb73860e3548715512888f	archive_if_unmerged_then_delete	Older branch; preserve unique tip with archive tag before deletion
+feature/aao-correction-aware-contract-day-candidates-20261026	cedfd252b462c348e0bbb2da40755194243e3082	archive_if_unmerged_then_delete	Older branch; preserve unique tip with archive tag before deletion
+feature/aao-cross-month-settlement-reconciliation-20261026	dbfc535b49d9c85727cf98aba1ded232982efa08	archive_if_unmerged_then_delete	Older branch; preserve unique tip with archive tag before deletion
+feature/aao-daily-definition-mapping-audit-20261025	0254e278f4b266cfb2a0717a81b7f9005367bb8d	archive_if_unmerged_then_delete	Older branch; preserve unique tip with archive tag before deletion
+feature/aao-databento-manual-pilot-20261026	5e827e9b60c8bde411b3fa7e123abaabc1ce8604	archive_if_unmerged_then_delete	Older branch; preserve unique tip with archive tag before deletion
+feature/aao-symbol-mapping-audit-20261025	23cecee2ccb42819ae4af2541e1d9cd5745f348e	archive_if_unmerged_then_delete	Older branch; preserve unique tip with archive tag before deletion
+feature/aao-timestamp-aware-settlement-gate-20261025	fc921babd9291ff41812010683eea6b60e7fc7a1	archive_if_unmerged_then_delete	Older branch; preserve unique tip with archive tag before deletion
+feature/barchart-offline-inventory-without-sqlite-20261026	1d1225edad29511f27b4af27f9332c808b4d972f	archive_if_unmerged_then_delete	Older branch; preserve unique tip with archive tag before deletion
+feature/databento-only-bayesian-paper-suite-20261026	cbfb9d823af3de8ee69ddb7a98c52c45ee060a89	archive_if_unmerged_then_delete	Older branch; preserve unique tip with archive tag before deletion
+fix/aao-git-lfs-recovery-and-backup-20261026	f04b3a6b31fb38b5871901ed0dbdb58f942aef21	archive_if_unmerged_then_delete	Older branch; preserve unique tip with archive tag before deletion
+fix/aao-metadata-record-count-and-lo-control-20261022	c1b9fd6a45cd041ceb9c0e9e48a88eac9bf1b44f	archive_if_unmerged_then_delete	Older branch; preserve unique tip with archive tag before deletion
+fix/databento-aao-parent-symbols-20261022	c4538fb6116015c611506f410a02ce1b30f31a7d	archive_if_unmerged_then_delete	Older branch; preserve unique tip with archive tag before deletion
+fix/remef-figure4-edges-figure1c-zoom-20261019	ae5847b32b51c9f450d47abd561c1a2d03006972	archive_if_unmerged_then_delete	Older branch; preserve unique tip with archive tag before deletion
+fix/remef-figure-typography-ticks-svg-20261019	1ef38a0ba3c1ce29ec66908b83390e6061ab9aac	archive_if_unmerged_then_delete	Older branch; preserve unique tip with archive tag before deletion
+fix/remef-final-explicit-axis-layout-20261019	c28c5f441ad0776690d2dd3d29df54b6bb25ca9a	archive_if_unmerged_then_delete	Older branch; preserve unique tip with archive tag before deletion
+fix/remef-latex-preview-conda-perl	5365e23cc6a0f6db0988f7a592680f2fced48fda	archive_if_unmerged_then_delete	Older branch; preserve unique tip with archive tag before deletion
+fix/remef-native-svg-word-20261019	b9aa808d798bcc828890d2811564a319676765d1	archive_if_unmerged_then_delete	Older branch; preserve unique tip with archive tag before deletion
+fix/remef-panel-titles-markers-and-spine-endpoints-20261019	43ccb912b1e967936dd411e5ad5182d4832f587f	archive_if_unmerged_then_delete	Older branch; preserve unique tip with archive tag before deletion
+fix/remef-pdf-preserve-latex-equations	0acc06d088428f44be5e365b6099f01012431a1b	archive_if_unmerged_then_delete	Older branch; preserve unique tip with archive tag before deletion
+fix/remef-svg-media-extension-20261019	be0506ae94f78b36746fa98083fdcc05d41ae0db	keep	Open PR #84: pending SVG Word media correction
+fix/remef-tune-inset-smile-fig4-height-20261019	20485688ae3919ceca12072d2cda2f66470a584f	archive_if_unmerged_then_delete	Older branch; preserve unique tip with archive tag before deletion
+fix/remef-word-inkscape-091-conda	41fb01176fab1343ef95641d78198286f56bb3f5	archive_if_unmerged_then_delete	Older branch; preserve unique tip with archive tag before deletion
+integration/remef-results-to-main-20261027	0485e79ed0096101c62198b3aef62c02004975a8	archive_if_unmerged_then_delete	Older branch; preserve unique tip with archive tag before deletion
+main	f4acb724204a3e2d63e9e967fffa5f1a5e4ae3d3	keep	Canonical code, research and manuscripts
+paper/jcm-independent-research-track	91ae3ee65cefc8f3d13ebfa7cbf3cc5ae885b6ac	keep	Open PR #114: independent JCM Paper B scope awaiting author approval
+paper/remef-figures-seed2468-10m-20261019	0503907a7b7dad8f16c369800d9a5ed968ca5510	archive_if_unmerged_then_delete	Older branch; preserve unique tip with archive tag before deletion
+paper/remef-finalize-submission-draft-20261028	ca3684a128f77546d23011c00466f751e0b7f534	archive_if_unmerged_then_delete	Older branch; preserve unique tip with archive tag before deletion
+paper/remef-scientific-completion-20261027	f49300cfe61babe831c4109d59844f21825f9ee4	archive_if_unmerged_then_delete	Older branch; preserve unique tip with archive tag before deletion
+paper/remef-zenodo-predoi-20261019	e32cb814aed29c3ff132b1462f117eaa7524b9ee	archive_if_unmerged_then_delete	Older branch; preserve unique tip with archive tag before deletion
+research/aao-inventory-results-20261025	89ffeedb0b5680060b47bf56dcc9f6cda9195b35	archive_if_unmerged_then_delete	Older branch; preserve unique tip with archive tag before deletion
+research/databento-aao-history-feasibility-20261020	abd7847ba27af4ad91316a144293cdacea9d8a6d	archive_if_unmerged_then_delete	Older branch; preserve unique tip with archive tag before deletion
+results/aao-databento-pilot-2023h1-20261026	3f4818d03522ff94ee77fe1f5df7114983ebddd4	keep	Active results branch with nonmerged experiments and visual outputs
+review/remef-compiled-word-pdf-20261028	dc2f67acee1efacaedb9fb16b1db043ba990702c	archive_if_unmerged_then_delete	Older branch; preserve unique tip with archive tag before deletion
+review/remef-privacy-and-author-20261028	9142935e7fc0aa18683c38a0bffac22956e12880	archive_if_unmerged_then_delete	Older branch; preserve unique tip with archive tag before deletion
