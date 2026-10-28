@@ -1,5 +1,8 @@
 # REMEF publication execution plan — Paper A
 
+> **Phase 2 progress (2026-10-27):** [Original 2,381/2,366 IV recalculation and 4,762 fitted-forecast reconstruction PASS](IV_NUMERICAL_AND_ASOF_AUDIT_2026-10-27.md). An independent date-field audit also passes. **Source-vendor as-of timestamps and first-release historical snapshots CANNOT be certified from the date-only Barchart records**; thus Phase 2 remains **PARTIAL / BLOCKED** for stronger fully ex-ante forecasting claims. The simpler lagged contract-IV persistence beats the fitted smile on matched MAE; retain this negative model-complexity result.
+
+
 **Created:** 2026-10-27  
 **Status:** ACTION PLAN ONLY — no new analysis has been run or validated by this document; the manuscript is NOT submission-ready.  
 **Target:** *Revista Mexicana de Economía y Finanzas* (REMEF), original research article.  
