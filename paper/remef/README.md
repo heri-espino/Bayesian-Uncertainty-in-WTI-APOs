@@ -140,9 +140,9 @@ perl -v
 
 The same dependency is declared in the repository's `environment.yml`.
 If the TeX programs are missing, install MiKTeX for your user and ensure
-`xelatex` and `bibtex` resolve on PATH. The separate Word builder
-still requires Pandoc, `python-docx` and Inkscape; it is **not** a
-prerequisite for the LaTeX PDF preview.
+`xelatex` and `bibtex` resolve on PATH. The separate Word builder requires Pandoc, `python-docx` and either
+Inkscape (including Conda's version 0.91) or Poppler `pdftocairo`;
+it is **not** a prerequisite for the LaTeX PDF preview.
 
 ## Build Word draft without rerunning experiments
 
