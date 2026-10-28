@@ -162,7 +162,10 @@ def build(*, skip_figures: bool = False) -> Path:
     xelatex = compiler("xelatex")
     bibtex = compiler("bibtex")
 
-    if latexmk and xelatex:
+    # MiKTeX exposes latexmk.exe even when its required Perl interpreter is
+    # absent. In that case use the already-supported direct XeLaTeX/BibTeX
+    # sequence rather than failing before producing a PDF.
+    if latexmk and xelatex and compiler("perl"):
         run(
             [
                 latexmk,
