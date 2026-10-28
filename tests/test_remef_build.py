@@ -269,3 +269,27 @@ def test_remef_reconciled_databento_sections():
     assert "date-balanced" in tex or "date-balanced" in (
         ROOT / "paper" / "remef" / "sections" / "03_data_design.tex"
     ).read_text(encoding="utf-8")
+
+def test_remef_workflow_checks_current_six_native_tables():
+    """Table 2 has two independently editable Word tables (Panels A and B)."""
+    b = _build_module()
+    source = "\n".join(p.read_text(encoding="utf-8") for p in b.BODY_SECTIONS)
+    assert source.count(r"\begin{tabular}") == 6, (
+        "Review the Word build if the manuscript table count changes"
+    )
+    workflow = (ROOT / ".github/workflows/build-remef.yml").read_text(encoding="utf-8")
+    assert "tables != 6" in workflow
+    assert "len(doc.tables) != 6" in workflow
+
+
+def test_remef_final_references_and_caveats():
+    """Protect the close-prior-work citation and the evidence-as-of boundary."""
+    b = _build_module()
+    text = b.make_latex(with_author=False)
+    bib = (ROOT / "paper/remef/references.bib").read_text(encoding="utf-8")
+    assert r"\citet{romboutsstentoft2014}" in text
+    assert r"\citet{sagorbooneghanam2026}" in text
+    assert "@article{sagorbooneghanam2026" in bib
+    assert "2,319 option-date rows" in text
+    assert "2,366 same-contract" in text
+    assert "first-publication" in text
