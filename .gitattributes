@@ -1,7 +1,10 @@
 data/ filter=lfs diff=lfs merge=lfs -text
 data/databento/**/*.csv filter=lfs diff=lfs merge=lfs -text
-
 # Paid AAO history and local reconstructed settlement records: backed up via Git LFS
 data/databento/wti_aao_bulk/raw/*.dbn.zst filter=lfs diff=lfs merge=lfs -text
 data/databento/wti_aao_bulk/derived_private/*.sqlite3 filter=lfs diff=lfs merge=lfs -text
 data/databento/wti_aao_bulk/derived_private/*.csv.gz filter=lfs diff=lfs merge=lfs -text
+data/databento/wti_aao_bulk/derived_private/pilot_2023h1/*.csv.gz filter=lfs diff=lfs merge=lfs -text
+data/databento/wti_aao_bulk/derived_private/full_2023_2026/*.csv.gz filter=lfs diff=lfs merge=lfs -text
+data/databento/wti_aao_bulk/derived_private/experiment004/*.csv.gz filter=lfs diff=lfs merge=lfs -text
+data/databento/wti_aao_bulk/derived_private/experiment004_smoke/*.csv.gz filter=lfs diff=lfs merge=lfs -text

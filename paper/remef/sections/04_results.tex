@@ -1,0 +1,187 @@
+\section{Results}\label{sec:short_results}
+
+\subsection{When does posterior integration matter?}
+
+Figure~\ref{fig:short_mechanism} shows how the PI--PM difference varies across the synthetic design. The largest differences occur with short estimation windows, high volatility, long maturities, few realized fixings, and pronounced price curvature. Across the 10 million synthetic histories, the maximum observed absolute difference is 0.1565 for a normalized \$100 forward, and the largest within-cell 99th percentile is 0.1273. These extremes exceed the differences observed in the October-2026 sample. The sample maximum depends on the number of simulated histories; the within-cell percentile is less sensitive to rare simulated outcomes.
+
+The second-order approximation tracks the simulated differences closely: the correlation between cell-level mean PI--PM differences and the curvature--variance term is 0.9995. Through-origin slopes are also close to one in the most extreme settings. These results support posterior variance and price curvature as the principal local determinants of the difference.
+
+The PI--PM difference generally declines as the share of realized fixings increases. The relationship is not strictly monotone: in Panel C, the 252-day case initially rises because partial fixing changes both the remaining volatility exposure and local price curvature. The difference nevertheless tends toward zero as the averaging period ends.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/publication/ten_million/fig01_mechanism_map.pdf}
+\caption{Posterior integration across 10 million synthetic return histories and WTI-like option states (root seed 2468). Panel A shows posterior dispersion by historical sample size. Panels B and C show the absolute PI--PM difference across moneyness and the realized-fixing fraction. Panel D compares mean PI--PM differences for 5,880 scenario cells with the second-order approximation in Equation~\eqref{eq:short_taylor}; the cell-level correlation is 0.9995. The color bar shows the number of scenario cells per hexagonal bin.}
+\label{fig:short_mechanism}
+\end{figure*}
+
+\subsection{Posterior integration in the WTI sample}
+
+The sample of options expiring in October 2026 contains 310 contract-date observations across 12 valuation dates from August 25 to September 10, 2026. Table~\ref{tab:short_october} shows nearly identical pricing errors for PI and PM (RMSE 0.5177 and 0.5183, respectively). Their mean absolute price difference is only 0.000745 dollars per barrel.
+
+The central 95\% posterior interval for conditional model prices has mean width 0.2733 dollars per barrel, approximately 367 times the mean absolute PI--PM difference. Parameter uncertainty therefore remains economically relevant even though posterior integration barely changes the point estimate. Both methods underprice October settlements on average.
+
+\begin{table}[t]
+\centering
+\caption{WTI options with October 2026 expiry: posterior pricing and model-price uncertainty. Pricing error is model price minus settlement price. All price quantities and errors are in U.S. dollars per barrel.}\label{tab:short_october}
+\begin{tabular}{lrr}
+\toprule
+Quantity & $N$ & Value \\
+\midrule
+PI RMSE & 310 & 0.5177 \\
+PM plug-in RMSE & 310 & 0.5183 \\
+Mean $|PI-PM|$ & 310 & 0.000745 \\
+Mean 95\% posterior price-interval width & 310 & 0.2733 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Historical versus option-implied volatility}
+
+Table~\ref{tab:short_forward} reports out-of-sample pricing errors on 2,381 contract-date observations. The historical PI benchmark has MAE 2.6187 and RMSE 3.4090, compared with 0.1075 and 0.1594 for the previous-day APO implied-volatility smile. The expanding earlier-date smile performs similarly. Both specifications reduce pricing errors for all seven expiries, with valuation-date cluster bootstrap intervals for the error differences below zero in each expiry (Figure~\ref{fig:short_forward_bootstrap}).
+
+\begin{table*}[t]
+\centering
+\caption{Historical-volatility and prior option-implied volatility benchmarks. Panel A uses the same 2,381 out-of-sample contract-date observations over 15 target dates. Panel B restricts the comparison to observations for which the same contract has a strictly prior implied volatility. Historical PI is the canonical Monte Carlo posterior-integrated price; scalar historical, GARCH, and implied-volatility inputs are repriced under the same Curran approximation. MAE and RMSE are in U.S. dollars per barrel.}\label{tab:short_forward}
+
+\textit{Panel A: main out-of-sample comparison}\\[2pt]
+\begin{tabular}{lrrrr}
+\toprule
+Volatility input & $N$ & Dates & MAE & RMSE\\
+\midrule
+Historical PI & 2,381 & 15 & 2.6187 & 3.4090\\
+Rolling 63 returns & 2,381 & 15 & 4.5201 & 5.6465\\
+Horizon-matched GARCH(1,1) & 2,381 & 15 & 2.6730 & 3.4441\\
+Previous-day APO implied-volatility smile & 2,381 & 15 & 0.1075 & 0.1594\\
+\bottomrule
+\end{tabular}
+
+\vspace{5pt}
+\textit{Panel B: same-contract lagged-IV benchmark}\\[2pt]
+\begin{tabular}{lrrrr}
+\toprule
+Volatility input & $N$ & Dates & MAE & RMSE\\
+\midrule
+Historical PI & 2,366 & 15 & 2.6279 & 3.4173\\
+Same-contract lagged IV & 2,366 & 15 & 0.0992 & 0.1403\\
+Previous-day fitted APO smile & 2,366 & 15 & 0.1074 & 0.1594\\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+Rolling-window, EWMA, and horizon-matched GARCH(1,1) benchmarks do not close the pricing-error gap (Online Supplement Section S1 and Table S1). In particular, GARCH gives MAE 2.6730 and RMSE 3.4441 on the same observations.
+
+Panel B isolates 2,366 observations with an earlier implied volatility for the same contract. Carrying that volatility forward yields lower pooled errors than the fitted previous-day smile (MAE 0.0992 versus 0.1074). This benchmark shows that the advantage over historical volatility does not require smile fitting; it does not establish a general ranking of persistence and fitted-smile methods.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/publication/fig03_forward_q_cluster_bootstrap.pdf}
+\caption{Out-of-sample pricing-error differences by APO expiry. Points compare the earlier-date APO implied-volatility specifications with the historical posterior-integrated benchmark; negative values indicate lower error for the implied-volatility specification. Horizontal bars are 95\% percentile intervals from valuation-date cluster bootstrap resampling. All implied-volatility inputs are estimated only from dates earlier than the target date.}
+\label{fig:short_forward_bootstrap}
+\end{figure*}
+
+\subsection{Cross-instrument validation using vanilla-WTI options}
+
+The cross-instrument comparison replaces APO-implied volatility with estimates from standard monthly WTI futures options. Table~\ref{tab:short_lo} uses 253 October-expiry APO contract-date observations across 10 valuation dates. Historical-volatility posterior integration has MAE 0.4464 and RMSE 0.5562. A previous-day vanilla-WTI implied-volatility specification based on LO options lowers these errors to 0.1559 and 0.2599. The corresponding previous-day APO implied-volatility smile has MAE 0.1676 and RMSE 0.2686.
+
+\begin{table}[t]
+\centering
+\caption{Cross-instrument validation on 253 October-expiry APO contract-dates within observed prior LO moneyness support. Historical PI is the canonical Monte Carlo posterior-integrated price; the vanilla-WTI and APO implied-volatility inputs are repriced with the deterministic Curran approximation. All implied-volatility inputs use only earlier-date option information. MAE and RMSE are in U.S. dollars per barrel.}\label{tab:short_lo}
+\begin{tabular}{lrr}
+\toprule
+Volatility input & MAE & RMSE\\
+\midrule
+Historical PI & 0.4464 & 0.5562\\
+Previous-day vanilla-WTI IV & 0.1559 & 0.2599\\
+Previous-day APO IV & 0.1676 & 0.2686\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Valuation-date cluster bootstrap results support the improvement over historical volatility. Differences between LO-implied and APO-implied specifications are small and do not establish consistent superiority by MAE and RMSE. The cross-instrument test instead shows that the advantage persists when implied volatility comes from another WTI option family.
+
+
+\subsection{Extended conditional settlement-mark evidence}
+
+The separate Databento analysis provides a longer-date check of the
+\emph{volatility-input ranking}, not an additional sample from the
+earlier path-dependent Curran design. Table~\ref{tab:remef_databento}
+reports errors for identical actual-flagged targets. The previous-date
+AAO implied-volatility benchmark gives an MAE of \$0.2184 per
+barrel, versus \$0.8040 for posterior integration of the
+historical parity-forward-change volatility proxy. Both estimates
+are evaluated within the same reduced-form terminal-average
+approximation. Posterior integration itself changes historical
+proxy pricing little: the PM MAE is \$0.8068.
+
+\begin{table}[t]
+\centering
+\caption{Independent Databento AAO settlement-mark exercise on 97,341 common actual-flagged contract-date targets over 189 valuation dates. Pricing errors are in dollars per barrel. This is conditional reduced-form pricing with same-date disjoint parity anchors, not the earlier Curran/CL fixing-path study.}
+\label{tab:remef_databento}
+\begin{tabular}{lrr}
+\toprule
+Volatility input and pricing method & MAE & RMSE\\
+\midrule
+Earlier AAO option-implied volatility & 0.2184 & 0.2979\\
+Historical proxy, posterior integration & 0.8040 & 1.1372\\
+Historical proxy, posterior-mean plug-in & 0.8068 & 1.1401\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The observed discrepancy is consistent with the mismatch between
+physical-style changes in a \emph{conditional expected average}
+and the option-market-implied dispersion of the \emph{terminal average}.
+A retrospective near-the-money inversion on the evaluation date
+gives mean implied volatility 30.97\% across 1,689 expiry-date
+groups, compared with a Bayesian plug-in price-equivalent volatility
+of 26.68\% and lagged AAO option-implied volatility of 30.88\%.
+The target-date inversion is used \emph{only to diagnose} pricing
+errors after scoring, never as an input to forecasts. These
+numbers do not identify a volatility risk premium.
+
+Table~\ref{tab:remef_bayes_iv} isolates the more demanding question:
+does a Bayesian market-volatility forecast outperform a simple
+persistence benchmark when both use the same prior option-market
+information? On 47,718 actual-flagged target observations across
+88 dates in 2025--September 2026, it does not. The unchanged
+lagged-IV method has slightly lower MAE and RMSE; price integration
+is almost indistinguishable from the matched Bayesian plug-in
+price. The difference in equal-date daily MAE between unchanged
+lagged IV and Bayesian market-IV PI is -\$0.00100/bbl,
+with a 95\% calendar-month-block bootstrap interval of
+[-\$0.00331,\$0.00082] for the Bayesian improvement.
+The interval crosses zero. These small gaps should not be
+presented as economically significant advantages.
+
+\begin{table}[t]
+\centering
+\caption{Matched actual-flagged AAO pricing, 2025--September 2026; 47,718 contract-date targets and 88 valuation dates. Bayesian market-IV variants use strictly earlier option-implied volatility.}
+\label{tab:remef_bayes_iv}
+\begin{tabular}{lrr}
+\toprule
+Method & MAE & RMSE\\
+\midrule
+Unchanged earlier-date AAO implied volatility & 0.2089 & 0.3014\\
+Bayesian market-IV posterior-mean plug-in & 0.2098 & 0.3023\\
+Bayesian market-IV posterior integration & 0.2098 & 0.3024\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The independent settlement-mark \emph{residual-calibration} exercise
+uses 89,696 common actual-flagged targets on 174 evaluation dates
+after historical warm-up. In the inspected 2025--September 2026
+subset, the Bayesian residual model, attached to the Bayesian
+market-IV PI point forecast, attains 86.43\% coverage for
+nominal 90\% intervals and 90.11\% coverage for nominal
+95\% intervals. Corresponding date-balanced rolling empirical
+quantile coverages are 84.72\% and 90.66\%. Proper-score
+month-block comparisons do not establish a consistent Bayesian
+advantage. The model experiences substantial nonstationarity:
+nominal 90\% Bayesian intervals cover only 59.0\% and
+56.9\% of targets in March and April 2026, respectively.
+These figures concern \emph{settlement-mark error intervals};
+they do not contradict the earlier much wider posterior
+\emph{conditional model-price} bands, which target a different
+random quantity.

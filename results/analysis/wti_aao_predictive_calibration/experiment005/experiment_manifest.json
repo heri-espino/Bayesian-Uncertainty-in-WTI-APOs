@@ -1,0 +1,30 @@
+{
+  "study": "experiment005_conditional_AAO_mark_residual_calibration",
+  "source": "experiment004_saved_contract_predictions_only",
+  "n_source_actual_contract_dates": 97341,
+  "n_source_valuation_dates": 189,
+  "n_eligible_scored_rows": 1076352,
+  "n_eligible_actual_contract_dates": 89696,
+  "n_eligible_valuation_dates": 174,
+  "calibration_min_historical_dates": 15,
+  "calibration_max_historical_dates": 63,
+  "point_models": [
+    "lagged_IV",
+    "bayes_IV_PM",
+    "bayes_IV_PI"
+  ],
+  "calibrators": [
+    "bayesian_nig",
+    "rolling_empirical"
+  ],
+  "levels": [
+    0.9,
+    0.95
+  ],
+  "test_start": "2025-01-01",
+  "test_inspected_previously": true,
+  "no_provider_calls": true,
+  "no_source_data_mutation": true,
+  "not_fully_ex_ante": true,
+  "interpretation": "Empirical intervals for conditional AAO settlement-mark pricing error after same-date disjoint parity anchoring. They are NOT Asian payoff prediction intervals, not calibrated probabilities of true option value, and not an untouched prospective holdout. The NIG power likelihood balances valuation dates but is not a complete hierarchical day-cluster model."
+}
