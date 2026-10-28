@@ -220,7 +220,8 @@ def _rewrite_tables(tex: str, labels: dict[str, str]) -> str:
     return TAB_RE.sub(convert, tex)
 
 
-def make_latex(*, with_author: bool) -> str:
+def make_latex(*, with_author: bool, for_pdf: bool = False) -> str:
+    """Compose REMEF text; preserve native TeX for PDF, rewrite only for Word."""
     sources = [HERE / "frontmatter.tex", HERE / "introduction.tex", *BODY_SECTIONS]
     sections = [p.read_text(encoding="utf-8") for p in sources]
     # Place the required disclosure in Methods, not outside the research design.
@@ -286,6 +287,12 @@ def make_latex(*, with_author: bool) -> str:
         "The author declares no conflicts of interest.\n"
     )
     combined = "\n\n".join(sections) + "\n" + statements
+    if for_pdf:
+        # Keep math labels/equation environments intact. The Word transform
+        # strips labels, leaving empty paragraphs inside display math that
+        # trigger MiKTeX "Missing $ inserted" in a direct LaTeX build.
+        # Preserve floats, captions and references for genuine LaTeX output.
+        return combined
     labels = _numbered_labels(combined)
     combined = _rewrite_figures(combined, labels)
     combined = _rewrite_tables(combined, labels)

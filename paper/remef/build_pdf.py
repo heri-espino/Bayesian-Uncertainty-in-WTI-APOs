@@ -34,7 +34,7 @@ PREAMBLE = r"""
 \usepackage[margin=2.5cm]{geometry}
 \usepackage{fontspec}
 \IfFontExistsTF{Times New Roman}{\setmainfont{Times New Roman}}{\setmainfont{Latin Modern Roman}}
-\usepackage{amsmath,amssymb,graphicx}
+\usepackage{amsmath,amssymb,graphicx,booktabs}
 \usepackage[round,authoryear]{natbib}
 \usepackage[hidelinks]{hyperref}
 \setlength{\parskip}{0.4em}
@@ -52,17 +52,19 @@ ENDING = r"""
 def compose_preview() -> tuple[str, tuple[Path, ...]]:
     """Use the same REMEF text as the Word builder, with original vector PDFs."""
     validate()
-    body = make_latex(with_author=False)
+    body = make_latex(with_author=False, for_pdf=True)
     used: list[Path] = []
     for source in PDF_FIGURES:
-        svg = f"paper/remef/build/vector_figures/{source.stem}.svg"
-        if svg in body:
-            body = body.replace(svg, f"preview_figures/{source.name}")
+        pdf_reference = source.relative_to(ROOT).as_posix()
+        if pdf_reference in body:
+            body = body.replace(pdf_reference, f"preview_figures/{source.name}")
             used.append(source)
     if len(used) < 2:
         raise ValueError("Expected at least two REMEF figure references.")
     if "vector_figures/" in body or ".svg" in body:
-        raise ValueError("Unconverted Word-only SVG reference in PDF preview.")
+        raise ValueError("Unexpected Word-only SVG reference in PDF preview.")
+    if r"\begin{equation}" not in body or r"\label{eq:short_returns}" not in body:
+        raise ValueError("Native LaTeX equation environments and labels are missing.")
     # Keep long Word table blocks within the PDF text width.
     body = body.replace(
         r"\begin{tabular}", r"\resizebox{\linewidth}{!}{\begin{tabular}"
