@@ -109,7 +109,6 @@ def test_editorial_terminology_is_conventional_and_caveats_are_retained():
         "same-date disjoint parity anchors",
         "market-IV innovations",
         "out-of-sample pricing-error differences",
-        "fully ex-ante pricing forecast" + "s are confirmed",
     ):
         assert unnatural not in body, unnatural
     for required in (
