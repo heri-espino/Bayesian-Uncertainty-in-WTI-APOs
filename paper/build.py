@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build the internal Journal of Futures Markets manuscript.
 
-The active manuscript is staged together with the unmodified Wiley NJDv5 vendor
+The concise JFM manuscript is staged together with the unmodified Wiley NJDv5 vendor
 bundle so that XeLaTeX can resolve the class, bibliography style, and bundled
 Utopia fonts without system-wide font installation.
 
@@ -25,9 +25,10 @@ PAPER_DIR = ROOT / "paper"
 SOURCE_DIR = PAPER_DIR / "manuscript"
 VENDOR_DIR = PAPER_DIR / "vendor" / "wiley_njd_v5"
 PUBLICATION_FIGURES_DIR = ROOT / "figures" / "publication"
+JFM_FIGURES_DIR = ROOT / "figures" / "jfm"
 BUILD_DIR = PAPER_DIR / "build"
 STAGE_DIR = BUILD_DIR / "stage"
-MAIN_TEX = SOURCE_DIR / "main.tex"
+MAIN_TEX = SOURCE_DIR / "main_short.tex"
 FINAL_PDF = PAPER_DIR / "espino_2026_bayess-on-wti.pdf"
 LEGACY_FINAL_PDFS = (
     BUILD_DIR / "jfm_internal_draft.pdf",
@@ -53,6 +54,7 @@ def validate_layout() -> None:
         PUBLICATION_FIGURES_DIR / "fig03_forward_q_cluster_bootstrap.pdf",
         PUBLICATION_FIGURES_DIR / "fig04_numerical_identification.pdf",
         PUBLICATION_FIGURES_DIR / "figure_manifest.json",
+        PUBLICATION_FIGURES_DIR / "ten_million" / "fig01_mechanism_map.pdf",
     ]
     missing = [path.relative_to(ROOT) for path in required if not path.exists()]
     if missing:
@@ -84,7 +86,19 @@ def prepare_stage() -> None:
     # directory. Copying the vendor bundle into the disposable stage is more
     # portable than requiring local font installation or symlink support.
     shutil.copytree(VENDOR_DIR, STAGE_DIR)
-    shutil.copytree(SOURCE_DIR, STAGE_DIR, dirs_exist_ok=True)
+    # Double-anonymized Wiley bundle: copy ONLY the active review-source files.
+    # Never stage jfm_title_page.tex or the historical author-identifying
+    # main.tex; both contain personal identity information for the editor.
+    shutil.copytree(SOURCE_DIR / "sections_short", STAGE_DIR / "sections_short")
+    shutil.copy2(SOURCE_DIR / "references.bib", STAGE_DIR / "references.bib")
+    shutil.copy2(MAIN_TEX, STAGE_DIR / "main.tex")
+    staged_text = (STAGE_DIR / "main.tex").read_text(encoding="utf-8")
+    identifying_tokens = (
+        "Heriberto", "Espino-Montelongo", "heriberto.espinomo",
+        "heri-espino", "Universidad de las Am", "IMEF Universitario",
+    )
+    if any(token.lower() in staged_text.lower() for token in identifying_tokens):
+        raise SystemExit("Identifying author content found in blinded Wiley LaTeX main file")
 
     # Stage publication figures when they have been generated.  Keeping the
     # relative "figures/publication" path inside the isolated build tree lets
@@ -96,6 +110,27 @@ def prepare_stage() -> None:
             STAGE_DIR / "figures" / "publication",
             dirs_exist_ok=True,
         )
+
+    # Prefer JFM-specific figures if the author has explicitly rendered them.
+    # Overlay only in the disposable staging tree; shared REMEF figure files
+    # are never modified. Legacy publication PDFs remain an honest fallback.
+    for name in (
+        "fig01_mechanism_map.pdf",
+        "fig02_historical_vs_apo_implied_volatility.pdf",
+        "fig03_forward_q_cluster_bootstrap.pdf",
+        "fig04_numerical_identification.pdf",
+    ):
+        candidate = JFM_FIGURES_DIR / name
+        if candidate.is_file():
+            destination = STAGE_DIR / "figures" / "publication" / name
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(candidate, destination)
+            if name == "fig01_mechanism_map.pdf":
+                ten_million = destination.parent / "ten_million" / name
+                if ten_million.is_file():
+                    shutil.copy2(candidate, ten_million)
+        else:
+            print("JFM figure not yet rendered; using existing committed publication figure:", name)
 
     # LaTeX releases from 2026 no longer expose etex's \reserveinserts
     # command because the extended allocation mechanism is built in.  Patch
@@ -146,7 +181,8 @@ def build_publication_figures() -> None:
 def build() -> Path:
     """Compile the manuscript with XeLaTeX and return the final PDF path."""
     validate_layout()
-    build_publication_figures()
+    # Do not regenerate shared REMEF/publication figures during a Wiley build.
+    # A separate manual JFM figure command will produce journal-specific art.
     prepare_stage()
 
     latexmk = compiler("latexmk")

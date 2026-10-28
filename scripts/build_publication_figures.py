@@ -212,11 +212,14 @@ def _wiley_utopia_mode() -> str | None:
 
 # REMEF Word (US Letter; 3 cm side margins), measured from the final DOCX.
 WORD_TEXT_WIDTH_IN = 6.1375
+JFM_TWO_COLUMN_WIDTH_IN = 7.0  # provisional proof width; verify against compiled Wiley template
+CURRENT_FIGURE_WIDTH_IN = WORD_TEXT_WIDTH_IN
+CURRENT_JOURNAL = "remef"
 FIGURE_ASPECT_RATIOS = {1: 5.8 / 7.25, 2: 5.8 / 7.25, 3: 3.7 / 7.2, 4: 4.9 / 7.2}
 
 
 def _word_figsize(number: int) -> tuple[float, float]:
-    return WORD_TEXT_WIDTH_IN, WORD_TEXT_WIDTH_IN * FIGURE_ASPECT_RATIOS[number]
+    return CURRENT_FIGURE_WIDTH_IN, CURRENT_FIGURE_WIDTH_IN * FIGURE_ASPECT_RATIOS[number]
 
 
 
@@ -992,7 +995,7 @@ def build_figure_3(
     _panel_title(axes[0], "A", "MAE difference by expiry")
     _forest_panel(axes[1], boot, metric="rmse")
     _panel_title(axes[1], "B", "RMSE difference by expiry")
-    _apply_suptitle(fig, "Forward-in-time volatility comparisons across expiries")
+    _apply_suptitle(fig, "Date-ordered conditional pricing comparisons across expiries" if CURRENT_JOURNAL == "jfm" else "Forward-in-time volatility comparisons across expiries")
     _align_numeric_axes(fig, categorical_y_axes=tuple(axes))
     outputs = _save(fig, output_dir / "fig03_forward_q_cluster_bootstrap", formats)
 
@@ -1033,7 +1036,7 @@ def build_figure_4(
     fig, axes = plt.subplots(
         2,
         1,
-        figsize=(WORD_TEXT_WIDTH_IN, WORD_TEXT_WIDTH_IN),
+        figsize=(CURRENT_FIGURE_WIDTH_IN, CURRENT_FIGURE_WIDTH_IN),
         sharex=True,
         gridspec_kw={"height_ratios": [0.78, 1.22]},
     )
@@ -1160,8 +1163,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--output-dir",
         type=Path,
-        default=DEFAULT_OUTPUT_DIR,
-        help="Output directory (default: figures/publication).",
+        default=None,
+        help="Output directory (defaults to figures/publication for REMEF and figures/jfm for JFM).",
+    )
+    parser.add_argument(
+        "--journal", choices=("remef", "jfm"), default="remef",
+        help="REMEF retains its unchanged defaults; JFM uses a separate draft figure directory.",
     )
     parser.add_argument(
         "--formats",
@@ -1198,11 +1205,14 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
+    global CURRENT_FIGURE_WIDTH_IN, CURRENT_JOURNAL
+    CURRENT_JOURNAL = args.journal
+    CURRENT_FIGURE_WIDTH_IN = JFM_TWO_COLUMN_WIDTH_IN if args.journal == "jfm" else WORD_TEXT_WIDTH_IN
     font_mode = _configure_matplotlib(
         force_no_tex=args.no_tex,
         require_times_new_roman=not args.allow_font_fallback,
     )
-    output_dir = args.output_dir
+    output_dir = args.output_dir or (Path("figures/jfm") if args.journal == "jfm" else DEFAULT_OUTPUT_DIR)
     if not output_dir.is_absolute():
         output_dir = ROOT / output_dir
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -1214,7 +1224,9 @@ def main() -> None:
         "formats": list(formats),
         "font_mode": font_mode,
         "word_text_width_inches": WORD_TEXT_WIDTH_IN,
-        "format_target": "REMEF Word, Times New Roman",
+        "format_target": ("JFM Wiley draft, font matching pending proof" if args.journal == "jfm" else "REMEF Word, Times New Roman"),
+        "figure_width_inches": CURRENT_FIGURE_WIDTH_IN,
+        "journal_target": args.journal,
         "numeric_axis_alignment": "built-in nice-tick endpoints (never crop data)",
         "typographic_hierarchy_pt": PUBLICATION_FONT_PT,
         "svg_text_mode": "editable-native-text",

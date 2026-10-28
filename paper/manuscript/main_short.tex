@@ -12,15 +12,14 @@
 
 \title{When Does Posterior Integration Change Option Values? Evidence from WTI Average Price Options}
 
-\author[1]{Heriberto Espino Montelongo}
-\authormark{ESPINO MONTELONGO}
-\titlemark{POSTERIOR INTEGRATION IN WTI AVERAGE PRICE OPTIONS}
-
-\address[1]{\orgname{Universidad de las Am\'ericas Puebla}, \orgaddress{\state{Puebla}, \country{Mexico}}}
-\corres{Corresponding author: Heriberto Espino Montelongo. \email{[corresponding email]}}
+% Double-anonymized JFM review copy. Identifying details belong ONLY in
+% jfm_title_page.tex, which is excluded from the compiled review bundle.
+\author[1]{Anonymous}
+\authormark{ANONYMOUS}
+\titlemark{VOLATILITY UNCERTAINTY IN WTI APOS}
 
 \abstract[Abstract]{
-We examine whether integrating uncertainty about historical volatility materially changes WTI Average Price Option (APO) values, and compare its effect with the choice of volatility input. Posterior-integrated pricing (PI) averages conditional values over the volatility posterior, whereas posterior-mean plug-in pricing (PM) uses posterior mean volatility. A second-order approximation links their difference to posterior variance and price curvature. In 175,000 synthetic return histories, PI and PM can differ substantially when estimation samples are short and price curvature is pronounced. In the October-2026 WTI sample, however, their mean absolute difference is only \$0.000745 per barrel, compared with a mean width of \$0.2733 for the central 95\% posterior interval of conditional model prices. On 2,381 out-of-sample APO observations, historical-volatility PI has MAE 2.6187, compared with 0.1075 for a previous-day APO implied-volatility smile. Rolling-window, EWMA, and horizon-matched GARCH benchmarks do not achieve similar pricing errors. The option-implied advantage persists without smile fitting and when implied volatility is inferred from standard monthly WTI futures options. The evidence is conditional on the maintained one-factor pricing model and the observed sample.
+We ask whether accounting for volatility parameter uncertainty materially changes WTI Average Price Option (APO) prices, and whether that effect is more important than the volatility information used for valuation. Posterior-integrated pricing (PI) averages option values over the volatility posterior; posterior-mean plug-in pricing (PM) uses its mean. We relate their difference to posterior variance and option-price curvature and examine the mechanism in 10 million synthetic return histories. For 310 October-2026-expiry contract-date observations, the mean absolute PI--PM difference is \$0.000745 per barrel, despite a mean 95\% posterior model-price interval width of \$0.2733. In a separate date-ordered conditional pricing comparison involving 2,381 option-date observations on only 15 valuation dates, earlier option-implied volatility produces lower errors against end-of-day settlement-price proxies than the tested historical-volatility estimates (MAE \$0.1075 versus \$2.6187 per barrel). The result also holds on the matched same-contract implied-volatility benchmark, without fitting a smile. Our comparisons are conditional on contemporaneous futures inputs, a one-factor pricing model, sparse trading, and unverified vendor publication times. A small integration correction should not be interpreted as evidence of small parameter-induced price uncertainty or overall pricing accuracy.
 }
 
 \keywords{Bayesian option pricing; Asian options; WTI crude oil; parameter uncertainty; implied volatility}
@@ -35,16 +34,22 @@ We examine whether integrating uncertainty about historical volatility materiall
 \input{sections_short/06_conclusion}
 
 \bmsection*{Data availability}
-The WTI APO and CL histories used in the empirical application were obtained through a commercial Barchart subscription. The independent vanilla-WTI validation uses CME/NYMEX LO option and CL futures statistics accessed through Databento. Raw proprietary market-data files are not redistributed. The public repository provides code, query metadata, schemas, provenance records, diagnostics, hashes, and derived results consistent with the applicable data licenses.
+The WTI APO and CL histories used in the empirical application were obtained through a commercial Barchart subscription. End-of-day \texttt{Latest} prices are treated as settlement-price proxies, not independently verified transaction prices. The independent vanilla-WTI validation uses CME/NYMEX LO option and CL futures statistics accessed through Databento. Raw proprietary market-data files are not redistributed. The public repository provides code, query metadata, schemas, provenance records, diagnostics, hashes, and derived results consistent with the applicable data licenses.
 
 \bmsection*{Code availability}
-The research code is organized as the Python package \texttt{bayesian\_asian\_options}, with tests, deterministic experiment entry points, and committed derived results. The public repository is \url{https://github.com/heri-espino/Bayesian-Uncertainty-in-WTI-APOs}. The computational snapshot underlying this revision is Git commit \texttt{8d95e5313e7b764c0cb0e7f9ef06e54bcf5d75d7}.
+The research code is organized as a Python package with tests and deterministic experiment entry points. The code and derived results are stored in a versioned repository. Its identifying URL is withheld from this double-anonymized review copy and can be supplied confidentially to the editor, subject to market-data licensing. The eventual submitted version will identify the exact computational snapshot.
+
+\bmsection*{Plain language summary}
+For WTI crude-oil average-price options, allowing for uncertainty about estimated volatility may change a model price only slightly. That does not imply the price is accurate or that volatility uncertainty is unimportant. We compare two ways to use the same volatility posterior and examine how much the choice of historical or earlier option-implied volatility affects conditional pricing errors.
+
+\bmsection*{AI-assisted preparation disclosure}
+OpenAI ChatGPT was used to assist with research software development, literature organization, and language editing. The author is responsible for the analysis, scientific claims, citations, and verification of the manuscript.
 
 \bmsection*{Conflict of interest}
 The author declares no conflict of interest.
 
 \bmsection*{Acknowledgments}
-To be completed before submission.
+The author received no external funding for this research.
 
 \bibliography{references}
 
