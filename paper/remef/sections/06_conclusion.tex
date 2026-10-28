@@ -1,48 +1,45 @@
 \section{Conclusion}\label{sec:short_conclusion}
 
-We examine two distinct effects in WTI average-price-option
-valuation: changing a volatility estimate and averaging model
-prices over uncertainty about that estimate. Posterior integration
-affects the conditional \emph{point price} through volatility
-posterior dispersion and option-price curvature; the dispersion
-of conditional prices induced by the posterior is a different
-object. Large synthetic simulations illustrate the mechanism.
-In the original October-2026 \emph{expiry} sample, the posterior
-integrated and plug-in values are nearly identical despite
-appreciably wider posterior distributions of conditional
-model prices.
+We asked whether accounting for uncertainty about volatility changes
+WTI average-price option values as much as choosing a different
+volatility input. These are different aspects of the pricing problem. The effect of posterior integration on the point price
+depends on the uncertainty about volatility and the curvature
+of the pricing function. The spread of
+the resulting model prices is a different measure of uncertainty.
+Our synthetic results illustrate this distinction, while the
+October-2026-expiry sample shows that posterior integration and
+pricing at the posterior mean give almost identical point values.
 
-The original date-ordered Barchart/LO comparison finds much
-smaller conditional settlement-proxy pricing errors when the
-volatility input comes from earlier option prices rather than
-the tested historical-return models. On matched observations,
-carrying forward the same contract's last implied volatility
-also outperforms a fitted previous-day smile on pooled MAE,
-without establishing universal superiority. An independent longer Databento AAO settlement-mark
-exercise also favors earlier AAO implied volatility, although
-its pricing function and information set differ. Within
-that reduced-form exercise, introducing a Bayesian model for
-earlier implied-volatility innovations does not reliably improve
-on carrying forward the latest implied volatility. Additional
-Bayesian modeling of historical settlement-mark residuals
-does not maintain nominal interval coverage during early 2026.
+In the original conditional pricing comparison, using earlier
+option-implied volatility yields smaller errors relative to
+settlement-price proxies than the tested historical-volatility inputs. For the same
+contracts, simply carrying forward the last available implied
+volatility also has lower pooled error than fitting a new smile.
+The comparison covers only 15 valuation dates and does not
+establish a general ranking of pricing methods. A separate, longer Databento
+exercise supports the importance of the volatility input under
+a different pricing approximation. In that exercise, Bayesian
+updating of earlier implied volatility does not reliably improve
+on simple persistence. Intervals for settlement-price errors based on a Bayesian
+model also fall below their stated coverage levels in parts
+of early 2026.
 
-The practical recommendation is to compare Bayesian
-posterior-integrated option values with a matched plug-in price,
-benchmark the volatility input against an honestly lagged
-option-implied alternative, and report \emph{model-price posterior
-dispersion} separately from empirical forecast-error coverage.
-These comparisons should be interpreted relative to the
-specific market observations and pricing assumptions, not as
-a general ranking of stochastic-volatility models.
+For valuation practice, the main lesson is to compare a
+posterior-integrated price with a simple plug-in price and to
+test historical-volatility estimates against available earlier
+option-implied volatilities. Uncertainty across model prices
+should be reported separately from intervals for observed
+pricing errors. The value of more elaborate inference should be judged
+against the pricing or uncertainty measure it is intended
+to improve.
 
-The evidence does not establish that the reduced-form
-terminal-average approximation or the maintained one-factor
-futures dynamics are structurally correct. End-of-day
-settlement fields can be model-generated, and the older
-independent-date market comparisons remain small. Original option-mark inputs have only date-level timing, and
-most of the original comparison rows report zero trading volume.
-Additional work with independently time-stamped CL fixing histories,
-market quotes and carefully designed hedging tests is needed
-before attributing pricing differences to tradable market
-inefficiencies or to a variance risk premium.
+These conclusions come from conditional comparisons with
+end-of-day settlement-price proxies, not from executable
+quotes or prospective trading results. Some marks may be generated
+from exchange valuation models; the longer exercise also uses
+other same-date option prices as inputs. The original study
+has relatively few valuation dates and many zero-volume
+observations, and the historical publication times of vendor
+records remain unverified. Stronger claims about hedging or a volatility risk premium
+would require reliably time-stamped data, more actively traded
+contracts, and comparisons with richer futures models.

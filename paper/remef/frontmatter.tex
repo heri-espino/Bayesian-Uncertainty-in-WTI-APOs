@@ -6,25 +6,37 @@
 
 \section*{Abstract}
 
-\textbf{Objective:} We assess how much posterior integration changes WTI average-price option values relative to changing the volatility input.
-\textbf{Methods:} We combine a price-curvature expansion, 10 million simulated histories, an original futures-curve-based Asian-option study, and a separately identified extended conditional settlement-mark benchmark.
-\textbf{Results:} The original October-expiry sample has a mean absolute integrated-versus-plug-in price difference of \$0.000745/bbl. On 2,381 date-ordered settlement-proxy observations, historical posterior integration has mean absolute pricing error 2.6187/bbl versus 0.1075/bbl using earlier option-implied volatility. In the distinct 97,341-observation settlement-mark benchmark, the corresponding errors are 0.8040 and 0.2184/bbl. A Bayesian market-implied-volatility model shows no reliable improvement over simple implied-volatility persistence.
-\textbf{Recommendation:} Evaluate posterior integration and volatility information separately.
-\textbf{Limitations:} Settlement proxies, few original valuation dates, model dependence, and contemporaneous parity anchors in the extended benchmark limit interpretation.
-\textbf{Originality:} We distinguish posterior point-price corrections, model-price dispersion, and volatility-information effects.
-\textbf{Conclusion:} Volatility inputs dominate observed pricing differences under the studied assumptions.
+\textbf{Objective:} Compare the effect of posterior integration with that of choosing a different volatility input when pricing WTI average-price options.
+
+\textbf{Methods:} We use a second-order expansion, 10 million simulated return histories, and two separate comparisons with option settlement prices.
+
+\textbf{Results:} Across 310 October-2026-expiry observations, posterior integration and posterior-mean plug-in prices differ by only \$0.000745/bbl on average. For 2,381 observations across 15 dates, historical-volatility mean absolute error (MAE) is \$2.6187/bbl, versus \$0.1075/bbl with earlier option-implied volatility. A separate 97,341-observation comparison also favors earlier implied volatility (MAE \$0.2184 versus \$0.8040/bbl). Bayesian updating of implied volatility does not reliably improve on carrying forward its last value.
+
+\textbf{Recommendation:} Compare volatility inputs before adding model complexity.
+
+\textbf{Limitations:} Results depend on settlement proxies, model assumptions, few original valuation dates, and same-date inputs in the larger comparison.
+
+\textbf{Originality:} We distinguish the effect of posterior integration on option prices from the effect of volatility inputs and uncertainty about pricing errors.
+
+\textbf{Conclusion:} Changing the volatility input affects pricing errors more than posterior integration in these tests.
 
 \textbf{Keywords:} Bayesian option pricing; Asian options; WTI crude oil; volatility uncertainty; implied volatility.
 
 \section*{Resumen}
 
-\textbf{Objetivo:} Evaluamos cuánto modifica la integración posterior el valor de opciones asiáticas sobre WTI frente al cambio de fuente de volatilidad.
-\textbf{Métodos:} Combinamos una expansión basada en la curvatura del precio, 10 millones de historias simuladas, un estudio con la curva de futuros y una evaluación independiente de cotizaciones de liquidación condicionadas.
-\textbf{Resultados:} En las opciones con vencimiento en octubre, la diferencia absoluta media entre integración posterior y sustitución por la media posterior es de \$0.000745 por barril. En 2,381 observaciones ordenadas cronológicamente, el error absoluto medio es 2.6187 con volatilidad histórica y 0.1075 con volatilidad implícita anterior. En otra muestra de 97,341 observaciones, los errores respectivos son 0.8040 y 0.2184. Un modelo bayesiano con volatilidad implícita previa no mejora de forma concluyente la persistencia simple.
-\textbf{Recomendación:} Separar la integración posterior de la información usada para estimar la volatilidad.
-\textbf{Limitaciones:} Las liquidaciones, pocas fechas y los supuestos de valuación restringen la interpretación.
-\textbf{Originalidad:} Distinguimos correcciones puntuales, dispersión posterior e información de volatilidad.
-\textbf{Conclusión:} La fuente de volatilidad domina las diferencias de error observadas bajo los supuestos analizados.
+\textbf{Objetivo:} Comparar el efecto de la integración posterior y de la fuente de volatilidad al valuar opciones asiáticas sobre WTI.
+
+\textbf{Métodos:} Empleamos una expansión de segundo orden, 10 millones de series simuladas y dos comparaciones con precios de liquidación.
+
+\textbf{Resultados:} En 310 observaciones del vencimiento de octubre de 2026, la integración posterior y el uso de la media posterior de volatilidad difieren \$0.000745 por barril en promedio. En 2,381 observaciones de 15 fechas, el error absoluto medio (MAE) es \$2.6187 por barril con volatilidad histórica y \$0.1075 con volatilidad implícita anterior. Otra comparación de 97,341 observaciones favorece la volatilidad implícita anterior (MAE de \$0.2184 frente a \$0.8040 por barril). Un modelo bayesiano no supera claramente el uso de la última volatilidad implícita.
+
+\textbf{Recomendación:} Comparar fuentes de volatilidad antes de añadir complejidad.
+
+\textbf{Limitaciones:} Los resultados dependen de precios de referencia, supuestos de valuación, pocas fechas originales y datos contemporáneos en la comparación ampliada.
+
+\textbf{Originalidad:} Distinguimos integración posterior, elección de volatilidad e incertidumbre sobre los errores.
+
+\textbf{Conclusión:} La fuente de volatilidad afecta más los errores que la integración posterior.
 
 \textbf{Palabras clave:} valuación bayesiana de opciones; opciones asiáticas; petróleo WTI; incertidumbre de volatilidad; volatilidad implícita.
 

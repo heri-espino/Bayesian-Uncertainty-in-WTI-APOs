@@ -73,13 +73,11 @@ def adapt_sections(doc):
         original._p.addprevious(find(doc, prefix)._p)
     insert_before(
         original,
-        "The REMEF studies examine Asian-option valuation with stochastic-control or "
-        "mean-reverting volatility specifications; the crude-oil option study addresses "
-        "forecasts of subsequent realized volatility. They are complementary but do not "
-        "directly test our question. Here the pricing dynamics are held fixed while we "
-        "separate the posterior-integration correction, the dispersion of conditional "
-        "model values, and the contribution of previously available volatility inputs "
-        "to out-of-sample APO pricing errors.",
+        "Those studies examine different pricing and volatility-forecasting "
+        "questions. Here we hold the pricing model fixed and compare the "
+        "effect of posterior integration with the choice of volatility input. "
+        "We also distinguish uncertainty in model prices from errors "
+        "relative to observed settlement prices.",
     )
     # These are the actual Pandoc-generated Heading 1/2 paragraph texts.
     # Do not assume the LaTeX section numbers will survive conversion.
@@ -89,16 +87,16 @@ def adapt_sections(doc):
         "Posterior integration and price uncertainty": "3.2 Posterior integration and price uncertainty",
         "Synthetic mechanism experiment": "3.3 Synthetic experiment",
         "WTI Average Price Options": "3.4 WTI Average Price Options and market data",
-        "Out-of-sample volatility comparisons": "3.5 Forward-in-time volatility comparisons",
+        "Date-ordered conditional pricing comparisons": "3.5 Date-ordered conditional pricing comparisons",
         "Cross-instrument validation": "3.6 Cross-instrument validation",
-        "Independent extended Databento settlement-mark benchmark": "3.7 Extended conditional AAO settlement-mark study",
+        "Separate Databento settlement-price comparison": "3.7 Separate Databento pricing comparison",
         "AI-assisted manuscript preparation": "3.9 AI-assisted manuscript preparation",
         "Results": "4. Results and discussion",
         "When does posterior integration matter?": "4.1 When does posterior integration matter?",
         "Posterior integration in the WTI sample": "4.2 Posterior integration in the WTI sample",
         "Historical versus option-implied volatility": "4.3 Historical versus option-implied volatility",
-        "Cross-instrument validation using vanilla-WTI options": "4.4 Cross-instrument validation using vanilla-WTI options",
-        "Extended conditional settlement-mark evidence": "4.5 Independent Databento settlement-mark results",
+        "Cross-instrument comparison using WTI futures options": "4.4 Cross-instrument comparison using WTI futures options",
+        "Databento settlement-price results": "4.5 Databento settlement-price results",
         "Robustness and interpretation": "4.6 Robustness, interpretation and limitations",
         "Conclusion": "5. Conclusions and recommendations",
     }
@@ -114,14 +112,14 @@ def adapt_sections(doc):
         "3.1 Physical-measure inference and risk-neutral valuation",
         "3.2 Posterior integration and price uncertainty",
         "3.3 Synthetic experiment", "3.4 WTI Average Price Options and market data",
-        "3.5 Forward-in-time volatility comparisons", "3.6 Cross-instrument validation",
-        "3.7 Extended conditional AAO settlement-mark study",
+        "3.5 Date-ordered conditional pricing comparisons", "3.6 Cross-instrument validation",
+        "3.7 Separate Databento pricing comparison",
         "3.9 AI-assisted manuscript preparation", "4. Results and discussion",
         "4.1 When does posterior integration matter?",
         "4.2 Posterior integration in the WTI sample",
         "4.3 Historical versus option-implied volatility",
-        "4.4 Cross-instrument validation using vanilla-WTI options",
-        "4.5 Independent Databento settlement-mark results",
+        "4.4 Cross-instrument comparison using WTI futures options",
+        "4.5 Databento settlement-price results",
         "4.6 Robustness, interpretation and limitations",
         "5. Conclusions and recommendations",
     ]
@@ -145,22 +143,6 @@ def adapt_sections(doc):
         "are resampled by valuation date to retain within-date dependence.",
     )
     conclusion = find(doc, "5. Conclusions and recommendations")
-    insert_before(
-        conclusion,
-        "Compared with the related Asian-option valuation studies, these results do "
-        "not establish that constant volatility is the best structural pricing "
-        "model. They show how posterior integration and the choice of volatility "
-        "input contribute differently to the pricing errors of one fixed benchmark.",
-    )
-    insert_before(
-        find(doc, "Data availability"),
-        "For valuation practice, the results support benchmarking historical "
-        "volatility against earlier option-implied information and reporting "
-        "posterior model-price dispersion separately from the PI–PM correction. "
-        "Future work should expand the number of valuation dates and liquid "
-        "contracts and examine stochastic-volatility and multifactor alternatives.",
-    )
-
     repair_equation_references(doc)
 
 
@@ -284,9 +266,9 @@ def format_layout(doc):
                 for run in extra.runs:
                     run.italic = True
                     run.font.size = Pt(10)
-            if p.text.startswith("Table 2.") and " Panel A: main out-of-sample comparison" in p.text:
-                p.text = p.text.replace(" Panel A: main out-of-sample comparison", "")
-                panel = p.insert_paragraph_before("Panel A: Main out-of-sample comparison")
+            if p.text.startswith("Table 2.") and " Panel A: date-ordered conditional pricing comparison" in p.text:
+                p.text = p.text.replace(" Panel A: date-ordered conditional pricing comparison", "")
+                panel = p.insert_paragraph_before("Panel A: Date-ordered conditional pricing comparison")
                 p._p.addnext(panel._p)
                 panel.alignment = WD_ALIGN_PARAGRAPH.LEFT
                 panel.paragraph_format.keep_with_next = True
