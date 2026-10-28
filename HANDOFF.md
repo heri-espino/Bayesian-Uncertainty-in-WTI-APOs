@@ -11,6 +11,8 @@
 
 **Local PDF preview (2026-10-28):** `python paper/remef/build_pdf.py` typesets the CURRENT REMEF Paper A content, two existing figure PDFs and both bibliographies to `paper/remef/build/remef_latex_preview.pdf` using XeLaTeX/BibTeX directly (no Word/Pandoc or simulation). `environment.yml` includes user-local Conda Perl for MiKTeX latexmk; both Wiley builders fall back to XeLaTeX/BibTeX when Perl is absent. See `paper/remef/README.md`. The preview is not final submission-format QA.
 
+**PDF preview compiler correction (2026-10-28):** Windows MiKTeX produced `preview.tex:177: Missing $ inserted` because the earlier preview reused Word-stripped equation labels, leaving an empty paragraph inside display math. `make_latex(..., for_pdf=True)` now preserves the original REMEF math environments, cross-references, captions and floats; the preview stages existing PDF figures and includes `booktabs`. New lightweight regression tests guard this path without rerunning scientific experiments. End-to-end local MiKTeX compilation and visual inspection are still required.
+
 **Next priorities:** run the [REMEF presubmission checklist](paper/remef/PRESUBMISSION_AUDIT.md), resolve source-time/vintage and licensing blockers, execute the committed [IV audit script](scripts/audit_remef_forward_iv.py) in a complete local checkout, render and visually inspect both Word outputs, and independently validate any prospective CL/AAO new study before extending scientific claims. CI is lightweight; expensive experiments and PDF/figure generation remain manual-only.
 
 ---
