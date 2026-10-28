@@ -1,5 +1,8 @@
 # REMEF Paper A — scientific-audit findings
 
+> **SUBSEQUENT 2026-10-27 AUDIT:** This earlier report's open 2,381 prior-smile and 2,366 same-contract-IV *arithmetic* tasks have now been **independently completed**. Full 4,762 prior/expanding smile `predicted_sigma_q` values were independently re-estimated from the 2,574 source-IV rows (maximum discrepancy 7.55e-14). See [IV numerical and as-of audit](IV_NUMERICAL_AND_ASOF_AUDIT_2026-10-27.md). **Raw vendor publication timestamps, revisions, historical snapshot licensing and trade/quote independence remain OPEN**. Earlier paragraphs below retain their *before-this-addendum* audit chronology.
+
+
 **Audited October 27, 2026, on the completed-results branch. Status: numerical checks substantially complete; scientific and editorial clearance STILL BLOCKED.** This report distinguishes independent recalculation from source-manifest corroboration and unresolved market-data checks. No new experiment, data purchase, price-file mutation, or GitHub Actions job was performed.
 
 ## Verified directly from contract-level rows
@@ -64,7 +67,9 @@ Checked completed-run JSON: results/analysis/massive_mechanism_map/6e23d5aabc519
 - [x] Distinct new Databento reduced-form evidence and adverse 2026 uncertainty interval performance documented in separate research reports.
 
 **Submission blockers OPEN:**
-- [ ] Independent contract-level prior-AAO-smile 2,381-row and same-contract 2,366-row IV error recalculation.
+- [ ] Vendor/exchange `published_at`, as-retrieved time-stamped option/CL/LO data and original Barchart revision vintages; the stored `Time` field is **date-only**. See [dedicated audit](IV_NUMERICAL_AND_ASOF_AUDIT_2026-10-27.md).
+- [ ] Vendor raw-data redistribution rights and independence from model-generated CME settlement marks; 2,319/2,381 original target rows have recorded volume zero.
+- [x] Independent contract-level prior-AAO-smile 2,381-row and same-contract 2,366-row IV error recalculation; original date-ordered six-feature ridge models independently fitted for all 4,762 forecasts. **Output arithmetic and date-record checks only, NOT first-publication timestamp verification.**
 - [ ] Independent input-time proof for all Barchart futures marks, CL fixings, Treasury dates and earlier LO/AAO implied volatilities; resolve after-publication archive revisions.
 - [ ] True source-vendor original-file SHA256 check and redistributability, including previously public Git history.
 - [ ] Independent market-quote/trade validation, theoretical versus actual settlement treatment, liquidity splits and small-sample date dependence, including only **15/10** clusters for key earlier results.
