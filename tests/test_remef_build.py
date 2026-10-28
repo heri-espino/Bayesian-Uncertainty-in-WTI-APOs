@@ -126,6 +126,7 @@ def test_actual_pandoc_heading_text_is_supported(tmp_path):
     doc.add_paragraph("Introduction", style="Heading 1")
     doc.add_paragraph("Volatility is not observed directly")
     doc.add_paragraph("Asian options depend on a price average")
+    doc.add_paragraph("Bayesian option pricing is also well established")
     doc.add_paragraph("WTI APOs provide a different test setting")
     doc.add_paragraph("The distinction between historical and option-implied information")
     doc.add_paragraph("Posterior uncertainty and Asian-option pricing", style="Heading 1")
