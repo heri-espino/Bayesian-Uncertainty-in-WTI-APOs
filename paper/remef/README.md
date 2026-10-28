@@ -115,7 +115,7 @@ git pull --ff-only origin main
 conda activate asian-options
 python paper/remef/build_pdf.py --check
 python paper/remef/build_pdf.py
-Start-Process .paperemefuildemef_latex_preview.pdf
+Start-Process .\paper\remef\build\remef_latex_preview.pdf
 ```
 
 The resulting PDF is at `paper/remef/build/remef_latex_preview.pdf`.
