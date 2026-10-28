@@ -86,10 +86,19 @@ def prepare_stage() -> None:
     # directory. Copying the vendor bundle into the disposable stage is more
     # portable than requiring local font installation or symlink support.
     shutil.copytree(VENDOR_DIR, STAGE_DIR)
-    shutil.copytree(SOURCE_DIR, STAGE_DIR, dirs_exist_ok=True)
-    # Compile the current, concise JFM paper under the staged main.tex filename.
-    # The longer historical main.tex remains available but is not the default.
+    # Double-anonymized Wiley bundle: copy ONLY the active review-source files.
+    # Never stage jfm_title_page.tex or the historical author-identifying
+    # main.tex; both contain personal identity information for the editor.
+    shutil.copytree(SOURCE_DIR / "sections_short", STAGE_DIR / "sections_short")
+    shutil.copy2(SOURCE_DIR / "references.bib", STAGE_DIR / "references.bib")
     shutil.copy2(MAIN_TEX, STAGE_DIR / "main.tex")
+    staged_text = (STAGE_DIR / "main.tex").read_text(encoding="utf-8")
+    identifying_tokens = (
+        "Heriberto", "Espino-Montelongo", "heriberto.espinomo",
+        "heri-espino", "Universidad de las Am", "IMEF Universitario",
+    )
+    if any(token.lower() in staged_text.lower() for token in identifying_tokens):
+        raise SystemExit("Identifying author content found in blinded Wiley LaTeX main file")
 
     # Stage publication figures when they have been generated.  Keeping the
     # relative "figures/publication" path inside the isolated build tree lets
