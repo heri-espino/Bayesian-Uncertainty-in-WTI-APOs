@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Assemble an editable Word *review draft* for REMEF from the concise source.
 
-Requirements: pandoc (in PATH) and python-docx. No simulations are run.
+Requirements: pandoc (in PATH), python-docx and a PDF-to-SVG converter
+(Inkscape 0.91/1.x or Conda-forge Poppler). No simulations are run.
 Usage:
   python paper/remef/build.py             # anonymized reviewer draft
   python paper/remef/build.py --author-version
@@ -163,19 +164,48 @@ def _sanitize_and_repair_svg(path: Path, *, repair_figure_3: bool = False) -> No
         raise ValueError(f"Author-identifying metadata in reviewer SVG: {path}")
 
 
-def prepare_vector_figures() -> list[Path]:
-    """Generate genuine SVG drawings from the four committed vector PDFs.
-
-    Pandoc 3 embeds them with DrawingML asvg:svgBlip. A raster compatibility
-    fallback may be included for older Word versions, but SVG is the main
-    rendering source. Requires Inkscape, not Monte Carlo or proprietary data.
-    """
+def _svg_export_commands(source: Path, dest: Path) -> list[tuple[str, list[str]]]:
+    """Choose compatible vector exporters, including Conda's Inkscape 0.91."""
+    commands: list[tuple[str, list[str]]] = []
     inkscape = shutil.which("inkscape")
-    if not inkscape:
-        raise SystemExit(
-            "Inkscape is required for native SVG Word figures. "
-            "Install it before building the REMEF Word manuscript."
+    if inkscape:
+        probe = subprocess.run(
+            [inkscape, "--version"], capture_output=True, text=True, check=False
         )
+        version = (probe.stdout or "") + (probe.stderr or "")
+        # Inkscape <= 0.92 expects --export-plain-svg=FILE; versions >= 1
+        # accept --export-plain-svg with --export-filename=FILE instead.
+        legacy = bool(re.search(r"\bInkscape\s+0\.", version, re.IGNORECASE))
+        if legacy:
+            command = [
+                inkscape, str(source), "--without-gui",
+                "--export-plain-svg=" + str(dest),
+            ]
+        else:
+            command = [
+                inkscape, str(source), "--export-plain-svg",
+                "--export-filename=" + str(dest),
+            ]
+        commands.append((f"Inkscape {version.strip() or '(unknown version)'}", command))
+
+    # Poppler is available for win-64 via conda-forge and provides a modern
+    # vector-only fallback if the old Inkscape PDF importer fails.
+    pdftocairo = shutil.which("pdftocairo")
+    if pdftocairo:
+        commands.append((
+            "Poppler pdftocairo",
+            [pdftocairo, "-svg", "-f", "1", "-l", "1", str(source), str(dest)],
+        ))
+    return commands
+
+
+def prepare_vector_figures() -> list[Path]:
+    """Convert the committed PDF figures into native SVG for editable Word.
+
+    Supports the Conda-forge Inkscape 0.91 CLI, modern Inkscape and Poppler.
+    No Monte Carlo, market data, administrator permissions or rasterization
+    of already-vector graphics are required for normal input PDFs.
+    """
     sources = (
         FIGURES / "ten_million" / "fig01_mechanism_map.pdf",
         FIGURES / "fig02_historical_vs_apo_implied_volatility.pdf",
@@ -188,17 +218,49 @@ def prepare_vector_figures() -> list[Path]:
         if not source.is_file():
             raise FileNotFoundError(f"Missing committed vector PDF: {source}")
         dest = SVG_DIR / (source.stem + ".svg")
-        subprocess.run(
-            [inkscape, str(source), "--export-plain-svg",
-             "--export-filename=" + str(dest)],
-            check=True, capture_output=True, text=True,
-        )
-        if not dest.is_file() or dest.stat().st_size < 512:
-            raise ValueError(f"Vector figure conversion failed: {dest}")
-        _sanitize_and_repair_svg(
-            dest, repair_figure_3=(source.stem == "fig03_forward_q_cluster_bootstrap")
-        )
-        paths.append(dest)
+        commands = _svg_export_commands(source, dest)
+        if not commands:
+            raise SystemExit(
+                "PDF-to-SVG converter missing. In Conda run: "
+                "conda install -c conda-forge poppler"
+            )
+        errors = []
+        for tool, command in commands:
+            # A previous conversion must not falsely satisfy output validation.
+            dest.unlink(missing_ok=True)
+            try:
+                result = subprocess.run(
+                    command, check=False, capture_output=True,
+                    text=True, timeout=120,
+                )
+            except (OSError, subprocess.TimeoutExpired) as exc:
+                errors.append(f"{tool}: {exc}")
+                continue
+            if result.returncode != 0 or not dest.is_file() or dest.stat().st_size < 512:
+                diagnostic = (result.stderr or result.stdout or "").strip()[-350:]
+                errors.append(
+                    f"{tool}: return code {result.returncode}, "
+                    f"SVG missing/empty. {diagnostic}"
+                )
+                continue
+            try:
+                _sanitize_and_repair_svg(
+                    dest,
+                    repair_figure_3=(source.stem == "fig03_forward_q_cluster_bootstrap"),
+                )
+            except (ET.ParseError, ValueError) as exc:
+                errors.append(f"{tool}: invalid SVG: {exc}")
+                continue
+            print(f"Converted {source.name} to SVG with {tool}.", flush=True)
+            paths.append(dest)
+            break
+        else:
+            raise ValueError(
+                f"Vector figure conversion failed: {dest}\n"
+                + "\n".join(errors)
+                + "\nInstall a fallback in the active Conda environment: "
+                  "conda install -c conda-forge poppler"
+            )
     return paths
 
 
