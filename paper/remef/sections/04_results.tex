@@ -88,7 +88,7 @@ fitting a smile.
 \label{fig:short_forward_bootstrap}
 \end{figure*}
 
-\subsection{Cross-instrument validation using vanilla-WTI options}
+\subsection{Cross-instrument comparison using WTI futures options}
 
 The cross-instrument comparison uses implied volatility from standard monthly WTI futures options instead of APOs. Table~\ref{tab:short_lo} uses 253 October-expiry APO contract-date observations across 10 valuation dates. Historical-volatility posterior integration has MAE 0.4464 and RMSE 0.5562. A previous-day vanilla-WTI implied-volatility specification based on LO options lowers these errors to 0.1559 and 0.2599. The corresponding previous-day APO implied-volatility smile has MAE 0.1676 and RMSE 0.2686.
 
@@ -109,7 +109,7 @@ Previous-day APO IV & 0.1676 & 0.2686\\
 Valuation-date cluster bootstrap results support the improvement over historical volatility. Differences between LO-implied and APO-implied specifications are small and do not establish consistent superiority by MAE and RMSE. The result shows that earlier implied volatility also produces smaller errors when estimated from a different WTI option product.
 
 
-\subsection{Extended conditional settlement-mark evidence}
+\subsection{Databento settlement-price results}
 
 The separate Databento analysis compares volatility inputs across
 more valuation dates, but uses a different pricing model from
@@ -147,8 +147,9 @@ near-the-money options on the valuation date. Its mean is 30.97\%
 across 1,689 expiry-date groups, compared with 26.68\% for the
 volatility equivalent to the Bayesian plug-in price and 30.88\%
 for earlier AAO implied volatility.
-The target-date inversion is used \emph{only to diagnose} pricing
-errors after scoring, never as an input to forecasts. These
+Implied volatility inferred from valuation-date prices is used
+\emph{only to explain} the pricing errors after evaluation, never
+as an input to the earlier-volatility comparisons. These
 numbers do not identify a volatility risk premium.
 
 Table~\ref{tab:remef_bayes_iv} asks whether Bayesian modeling
@@ -173,8 +174,8 @@ support a claim of economic advantage.
 Method & MAE & RMSE\\
 \midrule
 Unchanged earlier-date AAO implied volatility & 0.2089 & 0.3014\\
-Bayesian market-IV posterior-mean plug-in & 0.2098 & 0.3023\\
-Bayesian market-IV posterior integration & 0.2098 & 0.3024\\
+Bayesian implied-volatility posterior-mean plug-in & 0.2098 & 0.3023\\
+Bayesian implied-volatility posterior integration & 0.2098 & 0.3024\\
 \bottomrule
 \end{tabular}
 \end{table}
