@@ -89,7 +89,7 @@ def adapt_sections(doc):
         "Posterior integration and price uncertainty": "3.2 Posterior integration and price uncertainty",
         "Synthetic mechanism experiment": "3.3 Synthetic experiment",
         "WTI Average Price Options": "3.4 WTI Average Price Options and market data",
-        "Out-of-sample volatility comparisons": "3.5 Forward-in-time volatility comparisons",
+        "Out-of-sample volatility comparisons": "3.5 Date-ordered conditional pricing comparisons",
         "Cross-instrument validation": "3.6 Cross-instrument validation",
         "Independent extended Databento settlement-mark benchmark": "3.7 Extended conditional AAO settlement-mark study",
         "AI-assisted manuscript preparation": "3.9 AI-assisted manuscript preparation",
@@ -114,7 +114,7 @@ def adapt_sections(doc):
         "3.1 Physical-measure inference and risk-neutral valuation",
         "3.2 Posterior integration and price uncertainty",
         "3.3 Synthetic experiment", "3.4 WTI Average Price Options and market data",
-        "3.5 Forward-in-time volatility comparisons", "3.6 Cross-instrument validation",
+        "3.5 Date-ordered conditional pricing comparisons", "3.6 Cross-instrument validation",
         "3.7 Extended conditional AAO settlement-mark study",
         "3.9 AI-assisted manuscript preparation", "4. Results and discussion",
         "4.1 When does posterior integration matter?",
@@ -145,22 +145,6 @@ def adapt_sections(doc):
         "are resampled by valuation date to retain within-date dependence.",
     )
     conclusion = find(doc, "5. Conclusions and recommendations")
-    insert_before(
-        conclusion,
-        "Compared with the related Asian-option valuation studies, these results do "
-        "not establish that constant volatility is the best structural pricing "
-        "model. They show how posterior integration and the choice of volatility "
-        "input contribute differently to the pricing errors of one fixed benchmark.",
-    )
-    insert_before(
-        find(doc, "Data availability"),
-        "For valuation practice, the results support benchmarking historical "
-        "volatility against earlier option-implied information and reporting "
-        "posterior model-price dispersion separately from the PI–PM correction. "
-        "Future work should expand the number of valuation dates and liquid "
-        "contracts and examine stochastic-volatility and multifactor alternatives.",
-    )
-
     repair_equation_references(doc)
 
 
