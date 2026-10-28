@@ -147,7 +147,7 @@ def test_actual_pandoc_heading_text_is_supported(tmp_path):
         "WTI Average Price Options",
         "Out-of-sample volatility comparisons",
         "Cross-instrument validation",
-        "Independent extended Databento settlement-mark benchmark",
+        "Separate Databento settlement-price comparison",
         "AI-assisted manuscript preparation",
     ):
         doc.add_paragraph(title, style="Heading 2")
@@ -183,7 +183,7 @@ def test_actual_pandoc_heading_text_is_supported(tmp_path):
     for required in (
         "1. Introduction", "2. Literature review", "3. Methodology",
         "3.8 Computational implementation", "3.9 AI-assisted manuscript preparation",
-        "4. Results and discussion", "4.5 Independent Databento settlement-mark results",
+        "4. Results and discussion", "4.5 Databento settlement-price results",
         "4.6 Robustness, interpretation and limitations",
         "5. Conclusions and recommendations",
     ):
@@ -191,7 +191,7 @@ def test_actual_pandoc_heading_text_is_supported(tmp_path):
     assert "Data and empirical design" not in headings
     assert len(result.tables) == 4
     assert result.tables[0].cell(0, 1).text == "N"
-    assert any("The REMEF studies examine" in p.text for p in result.paragraphs)
+    assert any("Those studies examine different pricing" in p.text for p in result.paragraphs)
     assert any("no external funding" in p.text for p in result.paragraphs)
     # Reference-PDF title alignment and REMEF pagination are deterministic.
     from docx.enum.text import WD_ALIGN_PARAGRAPH
@@ -264,7 +264,7 @@ def test_remef_reconciled_databento_sections():
     b = _build_module()
     assert all("paper/remef/sections" in p.as_posix() for p in b.BODY_SECTIONS)
     tex = b.make_latex(with_author=False)
-    assert "Independent extended Databento settlement-mark benchmark" in tex
+    assert "Separate Databento settlement-price comparison" in tex
     assert "Extended conditional settlement-mark evidence" in tex
     assert "October 2026 expiry" in tex
     assert "97,341" in tex and "111,585" in tex
@@ -272,7 +272,7 @@ def test_remef_reconciled_databento_sections():
     assert "2026" in tex
     assert "Data availability" in tex
     assert tex.count(r"\noindent\textbf{Table ") >= 5
-    assert "date-balanced" in tex or "date-balanced" in (
+    assert "equal weight across dates" in tex or "equal weight across dates" in (
         ROOT / "paper" / "remef" / "sections" / "03_data_design.tex"
     ).read_text(encoding="utf-8")
 
@@ -296,8 +296,8 @@ def test_remef_final_references_and_caveats():
     assert r"\citet{romboutsstentoft2014}" in text
     assert r"\citet{sagorbooneghanam2026}" in text
     assert "@article{sagorbooneghanam2026" in bib
-    assert "2,319 option-date rows" in text
-    assert "2,366 same-contract" in text
+    assert "2,319" in text and "recorded trading volume" in text
+    assert "2,366-observation same-contract" in text
     assert "first-publication" in text
 
 
