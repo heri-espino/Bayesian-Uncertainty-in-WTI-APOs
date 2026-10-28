@@ -29,12 +29,36 @@ def test_pdf_preview_uses_remef_sources_not_wiley_or_word(monkeypatch):
     assert r"\citep{" in tex
     assert r"\bibliography{references_main,references_remef}" in tex
     assert r"\resizebox{\linewidth}{!}{\begin{tabular}" in tex
+    assert r"\usepackage{amsmath,amssymb,graphicx,booktabs}" in tex
+    assert r"\begin{equation}" in tex
+    assert r"\end{equation}" in tex
+    assert r"\label{eq:short_returns}" in tex
+    assert r"\eqref{eq:short_average}" in tex
+    assert r"\begin{figure*}" in tex
+    assert r"\caption{" in tex
     assert len(figures) == 2
     for name in ("fig01_mechanism_map.pdf", "fig03_forward_q_cluster_bootstrap.pdf"):
         assert f"preview_figures/{name}" in tex
     assert ".svg" not in tex
     assert "Heriberto Espino-Montelongo" not in tex
     assert "WileyNJDv5" not in tex
+
+
+
+def test_pdf_does_not_strip_labels_into_empty_math_paragraphs(monkeypatch):
+    """Regression for MiKTeX 'Missing $ inserted' at preview.tex:177."""
+    builder = _builder(monkeypatch)
+    pdf, _ = builder.compose_preview()
+    word_source = builder.make_latex(with_author=False)
+    native = builder.make_latex(with_author=False, for_pdf=True)
+    assert r"\label{eq:short_returns}" in native
+    assert r"\begin{equation}" in native
+    assert r"\label{eq:short_returns}" not in word_source
+    assert r"\begin{equation}" not in word_source
+    assert r"\begin{equation}" in pdf
+    assert r"\label{eq:short_returns}" in pdf
+
+
 
 
 def test_pdf_preview_staging_preserves_source_and_bibliography(monkeypatch, tmp_path):
