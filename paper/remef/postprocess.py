@@ -66,6 +66,7 @@ def adapt_sections(doc):
     insert_before(original, "2. Literature review", "Heading 1")
     for prefix in (
         "Asian options depend on a price average",
+        "Bayesian option pricing is also well established",
         "WTI APOs provide a different test setting",
         "The distinction between historical and option-implied information",
     ):
