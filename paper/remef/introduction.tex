@@ -18,9 +18,20 @@ published related Asian-option work: \citet{matiasgonzalez2019}
 study a stochastic optimal consumption/investment framework with
 Asian-option valuation, whereas \citet{ortizjimenez2026} apply
 realized volatility and mean reversion to the CEMEXCPO setting.
-Neither addresses our narrower comparison of the effect of
-integrating a volatility posterior on the \emph{price estimate}
-with the effect of using different volatility information.
+Neither addresses our narrower comparison of posterior integration with the choice of volatility information for WTI average-price option settlement marks.
+
+Bayesian option pricing is also well established. \citet{guidolin2003}
+study learning and option-price dynamics, while
+\citet{romboutsstentoft2014} report a small effect of parameter
+uncertainty on pricing errors in their equity-option setting.
+More recently, \citet{sagorbooneghanam2026} propagate Bayesian
+uncertainty into illustrative European-option prices, including
+a WTI example. Those results do not evaluate observed WTI
+arithmetic-average option marks. We do not claim that integrating
+a parameter posterior, or finding a small integration correction,
+is new. Our narrower contribution is the comparison with
+earlier option-implied volatility signals and a simple persistence
+benchmark for WTI average-price options.
 
 WTI APOs provide a different test setting. Market-specific
 models may account for stochastic convenience yields, jumps
@@ -64,7 +75,7 @@ information cutoffs. The first uses individual Barchart
 APO histories, a CL futures-curve-based one-factor
 Asian option approximation, 310 October-expiry
 contract-date observations in August--September 2026,
-2,381 forward-evaluation observations across 15 dates,
+2,381 date-ordered conditional repricing observations across 15 dates,
 and a 253-observation cross-instrument check using
 earlier LO vanilla-WTI implied volatilities. The second
 uses a larger Databento AAO settlement archive and a

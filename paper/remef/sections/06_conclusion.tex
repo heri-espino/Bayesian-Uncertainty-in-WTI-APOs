@@ -12,10 +12,13 @@ integrated and plug-in values are nearly identical despite
 appreciably wider posterior distributions of conditional
 model prices.
 
-The original forward-in-time Barchart/LO comparison finds much
-smaller pricing errors when the volatility input comes from
-earlier option prices rather than the tested historical-return
-models. An independent longer Databento AAO settlement-mark
+The original date-ordered Barchart/LO comparison finds much
+smaller conditional settlement-proxy pricing errors when the
+volatility input comes from earlier option prices rather than
+the tested historical-return models. On matched observations,
+carrying forward the same contract's last implied volatility
+also outperforms a fitted previous-day smile on pooled MAE,
+without establishing universal superiority. An independent longer Databento AAO settlement-mark
 exercise also favors earlier AAO implied volatility, although
 its pricing function and information set differ. Within
 that reduced-form exercise, introducing a Bayesian model for
@@ -37,8 +40,9 @@ The evidence does not establish that the reduced-form
 terminal-average approximation or the maintained one-factor
 futures dynamics are structurally correct. End-of-day
 settlement fields can be model-generated, and the older
-independent-date market comparisons remain small. Additional
-work with independently time-stamped CL fixing histories,
+independent-date market comparisons remain small. Original option-mark inputs have only date-level timing, and
+most of the original comparison rows report zero trading volume.
+Additional work with independently time-stamped CL fixing histories,
 market quotes and carefully designed hedging tests is needed
 before attributing pricing differences to tradable market
 inefficiencies or to a variance risk premium.

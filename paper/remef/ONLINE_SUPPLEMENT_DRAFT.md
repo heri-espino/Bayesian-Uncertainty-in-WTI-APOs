@@ -21,9 +21,9 @@ The synthetic experiment includes 10 million simulated return histories (seed 24
 
 The original empirical design uses a one-factor futures pricing process, partially fixed daily first-nearby WTI futures settlements, curve-based future fixing levels and a Curran pricing approximation. The Barchart end-of-day Latest column is treated as a settlement *proxy*, not independently certified as a final exchange trade. Historical return proxies include both continuous/front-month and contract-reconstructed CL changes.
 
-The main reported forward-in-time comparison uses 2,381 contract-date rows across only 15 valuation dates. On identical rows, historical PI MAE/RMSE are 2.6187/3.4090 USD/bbl; reconstructed first-nearby historical PI MAE/RMSE are 2.6468/3.4451; the prior-day fitted AAO IV smile has reported MAE/RMSE 0.1075/0.1594. The first two sets of error arithmetic were recomputed from saved individual rows. The prior-day smile values agree with saved aggregate scores but the >1 MB row-level source remains to be independently reaggregated on a complete local checkout.
+The main reported forward-in-time comparison uses 2,381 contract-date rows across only 15 valuation dates. On identical rows, historical PI MAE/RMSE are 2.6187/3.4090 USD/bbl; reconstructed first-nearby historical PI MAE/RMSE are 2.6468/3.4451; the prior-day fitted AAO IV smile has reported MAE/RMSE 0.1075/0.1594. The first two sets of error arithmetic were recomputed from saved individual rows. All 2,381 prior-day and expanding fitted-smile rows were independently reaggregated, including exact reconstruction of their 4,762 fitted volatilities from 2,574 archived source-IV inputs. This is an output-level audit, not certification of the original vendor publication time.
 
-The same-contract previous-IV test reports 2,366 eligible rows and MAE 0.0992 USD/bbl; complete source-row reconstruction remains open. The external vanilla LO-IV matched subset has 253 targets on 10 valuation dates and MAE 0.4464 historical PI, 0.1559 prior LO IV and 0.1676 prior AAO IV. Those three values were recomputed from saved common-support contract errors, but underlying original option-tree vintages and time cutoffs remain to be audited.
+The same-contract previous-IV test contains 2,366 matched eligible rows with MAE 0.099156 USD/bbl, versus 0.107417 USD/bbl for the fitted smile on exactly the same rows. The contract-level carry values, joins and original date-field precedence were independently reconciled. The external vanilla LO-IV matched subset has 253 targets on 10 valuation dates and MAE 0.4464 historical PI, 0.1559 prior LO IV and 0.1676 prior AAO IV. Those three values were recomputed from saved common-support contract errors, but underlying original option-tree vintages and time cutoffs remain to be audited.
 
 **October 2026 means option EXPIRY, not October valuation dates.** The separate posterior-price sample has 310 contract-date rows across 12 evaluation dates, August 25–September 10, 2026. Saved individual rows yield PI RMSE 0.517741, PM RMSE 0.518337, mean absolute PI–PM 0.000745132, and mean 95% posterior conditional model-price width 0.273272684 USD/bbl.
 
@@ -55,11 +55,12 @@ The original Barchart/LO and newer Databento approaches have different input pro
 
 ## S5. Independent checks and release requirements
 
-Saved-row error arithmetic is independently checked for the original 310-row October-expiry sample, original 2,381-row historical baseline and 253-row LO common-support subset. Completed synthetic-run statistics are checked against a saved run manifest and figure metadata, not independently regenerated. The large original prior-IV fitted-smile and same-contract lagged-IV contract-level numerical reconciliations remain OPEN. Exact quote/fixing/rate timestamp vintages, legal data redistribution rights (including public Git histories), actual trades versus theoretical exchange marks and executable trading costs remain OPEN.
+Saved-row error arithmetic is independently checked for the original 310-row October-expiry sample, original 2,381-row historical baseline and 253-row LO common-support subset. Completed synthetic-run statistics are checked against a saved run manifest and figure metadata, not independently regenerated. The original fitted-smile and same-contract lagged-IV contract-level numerical reconciliations are COMPLETE at the archived output-and-date-field level (see IV_NUMERICAL_AND_ASOF_AUDIT_2026-10-27.md). They do not establish provider first-publication times, record vintages, vendor permissions or independently executable trade prices. Exact quote/fixing/rate timestamp vintages, legal data redistribution rights (including public Git histories), actual trades versus theoretical exchange marks and executable trading costs remain OPEN.
 
 Local integrity and numerical audit commands (require a complete authorized checkout, no provider calls):
 
     python -m scripts.audit_remef_science
+    python -m scripts.audit_remef_forward_iv
     python -m pytest tests/test_remef_build.py tests/test_remef_manuscript_scientific_integrity.py -q
     python paper/remef/build.py --check
 

@@ -4,7 +4,14 @@ Alternative physical-return assumptions do not materially change the comparison.
 
 The small empirical PI--PM difference is not attributable to numerical noise. High-precision Monte Carlo, independently scrambled Sobol simulation, and Curran conditioning agree on the difference to a precision well below its observed magnitude. Simulation-based calibration provides a separate check on the posterior implementation. The supplement also reports a posterior-RMS plug-in sensitivity (Section S2), alternative mappings from LO-implied volatilities to one APO volatility, and Cox--Ross--Rubinstein tree-refinement checks (Section S4). These numerical checks do not establish an exact arbitrage-free representation of the volatility surface.
 
-The market evidence has important limits. Many APO settlements have zero reported trading volume, especially at long maturities. The historical-versus-implied ranking remains under positive-volume and open-interest restrictions, but some expiry-level samples are small (Online Supplement Section S3). Moreover, the main pricing comparison contains only 15 target dates and the external validation only 10. Valuation-date cluster resampling preserves dependence among contracts observed together, but cannot eliminate serial dependence across adjacent dates.
+The market evidence has important limits. In the original 2,381-row date-ordered comparison,
+2,319 option-date rows have zero recorded trading volume.
+The historical-versus-implied ranking remains under
+positive-volume and open-interest restrictions, but
+these subsets are small and some expiry-level samples
+are particularly limited (Online Supplement Section S3).
+An exchange settlement proxy should not be interpreted
+as an executable transaction price. Moreover, the main pricing comparison contains only 15 target dates and the external validation only 10. Valuation-date cluster resampling preserves dependence among contracts observed together, but cannot eliminate serial dependence across adjacent dates.
 
 Finally, the one-factor constant-volatility model excludes richer futures-curve dynamics, stochastic volatility, jumps, and convenience yields. Its implied volatilities are model-equivalent pricing inputs, not uniquely identified risk-neutral diffusion parameters or direct estimates of a variance risk premium. The out-of-sample results establish a difference in pricing performance for the tested inputs and model, not a structural physical-versus-risk-neutral volatility decomposition.
 
@@ -40,11 +47,12 @@ benchmark have different economic observables, providers,
 pricing engines, maturity support and information sets. They
 are \emph{separate analyses}, not pooled observations for one
 common estimator. None directly validates executable hedge
-profits or the implied-volatility risk premium. At the time
-of this revision, direct vendor vintage/timestamp verification,
-Barchart redistribution rights, underlying quote/trade
-validation, full 2,366-row same-contract IV reconciliation and
-independent end-to-end historical input replay remain open;
-publication-level conclusions must remain conditional on
-those checks.
+profits or the implied-volatility risk premium. Original vendor first-publication times, historical revision
+vintages, Barchart redistribution rights, trade/quote validation,
+and independent end-to-end historical input replay remain open.
+By contrast, stored-row arithmetic for the 2,381 fitted-smile
+and 2,366 same-contract carry comparisons has been independently
+reconciled, including all 4,762 fitted IV forecasts and archived
+prior-date relationships. These numerical checks do not prove
+when the vendor data first became available.
 

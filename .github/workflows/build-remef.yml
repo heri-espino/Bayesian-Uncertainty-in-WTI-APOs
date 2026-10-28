@@ -65,7 +65,7 @@ jobs:
               native_svg = xml.count("svgBlip")
               print(f"Editable math: {math}; Word tables: {tables}; "
                     f"embedded SVG: {len(vectors)}; native SVG references: {native_svg}")
-              if math < 30 or tables != 4 or len(vectors) < 2 or native_svg < 2:
+              if math < 30 or tables != 6 or len(vectors) < 2 or native_svg < 2:
                   raise SystemExit("Expected editable equations, four Word tables and native SVG figures")
               for name in vectors:
                   raw = z.read(name).decode("utf-8")
@@ -85,7 +85,7 @@ jobs:
               raise SystemExit("APA bibliography or REMEF precedents are missing")
           if "To be completed" in text:
               raise SystemExit("Unfinished placeholder leaked into blinded review draft")
-          if len(doc.tables) != 4 or doc.tables[0].cell(0, 1).text != "N":
+          if len(doc.tables) != 6 or doc.tables[0].cell(0, 1).text != "N":
               raise SystemExit("Table conversion / header missing")
           for phrase in ("This research received no external funding.",
                          "The author declares no conflicts of interest."):
