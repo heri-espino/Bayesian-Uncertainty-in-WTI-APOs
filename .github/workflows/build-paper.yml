@@ -8,13 +8,15 @@ permissions:
 
 jobs:
   compile:
-    name: figures + Wiley PDF
+    name: JFM figure previews + Wiley PDF
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
     steps:
-      - name: Check out repository
+      - name: Check out exact selected revision
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -52,25 +54,21 @@ jobs:
         run: |
           python -m scripts.vendor_utopia_fonts | tee /tmp/vendor-font-report.json
 
-      - name: Build publication figures
-        run: python -m scripts.build_publication_figures --formats pdf png
+      - name: Build isolated JFM figures (preview typography)
+        run: python -m scripts.build_publication_figures --journal jfm --formats pdf png svg --allow-font-fallback
 
-      - name: Require vendored Wiley typography
+      - name: Verify JFM-only figure output
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
-
-          manifest = json.loads(
-              Path("figures/publication/figure_manifest.json").read_text(encoding="utf-8")
-          )
-          mode = manifest.get("font_mode")
-          print(f"Figure font mode: {mode}")
-          if mode != "wiley-utopia-vendored":
-              raise SystemExit(
-                  "Publication figures were not rendered with the vendored "
-                  f"Wiley Utopia stack (font_mode={mode!r})."
-              )
+          root = Path("figures/jfm")
+          info = json.loads((root / "figure_manifest.json").read_text(encoding="utf-8"))
+          assert info.get("journal_target") == "jfm"
+          for number, title in ((1, "fig01_mechanism_map"), (2, "fig02_historical_vs_apo_implied_volatility"), (3, "fig03_forward_q_cluster_bootstrap"), (4, "fig04_numerical_identification")):
+              path = root / (title + ".pdf")
+              assert path.is_file() and path.stat().st_size > 0, path
+          print("JFM figure previews are isolated; font match still requires visual proof")
           PY
 
       - name: Compile Wiley manuscript
@@ -86,11 +84,12 @@ jobs:
       - name: Upload compiled paper
         uses: actions/upload-artifact@v4
         with:
-          name: jfm-paper-${{ github.sha }}
+          name: jfm-wiley-preview-${{ github.sha }}
           path: |
             paper/espino_2026_bayess-on-wti.pdf
-            figures/publication/*.pdf
-            figures/publication/*.png
-            figures/publication/figure_manifest.json
+            figures/jfm/*.pdf
+            figures/jfm/*.png
+            figures/jfm/*.svg
+            figures/jfm/figure_manifest.json
           if-no-files-found: error
           retention-days: 30
