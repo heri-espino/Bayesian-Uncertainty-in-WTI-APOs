@@ -81,6 +81,17 @@ jobs:
           test -s paper/espino_2026_bayess-on-wti.pdf
           pdfinfo paper/espino_2026_bayess-on-wti.pdf | head -n 20
 
+      - name: Check reviewer anonymity in the compiled PDF and source archive
+        run: |
+          test ! -e paper/build/stage/jfm_title_page.tex
+          test ! -e paper/build/stage/main_short.tex
+          pdftotext paper/espino_2026_bayess-on-wti.pdf /tmp/jfm-review-text.txt
+          if grep -Eiq 'Heriberto|Espino-Montelongo|@udlap[.]mx|heri-espino' /tmp/jfm-review-text.txt; then
+            echo "Identifying information detected in JFM reviewer PDF"
+            exit 1
+          fi
+          echo "Compiled Wiley review copy passed text-anonymity check"
+
       - name: Upload compiled paper
         uses: actions/upload-artifact@v4
         with:
