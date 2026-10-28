@@ -28,16 +28,16 @@ IDENTIFIERS = (
 
 
 def anonymize(input_path: Path, output_path: Path) -> None:
+    if not input_path.is_file():
+        raise FileNotFoundError(input_path)
+    if "blinded" not in input_path.stem.lower():
+        raise ValueError("Only the blinded review PDF may be anonymized by this script.")
+
     try:
         from pypdf import PdfReader, PdfWriter
         from pypdf.generic import NameObject
     except ImportError as exc:
         raise SystemExit("Install pypdf inside Conda: conda install -c conda-forge pypdf") from exc
-
-    if not input_path.is_file():
-        raise FileNotFoundError(input_path)
-    if "blinded" not in input_path.stem.lower():
-        raise ValueError("Only the blinded review PDF may be anonymized by this script.")
 
     reader = PdfReader(str(input_path))
     if not reader.pages:
