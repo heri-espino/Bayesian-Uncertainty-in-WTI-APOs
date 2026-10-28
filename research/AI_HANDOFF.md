@@ -1,40 +1,14 @@
-## Latest author decision: prepare Databento-only journal study (2026-10-26)
-
-> **Canonical continuation:** [HANDOFF](../HANDOFF.md), [master plan](PAPER_COMPLETION_MASTER_PLAN_2026-10-26.md), [evidence ledger](AAO_EVIDENCE_LEDGER_2026-10-26.md), [experiment register](AAO_EXPERIMENT_REGISTER_2026-10-26.md), and [agent verification](AAO_AGENT_VERIFICATION_PROTOCOL_2026-10-26.md). The current user-selected paper is **Databento-only PR #110**, not Barchart/LO comparisons; the original DBNs/SQLite have not been verified reuploaded.
-
-The author explicitly abandoned the Barchart-based option-price
-comparisons for the **new Elsevier CAS manuscript** and requests
-Bayesian PI/PM, historical-volatility and lagged AAO IV benchmarking
-using the owned Databento AAO source data alone. The assistant prepared
-`bayesian_asian_options.aao_databento_only`,
-`experiments.wti_aao_databento_only`,
-`scripts.plot_aao_databento_only`,
-`paper/jcm/databento_main.tex` and
-`paper/jcm/build_databento.py`, with synthetic tests and runbook
-`research/AAO_DATABENTO_ONLY_PAPER_RUNBOOK_2026-10-26.md`.
-
-**Scientific constraint:** AAO definitions+statistics do NOT contain
-the original CL first-nearby futures returns, fixings or current
-CL forward curve. This new study deliberately uses **reduced-form
-terminal-average Black valuation**, inferred expected average and
-discount from same-day AAO parity emph{at reserved strikes}, and
-strictly lagged volatility inputs. Anchors never become evaluated
-target strikes. Historical proxy changes in parity-implied forwards
-are NOT independent observed P-measure CL returns. Do not relabel
-this as the old structural Asian Monte Carlo or as fully ex-ante
-forecast accuracy. Actual/theoretical exchange marks are reported
-separately; inference resamples dates, not option rows.
-
-The source files and SQLite were lost during prior unsafe sparse
-checkout and remain unavailable until the author performs the paid
-replacement and **LFS-push** procedure already in PR #109/main.
-No Databento-only model results or publication charts have been
-computed yet. After user runs the experiment, inspect its manifest,
-`method_metrics.csv`, `cluster_intervals.csv`, and three
-generated figures, then **update the new CAS manuscript with the
-actual validated results**, not anticipated rankings.
-
 # AI handoff
+
+## Current status — COMPLETED AAO-only experiments (2026-10-27; results branch)
+
+**Read this section first; it supersedes the 2026-10-26 recovery/no-new-pricing statements below.** The author successfully ran the reduced-form Databento AAO-only pilot (3,135 target contract-dates, 9 priced days) and full 2023–Sep 2026 six-method benchmark (111,585 targets; 97,341 actual-flagged; 189 priced days; 1,689 expiry-date groups) locally on the Windows PC. The full actual-flagged MAEs are **lagged_IV 0.218420**, **PI 0.804044**, **PM 0.806818** USD/bbl. A separately executed diagnostic across 1,689 groups found mean current target IV 30.9748%, lagged AAO IV 30.8839%, Bayesian PM price-equivalent volatility 26.6787%, and corrected actual-only 45-calendar-month block 95% intervals. Figures fig06/fig07/fig08 and full CSVs were committed. **Figure 07 still shows original mixed-mark intervals, not the corrected actual-only block intervals.** This study is same-day parity-anchored conditional settlement valuation, **not** an ex-ante structural Asian-option forecast.
+
+**Canonical report:** [AAO_DATABENTO_ONLY_EMPIRICAL_REPORT_2026-10-27.md](AAO_DATABENTO_ONLY_EMPIRICAL_REPORT_2026-10-27.md). **Next not-yet-executed hypothesis and leak-safe local protocol:** [AAO_DATABENTO_ONLY_MARKET_INFORMED_BAYES_PROTOCOL_2026-10-27.md](AAO_DATABENTO_ONLY_MARKET_INFORMED_BAYES_PROTOCOL_2026-10-27.md). They link exact manifests, price-level Git LFS data, scripts, figures, inferential corrections, model assumptions, open validity issues, and local commands. **Source SHA256 162/162 and SQLite presence were confirmed on user's PC; independent remote LFS binary retrieval remains unverified.**
+
+**Git caution:** active results branch `results/aao-databento-pilot-2023h1-20261026` **diverges from main**; newer master plans, the selected CAS manuscript scaffolding and other merged documents may live in main and not in this branch. No rebase/reset/force-push/merge/sparse-checkout change without deliberate reconciliation; preserve user changes and all 162 DBNs and SQLite. No GitHub-hosted experiments or new paid Databento requests: heavy experiments on author's PC only, aggregate/source-of-truth handoff pushed into private GitHub. Next immediate action is NOT rewriting results: check inference correction and validate the market-informed Bayesian next-stage experiment design.
+
+> **Historical pre-experiment handoff (2026-10-26):** The prior author decision was to prepare the Databento-only CAS study; see [HANDOFF.md](../HANDOFF.md) and the master plan. Earlier references below to missing LFS backups and unrun experiments have been superseded by later completed work; independent remote binary retrieval and publication-time provenance remain open.
 
 ## URGENT: recovered data must be backed up via Git LFS (26 October 2026)
 
