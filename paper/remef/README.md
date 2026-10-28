@@ -118,6 +118,8 @@ python paper/remef/build_pdf.py
 Start-Process .\paper\remef\build\remef_latex_preview.pdf
 ```
 
+The PDF path is only created after all three XeLaTeX passes and BibTeX succeed. The 2026-10-28 Windows failure at `preview.tex:177` resulted from stripping native `\\label` commands for Word and leaving an empty paragraph inside display math; the PDF path now uses **unmodified equation environments and labels**, not the Word-specific rewrite. The PDF also uses the original LaTeX floating figures/tables with the `booktabs` package. If MiKTeX stops while installing a missing package, finish its user-level package setup/update and rerun the build.
+
 The resulting PDF is at `paper/remef/build/remef_latex_preview.pdf`.
 Its source and compiler logs remain in `paper/remef/build/latex_preview/`.
 These paths are ignored build products. The PDF is **for inspection only**:
