@@ -1,5 +1,8 @@
 # REMEF publication execution plan — Paper A
 
+> **PROSPECTIVE CONFIRMATORY DESIGN (2026-10-27):** [Pre-registered WTI AAO shadow forecasting protocol](../../research/PROSPECTIVE_WTI_AAO_SHADOW_FORECAST_PROTOCOL_2026-10-27.md) proposes issuance before the option's future settlement mark, using **only genuinely earlier available** CL/fixing/rate/IV inputs, immutable forecast evidence and paired daily scoring. This is a future option, NOT an already-executed live experiment, and cannot retroactively validate historical Barchart original as-of timestamps. Current legacy forward-priced scripts used target-day curves; never label them fully ex-ante. **AAO publication-time and source-license gates remain open.**
+
+
 > **Phase 2 progress (2026-10-27):** [Original 2,381/2,366 IV recalculation and 4,762 fitted-forecast reconstruction PASS](IV_NUMERICAL_AND_ASOF_AUDIT_2026-10-27.md). An independent date-field audit also passes. **Source-vendor as-of timestamps and first-release historical snapshots CANNOT be certified from the date-only Barchart records**; thus Phase 2 remains **PARTIAL / BLOCKED** for stronger fully ex-ante forecasting claims. The simpler lagged contract-IV persistence beats the fitted smile on matched MAE; retain this negative model-complexity result.
 
 
