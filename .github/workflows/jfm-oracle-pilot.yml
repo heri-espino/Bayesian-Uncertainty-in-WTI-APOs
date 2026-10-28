@@ -1,0 +1,44 @@
+name: JFM bounded oracle pilot (manual only)
+
+on:
+  workflow_dispatch:
+    inputs:
+      seed:
+        description: "Prespecified development seed (not a confirmatory holdout)"
+        required: false
+        type: string
+        default: "20261103"
+
+permissions:
+  contents: read
+
+jobs:
+  pilot:
+    name: Bounded simulation pilot, no vendor data
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check out exact selected commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          lfs: false
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install research package
+        run: python -m pip install -e .
+      - name: Run JFM pilot only
+        env:
+          PILOT_SEED: ${{ inputs.seed }}
+        run: |
+          python -m experiments.jfm_oracle_pilot --quick --seed "$PILOT_SEED"
+      - name: Upload all pilot CSV, JSON, notes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jfm-oracle-pilot-${{ github.sha }}
+          path: results/analysis/jfm_oracle_pilot/
+          if-no-files-found: warn
+          retention-days: 30
