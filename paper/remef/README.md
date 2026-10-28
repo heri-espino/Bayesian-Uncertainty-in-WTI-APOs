@@ -1,3 +1,6 @@
+
+
+> **PROVIDER SOURCE/BACKUP CLARIFICATION (2026-10-27):** [Databento AAO `statistics` contains settlement prices `stat_type=3`; existing 162 reacquired history DBNs and private SQLite are Git LFS-tracked](../../research/AAO_SETTLEMENT_SOURCE_PURCHASE_AND_BACKUP_REVIEW_2026-10-27.md). A read-only [LFS pointer checker](../../scripts/audit_aao_git_lfs_pointers.py) compares all files with the **reacquisition_20261026** manifest. Sampling matched 6/6 Git pointers; **full server payload recovery not yet verified**. Do not repurchase 2020–Sep2026 AAO statistics or claim a live forecast has been run.
 # REMEF submission candidate (separate from JFM)
 
 > **PROSPECTIVE CONFIRMATORY DESIGN (2026-10-27):** [Pre-registered WTI AAO shadow forecasting protocol](../../research/PROSPECTIVE_WTI_AAO_SHADOW_FORECAST_PROTOCOL_2026-10-27.md) proposes issuance before the option's future settlement mark, using **only genuinely earlier available** CL/fixing/rate/IV inputs, immutable forecast evidence and paired daily scoring. This is a future option, NOT an already-executed live experiment, and cannot retroactively validate historical Barchart original as-of timestamps. Current legacy forward-priced scripts used target-day curves; never label them fully ex-ante. **AAO publication-time and source-license gates remain open.**
