@@ -20,7 +20,7 @@ try {
     if ($LASTEXITCODE -ne 0) { throw "git fetch failed" }
     $manifestText = (& git show "refs/remotes/origin/main:docs/branch_cleanup_inventory_2026-10-28.tsv") -join [Environment]::NewLine
     if ($LASTEXITCODE -ne 0 -or -not $manifestText) { throw "Missing approved branch inventory" }
-    $manifest = @($manifestText | ConvertFrom-Csv -Delimiter ([char]9))
+    $manifest = @(($manifestText -split "[\r\n]+") | ConvertFrom-Csv -Delimiter ([char]9))
     if ($manifest.Count -ne 47) { throw "Unexpected inventory size: $($manifest.Count)" }
 
     $headLines = @(& git ls-remote --heads origin)
