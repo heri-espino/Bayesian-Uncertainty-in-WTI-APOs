@@ -1,5 +1,8 @@
 # REMEF submission candidate (separate from JFM)
 
+> **PROSPECTIVE CONFIRMATORY DESIGN (2026-10-27):** [Pre-registered WTI AAO shadow forecasting protocol](../../research/PROSPECTIVE_WTI_AAO_SHADOW_FORECAST_PROTOCOL_2026-10-27.md) proposes issuance before the option's future settlement mark, using **only genuinely earlier available** CL/fixing/rate/IV inputs, immutable forecast evidence and paired daily scoring. This is a future option, NOT an already-executed live experiment, and cannot retroactively validate historical Barchart original as-of timestamps. Current legacy forward-priced scripts used target-day curves; never label them fully ex-ante. **AAO publication-time and source-license gates remain open.**
+
+
 > **ORIGINAL IV ARITHMETIC VERIFIED; VENDOR-TIME BLOCKER STILL OPEN (2026-10-27):** [Complete source-row IV and date-order report](IV_NUMERICAL_AND_ASOF_AUDIT_2026-10-27.md) and [repeatable audit script](../../scripts/audit_remef_forward_iv.py). The 2,381 prior-smile and 2,366 contract-persistence errors have been independently recomputed; all 4,762 fitted-smile sigmas reproduced from 2,574 historical source-IV values. Matched original prior-contract IV carry beats the fitted smile on MAE. The original Barchart `Time` dates are **not** proof of actual publication timestamps, historically unmodified market marks or vendor rights. This remains a **draft**, not a submission clearance.
 
 
