@@ -1,0 +1,35 @@
+name: Archive and prune legacy Git branches
+
+on:
+  workflow_dispatch:
+    inputs:
+      apply:
+        description: "Archive and delete the 43 inventoried old branches? (false = preview)"
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  branch-cleanup:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Check out canonical repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Preview or apply conservative branch cleanup
+        shell: pwsh
+        env:
+          APPLY_MODE: ${{ inputs.apply }}
+        run: |
+          if ($env:APPLY_MODE -eq 'true') {
+            ./scripts/cleanup_branches_20261028.ps1 -Apply
+          } else {
+            ./scripts/cleanup_branches_20261028.ps1
+          }
