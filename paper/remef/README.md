@@ -146,15 +146,19 @@ prerequisite for the LaTeX PDF preview.
 
 ## Build Word draft without rerunning experiments
 
-Requires Python 3.11+, [Pandoc](https://pandoc.org/) and `python-docx`.
-Install the latter in the project environment if needed:
+Requires Python 3.11+, Pandoc, `python-docx`, and a PDF-to-SVG converter. **Windows Conda's Inkscape 0.91 is supported** through its historical `--export-plain-svg=FILE` syntax; Inkscape 1.x uses modern export flags. If Inkscape cannot convert a particular figure, the builder automatically falls back to Poppler `pdftocairo -svg`, available in Conda for Windows without administrator privileges. Each SVG is freshly generated, validated and scrubbed of source metadata. Poppler is also declared in `environment.yml`.
 
 ```powershell
 conda activate asian-options
-python -m pip install python-docx
+conda install -c conda-forge pandoc python-docx poppler -y
 python paper/remef/build.py --check
 python paper/remef/build.py
+python paper/remef/build.py --author-version
+Start-Process .\paper\remef\build\remef_blinded_draft.docx
+Start-Process .\paper\remef\build\remef_author_draft.docx
 ```
+
+There is **no need to uninstall Conda Inkscape 0.91**. If it fails, `pdftocairo` supplies the automatic fallback; do not edit the scientific figure PDFs or rerun experiments.
 
 The default is a **blinded review draft** at
 `paper/remef/build/remef_blinded_draft.docx`. Use
