@@ -1,0 +1,28 @@
+# REMEF Paper A — editorial review of the actual Word-exported PDF (2026-10-28)
+
+**Source reviewed:** `paper/remef/review/remef_blinded_draft.pdf`, 17 pages, exported by Microsoft Word LTSC on October 28. The public-facing text was reviewed from this PDF, not inferred from a TeX preview. This note records recommended edits and unresolved checks; it is not a submission-clearance certificate.
+
+## Assessment
+- **Scientific contribution:** A modest but defensible comparative finding: for the tested WTI Asian-option price models, changing the volatility source affects conditional settlement-proxy errors much more than posterior integration changes conditional point prices; modeling earlier AAO IV more elaborately does not reliably beat persistence. The latter is a useful negative result, not a claim that Bayesian modeling has no role.
+- **The empirical caveats remain decisive:** the original pricing-error analysis has 2,381 rows but just 15 valuation dates, and 2,319 rows report zero volume. Barchart data have unresolved first-publication/vintage and redistribution questions. The longer Databento exercise conditions on same-day parity anchors from other option strikes and uses a different, reduced-form price function. Some end-of-day prices may come from an exchange valuation model. Do not call these fully ex-ante forecasts, tradeable prices or tests of economic profit.
+- **Scope:** REMEF explicitly includes financial engineering, commodities, derivatives, valuation and risk management. The two REMEF Asian-option precedents and closest Bayesian option-pricing papers are cited, but the published 2014 Rombouts–Stentoft full text and source-record vintages remain outstanding before submission.
+- **Figures:** Figure 1 (PDF p. 9) is a useful four-panel mechanism diagnostic; panel D shows the second-order approximation extremely clearly, but some type and labels are small. Figure 2 (PDF p. 11) is the stronger finance-oriented evidence figure; markers and bootstrap intervals overlap near zero, making some within-expiry differences visually hard to assess. A targeted zoom near zero or a separate magnitude panel would improve readability. Keep underlying numbers and bootstrap units unchanged. The existing figure title “Forward-in-time” risks implying fully prospective prediction; “Date-ordered conditional pricing comparisons” is more precise.
+- **Layout:** Word export is 17 US-letter pages, visibly below the 25-page journal limit. The mathematics, figures and tables render, but final revised Word pagination and equation editability still require author-side inspection.
+- **Bibliography:** APA sentence casing is mostly appropriate, but proper nouns “Asian,” “Bayesian,” “Hurst,” and “Monte Carlo” should retain their capitals in article titles; check the generated DOCX references after every rebuild. Do not rewrite shared Wiley/JFM BibTeX just to correct REMEF typography.
+- **Terminology:** Retain standard “implied volatility,” “posterior integration,” “posterior mean,” “pricing error,” “MAE,” “RMSE,” “moneyness,” “Curran approximation,” and “cluster bootstrap” (define the last once). Simplify repeated “settlement-mark,” “actual-flagged,” “market-IV,” “parity-forward-change” and “source-vintage” wording where practical. Name the precise estimand and measurement limitations once, then use simpler terms.
+- **Marketing/positioning:** Introduce a finance-practice question (“Does integrating volatility uncertainty change prices more than changing the volatility input?”), show the original matched persistence control, and explicitly state this is a carefully bounded negative result. Avoid “first,” “best,” “unprecedented,” “predictive accuracy,” or “economically superior” without corresponding evidence.
+
+## Author identity and blind metadata
+- Correct author spelling: **Heriberto Espino-Montelongo**.
+- Academic affiliation: **Universidad de las Américas Puebla, México**.
+- Separate membership: **IMEF Universitario, Región Centro Sur (UDLAP chapter)**. IMEF Universitario lists UDLAP within that region; membership is not employment or research sponsorship, and editor may prefer it in a cover letter rather than a paper affiliation.
+- **Confirmed security defect:** `pdfinfo` on the uploaded blinded PDF reported `Author: Heriberto Espino Montelongo` despite no visible author byline. Microsoft Word export may populate PDF metadata from the user profile. This committed PDF is **not fit for blind review**. Use `python paper/remef/anonymize_review_pdf.py paper/remef/review/remef_blinded_draft.pdf` after exporting and inspect document-info/XMP plus full text. The historical commit retains the old PDF, even after a new sanitized version is committed; the repository remains private.
+- Membership in IMEF Universitario and its relationship to the journal's parent organization should be disclosed transparently to the editor for any conflict-of-interest assessment rather than assumed a financial conflict or automatically omitted.
+
+## Remaining submission gates
+1. Rebuild, render and inspect the revised **author** and **blinded** Word documents and Word-exported PDF (the older review artifacts are snapshots, not the revised source).
+2. Resolve original vendor first-publication times, revision vintages, dissemination rights and independently replayable market inputs, or agree with the editor on explicit archival limitations.
+3. Finish the closest-literature full-text check, review APA capitalization and references, finish journal-specific signed authorship and AI disclosure.
+4. Only then submit exclusively to one journal.
+
+The scientific outputs and figure PDFs were not modified during this editorial pass.
