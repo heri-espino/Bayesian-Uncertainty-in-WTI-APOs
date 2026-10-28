@@ -97,3 +97,31 @@ def test_no_unverified_submission_ready_claim():
     for p in docs:
         assert p.exists(), str(p)
     assert "NOT CLEARED" in docs[0].read_text(encoding="utf-8")
+
+
+
+def test_editorial_terminology_is_conventional_and_caveats_are_retained():
+    """Avoid internal experiment labels and overstated prospective claims."""
+    body = manuscript()
+    for unnatural in (
+        "actual-flagged",
+        "historical parity-forward-change volatility proxy",
+        "same-date disjoint parity anchors",
+        "market-IV innovations",
+        "out-of-sample pricing-error differences",
+        "fully ex-ante pricing forecast" + "s are confirmed",
+    ):
+        assert unnatural not in body, unnatural
+    for required in (
+        "Curran",
+        "posterior",
+        "option-implied volatility",
+        "put--call parity",
+        "15 valuation dates",
+        "97,341",
+        "2,319",
+        "same-date",
+    ):
+        assert required in body, required
+    # The two studies are not treated as independently tradable forecasts.
+    assert "not a" in body.lower() or r"\emph{not}" in body
