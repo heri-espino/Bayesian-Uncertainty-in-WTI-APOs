@@ -1,5 +1,8 @@
 # REMEF submission candidate (separate from JFM)
 
+> **ORIGINAL IV ARITHMETIC VERIFIED; VENDOR-TIME BLOCKER STILL OPEN (2026-10-27):** [Complete source-row IV and date-order report](IV_NUMERICAL_AND_ASOF_AUDIT_2026-10-27.md) and [repeatable audit script](../../scripts/audit_remef_forward_iv.py). The 2,381 prior-smile and 2,366 contract-persistence errors have been independently recomputed; all 4,762 fitted-smile sigmas reproduced from 2,574 historical source-IV values. Matched original prior-contract IV carry beats the fitted smile on MAE. The original Barchart `Time` dates are **not** proof of actual publication timestamps, historically unmodified market marks or vendor rights. This remains a **draft**, not a submission clearance.
+
+
 > **SOURCE-LEVEL LITERATURE REVIEW (2026-10-27):** [Rombouts–Stentoft (2009 working paper vs 2014 published abstract) and Sagor et al. (2026) full-text audit](SOURCE_REVIEW_ROMBOUTS_SAGOR_2026-10-27.md) confirms differences in empirical comparator, observed option marks and underlying payoff. The user-provided 2009 CIRANO working paper **does not replace** the as-yet-unread 2014 journal full text. This audit changes no paper source or empirical estimates.
 
 > **PRIORITIZED PUBLICATION PLAN (2026-10-27):** Read [PUBLICATION_EXECUTION_PLAN.md](PUBLICATION_EXECUTION_PLAN.md) first for novelty, data-as-of, paired robustness, literature, writing and REMEF submission gates. This is a task plan, not permission to submit; scientific and data-rights blockers remain open.
