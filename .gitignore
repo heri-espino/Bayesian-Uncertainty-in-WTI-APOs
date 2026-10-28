@@ -1,4 +1,7 @@
 # OS / editor artifacts
+# Microsoft Word temporary owner/lock files (not manuscripts)
+~$*.doc
+~$*.docx
 .DS_Store
 Thumbs.db
 .vscode/
