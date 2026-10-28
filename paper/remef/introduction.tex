@@ -1,14 +1,14 @@
 \section{Introduction}\label{sec:short_intro}
 
-WTI Average Price Options (APOs) allow market participants to manage
-risk in an arithmetic average of first-nearby crude-oil futures
-settlements rather than a single delivery-date price. Their
-valuation depends on the option payoff, the futures information
-available at the valuation date, and the volatility assumption.
-Bayesian methods also allow uncertainty about volatility to enter
-conditional theoretical values. But more elaborate posterior
-computation need not improve a price if its underlying information
-is poorly matched to the derivative being valued.
+What matters more when pricing an option on the average price of crude
+oil: allowing for uncertainty about volatility, or choosing a
+volatility estimate informed by option prices? WTI Average Price
+Options (APOs) hedge exposure to an arithmetic average of crude-oil
+futures settlements, rather than a single price at expiry.
+Their value depends on both the pricing model and its volatility
+input. Bayesian methods account for uncertainty about that input,
+but greater computational complexity does not necessarily produce
+a more accurate conditional price.
 
 Asian options depend on a price average rather than a single terminal
 price. Geometric-average approaches and conditioning approximations
@@ -55,18 +55,15 @@ quantity. Consequently, a large historical-versus-implied
 pricing difference by itself neither identifies a variance
 risk premium nor demonstrates that Bayesian inference fails.
 
-Our distinction has three parts. First, posterior-integrated
-pricing (PI) averages conditional values over the
-volatility posterior, whereas posterior-mean plug-in
-pricing (PM) evaluates the conditional value at one
-posterior mean. Their difference concerns the
-\emph{point price}; it does not equal the dispersion of
-the conditional model-price distribution. Second, the
-source of volatility information is an independent
-empirical choice. Third, a posterior distribution for
-model parameters and a predictive interval for actual
-settlement-mark errors answer different uncertainty
-questions and should not be presented interchangeably.
+We separate three questions. First, how much does averaging
+option prices over the volatility posterior change the price itself?
+We call this posterior integration (PI), and compare it with pricing
+at the posterior mean (PM). Second, how much does the chosen
+volatility input affect pricing errors? Third, how accurately can
+we describe errors relative to observed settlement prices?
+The PI--PM difference, the spread of model prices across
+the posterior, and an interval for settlement-price errors
+are different quantities; none should stand in for another.
 
 We examine those distinctions in a 10-million-history
 synthetic study and in two observational exercises,
@@ -86,33 +83,25 @@ marks on 189 dates and includes prior-date
 market-IV Bayesian forecasting and retrospective
 pricing-residual interval calibration.
 
-The central empirical finding is not that a
-particular Bayesian prior dominates. In the
-original analysis, historical-volatility posterior
-integration changes point prices little while
-earlier option-implied volatility substantially
-reduces the errors of the tested historical
-volatility inputs. The distinct longer-date AAO
-exercise confirms the importance of the volatility
-\emph{information source} but shows no reliable gain
-from Bayesian market-IV integration over carrying
-forward the previous implied volatility. Its
-uncertainty-calibration comparison also reveals
-severe undercoverage in part of 2026. These
-results are conditional: some settlement
-observations may be derived from an exchange
-valuation model, and the extended analysis uses
-same-day \emph{disjoint-strike} parity inputs.
-The two empirical cohorts cannot be pooled as
-if they came from one identical model.
+The results point to a practical distinction. In the original
+study, integrating over historical volatility uncertainty changes
+the point price very little. Using earlier option-implied
+volatility instead of the tested historical estimates yields
+much smaller errors relative to settlement-price proxies.
+The separate, longer AAO study finds a similar ranking of
+volatility inputs, but Bayesian updating of earlier implied
+volatility does not reliably outperform carrying forward
+the most recent observation. Its error intervals also
+undercover in parts of 2026. These results are conditional:
+some settlement prices may reflect exchange valuation models,
+and the longer study uses other same-date option strikes to
+estimate its pricing inputs. The two studies use different
+models and must not be pooled as one sample.
 
-Our contribution is therefore a transparent
-separation of three effects often grouped under
-the label of Bayesian option pricing: posterior
-curvature corrections, choice of volatility
-signals, and predictive uncertainty calibration.
-The paper explains the economic and
-measurement limits of each. The next
-sections describe the model, the two
-independent empirical designs, the
-results and their implications.
+The contribution is an empirical comparison of what changes a
+WTI average-price option valuation: integrating volatility
+uncertainty or changing the volatility input. We also distinguish
+uncertainty in model prices from uncertainty in observed pricing
+errors. These findings offer a benchmark for deciding when more
+elaborate Bayesian estimation is useful, while keeping the
+limitations of settlement data and model assumptions explicit.

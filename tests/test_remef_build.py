@@ -44,6 +44,8 @@ def test_rem_e_f_author_and_bilingual_abstract_limits():
     b = _build_module()
     author = b.make_latex(with_author=True)
     assert "Heriberto Espino-Montelongo" in author
+    assert "IMEF Universitario" in author
+    assert "IMEF Universitario" not in b.make_latex(with_author=False)
     fm = (ROOT / "paper" / "remef" / "frontmatter.tex").read_text(encoding="utf-8")
     for start, end in (
         (r"\section*{Abstract}", r"\textbf{Keywords:}"),
