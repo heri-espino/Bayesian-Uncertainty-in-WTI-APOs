@@ -145,7 +145,7 @@ def test_actual_pandoc_heading_text_is_supported(tmp_path):
     doc.add_paragraph("Data and empirical design", style="Heading 1")
     for title in (
         "WTI Average Price Options",
-        "Out-of-sample volatility comparisons",
+        "Date-ordered conditional pricing comparisons",
         "Cross-instrument validation",
         "Separate Databento settlement-price comparison",
         "AI-assisted manuscript preparation",
@@ -157,8 +157,8 @@ def test_actual_pandoc_heading_text_is_supported(tmp_path):
         "When does posterior integration matter?",
         "Posterior integration in the WTI sample",
         "Historical versus option-implied volatility",
-        "Cross-instrument validation using vanilla-WTI options",
-        "Extended conditional settlement-mark evidence",
+        "Cross-instrument comparison using WTI futures options",
+        "Databento settlement-price results",
     ):
         doc.add_paragraph(title, style="Heading 2")
         doc.add_paragraph("The results are calculated from saved experiments.")
@@ -265,7 +265,7 @@ def test_remef_reconciled_databento_sections():
     assert all("paper/remef/sections" in p.as_posix() for p in b.BODY_SECTIONS)
     tex = b.make_latex(with_author=False)
     assert "Separate Databento settlement-price comparison" in tex
-    assert "Extended conditional settlement-mark evidence" in tex
+    assert "Databento settlement-price results" in tex
     assert "October 2026 expiry" in tex
     assert "97,341" in tex and "111,585" in tex
     assert "0.2089" in tex and "0.2098" in tex
