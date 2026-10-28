@@ -30,6 +30,11 @@ claim remain pending. Complete runbook:
 
 # Journal of Commodity Markets — Elsevier CAS working draft
 
+> **2026-10-27 CL source feasibility finding:** [Independent first-nearby CL audit](../../research/JCM_CL_FUTURES_FEASIBILITY_AUDIT_2026-10-27.md) finds a previously purchased, Git LFS-tracked 2024–Sep2026 CL futures source (33 contracts, 2,223,975 reported raw rows), a derived 673-date/632-return roll-clean front series, and 14 short 2026 Barchart CL futures curve files. However the 311MB CL LFS SHA256 **disagrees** with the saved acquisition manifest SHA256; exact raw version and the full 2020–2026 forward curve remain unverified. The new read-only local scanner is scripts/audit_jcm_cl_feasibility.py; no purchase or JCM experiment has been authorized/executed. The existing JCM CAS draft still reproduces old Paper A text.
+
+> **PAPER B TRACK — 2026-10-27:** This is now the *prospective* venue/workspace for a **different original research project**: verified first-nearby CL fixing-path reconstruction, actual partly fixed WTI AAO payoff pricing under the futures term structure, and independent market-price or implementable hedging validation where possible. Read the [two-paper nonoverlap and publication plan](../../docs/two_paper_publication_strategy_2026-10-27.md) and the [separate structural JCM feasibility protocol](../../research/STRUCTURAL_WTI_AAO_PAPER_FEASIBILITY_PLAN_2026-10-27.md). **Current CAS builder still stages the OLD Paper A concise manuscript**; it is **not** a finished draft for this new JCM Paper B. No CL fixing-path research has yet been executed for Paper B and JCM is not selected for a live submission. Work only after auditing missing underlying data, economic targets and permissions.
+
+
 This is a **pre-submission source adaptation**, not a validated 81-month option-pricing paper or an approved journal submission.
 
 The author added Elsevier CAS v2.4 under paper/els-cas-templates/. This project uses **cas-dc.cls** (double-column) for an internal working draft. The final Journal of Commodity Markets Guide for Authors still needs verification before preparing the actual submission.
