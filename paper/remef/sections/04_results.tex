@@ -113,7 +113,8 @@ Valuation-date cluster bootstrap results support the improvement over historical
 The separate Databento analysis provides a longer-date check of the
 \emph{volatility-input ranking}, not an additional sample from the
 earlier path-dependent Curran design. Table~\ref{tab:remef_databento}
-reports errors for identical actual-flagged targets. The previous-date
+reports errors for the same observations classified
+as actual settlements by the data provider. The previous-date
 AAO implied-volatility benchmark gives an MAE of \$0.2184 per
 barrel, versus \$0.8040 for posterior integration of the
 historical parity-forward-change volatility proxy. Both estimates
@@ -123,7 +124,7 @@ proxy pricing little: the PM MAE is \$0.8068.
 
 \begin{table}[t]
 \centering
-\caption{Independent Databento AAO settlement-mark exercise on 97,341 common actual-flagged contract-date targets over 189 valuation dates. Pricing errors are in dollars per barrel. This is conditional reduced-form pricing with same-date disjoint parity anchors, not the earlier Curran/CL fixing-path study.}
+\caption{Separate Databento AAO settlement-price comparison on 97,341 common observations classified as actual settlements across 189 valuation dates. Pricing errors are in dollars per barrel. This is conditional reduced-form pricing with same-date disjoint parity anchors, not the earlier Curran/CL fixing-path study.}
 \label{tab:remef_databento}
 \begin{tabular}{lrr}
 \toprule
@@ -150,7 +151,7 @@ numbers do not identify a volatility risk premium.
 Table~\ref{tab:remef_bayes_iv} isolates the more demanding question:
 does a Bayesian market-volatility forecast outperform a simple
 persistence benchmark when both use the same prior option-market
-information? On 47,718 actual-flagged target observations across
+information? On 47,718 observations classified as actual settlements across
 88 dates in 2025--September 2026, it does not. The unchanged
 lagged-IV method has slightly lower MAE and RMSE; price integration
 is almost indistinguishable from the matched Bayesian plug-in
@@ -163,7 +164,7 @@ presented as economically significant advantages.
 
 \begin{table}[t]
 \centering
-\caption{Matched actual-flagged AAO pricing, 2025--September 2026; 47,718 contract-date targets and 88 valuation dates. Bayesian market-IV variants use strictly earlier option-implied volatility.}
+\caption{Matched AAO pricing on 47,718 observations classified as actual settlements across 88 valuation dates in 2025--September 2026. Bayesian market-IV variants use strictly earlier option-implied volatility.}
 \label{tab:remef_bayes_iv}
 \begin{tabular}{lrr}
 \toprule
@@ -176,8 +177,8 @@ Bayesian market-IV posterior integration & 0.2098 & 0.3024\\
 \end{tabular}
 \end{table}
 
-The independent settlement-mark \emph{residual-calibration} exercise
-uses 89,696 common actual-flagged targets on 174 evaluation dates
+The separate exercise assessing \emph{pricing-error interval coverage}
+uses 89,696 common actual settlement observations on 174 evaluation dates
 after historical warm-up. In the inspected 2025--September 2026
 subset, the Bayesian residual model, attached to the Bayesian
 market-IV PI point forecast, attains 86.43\% coverage for
