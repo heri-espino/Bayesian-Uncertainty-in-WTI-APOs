@@ -6,9 +6,9 @@
 
 \section*{Abstract}
 
-\textbf{Objective:} Compare posterior integration with volatility-input choice in pricing WTI average-price options.
+\textbf{Objective:} Compare the effect of posterior integration with that of choosing a different volatility input when pricing WTI average-price options.
 
-\textbf{Methods:} We use a second-order expansion, 10 million simulations, an Asian-option model, and a separate conditional settlement comparison.
+\textbf{Methods:} We use a second-order expansion, 10 million simulated return histories, and two separate comparisons with option settlement prices.
 
 \textbf{Results:} Across 310 October-2026-expiry observations, posterior integration and posterior-mean plug-in prices differ by only \$0.000745/bbl on average. For 2,381 observations across 15 dates, historical-volatility mean absolute error (MAE) is \$2.6187/bbl, versus \$0.1075/bbl with earlier option-implied volatility. A separate 97,341-observation comparison also favors earlier implied volatility (MAE \$0.2184 versus \$0.8040/bbl). Bayesian updating of implied volatility does not reliably improve on carrying forward its last value.
 
@@ -16,7 +16,7 @@
 
 \textbf{Limitations:} Results depend on settlement proxies, model assumptions, few original valuation dates, and same-date inputs in the larger comparison.
 
-\textbf{Originality:} We separate posterior point-price effects, volatility information, and uncertainty in pricing errors.
+\textbf{Originality:} We distinguish the effect of posterior integration on option prices from the effect of volatility inputs and uncertainty about pricing errors.
 
 \textbf{Conclusion:} Changing the volatility input affects pricing errors more than posterior integration in these tests.
 
@@ -24,17 +24,17 @@
 
 \section*{Resumen}
 
-\textbf{Objetivo:} Comparar la integración posterior y la elección de volatilidad al valuar opciones asiáticas sobre WTI.
+\textbf{Objetivo:} Comparar el efecto de la integración posterior y de la fuente de volatilidad al valuar opciones asiáticas sobre WTI.
 
-\textbf{Métodos:} Empleamos una expansión de segundo orden, 10 millones de simulaciones, un modelo de opciones asiáticas y otra comparación condicionada.
+\textbf{Métodos:} Empleamos una expansión de segundo orden, 10 millones de series simuladas y dos comparaciones con precios de liquidación.
 
-\textbf{Resultados:} En 310 observaciones con vencimiento en octubre de 2026, los precios por integración posterior y por usar la volatilidad media posterior difieren \$0.000745 por barril en promedio. En 2,381 observaciones de 15 fechas, el error absoluto medio (MAE) es \$2.6187 por barril con volatilidad histórica y \$0.1075 con volatilidad implícita anterior. Otra comparación de 97,341 observaciones favorece la volatilidad implícita anterior (MAE de \$0.2184 frente a \$0.8040 por barril). Un modelo bayesiano no supera de manera consistente la persistencia.
+\textbf{Resultados:} En 310 observaciones del vencimiento de octubre de 2026, la integración posterior y el uso de la media posterior de volatilidad difieren \$0.000745 por barril en promedio. En 2,381 observaciones de 15 fechas, el error absoluto medio (MAE) es \$2.6187 por barril con volatilidad histórica y \$0.1075 con volatilidad implícita anterior. Otra comparación de 97,341 observaciones favorece la volatilidad implícita anterior (MAE de \$0.2184 frente a \$0.8040 por barril). Un modelo bayesiano no supera claramente el uso de la última volatilidad implícita.
 
 \textbf{Recomendación:} Comparar fuentes de volatilidad antes de añadir complejidad.
 
 \textbf{Limitaciones:} Los resultados dependen de precios de referencia, supuestos de valuación, pocas fechas originales y datos contemporáneos en la comparación ampliada.
 
-\textbf{Originalidad:} Separamos los efectos de la integración posterior, la información de volatilidad y la incertidumbre de los errores.
+\textbf{Originalidad:} Distinguimos integración posterior, elección de volatilidad e incertidumbre sobre los errores.
 
 \textbf{Conclusión:} La fuente de volatilidad afecta más los errores que la integración posterior.
 
