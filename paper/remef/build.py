@@ -72,6 +72,7 @@ def authorship() -> str:
 Universidad de las Américas Puebla, Mexico\\
 ORCID: https://orcid.org/0009-0009-1230-2931
 \end{center}
+\noindent\textbf{Professional membership:} IMEF Universitario, Regi\'on Centro Sur (UDLAP chapter).\\
 \noindent\textbf{Professional website:} https://heri-espino.github.io\\
 \noindent\textbf{LinkedIn:} https://www.linkedin.com/in/heri-espino/
 """
