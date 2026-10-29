@@ -7,7 +7,8 @@ ROOT = Path(__file__).resolve().parents[1]
 def test_jfm_concise_source_current_and_remains_distinct_from_remef():
     main = (ROOT / "paper/manuscript/main_short.tex").read_text(encoding="utf-8")
     build = (ROOT / "paper/build.py").read_text(encoding="utf-8")
-    assert r"\author[1]{Anonymous}" in main
+    # WileyNJDv5 needs two name tokens; one causes \filtername to fail at \maketitle.
+    assert r"\author[1]{Anonymous Author}" in main
     assert "Heriberto" not in main and "heri-espino" not in main
     identifying = (ROOT / "paper/manuscript/jfm_title_page.tex").read_text(encoding="utf-8")
     assert "Heriberto Espino-Montelongo" in identifying
