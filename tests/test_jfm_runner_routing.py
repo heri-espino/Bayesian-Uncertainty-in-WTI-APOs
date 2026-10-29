@@ -8,7 +8,7 @@ def test_manual_jfm_workflows_target_only_pcag103a_15():
     for file in ("jfm-oracle-pilot.yml", "build-paper.yml"):
         text = (ROOT / ".github" / "workflows" / file).read_text(encoding="utf-8")
         assert "workflow_dispatch:" in text
-        assert "runs-on: [self-hosted, windows, x64, PCAG103A-15]" in text
+        assert "runs-on: [self-hosted, windows, x64]" in text
         assert '$env:RUNNER_NAME -ne "PCAG103A-15"' in text
         assert "lfs: false" in text
         assert "push:" not in text
