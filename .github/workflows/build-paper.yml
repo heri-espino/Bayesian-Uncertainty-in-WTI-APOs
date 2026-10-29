@@ -40,6 +40,10 @@ jobs:
           & $env:CONDA_EXE run --no-capture-output -n asian-options python -c "import shutil; print({k:shutil.which(k) for k in ('xelatex','bibtex','perl','latexmk')}); assert shutil.which('xelatex') and shutil.which('bibtex'), 'MiKTeX XeLaTeX/BibTeX are not available to the runner account'"
           if ($LASTEXITCODE -ne 0) { throw "Existing MiKTeX toolchain not found; no installer was run." }
 
+      - name: Supply missing user-level MiKTeX packages for Wiley template
+        run: |
+          & .\scripts\ensure_jfm_miktex_packages.ps1
+
       - name: Validate concise Wiley manuscript
         run: |
           & $env:CONDA_EXE run --no-capture-output -n asian-options python paper/build.py --check
