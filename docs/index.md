@@ -42,6 +42,7 @@ BRANCH_AND_MANUSCRIPT_POLICY_2026-10-28
 literature_strategy
 submission_checklist
 JFM_PRESUBMISSION_AUDIT_2026-10-29
+JFM_PDF_PROOFREVIEW_2026-10-29
 quickstart
 architecture
 repository_layout

@@ -52,16 +52,19 @@ of overlapping versions.
 - [x] Versioned JFM-only adapter now extends the exact AF compilation
   preamble with a `\graphicspath` for adjacent PGF image sidecars; AF
   continues to own PDF/embedding/width audits. It does not substitute fonts.
-- [ ] **Rerun manual build-paper on current main after merging this fix**, on
-  PCAG103A-15 in `asian-options`. The job intentionally clears old output
-  before generating fresh files, and it never auto-commits assets.
-- [ ] Confirm successful compilation, four PGF/TeX PDF figures, all four SVG
-  and PNG previews, metadata manifest and reviewer PDF in the uploaded artifact.
-- [ ] Independently inspect raster sidecar placement, labels, legends,
-  multi-panel readability, cropped bounds, grayscale contrast, page flow
-  and tables in *rendered pages*, not merely passing machine checks.
-- [ ] Confirm exact font embedding and matching Wiley width using
-  `scripts.verify_jfm_runner_build`; check blinded PDF content/metadata.
+- [x] **Manual build succeeded**, run #40955826056, commit
+  `b3d59dac2795a3db975f1efbca6b95158a18da74`, on PCAG103A-15
+  in `asian-options`. Outputs remain in a GitHub Actions artifact, not
+  auto-committed.
+- [x] Confirmed compilation, four PGF/TeX PDF figures, all four SVG/PNG
+  previews, metadata manifest and anonymous reviewer PDF in the uploaded artifact.
+- [x] Independently rendered all ten PDF pages; no apparent clipping,
+  and manuscript figures/tables legible. Still needs proof refinement:
+  page 1 production placeholders; page 6 dense Figure 1 labels/inset.
+  Detailed proof notes: `docs/JFM_PDF_PROOFREVIEW_2026-10-29.md`.
+- [x] Confirmed exact font embedding and matching Wiley width using
+  successful runner verifier plus independent artifact and PDF review.
+  The review PDF is metadata-blinded (blank Author/Title fields).
 - [ ] Commit final inspected artifacts to `figures/jfm/` and snapshot PDF
   only after manual verification (do not auto-commit generated files).
 
@@ -99,6 +102,6 @@ https://onlinelibrary.wiley.com/page/journal/10969934/homepage/forauthors.html
 The manuscript revision includes the bounded synthetic results as
 **qualified illustrative evidence** with explicit numerical limits. It does
 not relabel the study as preregistered or eliminate the outstanding
-coverage-convergence requirement. Figure assets and final PDF are **not**
-certified until the manual Windows build succeeds and the rendered artifact
-is inspected.
+coverage-convergence requirement. The **technical PDF and figure build is verified** in run #40955826056,
+but the print proof still has production placeholders and the scientific,
+supplement, and source-verification gates remain open. Do not submit yet.
