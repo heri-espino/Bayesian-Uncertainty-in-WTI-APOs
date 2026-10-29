@@ -8,6 +8,20 @@
 \journal{Journal of Futures Markets}
 \raggedbottom
 
+% Blinded PRE-ACCEPTANCE proof: suppress NJDv5's fictitious production
+% metadata rather than printing fake dates, DOI, copyright holder or pages.
+% Do not change the frozen publisher class: remove these overrides only when
+% Wiley supplies actual production metadata after acceptance.
+\makeatletter
+\gdef\@received{}
+\gdef\@revised{}
+\gdef\@accepted{}
+\gdef\@published{}
+\doiheadtext{}
+\def\oddfoot@titlepage@info{}
+\let\evenfoot@titlepage@info\oddfoot@titlepage@info
+\makeatother
+
 \begin{document}
 
 \title{When Does Posterior Integration Change Option Values? Evidence from WTI Average Price Options}
