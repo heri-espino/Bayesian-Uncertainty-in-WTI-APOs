@@ -66,6 +66,7 @@ def calculate(out: Path):
                                      qmc_reference=ref, qmc_halfwidth=half,
                                      covered=int(lo <= ref <= hi),
                                      clearly_covered=int(definitely_inside),
+                                     clearly_not_covered=int(definitely_outside),
                                      oracle_boundary_ambiguous=int(not
                                         (definitely_inside or definitely_outside))))
     data = pd.DataFrame(rows)
@@ -81,11 +82,14 @@ def calculate(out: Path):
         diff = np.max(abs(original[now] - original[previous]))
         assert diff < 2e-9, (now, diff)
 
+    widths = data["interval_hi"] - data["interval_lo"]
+    data["interval_width"] = widths
     summary = data.groupby(["grid_nodes", "rho"], sort=True).agg(
         covered=("covered", "sum"), state_rows=("covered", "size"),
         coverage=("covered", "mean"),
-        clearly_covered=("clearly_covered", "sum"),
-        boundary_ambiguous=("oracle_boundary_ambiguous", "sum"))
+        certainly_covered=("clearly_covered", "sum"),
+        boundary_ambiguous=("oracle_boundary_ambiguous", "sum"),
+        mean_interval_width=("interval_width", "mean"))
     full = data.loc[data.grid_nodes.eq(max(NODES))].set_index(
         ["sigma_true", "n_obs", "replication", "strike", "rho"])
     differences = []
@@ -96,7 +100,7 @@ def calculate(out: Path):
             differences.append(dict(grid_nodes=nodes, reference_grid=max(NODES),
                 metric=col, max_abs_difference=float(delta.max()),
                 p99_abs_difference=float(delta.quantile(.99))))
-    return data, summary.reset_index(), pd.DataFrame(differences)
+    return data.drop(columns=["interval_width"]), summary.reset_index(), pd.DataFrame(differences)
 
 
 def main():
