@@ -1,5 +1,7 @@
 name: build-paper
 
+# Manual-only JFM build. Add custom label PCAG103A-15 to that runner only.
+# Never schedules on the other Windows runner and never runs on push.
 on:
   workflow_dispatch:
 
@@ -8,99 +10,66 @@ permissions:
 
 jobs:
   compile:
-    name: JFM figure previews + Wiley PDF
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-
+    name: JFM Wiley PDF and isolated vector figures on PCAG103A-15
+    runs-on: [self-hosted, windows, x64, PCAG103A-15]
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: powershell
     steps:
-      - name: Check out exact selected revision
+      - name: Check out exact selected revision without LFS downloads
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
+          lfs: false
+          persist-credentials: false
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-          cache: "pip"
-
-      - name: Install TeX toolchain
+      - name: Verify target machine (never run on PCAG103A-08)
         run: |
-          sudo apt-get update
-          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-            latexmk \
-            texlive-xetex \
-            texlive-latex-base \
-            texlive-latex-extra \
-            texlive-plain-generic \
-            texlive-fonts-recommended \
-            texlive-bibtex-extra \
-            texlive-science \
-            dvipng \
-            ghostscript \
-            cm-super \
-            perl \
-            poppler-utils
+          if ($env:RUNNER_NAME -ne "PCAG103A-15") {
+            throw "Wrong runner $env:RUNNER_NAME; expected PCAG103A-15"
+          }
+          Write-Host "Using $env:RUNNER_NAME"
 
-      - name: Install research package
+      - name: Locate existing user-level Conda environment
         run: |
-          python -m pip install --upgrade pip
-          python -m pip install -e ".[dev]"
+          & .\scripts\resolve_conda_windows_runner.ps1 -EnvironmentName asian-options
 
-      - name: Validate manuscript layout
-        run: python paper/build.py --check
-
-      - name: Prepare vendored Utopia typography
+      - name: Confirm existing Wiley compilation tools (no installs)
         run: |
-          python -m scripts.vendor_utopia_fonts | tee /tmp/vendor-font-report.json
+          & $env:CONDA_EXE run --no-capture-output -n asian-options python -c "import shutil; print({k:shutil.which(k) for k in ('xelatex','bibtex','perl','latexmk')}); assert shutil.which('xelatex') and shutil.which('bibtex'), 'MiKTeX XeLaTeX/BibTeX are not available to the runner account'"
+          if ($LASTEXITCODE -ne 0) { throw "Existing MiKTeX toolchain not found; no installer was run." }
 
-      - name: Build isolated JFM figures (preview typography)
-        run: python -m scripts.build_publication_figures --journal jfm --formats pdf png svg --allow-font-fallback
-
-      - name: Verify JFM-only figure output
+      - name: Validate concise Wiley manuscript
         run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          root = Path("figures/jfm")
-          info = json.loads((root / "figure_manifest.json").read_text(encoding="utf-8"))
-          assert info.get("journal_target") == "jfm"
-          for number, title in ((1, "fig01_mechanism_map"), (2, "fig02_historical_vs_apo_implied_volatility"), (3, "fig03_forward_q_cluster_bootstrap"), (4, "fig04_numerical_identification")):
-              path = root / (title + ".pdf")
-              assert path.is_file() and path.stat().st_size > 0, path
-          print("JFM figure previews are isolated; font match still requires visual proof")
-          PY
+          & $env:CONDA_EXE run --no-capture-output -n asian-options python paper/build.py --check
+          if ($LASTEXITCODE -ne 0) { throw "JFM layout validation failed" }
 
-      - name: Compile Wiley manuscript
+      - name: Render JFM-only figures from existing derived results
         run: |
-          python paper/build.py --clean
-          python paper/build.py
+          & $env:CONDA_EXE run --no-capture-output -n asian-options python -m scripts.build_publication_figures --journal jfm --formats pdf png svg --allow-font-fallback
+          if ($LASTEXITCODE -ne 0) { throw "JFM figure rendering failed" }
 
-      - name: Verify PDF output
+      - name: Compile anonymous Wiley LaTeX document
         run: |
-          test -s paper/espino_2026_bayess-on-wti.pdf
-          pdfinfo paper/espino_2026_bayess-on-wti.pdf | head -n 20
+          & $env:CONDA_EXE run --no-capture-output -n asian-options python paper/build.py
+          if ($LASTEXITCODE -ne 0) { throw "Wiley XeLaTeX compilation failed" }
 
-      - name: Check reviewer anonymity in the compiled PDF and source archive
+      - name: Verify anonymous reviewer PDF and separate figure outputs
         run: |
-          test ! -e paper/build/stage/jfm_title_page.tex
-          test ! -e paper/build/stage/main_short.tex
-          pdftotext paper/espino_2026_bayess-on-wti.pdf /tmp/jfm-review-text.txt
-          if grep -Eiq 'Heriberto|Espino-Montelongo|@udlap[.]mx|heri-espino' /tmp/jfm-review-text.txt; then
-            echo "Identifying information detected in JFM reviewer PDF"
-            exit 1
-          fi
-          echo "Compiled Wiley review copy passed text-anonymity check"
+          & $env:CONDA_EXE run --no-capture-output -n asian-options python -m scripts.verify_jfm_runner_build
+          if ($LASTEXITCODE -ne 0) { throw "Reviewer anonymity or figure output verification failed" }
 
-      - name: Upload compiled paper
+      - name: Upload JFM PDF and figures (never auto-commit)
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: jfm-wiley-preview-${{ github.sha }}
+          name: jfm-wiley-PCAG103A-15-${{ github.sha }}-run-${{ github.run_id }}
           path: |
             paper/espino_2026_bayess-on-wti.pdf
             figures/jfm/*.pdf
             figures/jfm/*.png
             figures/jfm/*.svg
             figures/jfm/figure_manifest.json
-          if-no-files-found: error
+          if-no-files-found: warn
           retention-days: 30
