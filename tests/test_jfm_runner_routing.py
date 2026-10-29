@@ -37,3 +37,18 @@ def test_missing_cuted_sty_has_nonadmin_official_ctan_fallback():
     assert 'BUILD_DIR / "local_tex" / "cuted.sty"' in build
     assert 'shutil.copy2(local_cuted, STAGE_DIR / "cuted.sty")' in build
     assert "--admin" not in script
+
+def test_miktex_update_reminder_on_stderr_is_not_a_hard_failure():
+    """MiKTeX's 'major issue' update reminder does not imply a failed lookup."""
+    script = (ROOT / "scripts/ensure_jfm_miktex_packages.ps1").read_text(encoding="utf-8")
+    assert "Invoke-MiKTeXProcess" in script
+    assert "System.Diagnostics.ProcessStartInfo" in script
+    assert "RedirectStandardError = $true" in script
+    assert "RedirectStandardOutput = $true" in script
+    assert "$result.ExitCode -eq 0" in script
+    assert "$result.StdOut" in script
+    assert "No MiKTeX package installation or update is necessary" in script
+    assert "exit 0" in script
+    # Native stderr is handled by redirected .NET streams, not PowerShell's
+    # NativeCommandError under ErrorActionPreference=Stop.
+    assert '& $kpsewhich.Source cuted.sty 2>$null' not in script
