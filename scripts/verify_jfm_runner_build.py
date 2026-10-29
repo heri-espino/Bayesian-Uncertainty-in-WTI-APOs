@@ -6,6 +6,7 @@ environment (pypdf, which is included in environment.yml).
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 
 from pypdf import PdfReader
@@ -73,6 +74,19 @@ def main() -> None:
             file = ART / f"{name}.{ext}"
             if not file.is_file() or file.stat().st_size == 0:
                 raise SystemExit(f"Missing JFM figure: {file}")
+
+    # PGF files can include bitmap sidecars from heatmaps/imshow; retain
+    # every image referenced by the TeX source for reproducible font-exact PDFs.
+    for name in NAMES:
+        pgf_text = (ART / f"{name}.pgf").read_text(encoding="utf-8")
+        images = re.findall(
+            r"\\includegraphics(?:\[[^\]]*\])?\{([^}]+)\}", pgf_text
+        )
+        for image in images:
+            if not (ART / image).is_file():
+                raise SystemExit(
+                    f"PGF auxiliary artwork missing for {name}: {image}"
+                )
 
     reader = PdfReader(str(PDF))
     text = "\n".join(page.extract_text() or "" for page in reader.pages)
