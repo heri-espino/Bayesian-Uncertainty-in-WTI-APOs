@@ -20,6 +20,7 @@ def test_manual_jfm_workflows_target_only_pcag103a_15():
 
 def test_remef_files_not_targeted_by_manual_jfm_build():
     build = (ROOT / ".github/workflows/build-paper.yml").read_text(encoding="utf-8")
+    assert "ensure_jfm_miktex_packages.ps1" in build
     assert "scripts.verify_jfm_runner_build" in build
     assert "scripts.build_publication_figures --journal jfm" in build
     assert "paper/remef/" not in build
