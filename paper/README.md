@@ -1,3 +1,5 @@
+> **2026-10-29 JFM figures:** JFM PDFs now use the pinned AwesomeFigures `af.paper()` integration with the actual staged Wiley LaTeX preamble, measured `\textwidth`, and TeX-native embedded fonts. Render them with `python -m scripts.build_publication_figures --journal jfm --formats pdf png svg` after `python -m pip install -r paper/requirements-awesomefigures.txt` in the `asian-options` environment. Then run `python paper/build.py` and `python -m scripts.verify_jfm_runner_build`. Keep `figures/jfm/*.pgf`, `awesomefigures_manifest.json`, and the audited PDF in Git once regenerated and visually proofed. SVG/PNG are previews, not exact TeX font exports. REMEF output stays unchanged. The existing committed JFM binary PDF/figures predate this new integration until rebuilt.
+
 > **2026-10-28 current target:** Paper A now prioritizes an **ambitious JFM submission**, with the existing REMEF document left unchanged as the fallback. The JFM source is the concise `paper/manuscript/main_short.tex`, compiled by `python paper/build.py` using the frozen Wiley vendor class. `main.tex` is an older, noncanonical full-length draft. A bounded synthetic experiment is implemented but has **no claims or final results yet**; read [JFM revision and oracle pilot](manuscript/JFM_REVISION_AND_ORACLE_PILOT_2026-10-28.md) before running it. JFM-specific figure output is isolated under `figures/jfm/` and the REMEF artifact paths are untouched. This target change does **not** complete the distinct future JCM Paper B.
 
 # Internal Wiley/JFM manuscript — retained while the journal target is reassessed
@@ -95,7 +97,7 @@ the builder moves the final local PDF to:
 paper/espino_2026_bayess-on-wti.pdf
 ```
 
-Generated LaTeX products and the exported PDF must not be committed.
+LaTeX intermediate files remain ignored. Once the reviewed JFM PDF passes the font, size, and anonymity audits, the author may explicitly commit it (`git add -f paper/espino_2026_bayess-on-wti.pdf`) alongside `figures/jfm/` as the reproducible paper snapshot.
 
 The submission-oriented concise manuscript keeps the main argument and essential evidence.
 Detailed experimental settings and supporting diagnostics are preserved in
