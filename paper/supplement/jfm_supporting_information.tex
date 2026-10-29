@@ -3,7 +3,7 @@
 \usepackage{amsmath,amssymb,booktabs,longtable,array}
 \usepackage[hidelinks]{hyperref}
 \usepackage[T1]{fontenc}
-\renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\thetable}{S\arabic{section}}
 \renewcommand{\thesection}{S\arabic{section}}
 \setlength{\parskip}{0.35em}
 \setlength{\parindent}{1em}
@@ -65,6 +65,7 @@ October call, strike 98 & Pseudo-MC & Curran & Sobol\\\midrule
 \end{table}
 
 \begin{table}[htbp]\centering\small
+\renewcommand{\thetable}{S2b}
 \caption{Gaussian volatility posterior simulation-based calibration.}
 \label{tab:s2b}
 \begin{tabular}{rrrr}\toprule
@@ -76,6 +77,7 @@ Historical $n$ & Mean rank & KS $p$ & Empirical 95\% coverage\\\midrule
 \end{tabular}
 \end{table}
 
+\renewcommand{\thetable}{S\arabic{section}}
 \noindent A separate posterior-RMS plug-in sensitivity replaces mean volatility
 by $\sqrt{\mathrm E[\sigma^2\mid\mathcal D]}$ under the same Curran
 approximation. This is a distinct point-estimator benchmark, not posterior
@@ -128,6 +130,7 @@ Expanding LO, variance-matched & 0.1611 & 0.2869\\\bottomrule
 \end{table}
 
 \begin{table}[htbp]\centering\small
+\renewcommand{\thetable}{S4b}
 \caption{Absolute changes in inverted LO implied volatility under
 Cox--Ross--Rubinstein tree refinement (156 stratified contract-dates).}
 \label{tab:s4b}
@@ -138,6 +141,7 @@ Steps & Mean & Median & 95th pct. & Maximum\\\midrule
 \end{tabular}
 \end{table}
 
+\renewcommand{\thetable}{S\arabic{section}}
 \section{Bounded numerical reference and full grid-sensitivity sweep}
 The separate, pilot-informed synthetic check reuses the 160 independent
 historical return datasets and 480 option-state rows per futures-correlation
@@ -172,6 +176,7 @@ Volatility nodes & $\rho=1.00$ & $\rho=0.75$ & $\rho=0.50$\\\midrule
 \end{table}
 
 \begin{table}[htbp]\centering\small
+\renewcommand{\thetable}{S5b}
 \caption{Maximum absolute posterior grid differences against the
 4,097-node benchmark (USD/bbl); this is not a proof of the exact
 continuous-grid limit.}\label{tab:s5b}
