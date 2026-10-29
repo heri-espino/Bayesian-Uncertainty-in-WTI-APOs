@@ -8,6 +8,18 @@
 \journal{Journal of Futures Markets}
 \raggedbottom
 
+% The NJDv5 vendor class prints "Added at production", dummy DOI and a
+% copyright placeholder by default. Suppress only production metadata in
+% the double-anonymized submission proof; do NOT invent receipt dates/DOI
+% or edit the frozen Wiley class. Wiley will supply production metadata.
+\makeatletter
+\gdef\@history@dates{}
+\gdef\@DOI@text{}
+\gdef\@doi{}
+\gdef\oddfoot@titlepage@info{}
+\gdef\evenfoot@titlepage@info{}
+\makeatother
+
 \begin{document}
 
 \title{When Does Posterior Integration Change Option Values? Evidence from WTI Average Price Options}
