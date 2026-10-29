@@ -66,6 +66,9 @@ jobs:
           if (Test-Path "paper/espino_2026_bayess-on-wti.pdf") {
             Remove-Item "paper/espino_2026_bayess-on-wti.pdf" -Force
           }
+          foreach ($f in @("paper/jfm_supporting_information.pdf", "paper/jfm_title_page.pdf")) {
+            if (Test-Path $f) { Remove-Item $f -Force }
+          }
 
       - name: Render JFM-only figures from existing derived results
         run: |
@@ -76,6 +79,11 @@ jobs:
         run: |
           & $env:CONDA_EXE run --no-capture-output -n asian-options python paper/build.py
           if ($LASTEXITCODE -ne 0) { throw "Wiley XeLaTeX compilation failed" }
+
+      - name: Compile independent JFM supplement and separate author title page
+        run: |
+          & $env:CONDA_EXE run --no-capture-output -n asian-options python paper/build_jfm_addenda.py
+          if ($LASTEXITCODE -ne 0) { throw "JFM addenda XeLaTeX compilation failed" }
 
       - name: Verify anonymous reviewer PDF and separate figure outputs
         run: |
@@ -89,6 +97,8 @@ jobs:
           name: jfm-wiley-PCAG103A-15-${{ github.sha }}-run-${{ github.run_id }}
           path: |
             paper/espino_2026_bayess-on-wti.pdf
+            paper/jfm_supporting_information.pdf
+            paper/jfm_title_page.pdf
             figures/jfm/*.pdf
             figures/jfm/*.png
             figures/jfm/*.svg
