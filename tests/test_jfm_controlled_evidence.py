@@ -71,7 +71,8 @@ def test_controlled_results_explicitly_label_provisional_coverage():
     assert "tab:short_controlled_stress" in results
     assert "0.318736" in results
     assert "96.3" in results
-    assert "numerically provisional" in results
+    assert "unchanged when the posterior grid increases" in results
+    assert "sensitivity within a stylized" in results
     assert "0.002281" in robustness
     assert r"\citep{cmeclearing2020curran}" in robustness
 
