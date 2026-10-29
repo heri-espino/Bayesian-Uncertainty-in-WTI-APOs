@@ -72,4 +72,4 @@ def test_jfm_uses_exact_awesomefigures_tex_without_remef_font_fallback():
 
     assert "exact-tex-preamble" in verifier
     assert 'record["pdf_fonts"]' in verifier
-    assert 'record["actual_width_tex_pt"]' in verifier
+    assert 'record.get("actual_width_tex_pt")' in verifier
