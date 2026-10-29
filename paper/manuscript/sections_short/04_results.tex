@@ -37,8 +37,11 @@ gap does not change because the posterior pricing model stays at $\rho=1$.
 Relative to each separately simulated fixed-volatility payoff reference,
 plug-in errors increase and nominal 95\% posterior model-price interval
 coverage falls as the cross-contract correlation weight decreases.
-These rates are provisional: they describe sensitivity within a stylized
-model, not empirical coverage or an estimate of WTI correlations.
+Across the original 1,440 option-scenario rows, interval-coverage
+classifications are identical when the posterior volatility grid is
+refined from 513 to 1,025, 2,049, and 4,097 points (Online Supplement
+Table S5). These synthetic frequencies remain conditional on the model:
+they are not evidence of real-market calibration or WTI correlations.
 
 \begin{table*}[t]
 \centering
@@ -46,8 +49,9 @@ model, not empirical coverage or an estimate of WTI correlations.
 per barrel. There are 160 independent return histories and 480 option-state
 rows per correlation weight; strikes share histories. Coverage intervals
 are 95\% stratified bootstrap intervals resampling histories rather than
-option-state rows. Coverage remains numerically provisional because
-posterior interval-quantile grid convergence is incomplete.}
+option-state rows. Coverage classifications are identical across the tested 513-, 1,025-,
+2,049-, and 4,097-point posterior grids; this does not establish
+sub-cent interval-endpoint accuracy or market-price calibration.}
 \label{tab:short_controlled_stress}
 \begin{tabular}{lrrr}
 \toprule
