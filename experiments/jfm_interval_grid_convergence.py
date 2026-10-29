@@ -115,13 +115,14 @@ def main():
         path = out / name
         frame.to_csv(path, index=False, float_format="%.14g")
         outputs[name] = hashlib.sha256(path.read_bytes()).hexdigest()
-    manifest = dict(status="BOUNDED_NUMERIC_GRID_CHECK_NOT_MARKET_VALIDATION",
-                    original_seed=c.SEED, independent_histories=160,
-                    option_state_rows_per_rho=480, grid_nodes=NODES,
-                    shared_history="3 strikes and 3 correlation references",
-                    reused_qmc_reference="reference_prices.csv",
-                    boundary_rule="95% QMC halfwidth compared with posterior endpoints",
-                    sha256=outputs)
+    manifest = dict(status="FULL_BOUNDED_GRID_CONVERGENCE_NOT_MARKET_VALIDATION",
+                    historical_seed=c.SEED,
+                    historical_independent_datasets=160,
+                    reused_strikes=3, reused_rho_references=3,
+                    grid_nodes=list(NODES),
+                    reference="independent randomized Sobol payoff from existing reference_prices.csv",
+                    numerical_precision="QMC CI boundary ambiguity recorded, not assumed zero",
+                    files=outputs)
     (out / "grid_coverage_manifest.json").write_text(
         json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     print(summary.to_string(index=False))
