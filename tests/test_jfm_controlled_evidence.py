@@ -74,3 +74,12 @@ def test_controlled_results_explicitly_label_provisional_coverage():
     assert "numerically provisional" in results
     assert "0.002281" in robustness
     assert r"\citep{cmeclearing2020curran}" in robustness
+
+
+
+def test_figure_fraction_fixed_axis_stays_within_unit_interval():
+    root = Path(__file__).resolve().parents[1]
+    src = (root / "scripts/build_publication_figures.py").read_text()
+    assert "ax_c.set_xlim(0.0, 1.0)" in src
+    assert "ax_c.set_xlim(0.0, 2.5)" not in src
+    assert "ax_c.set_xticks((0.0, 0.25, 0.5, 0.75, 1.0))" in src
