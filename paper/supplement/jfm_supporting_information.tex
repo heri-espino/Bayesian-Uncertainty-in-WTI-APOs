@@ -1,0 +1,196 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,booktabs,longtable,array}
+\usepackage[hidelinks]{hyperref}
+\usepackage[T1]{fontenc}
+\renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\thesection}{S\arabic{section}}
+\setlength{\parskip}{0.35em}
+\setlength{\parindent}{1em}
+\title{Supporting Information\\
+When Does Posterior Integration Change Option Values?\\
+Evidence from WTI Average Price Options}
+\author{Anonymous}
+\date{}
+\begin{document}
+\maketitle
+\noindent\textbf{Scope.} This is a separate, anonymized supplement to the
+Journal of Futures Markets reviewer manuscript. All market price measures
+are USD per barrel, and Barchart end-of-day \texttt{Latest} values are
+settlement-price proxies rather than independently verified trades or final
+CME settlement marks. The bounded correlation study uses synthetic model
+values only and is not a historical WTI market-calibration experiment.
+
+\section{Full historical-volatility comparison}
+Table~\ref{tab:s1} includes the additional earlier-date input benchmarks
+omitted from the compact main paper. All eight specifications use the same
+2,381 contract-date rows over 15 valuation dates. The GARCH parameters are
+estimated from earlier returns; the valuation-date return updates the
+conditional variance state. Price benchmarks use the valuation-date CL curve
+and realized fixings. Consequently this is date-ordered \emph{conditional
+repricing}, not a fully prospective price forecast.
+
+\begin{table}[htbp]\centering\small
+\caption{Historical-volatility and earlier option-implied volatility
+benchmarks; MAE and RMSE in USD/bbl.}\label{tab:s1}
+\begin{tabular}{lrrrr}\toprule
+Volatility input & Rows & Dates & MAE & RMSE\\\midrule
+Long-window historical PI & 2,381 & 15 & 2.6187 & 3.4090\\
+Rolling 252 returns & 2,381 & 15 & 5.2183 & 6.3933\\
+Rolling 126 returns & 2,381 & 15 & 8.3419 & 9.7846\\
+Rolling 63 returns & 2,381 & 15 & 4.5201 & 5.6465\\
+EWMA, half-life 63 business days & 2,381 & 15 & 5.6616 & 6.8824\\
+Horizon-matched GARCH(1,1) & 2,381 & 15 & 2.6730 & 3.4441\\
+Earlier-date expanding APO smile & 2,381 & 15 & 0.1088 & 0.1725\\
+Previous-day APO smile & 2,381 & 15 & 0.1075 & 0.1594\\\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Numerical agreement and simulation-based calibration}
+Table~\ref{tab:s2} compares PI--PM differences for selected empirical
+conditions across alternative numerical pricing methods. Agreement on the
+\emph{difference} does not imply equality of absolute Curran and exact
+arithmetic-average payoff prices. The Gaussian posterior
+simulation-based calibration uses 200,000 prior-predictive datasets in total,
+with 50,000 at each historical length. These are checks of the statistical
+inference machinery, not exchange price accuracy.
+
+\begin{table}[htbp]\centering\small
+\caption{Representative numerical PI--PM differences (USD/bbl).}\label{tab:s2}
+\begin{tabular}{lrrr}\toprule
+October call, strike 98 & Pseudo-MC & Curran & Sobol\\\midrule
+2026-08-27 & 0.0013683 & 0.0013690 & 0.0013717\\
+2026-08-28 & 0.0013394 & 0.0013402 & 0.0013393\\\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]\centering\small
+\caption{Gaussian volatility posterior simulation-based calibration.}
+\label{tab:s2b}
+\begin{tabular}{rrrr}\toprule
+Historical $n$ & Mean rank & KS $p$ & Empirical 95\% coverage\\\midrule
+21 & 0.5000 & 0.861 & 0.9500\\
+63 & 0.4993 & 0.348 & 0.9505\\
+252 & 0.4978 & 0.210 & 0.9483\\
+1,260 & 0.5027 & 0.106 & 0.9505\\\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent A separate posterior-RMS plug-in sensitivity replaces mean volatility
+by $\sqrt{\mathrm E[\sigma^2\mid\mathcal D]}$ under the same Curran
+approximation. This is a distinct point-estimator benchmark, not posterior
+price integration.
+
+\section{Liquidity, timing and data provenance}
+The 2,381-row pricing panel includes 2,319 observations with zero recorded
+trading volume. Only 62 observations on 13 valuation dates have positive
+reported volume. The inferred ranking persists in that restriction, but
+the sample is too small for broad claims about executable trading prices.
+Valuation-date cluster resampling accounts for cross-contract dependence
+within a date but not all serial dependence across nearby dates.
+
+\begin{table}[htbp]\centering\small
+\caption{Positive-volume conditional repricing comparison.}\label{tab:s3}
+\begin{tabular}{lrrrr}\toprule
+Volatility input & Rows & Dates & MAE & RMSE\\\midrule
+Historical PI & 62 & 13 & 1.6340 & 2.3391\\
+Earlier-date expanding APO smile & 62 & 13 & 0.1003 & 0.1358\\
+Previous-day APO smile & 62 & 13 & 0.1084 & 0.1333\\\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent Vendor first-publication timestamps and record revisions have not
+been established. CME Clearing Advisory 20-198, dated 15 May 2020, specifies
+Curran for WTI Average Price Option end-of-day valuation effective 18 May
+2020. The extent to which the vendor \texttt{Latest} marks reproduce
+the exchange's model-generated settlements remains unverified. See
+\url{https://www.cmegroup.com/notices/clearing/2020/05/Chadv20-198.pdf}.
+A shared valuation methodology can mechanically favor near-implied
+volatility repricing; it is not an independently traded price test.
+
+\section{External vanilla-WTI implied volatility}
+The cross-instrument control estimates volatility from earlier LO futures
+options and applies the implied term structure to APO averaging dates.
+The primary transfer uses fixing-count weighted RMS volatility; a
+secondary transfer matches unresolved-average variance under the
+maintained one-factor model. Results in Table~\ref{tab:s4} apply to 253
+contract-date APO observations over 10 valuation dates.
+
+\begin{table}[htbp]\centering\small
+\caption{Cross-instrument scalar-volatility mapping (USD/bbl).}\label{tab:s4}
+\begin{tabular}{lrr}\toprule
+Specification & MAE & RMSE\\\midrule
+Previous-day LO, weighted RMS & 0.1559 & 0.2599\\
+Previous-day LO, variance-matched & 0.1562 & 0.2612\\
+Expanding LO, weighted RMS & 0.1604 & 0.2858\\
+Expanding LO, variance-matched & 0.1611 & 0.2869\\\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]\centering\small
+\caption{Absolute changes in inverted LO implied volatility under
+Cox--Ross--Rubinstein tree refinement (156 stratified contract-dates).}
+\label{tab:s4b}
+\begin{tabular}{lrrrr}\toprule
+Steps & Mean & Median & 95th pct. & Maximum\\\midrule
+80 to 160 & 0.000820 & -- & -- & --\\
+160 to 320 & 0.000402 & 0.000284 & 0.001089 & 0.001810\\\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Bounded numerical reference and full grid-sensitivity sweep}
+The separate, pilot-informed synthetic check reuses the 160 independent
+historical return datasets and 480 option-state rows per futures-correlation
+weight, with three strikes per dataset. The inference and PI/PM prices
+assume correlation $\rho=1$ throughout. The known-volatility arithmetic
+payoff reference is calculated independently using randomized scrambled
+Sobol with an analytical geometric-average control variate, at
+$\rho\in\{1,0.75,0.5\}$. These are hypothetical correlations, not empirical
+estimates for the WTI futures curve.
+
+The original 513-point posterior grid was compared against grids of
+1,025, 2,049, and 4,097 points, replaying the \emph{same}
+historical sufficient statistics and QMC reference prices. Coverage
+classifications are unchanged across all four grids; one reference
+near an interval boundary at $\rho=0.75$ intersects its QMC 95\%
+uncertainty range at the finer grids. The absolute posterior
+quantile endpoints nevertheless change by up to 0.00523 USD/bbl
+between 513 and 4,097 points. Hence classification stability
+does not establish sub-0.001 USD/bbl endpoint accuracy.
+
+\begin{table}[htbp]\centering\small
+\caption{Nominal 95\% posterior model-price interval coverage,
+number covered among 480 option-state rows at each assumed
+reference correlation. The same historical returns are reused.}\label{tab:s5}
+\begin{tabular}{rrrr}\toprule
+Volatility nodes & $\rho=1.00$ & $\rho=0.75$ & $\rho=0.50$\\\midrule
+513 & 456 (95.0\%) & 313 (65.2\%) & 153 (31.9\%)\\
+1,025 & 456 (95.0\%) & 313 (65.2\%) & 153 (31.9\%)\\
+2,049 & 456 (95.0\%) & 313 (65.2\%) & 153 (31.9\%)\\
+4,097 & 456 (95.0\%) & 313 (65.2\%) & 153 (31.9\%)\\\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]\centering\small
+\caption{Maximum absolute posterior grid differences against the
+4,097-node benchmark (USD/bbl); this is not a proof of the exact
+continuous-grid limit.}\label{tab:s5b}
+\begin{tabular}{rrrrr}\toprule
+Nodes & PI & PM & 2.5\% endpoint & 97.5\% endpoint\\\midrule
+513 & $4.50\times10^{-9}$ & 0.0000556 & 0.005227 & 0.004029\\
+1,025 & $1.08\times10^{-9}$ & 0.0000152 & 0.001215 & 0.001028\\
+2,049 & $2.15\times10^{-10}$ & 0.00000496 & 0.000275 & 0.000244\\\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent Counts are not independent across strikes, and the sample design
+was not preregistered. These are frequentist repeated-sampling
+checks of posterior \emph{model-price} intervals against known
+parameters, not observed price intervals, executable performance,
+or evidence of real-market correlation misspecification.
+The complete deterministic reproduction entry point is
+\texttt{experiments/jfm\_interval\_grid\_convergence.py} in the
+research repository, with versioned summary CSVs and independent
+QMC benchmark inputs.
+
+\end{document}
