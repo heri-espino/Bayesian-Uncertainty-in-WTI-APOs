@@ -86,6 +86,12 @@ def prepare_stage() -> None:
     # directory. Copying the vendor bundle into the disposable stage is more
     # portable than requiring local font installation or symlink support.
     shutil.copytree(VENDOR_DIR, STAGE_DIR)
+    # A missing MiKTeX sttools package may be extracted from official CTAN
+    # into an ignored, build-local folder. Never alter the frozen Wiley vendor
+    # source or the REMEF assets; only copy cuted.sty into disposable staging.
+    local_cuted = BUILD_DIR / "local_tex" / "cuted.sty"
+    if local_cuted.is_file():
+        shutil.copy2(local_cuted, STAGE_DIR / "cuted.sty")
     # Double-anonymized Wiley bundle: copy ONLY the active review-source files.
     # Never stage jfm_title_page.tex or the historical author-identifying
     # main.tex; both contain personal identity information for the editor.
