@@ -367,8 +367,8 @@ def test_requested_figure1_ranges_full_heatmap_and_identity_line(
     a, b, c, d = figure["fig"].axes[:4]
     assert np.allclose(a.get_ylim(), [0.0, 0.15])
     assert np.allclose(c.get_ylim(), [0.0, 0.15])
-    assert np.allclose(c.get_xlim(), [0.0, 2.5])
-    assert np.allclose(c.get_xticks(), [0.0, 0.5, 1.0, 1.5, 2.0, 2.5])
+    assert np.allclose(c.get_xlim(), [0.0, 1.0])
+    assert np.allclose(c.get_xticks(), [0.0, 0.25, 0.5, 0.75, 1.0])
 
     heat = b.images[0].get_array()
     assert len(b.get_xticks()) == heat.shape[1]
