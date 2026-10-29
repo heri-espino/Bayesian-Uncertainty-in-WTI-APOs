@@ -40,8 +40,36 @@ def main() -> None:
     manifest = json.loads(manifest_file.read_text(encoding="utf-8"))
     if manifest.get("journal_target") != "jfm":
         raise SystemExit("Wrong figure target: expected JFM-only outputs")
+    publication = manifest.get("awesomefigures_publication")
+    if not publication or manifest.get("font_mode") != "exact-tex-preamble":
+        raise SystemExit("JFM figure manifest does not certify exact Wiley XeLaTeX typography")
+    if publication.get("engine") != "xelatex" or not publication.get("all_passed"):
+        raise SystemExit("JFM AwesomeFigures engine or font/size audit failed")
+    if publication.get("exact_pdf_count") != len(NAMES):
+        raise SystemExit("Expected exactly four audited XeLaTeX PDF figures")
+    af_report = ART / "awesomefigures_manifest.json"
+    if not af_report.is_file():
+        raise SystemExit("AwesomeFigures manifest missing")
+    audit = json.loads(af_report.read_text(encoding="utf-8"))
+    if audit.get("all_passed") is not True:
+        raise SystemExit("AwesomeFigures report contains failed publication audits")
+    expected_width_pt = float(audit["layout"]["textwidth_pt"])
+    if expected_width_pt <= 0:
+        raise SystemExit("Invalid Wiley LaTeX textwidth")
+    pdf_records = [record for record in audit["figures"] if record["format"] == "pdf"]
+    if len(pdf_records) != len(NAMES):
+        raise SystemExit("AwesomeFigures report is incomplete for JFM PDFs")
+    for record in pdf_records:
+        if record["typography"] != "exact-tex-preamble" or record["warnings"]:
+            raise SystemExit(f"Figure has fallback fonts or audit warnings: {record['path']}")
+        actual = record.get("actual_width_tex_pt")
+        if actual is None or abs(float(actual) - expected_width_pt) > 0.75:
+            raise SystemExit(f"Figure not at final Wiley textwidth: {record['path']}")
+        fonts = record["pdf_fonts"]
+        if not fonts or any(not item["embedded"] for item in fonts):
+            raise SystemExit(f"Figure does not embed all TeX fonts: {record['path']}")
     for name in NAMES:
-        for ext in ("pdf", "png", "svg"):
+        for ext in ("pdf", "png", "svg", "pgf"):
             file = ART / f"{name}.{ext}"
             if not file.is_file() or file.stat().st_size == 0:
                 raise SystemExit(f"Missing JFM figure: {file}")
@@ -54,7 +82,7 @@ def main() -> None:
     if any(item in (text + "\n" + meta).lower() for item in IDENTIFIERS):
         raise SystemExit("Author identifying information leaked into the reviewer PDF")
     print(f"PASS: {len(reader.pages)} PDF pages, anonymous visible text/metadata")
-    print("PASS: 4 JFM-only figures in PDF, PNG and SVG with manifest")
+    print(f"PASS: {len(NAMES)} Wiley-width PGF/XeLaTeX PDF figures with embedded fonts and SVG/PNG previews")
     print("NOTE: this is a draft; manual visual/typographic inspection is still required")
 
 
