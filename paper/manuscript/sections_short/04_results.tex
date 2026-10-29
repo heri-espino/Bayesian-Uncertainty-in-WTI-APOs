@@ -15,6 +15,51 @@ The PI--PM difference generally declines as the share of realized fixings increa
 \label{fig:short_mechanism}
 \end{figure*}
 
+
+\subsection{A bounded check of estimation and model error}
+
+The independent-seed synthetic follow-up has 160 return histories and
+480 option-state rows at each reference correlation. Under the maintained
+one-factor payoff model ($\rho=1$), the mean absolute PI--PM gap is
+\$0.003709 per barrel, whereas the mean plug-in error against the independently
+simulated, known-volatility payoff reference is \$0.318736 per barrel.
+At the illustrative \$0.005-per-barrel cutoff, 327 of 480 option states
+have an absolute PI--PM gap at or below the cutoff; 315 of these still have
+plug-in errors above it. This conditional 96.3\% proportion is specific to
+the tight threshold, synthetic design, and reused histories, not a market
+risk probability. It tests whether small estimator disagreement implies
+small total pricing error, not whether the second-order Taylor approximation
+predicts the PI--PM gap.
+
+Table~\ref{tab:short_controlled_stress} reports the same posterior under
+three hypothetical futures-correlation structures. The measured PI--PM
+gap does not change because the posterior pricing model stays at $\rho=1$.
+Relative to each separately simulated fixed-volatility payoff reference,
+plug-in errors increase and nominal 95\% posterior model-price interval
+coverage falls as the cross-contract correlation weight decreases.
+These rates are provisional: they describe sensitivity within a stylized
+model, not empirical coverage or an estimate of WTI correlations.
+
+\begin{table*}[t]
+\centering
+\caption{Pilot-informed independent-seed synthetic check, in U.S. dollars
+per barrel. There are 160 independent return histories and 480 option-state
+rows per correlation weight; strikes share histories. Coverage intervals
+are 95\% stratified bootstrap intervals resampling histories rather than
+option-state rows. Coverage remains numerically provisional because
+posterior interval-quantile grid convergence is incomplete.}
+\label{tab:short_controlled_stress}
+\begin{tabular}{lrrr}
+\toprule
+Reference $\rho$ & Mean $|PI-PM|$ & PM absolute error & 95\% coverage [bootstrap CI]\\
+\midrule
+1.00 & 0.003709 & 0.318736 & 95.0\% [91.3\%, 98.1\%]\\
+0.75 & 0.003709 & 0.451675 & 65.2\% [58.3\%, 71.9\%]\\
+0.50 & 0.003709 & 0.721005 & 31.9\% [26.9\%, 36.9\%]\\
+\bottomrule
+\end{tabular}
+\end{table*}
+
 \subsection{Posterior integration in the WTI sample}
 
 The October-2026 sample contains 310 contract-date observations across 12 valuation dates. Table~\ref{tab:short_october} shows nearly identical pricing errors for PI and PM (RMSE 0.5177 and 0.5183, respectively). Their mean absolute price difference is only 0.000745 dollars per barrel.
