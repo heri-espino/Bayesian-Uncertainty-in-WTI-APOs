@@ -53,4 +53,6 @@ def test_jfm_addenda_are_separate_and_manual_only():
     assert "paper/jfm_supporting_information.pdf" in workflow
     assert "paper/jfm_title_page.pdf" in workflow
     # The existing main reviewer PDF must remain independently anonymized.
-    assert "jfm_title_page.tex" not in (ROOT / "paper/manuscript/main_short.tex").read_text().split(r"\begin{document}", 1)[-1]
+    reviewer_source = (ROOT / "paper/manuscript/main_short.tex").read_text()
+    assert r"\input{jfm_title_page.tex}" not in reviewer_source
+    assert r"\include{jfm_title_page.tex}" not in reviewer_source
