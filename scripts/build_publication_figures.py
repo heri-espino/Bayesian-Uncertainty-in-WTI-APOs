@@ -631,13 +631,12 @@ def build_figure_1(
         rasterized=True,
     )
     ax_b.grid(False)
-    # Display the complete heatmap, but label only alternate cells. The
-    # seven vertical tick labels in the initial Wiley proof were crowded.
-    # All seven moneyness observations remain plotted; this is label-only.
-    shown = np.unique(np.r_[0, np.arange(2, len(heat.columns), 2), len(heat.columns) - 1])
-    ax_b.set_xticks(shown)
+    # Retain all seven design-grid tick labels, which the scientific figure
+    # regression tests require, but use gentler rotation than the dense
+    # 65-degree original to improve the Wiley-width print proof.
+    ax_b.set_xticks(np.arange(len(heat.columns)))
     ax_b.set_xticklabels(
-        [f"{float(heat.columns[i]):.2f}" for i in shown], rotation=30, ha="right",
+        [f"{float(v):.2f}" for v in heat.columns], rotation=30, ha="right",
         fontsize=PUBLICATION_FONT_PT["tick"] - 0.2,
     )
     ax_b.set_yticks(np.arange(len(heat.index)))
