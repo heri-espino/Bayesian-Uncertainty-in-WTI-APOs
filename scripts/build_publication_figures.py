@@ -329,14 +329,28 @@ def _snap_numeric_axis_to_ticks(ax: plt.Axes, axis: str, *, bins: int = 4) -> No
         ticks = np.asarray(locator.tick_values(lo, hi), dtype=float)
     if len(ticks) < 2:
         return
-    if ticks[0] > lo or ticks[-1] < hi:
-        raise AssertionError("Nice ticks must enclose the original plot limits")
+    # MaxNLocator does not guarantee strict inclusion on every Matplotlib
+    # version/scale (notably with the small, negative CI differences plotted
+    # by Figure 3). Rather than raising or cropping the original error bars,
+    # extend its existing regular grid by as many whole steps as necessary.
+    step = float(np.median(np.diff(ticks)))
+    if not np.isfinite(step) or step <= 0:
+        return
+    if ticks[0] > lo:
+        nleft = int(np.ceil((float(ticks[0]) - lo) / step))
+        ticks = np.r_[ticks[0] - step * np.arange(nleft, 0, -1), ticks]
+    if ticks[-1] < hi:
+        nright = int(np.ceil((hi - float(ticks[-1])) / step))
+        ticks = np.r_[ticks, ticks[-1] + step * np.arange(1, nright + 1)]
+    # Round-off near a tick boundary must also never crop any original data.
+    lower = min(lo, float(ticks[0]))
+    upper = max(hi, float(ticks[-1]))
     if axis == "x":
         ax.set_xticks(ticks)
-        ax.set_xlim(ticks[-1], ticks[0]) if inverted else ax.set_xlim(ticks[0], ticks[-1])
+        ax.set_xlim(upper, lower) if inverted else ax.set_xlim(lower, upper)
     else:
         ax.set_yticks(ticks)
-        ax.set_ylim(ticks[-1], ticks[0]) if inverted else ax.set_ylim(ticks[0], ticks[-1])
+        ax.set_ylim(upper, lower) if inverted else ax.set_ylim(lower, upper)
     dim.set_minor_locator(NullLocator())
 
 
