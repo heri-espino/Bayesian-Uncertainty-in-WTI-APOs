@@ -1214,32 +1214,176 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
+def _open_wiley_publication():
+    """Measure the actual trusted Wiley class, fonts, and TeX text width."""
+    try:
+        import awesomefigures as af
+    except ImportError as exc:
+        raise SystemExit(
+            "JFM exact typography requires AwesomeFigures. Install "
+            "paper/requirements-awesomefigures.txt in asian-options."
+        ) from exc
+    if not callable(getattr(af, "paper", None)):
+        raise SystemExit(
+            "AwesomeFigures is outdated: af.paper() not found. "
+            "Install paper/requirements-awesomefigures.txt."
+        )
+    # The Wiley class loads bundled resources relative to the source folder.
+    # Stage the *same* manuscript and vendor font tree as paper/build.py.
+    from paper.build import STAGE_DIR, prepare_stage, validate_layout
+    validate_layout()
+    prepare_stage()
+    af.clear_publication_cache()
+    return af.paper(
+        STAGE_DIR / "main.tex", engine="xelatex",
+        style="elegante", palette="okabe-ito", width="text",
+        minimum_text_pt=7.0, strict=True, timeout=180,
+    )
+
+
+def _apply_jfm_latex_metrics(pub) -> None:
+    """Match final figure* width and font sizes to the TeX document."""
+    global CURRENT_FIGURE_WIDTH_IN
+    CURRENT_FIGURE_WIDTH_IN = pub.layout.width_inches("text")
+    body = float(pub.layout.fontsize_pt)
+    PUBLICATION_FONT_PT.update({
+        "suptitle": body,
+        "panel_title": body * 0.9,
+        "axis_label": body * 0.9,
+        "tick": body * 0.8,
+        "legend": body * 0.8,
+        "panel_letter": body * 0.9,
+    })
+    # af.paper supplies the actual font through the exact PGF PDF. Only
+    # customize axis decoration here; do not restore Times New Roman.
+    mpl.rcParams.update({
+        "axes.labelsize": PUBLICATION_FONT_PT["axis_label"],
+        "axes.titlesize": PUBLICATION_FONT_PT["panel_title"],
+        "figure.titlesize": PUBLICATION_FONT_PT["suptitle"],
+        "xtick.labelsize": PUBLICATION_FONT_PT["tick"],
+        "ytick.labelsize": PUBLICATION_FONT_PT["tick"],
+        "legend.fontsize": PUBLICATION_FONT_PT["legend"],
+        "axes.unicode_minus": False,
+        "axes.grid": True,
+        "grid.color": NEUTRAL["grid"],
+        "grid.linewidth": 0.45,
+        "grid.alpha": 0.35,
+        "savefig.bbox": None,
+        "savefig.pad_inches": 0,
+        "svg.fonttype": "none",
+    })
+
+
+def _awesomefigures_report(pub, output_dir: Path) -> dict[str, object]:
+    """Preserve audit and replace Windows-specific absolute paths in JSON."""
+    report_path = pub.report(output_dir / "awesomefigures_manifest.json")
+    audit = json.loads(report_path.read_text(encoding="utf-8"))
+    audit["manuscript"] = "paper/build/stage/main.tex"
+    for item in audit["figures"]:
+        item["path"] = _portable_path(Path(item["path"]))
+    report_path.write_text(
+        json.dumps(audit, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    md = report_path.with_suffix(".md")
+    md.write_text(
+        md.read_text(encoding="utf-8").replace(
+            str(pub.manuscript), "paper/build/stage/main.tex"
+        ),
+        encoding="utf-8",
+    )
+    pdfs = [record for record in audit["figures"] if record["format"] == "pdf"]
+    if not pdfs or any(
+        record["typography"] != "exact-tex-preamble" for record in pdfs
+    ):
+        raise RuntimeError("JFM PDF typography must use the Wiley TeX preamble, never a fallback")
+    if not audit["all_passed"]:
+        raise RuntimeError("AwesomeFigures reported nonconforming figure sizes/fonts")
+    return {
+        "engine": "xelatex",
+        "tex_source": "paper/build/stage/main.tex",
+        "manuscript_sha256": audit["manuscript_sha256"],
+        "font_mode": "exact-tex-preamble",
+        "layout": audit["layout"],
+        "report": _portable_path(report_path),
+        "exact_pdf_count": len(pdfs),
+        "all_passed": True,
+        "preview_font_identity": "SVG/PNG do not guarantee exact TeX fonts",
+    }
+
+
 def main() -> None:
     args = parse_args()
-    global CURRENT_FIGURE_WIDTH_IN, CURRENT_JOURNAL
+    global CURRENT_FIGURE_WIDTH_IN, CURRENT_JOURNAL, CURRENT_JFM_PAPER
     CURRENT_JOURNAL = args.journal
-    CURRENT_FIGURE_WIDTH_IN = JFM_TWO_COLUMN_WIDTH_IN if args.journal == "jfm" else WORD_TEXT_WIDTH_IN
-    font_mode = _configure_matplotlib(
-        force_no_tex=args.no_tex,
-        require_times_new_roman=not args.allow_font_fallback,
+    if args.journal == "jfm" and (args.no_tex or args.allow_font_fallback):
+        raise SystemExit(
+            "JFM uses exact AwesomeFigures XeLaTeX; --no-tex and "
+            "--allow-font-fallback are REMEF-only preview flags."
+        )
+    formats = tuple(dict.fromkeys(args.formats))
+    requested = tuple(dict.fromkeys(args.figures))
+    if args.journal == "jfm" and "pdf" not in formats:
+        raise SystemExit("JFM requires an audited exact XeLaTeX PDF (include --formats pdf)")
+
+    output_dir = args.output_dir or (
+        Path("figures/jfm") if args.journal == "jfm" else DEFAULT_OUTPUT_DIR
     )
-    output_dir = args.output_dir or (Path("figures/jfm") if args.journal == "jfm" else DEFAULT_OUTPUT_DIR)
     if not output_dir.is_absolute():
         output_dir = ROOT / output_dir
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    formats = tuple(dict.fromkeys(args.formats))
-    requested = tuple(dict.fromkeys(args.figures))
+    if args.journal == "remef":
+        CURRENT_FIGURE_WIDTH_IN = WORD_TEXT_WIDTH_IN
+        font_mode = _configure_matplotlib(
+            force_no_tex=args.no_tex,
+            require_times_new_roman=not args.allow_font_fallback,
+        )
+    else:
+        font_mode = "exact-tex-preamble"
+
+    def render() -> dict[str, object]:
+        items = {}
+        if 1 in requested:
+            mechanism_run = _discover_monster_mechanism_run(args.mechanism_run)
+            outputs, metadata = build_figure_1(mechanism_run, output_dir, formats)
+            items["1"] = {"outputs": outputs, **metadata}
+        if 2 in requested:
+            outputs, metadata = build_figure_2(output_dir, formats)
+            items["2"] = {"outputs": outputs, **metadata}
+        if 3 in requested:
+            outputs, metadata = build_figure_3(output_dir, formats)
+            items["3"] = {"outputs": outputs, **metadata}
+        if 4 in requested:
+            outputs, metadata = build_figure_4(output_dir, formats)
+            items["4"] = {"outputs": outputs, **metadata}
+        return items
+
+    jfm_publication = None
+    if args.journal == "jfm":
+        with _open_wiley_publication() as pub:
+            CURRENT_JFM_PAPER = pub
+            try:
+                _apply_jfm_latex_metrics(pub)
+                figures = render()
+                jfm_publication = _awesomefigures_report(pub, output_dir)
+            finally:
+                CURRENT_JFM_PAPER = None
+    else:
+        figures = render()
+
     manifest: dict[str, object] = {
         "output_dir": _portable_path(output_dir),
         "formats": list(formats),
         "font_mode": font_mode,
         "word_text_width_inches": WORD_TEXT_WIDTH_IN,
-        "format_target": ("JFM Wiley draft, font matching pending proof" if args.journal == "jfm" else "REMEF Word, Times New Roman"),
+        "format_target": (
+            "JFM Wiley measured XeLaTeX/PGF PDFs; SVG/PNG are previews"
+            if args.journal == "jfm" else "REMEF Word, Times New Roman"
+        ),
         "figure_width_inches": CURRENT_FIGURE_WIDTH_IN,
         "journal_target": args.journal,
         "numeric_axis_alignment": "built-in nice-tick endpoints (never crop data)",
-        "typographic_hierarchy_pt": PUBLICATION_FONT_PT,
+        "typographic_hierarchy_pt": dict(PUBLICATION_FONT_PT),
         "svg_text_mode": "editable-native-text",
         "hybrid_pdf": True,
         "raster_dpi": 600,
@@ -1256,26 +1400,10 @@ def main() -> None:
         "neutral_palette": NEUTRAL,
         "print_mode": "color + grayscale-safe redundancy",
         "style_encoding": "color + marker + line pattern + marker fill",
-        "figures": {},
+        "figures": figures,
     }
-
-    if 1 in requested:
-        mechanism_run = _discover_monster_mechanism_run(args.mechanism_run)
-        outputs, metadata = build_figure_1(mechanism_run, output_dir, formats)
-        manifest["figures"]["1"] = {"outputs": outputs, **metadata}
-
-    if 2 in requested:
-        outputs, metadata = build_figure_2(output_dir, formats)
-        manifest["figures"]["2"] = {"outputs": outputs, **metadata}
-
-    if 3 in requested:
-        outputs, metadata = build_figure_3(output_dir, formats)
-        manifest["figures"]["3"] = {"outputs": outputs, **metadata}
-
-    if 4 in requested:
-        outputs, metadata = build_figure_4(output_dir, formats)
-        manifest["figures"]["4"] = {"outputs": outputs, **metadata}
-
+    if jfm_publication is not None:
+        manifest["awesomefigures_publication"] = jfm_publication
     manifest_path = output_dir / "figure_manifest.json"
     manifest_path.write_text(
         json.dumps(manifest, indent=2, sort_keys=True) + "\n",
@@ -1287,7 +1415,6 @@ def main() -> None:
         for output in item["outputs"]:
             print(f"  {output}")
     print(f"  {_portable_path(manifest_path)}")
-
 
 if __name__ == "__main__":
     main()
