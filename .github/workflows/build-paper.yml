@@ -1,7 +1,7 @@
 name: build-paper
 
-# Manual-only JFM build. Add custom label PCAG103A-15 to that runner only.
-# Never schedules on the other Windows runner and never runs on push.
+# Manual-only JFM build. The other Windows runner was removed.
+# Select by standard Windows x64 labels and verify runner identity; never run on push.
 on:
   workflow_dispatch:
 
@@ -11,7 +11,7 @@ permissions:
 jobs:
   compile:
     name: JFM Wiley PDF and isolated vector figures on PCAG103A-15
-    runs-on: [self-hosted, windows, x64, PCAG103A-15]
+    runs-on: [self-hosted, windows, x64]
     timeout-minutes: 60
     defaults:
       run:
