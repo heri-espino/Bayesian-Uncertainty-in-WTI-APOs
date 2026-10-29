@@ -46,6 +46,10 @@ def blinded_source_package(source_dir: Path, target: Path) -> Path:
         if not path.is_file():
             continue
         rel = path.relative_to(source_dir)
+        if "jfm_title_page" in rel.as_posix().lower():
+            # Keep identifying metadata outside the reviewer's source ZIP,
+            # even if a stray editor-only page is present in the stage.
+            continue
         if path.suffix.lower() in approved or (
             path.suffix.lower() == ".pdf" and
             "figures" in rel.parts
