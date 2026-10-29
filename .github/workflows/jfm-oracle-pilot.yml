@@ -1,5 +1,7 @@
-name: JFM bounded oracle pilot (manual only)
+name: JFM bounded oracle pilot (PCAG103A-15, manual only)
 
+# Assign the custom label PCAG103A-15 ONLY to runner PCAG103A-15.
+# Matching the default Windows/x64 labels alone would also select PCAG103A-08.
 on:
   workflow_dispatch:
     inputs:
@@ -14,31 +16,54 @@ permissions:
 
 jobs:
   pilot:
-    name: Bounded simulation pilot, no vendor data
-    runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    name: Bounded JFM pilot on PCAG103A-15
+    runs-on: [self-hosted, windows, x64, PCAG103A-15]
+    timeout-minutes: 25
+    defaults:
+      run:
+        shell: powershell
     steps:
-      - name: Check out exact selected commit
+      - name: Check out selected commit without pulling licensed LFS data
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
           lfs: false
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-      - name: Install research package
-        run: python -m pip install -e .
-      - name: Run JFM pilot only
+          persist-credentials: false
+
+      - name: Verify assigned machine
+        run: |
+          if ($env:RUNNER_NAME -ne "PCAG103A-15") {
+            throw "Wrong machine: expected PCAG103A-15, got $env:RUNNER_NAME"
+          }
+          Write-Host "Selected runner: $env:RUNNER_NAME"
+
+      - name: Locate existing asian-options Conda environment (no installs)
+        run: |
+          & .\scripts\resolve_conda_windows_runner.ps1 -EnvironmentName asian-options
+          if ($LASTEXITCODE -ne 0 -and $LASTEXITCODE -ne $null) { throw "Conda preflight failed" }
+
+      - name: Test bounded-pilot code
+        run: |
+          & $env:CONDA_EXE run --no-capture-output -n asian-options python -m pytest -q tests/test_jfm_oracle_pilot.py
+          if ($LASTEXITCODE -ne 0) { throw "JFM pilot tests failed" }
+
+      - name: Run bounded synthetic pilot without downloading market data
         env:
           PILOT_SEED: ${{ inputs.seed }}
         run: |
-          python -m experiments.jfm_oracle_pilot --quick --seed "$PILOT_SEED"
-      - name: Upload all pilot CSV, JSON, notes
+          $outputRoot = "results/analysis/jfm_oracle_pilot/runner-$env:GITHUB_RUN_ID-$env:GITHUB_RUN_ATTEMPT"
+          & $env:CONDA_EXE run --no-capture-output -n asian-options python -m experiments.jfm_oracle_pilot --quick --seed $env:PILOT_SEED --output-root $outputRoot
+          if ($LASTEXITCODE -ne 0) { throw "JFM pilot failed with exit code $LASTEXITCODE" }
+          $manifests = @(Get-ChildItem $outputRoot -Filter pilot_manifest.json -Recurse -File -ErrorAction Stop)
+          if ($manifests.Count -ne 1) { throw "Expected exactly one JFM pilot manifest, found $($manifests.Count)" }
+          Write-Host "Pilot manifest: $($manifests[0].FullName)"
+          Write-Host "PILOT ONLY - results must be reviewed before publication."
+
+      - name: Upload complete pilot results (never auto-commit)
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: jfm-oracle-pilot-${{ github.sha }}
-          path: results/analysis/jfm_oracle_pilot/
+          name: jfm-pilot-PCAG103A-15-${{ github.sha }}-run-${{ github.run_id }}
+          path: results/analysis/jfm_oracle_pilot/runner-${{ github.run_id }}-${{ github.run_attempt }}/
           if-no-files-found: warn
           retention-days: 30
