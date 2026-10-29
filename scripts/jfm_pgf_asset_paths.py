@@ -14,7 +14,6 @@ from contextlib import contextmanager
 from pathlib import Path
 import tempfile
 
-from awesomefigures import auto_publication
 
 
 def _add_pgf_graphicspath(original: str, pgf: Path) -> str:
@@ -39,6 +38,8 @@ def jfm_pgf_sidecar_support():
     temporary TeX file stays in the original Wiley stage folder so relative
     class and style imports continue to resolve normally.
     """
+    from awesomefigures import auto_publication
+
     compile_original = auto_publication._compile_exact_pdf
 
     def compile_with_assets(pgf, pdf, manuscript, engine, timeout):
