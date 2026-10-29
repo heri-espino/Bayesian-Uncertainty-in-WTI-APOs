@@ -51,8 +51,6 @@ from matplotlib.colors import LinearSegmentedColormap
 import numpy as np
 import pandas as pd
 
-from scripts.jfm_pgf_asset_paths import jfm_pgf_sidecar_support
-
 from scripts.vendor_utopia_fonts import (
     archives_available,
     diagnostic_report,
@@ -1362,6 +1360,7 @@ def main() -> None:
 
     jfm_publication = None
     if args.journal == "jfm":
+        from scripts.jfm_pgf_asset_paths import jfm_pgf_sidecar_support
         with _open_wiley_publication() as pub, jfm_pgf_sidecar_support():
             CURRENT_JFM_PAPER = pub
             try:
