@@ -105,3 +105,13 @@ not relabel the study as preregistered or eliminate the outstanding
 coverage-convergence requirement. The **technical PDF and figure build is verified** in run #40955826056,
 but the print proof still has production placeholders and the scientific,
 supplement, and source-verification gates remain open. Do not submit yet.
+
+## 2026-10-29 follow-up: numerical gate and packaging
+
+- [x] Repeated **all 1,440** synthetic price-state rows on four posterior grids (513, 1,025, 2,049, 4,097). Coverage classifications stable: 95.00% / 65.21% / 31.88% for rho 1/.75/.5, with no state flips. Endpoint changes up to $0.005227/bbl between 513 and 4,097; do not call this sub-cent endpoint precision or real-market calibration.
+- [x] Versioned deterministic convergence script and lightweight aggregate CSV; manual-only runner replay available.
+- [x] Prepared anonymized standalone S1--S6 TeX supplement, editor-only title page, and exact-source manuscript upload packaging in the **manual** build.
+- [x] Suppressed unassigned NJDv5 production metadata in the review source; improved Figure 1 layout only for JFM.
+- [ ] Rebuild the *new commit*, check that the production placeholders have disappeared, inspect the revised figures and support PDF, and archive signed-off normal-Git PDF.
+- [ ] Original Barchart `Latest` values and release vintages have **not** been independently verified as final CME settlements. This research/data-provenance gate stays OPEN. See `research/JFM_NUMERICAL_AND_PRICE_PROVENANCE_2026-10-29.md`.
+- [ ] Final author approval of AI declaration, claims, citations, data-licensing compliance and separate identifying metadata.
