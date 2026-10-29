@@ -1,0 +1,41 @@
+name: JFM posterior interval grid sensitivity (manual)
+
+# Existing prices only: no new QMC valuation, market data access, or large MC.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  grid-sensitivity:
+    runs-on: [self-hosted, windows, x64]
+    timeout-minutes: 40
+    defaults:
+      run:
+        shell: powershell
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Verify correct local runner
+        run: |
+          if ($env:RUNNER_NAME -ne 'PCAG103A-15') { throw "Wrong runner" }
+      - name: Locate existing Conda environment
+        run: |
+          & .\scripts\resolve_conda_windows_runner.ps1 -EnvironmentName asian-options
+      - name: Recompute four posterior grids using fixed historical draws
+        run: |
+          & $env:CONDA_EXE run --no-capture-output -n asian-options python -m experiments.jfm_grid_sensitivity
+          if ($LASTEXITCODE -ne 0) { throw "JFM grid-sensitivity check failed" }
+      - name: Upload bounded numerical audit (do not auto-commit)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jfm-grid-sensitivity-${{ github.sha }}-run-${{ github.run_id }}
+          path: |
+            results/analysis/jfm_grid_sensitivity/summary.csv
+            results/analysis/jfm_grid_sensitivity/manifest.json
+          retention-days: 30
+          if-no-files-found: warn
