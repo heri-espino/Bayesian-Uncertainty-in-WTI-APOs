@@ -633,8 +633,9 @@ def build_figure_1(
     # Small type and vertical labels avoid overlaps at Word column width.
     ax_b.set_xticks(np.arange(len(heat.columns)))
     ax_b.set_xticklabels(
-        [f"{value:.2f}" for value in heat.columns], rotation=65, ha="right",
-        fontsize=PUBLICATION_FONT_PT["tick"] - 0.6,
+        [f"{value:.2f}" for value in heat.columns],
+        rotation=(40 if CURRENT_JOURNAL == "jfm" else 65), ha="right",
+        fontsize=PUBLICATION_FONT_PT["tick"] - (0.3 if CURRENT_JOURNAL == "jfm" else 0.6),
     )
     ax_b.set_yticks(np.arange(len(heat.index)))
     ax_b.set_yticklabels(
@@ -745,7 +746,11 @@ def build_figure_1(
         linestyle="--", linewidth=1.0, color=NEUTRAL["black"],
         zorder=5,
     )
-    _add_partial_fixing_zoom(ax_c, curve)
+    # The two-column Wiley page makes the tiny near-zero inset cover Panel C
+    # labels and curves. Keep the historical REMEF figure unchanged; omit the
+    # inset only in JFM, retaining every data point in the main axes.
+    if CURRENT_JOURNAL != "jfm":
+        _add_partial_fixing_zoom(ax_c, curve)
     outputs = _save(fig, output_dir / "fig01_mechanism_map", formats)
     metadata = {
         "mechanism_run": str(mechanism_run.relative_to(ROOT)),

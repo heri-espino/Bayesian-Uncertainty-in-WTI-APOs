@@ -77,6 +77,11 @@ jobs:
           & $env:CONDA_EXE run --no-capture-output -n asian-options python paper/build.py
           if ($LASTEXITCODE -ne 0) { throw "Wiley XeLaTeX compilation failed" }
 
+      - name: Build separate author title page, supplement, and blinded LaTeX package
+        run: |
+          & $env:CONDA_EXE run --no-capture-output -n asian-options python -m scripts.build_jfm_submission_extras
+          if ($LASTEXITCODE -ne 0) { throw "JFM supplementary manuscript packaging failed" }
+
       - name: Verify anonymous reviewer PDF and separate figure outputs
         run: |
           & $env:CONDA_EXE run --no-capture-output -n asian-options python -m scripts.verify_jfm_runner_build
@@ -89,6 +94,9 @@ jobs:
           name: jfm-wiley-PCAG103A-15-${{ github.sha }}-run-${{ github.run_id }}
           path: |
             paper/espino_2026_bayess-on-wti.pdf
+            paper/jfm_title_page.pdf
+            paper/supplement/jfm_supporting_information.pdf
+            paper/jfm_blinded_latex_sources.zip
             figures/jfm/*.pdf
             figures/jfm/*.png
             figures/jfm/*.svg

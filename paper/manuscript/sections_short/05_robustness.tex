@@ -11,13 +11,16 @@ reference is \$0.000922 per barrel; the largest associated 95\%
 reference-uncertainty halfwidth is \$0.000154 per barrel. For the
 $\rho=0.50$ correlation stress, the largest reference halfwidth is
 approximately \$0.001023 per barrel, although its model-price effects
-are much larger. Comparing 513-point with 1,025-point sigma grids
-changes representative PI and PM point prices by less than
-\$0.000001 per barrel, but posterior interval endpoints by as much
-as \$0.002281 per barrel. The reported interval coverage is therefore
-numerically provisional: we cannot claim exact 95\% calibration or
-exact-payoff accuracy at the smallest \$0.001 decision threshold.
-A full coverage-sensitivity sweep on finer grids was not completed.
+are much larger. A full 1,440-row grid check now reproduces the archived 513-point
+PI, PM and posterior interval endpoints and compares 1,025-,
+2,049-, and 4,097-point quadrature. All three correlation-stress
+coverage frequencies remain identical across the four grids.
+Nevertheless, 513- and 4,097-point interval endpoints differ by as
+much as \$0.005227 per barrel (1,025 versus 4,097: \$0.001215;
+2,049 versus 4,097: \$0.000275). Thus binary coverage
+classifications are stable in this bounded experiment, but fine-scale
+posterior quantiles and exact-payoff accuracy at the \$0.001 threshold
+are not certified. These results do not show calibration to market prices.
 The independent-seed follow-up is pilot-informed and was not
 preregistered; its hypothetical futures correlations do not constitute
 an estimate of market misspecification or validation of exchange marks.
