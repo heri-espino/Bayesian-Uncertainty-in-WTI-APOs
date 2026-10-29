@@ -215,6 +215,7 @@ WORD_TEXT_WIDTH_IN = 6.1375
 JFM_TWO_COLUMN_WIDTH_IN = 7.0  # provisional proof width; verify against compiled Wiley template
 CURRENT_FIGURE_WIDTH_IN = WORD_TEXT_WIDTH_IN
 CURRENT_JOURNAL = "remef"
+CURRENT_JFM_PAPER = None  # Only active in an AwesomeFigures Wiley session
 FIGURE_ASPECT_RATIOS = {1: 5.8 / 7.25, 2: 5.8 / 7.25, 3: 3.7 / 7.2, 4: 4.9 / 7.2}
 
 
@@ -404,26 +405,36 @@ def _portable_path(path: Path) -> str:
 
 
 def _save(fig: plt.Figure, stem: Path, formats: Iterable[str]) -> list[str]:
-    """Save hybrid PDFs: vector text/axes with dense artists rasterized at 600 dpi."""
+    """Preserve REMEF's original export; JFM uses exact Wiley XeLaTeX/PGF."""
     outputs: list[str] = []
     stem.parent.mkdir(parents=True, exist_ok=True)
     metadata = {
         "Title": stem.stem,
         "Subject": "Posterior integration in WTI average price options",
     }
-    for fmt in formats:
-        path = stem.with_suffix(f".{fmt}")
-        fig.savefig(
-            path,
-            dpi=600,
-            bbox_inches=None,
-            pad_inches=0,
-            metadata=metadata if fmt == "pdf" else None,
-        )
-        outputs.append(_portable_path(path))
-    plt.close(fig)
+    try:
+        for fmt in formats:
+            path = stem.with_suffix(f".{fmt}")
+            if CURRENT_JOURNAL == "jfm":
+                if CURRENT_JFM_PAPER is None:
+                    raise RuntimeError("JFM requires an active AwesomeFigures publication session")
+                # Exact-font PDF: AwesomeFigures typesets PGF with the same Wiley
+                # preamble as the article; SVG/PNG are explicitly only previews.
+                CURRENT_JFM_PAPER.savefig(
+                    fig, path, width="text", dpi=600, exact=(fmt == "pdf"),
+                )
+            else:
+                fig.savefig(
+                    path,
+                    dpi=600,
+                    bbox_inches=None,
+                    pad_inches=0,
+                    metadata=metadata if fmt == "pdf" else None,
+                )
+            outputs.append(_portable_path(path))
+    finally:
+        plt.close(fig)
     return outputs
-
 
 def _discover_monster_mechanism_run(explicit: Path | None) -> Path:
     if explicit is not None:
