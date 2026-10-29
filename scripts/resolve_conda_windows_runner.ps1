@@ -49,11 +49,11 @@ if ($env:GITHUB_ENV) {
 # MiKTeX commonly installs in the user's profile on non-admin university PCs.
 # Discover an existing installation; NEVER install or update TeX here.
 $texFolders = @(
-    "$env:LOCALAPPDATA\\Programs\\MiKTeX\\miktex\\bin\\x64",
-    "$env:LOCALAPPDATA\\MiKTeX\\miktex\\bin\\x64",
-    "$env:APPDATA\\MiKTeX\\miktex\\bin\\x64",
-    "$env:ProgramFiles\\MiKTeX\\miktex\\bin\\x64",
-    "C:\\Program Files\\MiKTeX\\miktex\\bin\\x64"
+    "$env:LOCALAPPDATA\Programs\MiKTeX\miktex\bin\x64",
+    "$env:LOCALAPPDATA\MiKTeX\miktex\bin\x64",
+    "$env:APPDATA\MiKTeX\miktex\bin\x64",
+    "$env:ProgramFiles\MiKTeX\miktex\bin\x64",
+    "C:\Program Files\MiKTeX\miktex\bin\x64"
 )
 foreach ($texDir in $texFolders) {
     if (-not (Test-Path -LiteralPath (Join-Path $texDir "xelatex.exe") -PathType Leaf)) {
