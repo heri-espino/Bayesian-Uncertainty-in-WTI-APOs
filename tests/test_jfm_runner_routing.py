@@ -24,3 +24,16 @@ def test_remef_files_not_targeted_by_manual_jfm_build():
     assert "scripts.verify_jfm_runner_build" in build
     assert "scripts.build_publication_figures --journal jfm" in build
     assert "paper/remef/" not in build
+
+
+def test_missing_cuted_sty_has_nonadmin_official_ctan_fallback():
+    script = (ROOT / "scripts/ensure_jfm_miktex_packages.ps1").read_text(encoding="utf-8")
+    build = (ROOT / "paper/build.py").read_text(encoding="utf-8")
+    assert "packages update-package-database" in script
+    assert "packages install sttools" in script
+    assert "https://mirrors.ctan.org/macros/latex/contrib/sttools.zip" in script
+    assert "latex" in script and "sttools.ins" in script
+    assert "paper\\build\\local_tex" in script
+    assert 'BUILD_DIR / "local_tex" / "cuted.sty"' in build
+    assert 'shutil.copy2(local_cuted, STAGE_DIR / "cuted.sty")' in build
+    assert "--admin" not in script
