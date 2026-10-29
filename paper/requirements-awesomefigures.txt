@@ -1,0 +1,4 @@
+# Reproducible exact XeLaTeX/PGF rendering for the JFM Wiley manuscript.
+# Pinned to the upstream revision with af.paper(), width/font probes and audits.
+# These are Python publication dependencies; no market data are downloaded.
+awesomefigures[publication] @ git+https://github.com/awesomefigures/awesomefigures.git@a9760351c1f72ccf7a1a2ef2ff14136d6e280d88
