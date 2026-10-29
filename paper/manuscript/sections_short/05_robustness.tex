@@ -4,6 +4,24 @@ Alternative physical-return assumptions do not materially change the comparison.
 
 The small empirical PI--PM difference is not attributable to numerical noise. High-precision Monte Carlo, independently scrambled Sobol simulation, and Curran conditioning agree on the difference to a precision well below its observed magnitude. Simulation-based calibration provides a separate check on the posterior implementation. The supplement also reports a posterior-RMS plug-in sensitivity (Section S2), alternative mappings from LO-implied volatilities to one APO volatility, and Cox--Ross--Rubinstein tree-refinement checks (Section S4). These numerical checks do not establish an exact arbitrage-free representation of the volatility surface.
 
+The bounded independent-payoff check also establishes that Curran
+conditioning is not an exact payoff oracle. In six one-factor numerical
+controls, its largest absolute difference from the randomized Sobol
+reference is \$0.000922 per barrel; the largest associated 95\%
+reference-uncertainty halfwidth is \$0.000154 per barrel. For the
+$\rho=0.50$ correlation stress, the largest reference halfwidth is
+approximately \$0.001023 per barrel, although its model-price effects
+are much larger. Comparing 513-point with 1,025-point sigma grids
+changes representative PI and PM point prices by less than
+\$0.000001 per barrel, but posterior interval endpoints by as much
+as \$0.002281 per barrel. The reported interval coverage is therefore
+numerically provisional: we cannot claim exact 95\% calibration or
+exact-payoff accuracy at the smallest \$0.001 decision threshold.
+A full coverage-sensitivity sweep on finer grids was not completed.
+The independent-seed follow-up is pilot-informed and was not
+preregistered; its hypothetical futures correlations do not constitute
+an estimate of market misspecification or validation of exchange marks.
+
 The market evidence has important limits. In the original 2,381-observation comparison, 2,319 option-date observations have zero recorded trading volume. The historical-versus-implied ranking remains under positive-volume and open-interest restrictions, but some expiry-level samples are small (Online Supplement Section S3). Moreover, the main pricing comparison contains only 15 valuation dates and the external comparison only 10. Publication timestamps and revision vintages of the original vendor records remain unverified. Valuation-date cluster resampling preserves dependence among contracts observed together, but cannot eliminate serial dependence across adjacent dates.
 
 Finally, the one-factor constant-volatility model excludes richer futures-curve dynamics, stochastic volatility, jumps, and convenience yields. Its implied volatilities are model-equivalent pricing inputs, not uniquely identified risk-neutral diffusion parameters or direct estimates of a variance risk premium. The pricing-error differences apply to these inputs and this model; they do not identify physical and risk-neutral volatility components, trading gains, or the value of a hedging strategy.
