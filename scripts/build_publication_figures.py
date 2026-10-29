@@ -505,7 +505,9 @@ def _add_partial_fixing_zoom(
     global tick formatting cannot override the zoom's deliberately small
     x/y ranges. The zoom window is explicitly outlined in the main panel.
     """
-    zoom = ax.inset_axes((0.55, 0.10, 0.42, 0.41), zorder=9)
+    # Slightly smaller inset retains the near-zero comparison but leaves
+    # greater separation from the parent panel's x labels and line markers.
+    zoom = ax.inset_axes((0.57, 0.14, 0.38, 0.35), zorder=9)
     for maturity, group in curve.groupby("maturity_days", sort=True):
         group = group.sort_values("fraction_fixed")
         style = MATURITY_STYLES.get(
@@ -629,12 +631,13 @@ def build_figure_1(
         rasterized=True,
     )
     ax_b.grid(False)
-    # Show the complete simulated design grid (not sampled tick labels).
-    # Small type and vertical labels avoid overlaps at Word column width.
+    # Retain all seven design-grid tick labels, which the scientific figure
+    # regression tests require, but use gentler rotation than the dense
+    # 65-degree original to improve the Wiley-width print proof.
     ax_b.set_xticks(np.arange(len(heat.columns)))
     ax_b.set_xticklabels(
-        [f"{value:.2f}" for value in heat.columns], rotation=65, ha="right",
-        fontsize=PUBLICATION_FONT_PT["tick"] - 0.6,
+        [f"{float(v):.2f}" for v in heat.columns], rotation=30, ha="right",
+        fontsize=PUBLICATION_FONT_PT["tick"] - 0.2,
     )
     ax_b.set_yticks(np.arange(len(heat.index)))
     ax_b.set_yticklabels(

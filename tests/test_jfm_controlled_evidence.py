@@ -61,7 +61,7 @@ def test_pgf_sidecar_context_restores_compiler_and_cleans_temporary_tex(
     assert result.exists()
 
 
-def test_controlled_results_explicitly_label_provisional_coverage():
+def test_controlled_results_explicitly_label_grid_stability_and_model_limits():
     root = Path(__file__).resolve().parents[1]
     method = (root / "paper/manuscript/sections_short/02_posterior_pricing.tex").read_text()
     results = (root / "paper/manuscript/sections_short/04_results.tex").read_text()
@@ -71,8 +71,9 @@ def test_controlled_results_explicitly_label_provisional_coverage():
     assert "tab:short_controlled_stress" in results
     assert "0.318736" in results
     assert "96.3" in results
-    assert "numerically provisional" in results
-    assert "0.002281" in robustness
+    assert "unchanged when the posterior grid increases" in results
+    assert "sensitivity within a stylized" in results
+    assert "0.005227" in robustness
     assert r"\citep{cmeclearing2020curran}" in robustness
 
 

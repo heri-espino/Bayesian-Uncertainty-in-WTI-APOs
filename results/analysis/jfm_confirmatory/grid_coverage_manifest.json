@@ -1,0 +1,20 @@
+{
+  "status": "FULL_BOUNDED_GRID_CONVERGENCE_NOT_MARKET_VALIDATION",
+  "historical_seed": 20261219,
+  "historical_independent_datasets": 160,
+  "reused_strikes": 3,
+  "reused_rho_references": 3,
+  "grid_nodes": [
+    513,
+    1025,
+    2049,
+    4097
+  ],
+  "reference": "independent randomized Sobol payoff from existing reference_prices.csv",
+  "numerical_precision": "QMC CI boundary ambiguity recorded, not assumed zero",
+  "files": {
+    "grid_coverage_rows.csv": "15ed24b336626af5b8d27b4d746aa1f28edfc31c0e698e07420880f5af7e47d7",
+    "grid_coverage_summary.csv": "daa1a87d5879d0675e10a68329da85c215de9f3fa38beae922582e4f6013be85",
+    "grid_coverage_differences.csv": "565872b1fd75f68144e47f2afb8bcde884793df78599ce13a5df90c76d24e476"
+  }
+}
