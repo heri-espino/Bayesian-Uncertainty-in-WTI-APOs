@@ -1,0 +1,58 @@
+name: JFM bounded numerical reference and independent-seed follow-up (manual)
+
+# Deliberately not run on push. Existing self-hosted Windows runner only.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  reproduce:
+    name: Reproduce frozen JFM numerical/confirmatory results on PCAG103A-15
+    runs-on: [self-hosted, windows, x64]
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: powershell
+    steps:
+      - name: Check out exact selected revision (no licensed LFS fetch)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          lfs: false
+          persist-credentials: false
+      - name: Verify runner identity
+        run: |
+          if ($env:RUNNER_NAME -ne 'PCAG103A-15') {
+            throw "Expected PCAG103A-15, got $env:RUNNER_NAME"
+          }
+      - name: Locate installed asian-options environment
+        run: |
+          & .\scripts\resolve_conda_windows_runner.ps1 -EnvironmentName asian-options
+      - name: Remove checked-in reference previews from disposable checkout
+        run: |
+          foreach ($name in @('reference_prices.csv', 'confirmatory_rows.csv', 'confirmatory_summary.csv', 'confirmatory_manifest.json')) {
+            $path = Join-Path 'results/analysis/jfm_confirmatory' $name
+            if (Test-Path $path) { Remove-Item $path -Force }
+          }
+      - name: Reproduce independent payoff QMC references
+        run: |
+          & $env:CONDA_EXE run --no-capture-output -n asian-options python -m experiments.jfm_numerical_reference
+          if ($LASTEXITCODE -ne 0) { throw 'JFM independent QMC payoff validation failed' }
+      - name: Reproduce bounded independent-seed historical follow-up
+        run: |
+          & $env:CONDA_EXE run --no-capture-output -n asian-options python -m experiments.jfm_confirmatory
+          if ($LASTEXITCODE -ne 0) { throw 'JFM independent-seed follow-up failed' }
+      - name: Upload reproducible results (never auto-commit)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jfm-confirmatory-PCAG103A-15-${{ github.sha }}-run-${{ github.run_id }}
+          path: |
+            results/analysis/jfm_confirmatory/reference_prices.csv
+            results/analysis/jfm_confirmatory/confirmatory_rows.csv
+            results/analysis/jfm_confirmatory/confirmatory_summary.csv
+            results/analysis/jfm_confirmatory/confirmatory_manifest.json
+          if-no-files-found: warn
+          retention-days: 30

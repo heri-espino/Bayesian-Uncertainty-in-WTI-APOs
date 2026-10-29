@@ -1,0 +1,33 @@
+{
+  "status": "BOUNDED_INDEPENDENT_SEED_EXPLORATORY_CONFIRMATORY_NOT_EDITORIALLY_CLEARED",
+  "seed": 20261219,
+  "repetitions": 40,
+  "original_pilot_seed": 20261103,
+  "sigma_grid_points": 513,
+  "historical_sizes": [
+    21,
+    252
+  ],
+  "volatilities": [
+    0.2,
+    0.5
+  ],
+  "strikes": [
+    95.0,
+    100.0,
+    105.0
+  ],
+  "rho": [
+    1.0,
+    0.75,
+    0.5
+  ],
+  "qmc_reference": "randomized Sobol independent payoff with exact geometric control",
+  "reuse": "three strikes from each history; do not use naive binomial SE over rows",
+  "limitation": "Curran posterior prices versus independent QMC truth; pilot-informed study design",
+  "files": {
+    "confirmatory_rows.csv": "d72971e80adcd9c69252bbd3ae2d39eacd1ceff4110bdc8c5a5f1c232f3c163b",
+    "confirmatory_summary.csv": "1dee53c87d6ef67a17eef97c48e38bf839971768e33877973c0316177ef9640e",
+    "reference_prices.csv": "2dfd76d93b4300cfca5266ea0f0a03d0a67f37ab0c4b67ce470565fa86f95bc7"
+  }
+}
