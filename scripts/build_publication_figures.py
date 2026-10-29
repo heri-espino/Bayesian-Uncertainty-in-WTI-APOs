@@ -708,9 +708,11 @@ def build_figure_1(
     # Ticks end exactly on the requested bounds.
     ax_a.set_yticks((0.00, 0.05, 0.10, 0.15))
     ax_a.set_ylim(0.0, 0.15)
-    ax_c.set_xticks((0.0, 0.5, 1.0, 1.5, 2.0, 2.5))
+    # A realized-fixing fraction is defined on [0, 1]; do not show the
+    # misleading legacy 1.5/2.0/2.5 ticks in panel C.
+    ax_c.set_xticks((0.0, 0.25, 0.5, 0.75, 1.0))
     ax_c.set_yticks((0.00, 0.05, 0.10, 0.15))
-    ax_c.set_xlim(0.0, 2.5)
+    ax_c.set_xlim(0.0, 1.0)
     ax_c.set_ylim(0.0, 0.15)
 
     # The identity line must extend from corner to corner, not stop at the
@@ -1360,7 +1362,8 @@ def main() -> None:
 
     jfm_publication = None
     if args.journal == "jfm":
-        with _open_wiley_publication() as pub:
+        from scripts.jfm_pgf_asset_paths import jfm_pgf_sidecar_support
+        with _open_wiley_publication() as pub, jfm_pgf_sidecar_support():
             CURRENT_JFM_PAPER = pub
             try:
                 _apply_jfm_latex_metrics(pub)

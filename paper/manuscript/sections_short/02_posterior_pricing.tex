@@ -86,3 +86,45 @@ The two quantities have different local orders in posterior dispersion. The PI--
 The synthetic experiment is designed to vary the two ingredients in Equation~\eqref{eq:short_taylor}. It contains 10 million simulated return histories, generated with root seed 2468 and distributed over 35 combinations of historical sample size (21 to 1,260 observations) and annual volatility (0.10 to 0.80). We evaluate 168 option states varying maturity, moneyness, and the fraction of the arithmetic average already fixed. For each history and option state, we calculate the PI--PM difference, posterior volatility variance, local price curvature, and the second-order approximation. The volatility posterior is evaluated on a 4,097-point grid; computations are batched without changing the model or pricing grid.
 
 This design isolates the conditions under which posterior integration matters and tests the curvature--variance approximation independently of market pricing errors.
+
+\subsection{Bounded numerical reference and model-risk diagnostic}
+
+A separate, pilot-informed synthetic check asks whether a small PI--PM gap
+also implies a small error relative to a known-parameter payoff value.
+We generate Gaussian return sufficient statistics under two annual volatilities
+(0.20 and 0.50) and two historical sample lengths (21 and 252). Forty
+independent return histories per volatility--length setting are evaluated at
+three strikes (95, 100, and 105) for a normalized \$100 futures level.
+This gives 160 independent return histories, reused across strikes.
+The follow-up uses seed 20261219, separate from the development pilot,
+but the design was informed by that pilot and was not preregistered.
+
+For each history, 513-point volatility-posterior quadrature provides PI, PM,
+and the central 95\% interval of conditional model prices under the
+one-factor approximation. Independently, randomized scrambled Sobol
+payoff simulation with an exact geometric-average control variate provides
+reference arithmetic-average call values at the generating volatility.
+The reference preserves eight dated fixings mapped to four futures contracts.
+We compare the maintained perfect-correlation model with hypothetical
+cross-contract correlation weights $\rho\in\{1,0.75,0.50\}$. The pricing
+posterior and PI/PM calculations continue to assume $\rho=1$ in all three
+cases; only the payoff reference changes. Three strikes and three reference
+correlations share each generated history. Thus the 1,440 option-scenario
+rows are not 1,440 independent statistical replicates. Uncertainty intervals
+resample whole return histories within the four volatility--length strata.
+
+We report plug-in absolute error against the independently simulated
+fixed-parameter payoff and repeated-sample coverage of the posterior
+model-price interval. This coverage is not a market-price prediction
+interval. The numerical study is bounded, and posterior interval-quantile
+convergence is not yet fully established, so its coverage estimates are
+illustrative rather than fully validated calibration results.
+
+\subsection{Research software verification and AI assistance}
+
+All numerical results are derived from versioned Python scripts and archived
+experiment outputs; the independent-seed synthetic check does not reuse the
+original 10-million-history simulation. OpenAI ChatGPT assisted with research
+software implementation and debugging, literature organization, and language
+editing and drafting. The author is responsible for verifying the code,
+statistical calculations, references, interpretations, and final manuscript.
