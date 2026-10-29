@@ -24,4 +24,15 @@ an estimate of market misspecification or validation of exchange marks.
 
 The market evidence has important limits. In the original 2,381-observation comparison, 2,319 option-date observations have zero recorded trading volume. The historical-versus-implied ranking remains under positive-volume and open-interest restrictions, but some expiry-level samples are small (Online Supplement Section S3). Moreover, the main pricing comparison contains only 15 valuation dates and the external comparison only 10. Publication timestamps and revision vintages of the original vendor records remain unverified. Valuation-date cluster resampling preserves dependence among contracts observed together, but cannot eliminate serial dependence across adjacent dates.
 
+A further benchmark-dependence issue is that CME Clearing switched
+the WTI Average Price Option end-of-day settlement valuation model
+to Curran's model effective May 18, 2020
+\citep{cmeclearing2020curran}. Thus a Curran-based repricing benchmark
+and model-generated settlement marks need not be independent.
+The Barchart \texttt{Latest} field has not been independently tied to
+the exchange's final settlement calculation. The historical versus
+option-implied comparison should be interpreted as conditional
+agreement with available price proxies, not independent validation
+of the market's stochastic process.
+
 Finally, the one-factor constant-volatility model excludes richer futures-curve dynamics, stochastic volatility, jumps, and convenience yields. Its implied volatilities are model-equivalent pricing inputs, not uniquely identified risk-neutral diffusion parameters or direct estimates of a variance risk premium. The pricing-error differences apply to these inputs and this model; they do not identify physical and risk-neutral volatility components, trading gains, or the value of a hedging strategy.
