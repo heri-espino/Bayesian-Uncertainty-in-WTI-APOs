@@ -52,3 +52,12 @@ def test_miktex_update_reminder_on_stderr_is_not_a_hard_failure():
     # Native stderr is handled by redirected .NET streams, not PowerShell's
     # NativeCommandError under ErrorActionPreference=Stop.
     assert '& $kpsewhich.Source cuted.sty 2>$null' not in script
+
+
+def test_awesomefigures_pip_build_distutils_windows_repair():
+    """Keep the Conda/setuptools workaround scoped to JFM AwesomeFigures install."""
+    build = (ROOT / ".github/workflows/build-paper.yml").read_text(encoding="utf-8")
+    assert "SETUPTOOLS_USE_DISTUTILS: stdlib" in build
+    assert "_distutils_hack" in build
+    assert "python -m pip install -r paper/requirements-awesomefigures.txt" in build
+    assert "workflow_dispatch:" in build and "push:" not in build
