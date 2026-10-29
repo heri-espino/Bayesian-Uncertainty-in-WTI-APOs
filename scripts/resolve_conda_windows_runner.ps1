@@ -36,8 +36,34 @@ Write-Host "Using existing conda at $conda"
 if ($LASTEXITCODE -ne 0) {
     throw "Conda environment '$EnvironmentName' is not available for Windows user $env:USERNAME. Create/activate it under the SAME account as the runner."
 }
+# GitHub's GITHUB_ENV/GITHUB_PATH are UTF-8 files *without BOM*. Windows
+# PowerShell 5.1 Out-File -Encoding utf8 writes a BOM, so use .NET explicitly.
+$utf8 = New-Object System.Text.UTF8Encoding($false)
 if ($env:GITHUB_ENV) {
-    "CONDA_EXE=$conda" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
-    "SHORT_SHA=$($env:GITHUB_SHA.Substring(0, 8))" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+    [System.IO.File]::AppendAllText($env:GITHUB_ENV, "CONDA_EXE=$conda" + [Environment]::NewLine, $utf8)
+    if ($env:GITHUB_SHA -and $env:GITHUB_SHA.Length -ge 8) {
+        [System.IO.File]::AppendAllText($env:GITHUB_ENV, "SHORT_SHA=$($env:GITHUB_SHA.Substring(0,8))" + [Environment]::NewLine, $utf8)
+    }
+}
+
+# MiKTeX commonly installs in the user's profile on non-admin university PCs.
+# Discover an existing installation; NEVER install or update TeX here.
+$texFolders = @(
+    "$env:LOCALAPPDATA\\Programs\\MiKTeX\\miktex\\bin\\x64",
+    "$env:LOCALAPPDATA\\MiKTeX\\miktex\\bin\\x64",
+    "$env:APPDATA\\MiKTeX\\miktex\\bin\\x64",
+    "$env:ProgramFiles\\MiKTeX\\miktex\\bin\\x64",
+    "C:\\Program Files\\MiKTeX\\miktex\\bin\\x64"
+)
+foreach ($texDir in $texFolders) {
+    if (-not (Test-Path -LiteralPath (Join-Path $texDir "xelatex.exe") -PathType Leaf)) {
+        continue
+    }
+    $env:PATH = "$texDir;$env:PATH"
+    if ($env:GITHUB_PATH) {
+        [System.IO.File]::AppendAllText($env:GITHUB_PATH, $texDir + [Environment]::NewLine, $utf8)
+    }
+    Write-Host "Located existing MiKTeX: $texDir"
+    break
 }
 Write-Host "Environment '$EnvironmentName' is ready; no installs performed."
