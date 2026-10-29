@@ -95,6 +95,11 @@ def main() -> None:
         raise SystemExit("Could not extract text from compiled JFM review PDF")
     if any(item in (text + "\n" + meta).lower() for item in IDENTIFIERS):
         raise SystemExit("Author identifying information leaked into the reviewer PDF")
+    # NJDv5 normally prints fictitious production placeholders. They must
+    # not appear in a submission-ready double-anonymized reviewer proof.
+    for placeholder in ("added at production", "xxx/xxxx", "copyright holder name"):
+        if placeholder in text.lower():
+            raise SystemExit(f"Unresolved Wiley production placeholder: {placeholder}")
     print(f"PASS: {len(reader.pages)} PDF pages, anonymous visible text/metadata")
     print(f"PASS: {len(NAMES)} Wiley-width PGF/XeLaTeX PDF figures with embedded fonts and SVG/PNG previews")
     print("NOTE: this is a draft; manual visual/typographic inspection is still required")
