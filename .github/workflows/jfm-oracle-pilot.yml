@@ -1,7 +1,7 @@
 name: JFM bounded oracle pilot (PCAG103A-15, manual only)
 
-# Assign the custom label PCAG103A-15 ONLY to runner PCAG103A-15.
-# Matching the default Windows/x64 labels alone would also select PCAG103A-08.
+# PCAG103A-08 was removed from this repository's runner pool.
+# Default Windows x64 runner labels suffice; verify the machine name before work.
 on:
   workflow_dispatch:
     inputs:
@@ -17,7 +17,7 @@ permissions:
 jobs:
   pilot:
     name: Bounded JFM pilot on PCAG103A-15
-    runs-on: [self-hosted, windows, x64, PCAG103A-15]
+    runs-on: [self-hosted, windows, x64]
     timeout-minutes: 25
     defaults:
       run:
