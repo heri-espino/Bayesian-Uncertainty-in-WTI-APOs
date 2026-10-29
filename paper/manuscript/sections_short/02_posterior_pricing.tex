@@ -116,9 +116,12 @@ resample whole return histories within the four volatility--length strata.
 We report plug-in absolute error against the independently simulated
 fixed-parameter payoff and repeated-sample coverage of the posterior
 model-price interval. This coverage is not a market-price prediction
-interval. The numerical study is bounded, and posterior interval-quantile
-convergence is not yet fully established, so its coverage estimates are
-illustrative rather than fully validated calibration results.
+interval. The bounded sample is recomputed at 513, 1,025, 2,049, and 4,097
+volatility-grid nodes, retaining the original histories and QMC
+references. The classifications are stable across those grids, although
+the posterior interval endpoints change by several thousandths of
+a dollar per barrel. This is a numerical stability check within the
+specified synthetic model, not market calibration.
 
 \subsection{Research software verification and AI assistance}
 
