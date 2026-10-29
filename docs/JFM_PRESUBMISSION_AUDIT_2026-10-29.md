@@ -22,11 +22,16 @@ of overlapping versions.
 - [x] Concise manuscript table and uncertainty caveats: method, results,
   robustness and conclusion now separate PI--PM disagreement from known-sigma
   pricing error and dependence misspecification.
-- [ ] **Numeric gate still open:** 513/1025 sigma grids differed by up to
-  $0.002281/bbl in representative posterior interval endpoints; broader
-  coverage-rate sensitivity is still unverified. The resulting 95%/65%/32%
-  coverage values must be labeled illustrative/provisional, NOT exact
-  coverage-calibration results.
+- [x] **Bounded numerical coverage-frequency sensitivity complete:** full
+  160-history, three-strike, three-rho replay at 513/1025/2049/4097
+  posterior nodes gives unchanged 456/313/153 covered of 480 per rho.
+  Full rows and SHA-256 manifest are versioned under
+  `results/analysis/jfm_confirmatory/grid_coverage_*`; this does NOT
+  establish exchange-price or real-market coverage.
+- [ ] **Numerical absolute-price precision remains qualified:**
+  513-vs-4097 interval endpoints differ by up to $0.005227/bbl and the
+  4097-point result is not an exact continuous-grid proof. One rho=0.75
+  value lies near its independent QMC reference-uncertainty boundary.
 - [ ] The $0.001/bbl tolerance is too fine to claim exact-payoff validation:
   maximum observed one-factor Curran bias $0.000922/bbl, QMC reference
   halfwidth $0.000154/bbl. No precision claims below validated resolution.
@@ -89,8 +94,12 @@ https://onlinelibrary.wiley.com/page/journal/10969934/homepage/forauthors.html
   declarations comply with *current* journal-specific placement requirements,
   including title page and system fields.
 - [ ] Submitting author's ORCID; check all editorial metadata and rights.
-- [ ] Complete portable **supplementary** files (not just a local Markdown
-  planning document); verify table/figure citations and source completeness.
+- [x] Standalone anonymized supporting-information LaTeX source
+  `paper/supplement/jfm_supporting_information.tex` contains S1--S5;
+  `paper/build_jfm_addenda.py` builds its PDF and the distinct identifying
+  title-page PDF in the manual Wiley workflow.
+- [ ] Inspect the *newly compiled* addenda PDFs, check title-page declarations
+  and supply the correct files under their submission-system designations.
 - [ ] Author review of originality, prior Asian/WTI and Bayesian literature,
   market-versus-model interpretation, permissions, all statistical numbers,
   compiled bibliography and final blinded/unblinded file separation.
@@ -99,9 +108,11 @@ https://onlinelibrary.wiley.com/page/journal/10969934/homepage/forauthors.html
 
 ## Current decision
 
-The manuscript revision includes the bounded synthetic results as
-**qualified illustrative evidence** with explicit numerical limits. It does
-not relabel the study as preregistered or eliminate the outstanding
-coverage-convergence requirement. The **technical PDF and figure build is verified** in run #40955826056,
+The manuscript reports bounded synthetic evidence with explicit
+numerical limits. The full fixed-history posterior grid sensitivity now
+establishes **stability of coverage classifications**, not actual market
+calibration. The study remains pilot-informed, not preregistered. The
+Barchart AAO price-vintage/settlement provenance gate remains OPEN;
+see `research/JFM_WTI_APO_PRICE_PROVENANCE_2026-10-29.md`. The **technical PDF and figure build is verified** in run #40955826056,
 but the print proof still has production placeholders and the scientific,
 supplement, and source-verification gates remain open. Do not submit yet.
