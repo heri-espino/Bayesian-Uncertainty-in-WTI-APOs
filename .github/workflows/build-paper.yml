@@ -54,6 +54,14 @@ jobs:
           & $env:CONDA_EXE run --no-capture-output -n asian-options python paper/build.py --check
           if ($LASTEXITCODE -ne 0) { throw "JFM layout validation failed" }
 
+      - name: Remove obsolete checked-in previews from this disposable runner checkout
+        run: |
+          # Prevent failed runs from uploading a stale JFM paper or mixed old figures.
+          if (Test-Path "figures/jfm") { Remove-Item "figures/jfm" -Recurse -Force }
+          if (Test-Path "paper/espino_2026_bayess-on-wti.pdf") {
+            Remove-Item "paper/espino_2026_bayess-on-wti.pdf" -Force
+          }
+
       - name: Render JFM-only figures from existing derived results
         run: |
           & $env:CONDA_EXE run --no-capture-output -n asian-options python -m scripts.build_publication_figures --journal jfm --formats pdf png svg
