@@ -45,6 +45,11 @@ jobs:
           & .\scripts\ensure_jfm_miktex_packages.ps1
 
       - name: Install pinned AwesomeFigures publication API in existing Conda
+        # Windows Miniconda's stdlib distutils conflicts with build-isolated
+        # setuptools' _distutils_hack; use explicit stdlib mode for this step.
+        # See failed manual Wiley run #40833085820.
+        env:
+          SETUPTOOLS_USE_DISTUTILS: stdlib
         run: |
           & $env:CONDA_EXE run --no-capture-output -n asian-options python -m pip install -r paper/requirements-awesomefigures.txt
           if ($LASTEXITCODE -ne 0) { throw "Pinned AwesomeFigures installation failed" }
