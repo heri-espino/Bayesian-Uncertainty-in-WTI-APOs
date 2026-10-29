@@ -1,7 +1,7 @@
 # JFM pre-submission scientific, figure and editorial audit — 2026-10-29
 
 **Status: NOT SUBMISSION-READY.** This checklist applies only to canonical
-\`paper/manuscript/main_short.tex\` (Paper A); the historical full Wiley draft,
+`paper/manuscript/main_short.tex` (Paper A); the historical full Wiley draft,
 REMEF version and proposed JCM Paper B are separate. No simultaneous submission
 of overlapping versions.
 
@@ -10,14 +10,14 @@ of overlapping versions.
 - [x] Prior main experiment: 10 million simulated return histories; PI--PM
   mechanism and numerical validation previously reported.
 - [x] Date-ordered APO comparison: 2,381 option-date rows on **15 valuation
-  dates**; \`Latest\` vendor field is a settlement-price *proxy*, not verified
+  dates**; `Latest` vendor field is a settlement-price *proxy*, not verified
   trade or official final exchange settlement.
 - [x] Cross-instrument comparison: 253 October APO contract-date rows on 10 dates.
 - [x] Pilot artifacts: successful Windows runner #40822904143 archived in
-  \`results/analysis/jfm_oracle_pilot/recovered_original_pilot_20261029.zip\`.
+  `results/analysis/jfm_oracle_pilot/recovered_original_pilot_20261029.zip`.
 - [x] Independent payoff QMC reference and pilot-informed, independent-seed
-  bounded follow-up: scripts and outputs in \`experiments/jfm_*.py\` and
-  \`results/analysis/jfm_confirmatory/\`. Repeated strikes and rho references
+  bounded follow-up: scripts and outputs in `experiments/jfm_*.py` and
+  `results/analysis/jfm_confirmatory/`. Repeated strikes and rho references
   are **not** independent historical replications.
 - [x] Concise manuscript table and uncertainty caveats: method, results,
   robustness and conclusion now separate PI--PM disagreement from known-sigma
@@ -42,18 +42,18 @@ of overlapping versions.
 
 ## Figures and compiled PDF
 
-- [x] JFM branch isolates assets under \`figures/jfm/\` and uses pinned
-  AwesomeFigures \`af.paper\` with staged Wiley LaTeX, measured \`\\textwidth\`,
+- [x] JFM branch isolates assets under `figures/jfm/` and uses pinned
+  AwesomeFigures `af.paper` with staged Wiley LaTeX, measured `\textwidth`,
   XeLaTeX PGF PDF, and strict embedded-font validation. REMEF unchanged.
-- [x] Recent manual \`PCAG103A-15\` build runs 40858842086,
+- [x] Recent manual `PCAG103A-15` build runs 40858842086,
   40858843594 and 40858844835: Conda, MiKTeX and pinned AF installation
   succeed, **figure rendering fails** because PGF refers to
-  \`fig01_mechanism_map-img0.png\` outside the TeX working directory.
+  `fig01_mechanism_map-img0.png` outside the TeX working directory.
 - [x] Versioned JFM-only adapter now extends the exact AF compilation
-  preamble with a \`\\graphicspath\` for adjacent PGF image sidecars; AF
+  preamble with a `\graphicspath` for adjacent PGF image sidecars; AF
   continues to own PDF/embedding/width audits. It does not substitute fonts.
 - [ ] **Rerun manual build-paper on current main after merging this fix**, on
-  PCAG103A-15 in \`asian-options\`. The job intentionally clears old output
+  PCAG103A-15 in `asian-options`. The job intentionally clears old output
   before generating fresh files, and it never auto-commits assets.
 - [ ] Confirm successful compilation, four PGF/TeX PDF figures, all four SVG
   and PNG previews, metadata manifest and reviewer PDF in the uploaded artifact.
@@ -61,8 +61,8 @@ of overlapping versions.
   multi-panel readability, cropped bounds, grayscale contrast, page flow
   and tables in *rendered pages*, not merely passing machine checks.
 - [ ] Confirm exact font embedding and matching Wiley width using
-  \`scripts.verify_jfm_runner_build\`; check blinded PDF content/metadata.
-- [ ] Commit final inspected artifacts to \`figures/jfm/\` and snapshot PDF
+  `scripts.verify_jfm_runner_build`; check blinded PDF content/metadata.
+- [ ] Commit final inspected artifacts to `figures/jfm/` and snapshot PDF
   only after manual verification (do not auto-commit generated files).
 
 ## Current Journal of Futures Markets requirements
@@ -74,11 +74,11 @@ https://onlinelibrary.wiley.com/page/journal/10969934/homepage/forauthors.html
   two-column NJDv5 layout is a quality preference, not a required pre-review
   formatting condition.
 - [x] **Double-anonymized** review: main source/PDF excludes author identity;
-  separate \`paper/manuscript/jfm_title_page.tex\` identifies the author.
+  separate `paper/manuscript/jfm_title_page.tex` identifies the author.
 - [x] Abstract, keywords, plain-language summary, AI-assisted preparation,
   disclosures, and separate author-title metadata are present in sources.
-- [ ] Make AI use transparent in the Methods section per current journal
-  policy, with the final author verifying what activities and claims are true.
+- [x] AI use is described in the Methods and disclosure sections; the author
+  must verify the accuracy and completeness of the description before upload.
 - [ ] At upload select "Main Document - LaTeX .text File" and also provide
   "Main Document - LaTeX PDF" for review; supply all needed classes,
   bibliography, figures and inputs as "LaTeX Supplementary File".
