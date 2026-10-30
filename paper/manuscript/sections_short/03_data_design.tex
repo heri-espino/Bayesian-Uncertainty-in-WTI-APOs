@@ -2,7 +2,7 @@
 
 \subsection{WTI Average Price Options}
 
-The empirical sample is built from individual Barchart histories for WTI Average Price Options. The raw archive contains 213 unique contracts and 11,179 contract-date observations, with expiry months ranging from September 2026 to June 2029. We compare model prices with the Barchart end-of-day \texttt{Latest} field, used as a settlement-price proxy because official final settlement and trade-execution status have not been independently verified. Calls and puts are retained as available, and moneyness is recomputed by valuation date rather than assigned once at the contract level.
+The empirical sample is built from individual Barchart histories for WTI Average Price Options \citep{barchartwti2026}. The raw archive contains 213 unique contracts and 11,179 contract-date observations, with expiry months ranging from September 2026 to June 2029. We compare model prices with the Barchart end-of-day \texttt{Latest} field, used as a settlement-price proxy because official final settlement and trade-execution status have not been independently verified. Calls and puts are retained as available, and moneyness is recomputed by valuation date rather than assigned once at the contract level.
 
 For every observation, we identify the fixings already known and the futures contracts used for the remaining fixings. We initialize those contracts with the futures prices observed on the valuation date. This matters because the first-nearby contract can change during the averaging month.
 
@@ -22,7 +22,7 @@ Pricing performance is summarized by mean error, mean absolute error (MAE), and 
 
 \subsection{Cross-instrument validation}
 
-The within-APO comparison draws implied volatility from earlier observations of the same option family. We therefore add a cross-instrument check using standard monthly American WTI futures options (CME product LO) from Databento. We match LO option settlements to the underlying CL futures and invert prices using a Cox--Ross--Rubinstein futures-option tree.
+The within-APO comparison draws implied volatility from earlier observations of the same option family. We therefore add a cross-instrument check using standard monthly American WTI futures options (CME product LO) from Databento \citep{databentolocl2026}. We match LO option settlements to the underlying CL futures and invert prices using a Cox--Ross--Rubinstein futures-option tree.
 
 For each APO target date, only LO observations from earlier dates are used. Implied-volatility smiles are fitted separately for the underlying CL futures contracts needed by the October-2026 APO fixing schedule. The resulting maturity-specific volatilities are mapped into the maintained scalar-volatility APO pricing model. We compare 253 APO contract-date observations over 10 target dates for which both external specifications can be evaluated within the moneyness range observed in earlier LO data. Online Supplement Section S4 and Table S4 report checks of the constant-volatility mapping and the number of steps in the Cox--Ross--Rubinstein tree.
 
