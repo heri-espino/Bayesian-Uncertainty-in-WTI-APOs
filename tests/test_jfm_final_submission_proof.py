@@ -33,6 +33,14 @@ def test_review_pdf_has_no_fictitious_njd5_publication_metadata():
     verify = (ROOT / "scripts/verify_jfm_runner_build.py").read_text()
     assert r"\gdef\@received{}" in source
     assert r"\gdef\@accepted{}" in source
+    # The Wiley NJDv5 class prints red dummy dates even when the individual
+    # received/revised/accepted values are cleared: suppress its renderer.
+    assert r"\historydates{}" in source.split(r"\begin{document}", 1)[0]
+    cls = (ROOT / "paper/vendor/wiley_njd_v5/WileyNJDv5.cls").read_text(
+        encoding="utf-8"
+    )
+    assert r"\def\@dummy@received" in cls
+    assert "Added at production" in cls
     assert r"\doiheadtext{}" in source
     assert "copyright holder name" in verify.lower()
     assert "added at production" in verify.lower()
@@ -56,3 +64,15 @@ def test_jfm_addenda_are_separate_and_manual_only():
     reviewer_source = (ROOT / "paper/manuscript/main_short.tex").read_text()
     assert r"\input{jfm_title_page.tex}" not in reviewer_source
     assert r"\include{jfm_title_page.tex}" not in reviewer_source
+
+
+
+def test_market_data_sources_have_bibliography_entries_and_citations():
+    bib = (ROOT / "paper/manuscript/references.bib").read_text(encoding="utf-8")
+    design = (ROOT / "paper/manuscript/sections_short/03_data_design.tex").read_text(
+        encoding="utf-8"
+    )
+    for key in ("barchartwti2026", "databentolocl2026"):
+        assert "{" + key + "," in bib
+        assert r"\citep{" + key + "}" in design
+    assert "original provider publication times" in bib

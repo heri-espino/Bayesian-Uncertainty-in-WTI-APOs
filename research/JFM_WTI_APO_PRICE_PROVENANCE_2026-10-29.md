@@ -4,6 +4,17 @@
 
 This is a record-by-record source audit, not an assertion that vendor price vintages are authentic or that the observed marks were traded.
 
+## Author confirmation (2026-10-30)
+
+The author confirmed that they personally assembled the Barchart research
+sample and accepts its recorded observations as the data source for Paper A.
+This author acceptance allows the paper to proceed as a **conditional,
+retrospective valuation comparison**, provided its existing provenance,
+settlement-proxy, trading-volume, and timing disclosures stay explicit.
+It is **not** independent certification of historical vendor release times,
+revision vintages, execution prices, or exchange settlement status.
+No external claim of an independently prospective trading experiment is made.
+
 ## What the repository establishes
 
 1. `results/analysis/wti_extended_forward/forward_q_validation/forward_q_report.json` records 4,762 method-specific forward predictions on 15 target valuation dates across seven expiries. Its guardrail is strictly earlier-date APO implied-volatility fitting; it explicitly does not use same-day APO implied volatilities to fit or price that target. **This is an auditable source-date ordering rule, not independently verified source *publication-time* ordering.**
