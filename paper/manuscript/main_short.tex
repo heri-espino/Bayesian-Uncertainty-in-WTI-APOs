@@ -17,6 +17,10 @@
 \gdef\@revised{}
 \gdef\@accepted{}
 \gdef\@published{}
+% NJDv5's default \@history@dates expands its *dummy* "Added at production"
+% strings even when \@received/\@revised/\@accepted are emptied above.
+% Suppress the production-history *renderer* for the pre-acceptance PDF.
+\historydates{}
 \doiheadtext{}
 \def\oddfoot@titlepage@info{}
 \let\evenfoot@titlepage@info\oddfoot@titlepage@info
