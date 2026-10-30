@@ -33,6 +33,14 @@ def test_review_pdf_has_no_fictitious_njd5_publication_metadata():
     verify = (ROOT / "scripts/verify_jfm_runner_build.py").read_text()
     assert r"\gdef\@received{}" in source
     assert r"\gdef\@accepted{}" in source
+    # The Wiley NJDv5 class prints red dummy dates even when the individual
+    # received/revised/accepted values are cleared: suppress its renderer.
+    assert r"\historydates{}" in source.split(r"\begin{document}", 1)[0]
+    cls = (ROOT / "paper/vendor/wiley_njd_v5/WileyNJDv5.cls").read_text(
+        encoding="utf-8"
+    )
+    assert r"\def\@dummy@received" in cls
+    assert "Added at production" in cls
     assert r"\doiheadtext{}" in source
     assert "copyright holder name" in verify.lower()
     assert "added at production" in verify.lower()
