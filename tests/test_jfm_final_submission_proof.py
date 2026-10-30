@@ -64,3 +64,15 @@ def test_jfm_addenda_are_separate_and_manual_only():
     reviewer_source = (ROOT / "paper/manuscript/main_short.tex").read_text()
     assert r"\input{jfm_title_page.tex}" not in reviewer_source
     assert r"\include{jfm_title_page.tex}" not in reviewer_source
+
+
+
+def test_market_data_sources_have_bibliography_entries_and_citations():
+    bib = (ROOT / "paper/manuscript/references.bib").read_text(encoding="utf-8")
+    design = (ROOT / "paper/manuscript/sections_short/03_data_design.tex").read_text(
+        encoding="utf-8"
+    )
+    for key in ("barchartwti2026", "databentolocl2026"):
+        assert "{" + key + "," in bib
+        assert r"\citep{" + key + "}" in design
+    assert "original provider publication times" in bib
